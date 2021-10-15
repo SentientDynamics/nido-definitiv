@@ -1,0 +1,337 @@
+swagger: '2.0'
+info:
+  title: definitiv
+  version: '1.0'
+  contact:
+    name: Edward Davison
+    url: 'https://sentientdynamics.com.au'
+    email: edward.davison@sentientdynamics.com.au
+host: nido.definitiv.com.au
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  /v2/organizations:
+    get:
+      summary: List Organizations
+      tags: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/organization'
+      operationId: get-v2-organizations
+      parameters: []
+      description: List the Organization records
+definitions:
+  organization:
+    description: ''
+    type: object
+    x-examples:
+      example-1:
+        organizationId: string
+        organizationCode: string
+        legalName: string
+        tradingName: string
+        wpn: string
+        abn: string
+        branchCode: 0
+        acn: string
+        employeeSupportEmail: string
+        contactTitle: string
+        contactFirstName: string
+        contactSurname: string
+        contactEmail: string
+        contactPhone: string
+        fbtExempt: true
+        intermediary: {}
+        beamTermsConfirmUserId: 00000000-0000-0000-0000-000000000000
+        beamTermsConfirmUserName: string
+        beamTermsConfirmDate: '2021-10-14T23:10:49Z'
+        streetAddress: {}
+        reference: string
+        softwareProviderABN: string
+        softwareProviderName: string
+        softwareSubscriptionId: string
+        notificationUserIds: []
+        notifyLodgementSubmitters: true
+    properties:
+      organizationId:
+        type: string
+        minLength: 1
+      organizationCode:
+        type: string
+        minLength: 1
+      legalName:
+        type: string
+        minLength: 1
+      tradingName:
+        type: string
+        minLength: 1
+      wpn:
+        type: string
+        minLength: 1
+      abn:
+        type: string
+        minLength: 1
+      branchCode:
+        type: number
+      acn:
+        type: string
+        minLength: 1
+      employeeSupportEmail:
+        type: string
+        minLength: 1
+      contactTitle:
+        type: string
+        minLength: 1
+      contactFirstName:
+        type: string
+        minLength: 1
+      contactSurname:
+        type: string
+        minLength: 1
+      contactEmail:
+        type: string
+        minLength: 1
+      contactPhone:
+        type: string
+        minLength: 1
+      fbtExempt:
+        type: boolean
+      intermediary:
+        $ref: '#/definitions/intermediary'
+      beamTermsConfirmUserId:
+        type: string
+        minLength: 1
+      beamTermsConfirmUserName:
+        type: string
+        minLength: 1
+      beamTermsConfirmDate:
+        type: string
+        minLength: 1
+      streetAddress:
+        $ref: '#/definitions/streetAddress'
+      reference:
+        type: string
+        minLength: 1
+      softwareProviderABN:
+        type: string
+        minLength: 1
+      softwareProviderName:
+        type: string
+        minLength: 1
+      softwareSubscriptionId:
+        type: string
+        minLength: 1
+      notificationUserIds:
+        type: array
+        items:
+          $ref: '#/definitions/notificationUserId'
+      notifyLodgementSubmitters:
+        type: boolean
+    required:
+      - organizationId
+      - organizationCode
+      - legalName
+      - tradingName
+      - wpn
+      - abn
+      - branchCode
+      - acn
+      - employeeSupportEmail
+      - contactTitle
+      - contactFirstName
+      - contactSurname
+      - contactEmail
+      - contactPhone
+      - fbtExempt
+      - intermediary
+      - beamTermsConfirmUserId
+      - beamTermsConfirmUserName
+      - beamTermsConfirmDate
+      - streetAddress
+      - reference
+      - softwareProviderABN
+      - softwareProviderName
+      - softwareSubscriptionId
+      - notificationUserIds
+      - notifyLodgementSubmitters
+  intermediary:
+    description: ''
+    type: object
+    x-examples:
+      example-1:
+        tan: string
+        abn: string
+        legalName: string
+        tradingName: string
+        contactTitle: string
+        contactFirstName: string
+        contactSurname: string
+        contactEmail: string
+        contactPhone: string
+        streetAddress: {}
+        enabled: true
+    properties:
+      tan:
+        type: string
+        minLength: 1
+      abn:
+        type: string
+        minLength: 1
+      legalName:
+        type: string
+        minLength: 1
+      tradingName:
+        type: string
+        minLength: 1
+      contactTitle:
+        type: string
+        minLength: 1
+      contactFirstName:
+        type: string
+        minLength: 1
+      contactSurname:
+        type: string
+        minLength: 1
+      contactEmail:
+        type: string
+        minLength: 1
+      contactPhone:
+        type: string
+        minLength: 1
+      streetAddress:
+        $ref: '#/definitions/streetAddress'
+      enabled:
+        type: boolean
+    required:
+      - tan
+      - abn
+      - legalName
+      - tradingName
+      - contactTitle
+      - contactFirstName
+      - contactSurname
+      - contactEmail
+      - contactPhone
+      - streetAddress
+      - enabled
+  streetAddress:
+    description: Street Address
+    type: object
+    x-examples:
+      example-1:
+        street: string
+        suburb: string
+        state: string
+        postCode: string
+        countryCode: string
+        fullAddress: string
+        components: []
+        coordinate: {}
+    properties:
+      street:
+        type: string
+        minLength: 1
+      suburb:
+        type: string
+        minLength: 1
+      state:
+        type: string
+        minLength: 1
+      postCode:
+        type: string
+        minLength: 1
+      countryCode:
+        type: string
+        minLength: 1
+      fullAddress:
+        type: string
+        minLength: 1
+      components:
+        type: array
+        items:
+          $ref: '#/definitions/component'
+      coordinate:
+        $ref: '#/definitions/coordinate'
+    required:
+      - street
+      - suburb
+      - state
+      - postCode
+      - countryCode
+      - fullAddress
+      - components
+      - coordinate
+    title: Street Address
+    x-ms-summary: Street Address
+    x-ms-visibility: advanced
+  component:
+    description: component
+    type: object
+    x-examples:
+      example-1:
+        longName: string
+        shortName: string
+        types:
+          - string
+    properties:
+      longName:
+        type: string
+        minLength: 1
+      shortName:
+        type: string
+        minLength: 1
+      types:
+        type: array
+        items:
+          $ref: '#/definitions/type'
+    required:
+      - longName
+      - shortName
+      - types
+    title: component
+    x-ms-summary: component
+    x-ms-visibility: advanced
+  coordinate:
+    description: coordinate
+    type: object
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    required:
+      - latitude
+      - longitude
+    x-examples:
+      example-1:
+        latitude: 0
+        longitude: 0
+    x-ms-summary: coordinate
+    x-ms-visibility: advanced
+    title: coordinate
+  type:
+    title: type
+    type: string
+    description: type
+    x-ms-summary: type
+    x-ms-visibility: advanced
+  notificationUserId:
+    title: Notification User Id
+    type: string
+    description: Notification User Id
+    x-extension-1: Notification User Id
+securityDefinitions:
+  basic:
+    type: basic
+    description: 'username:password'
+security:
+  - basic: []
+basePath: /api
