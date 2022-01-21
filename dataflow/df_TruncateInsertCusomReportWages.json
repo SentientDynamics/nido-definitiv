@@ -1,6 +1,9 @@
 {
 	"name": "df_TruncateInsertCusomReportWages",
 	"properties": {
+		"folder": {
+			"name": "02_Wages"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
