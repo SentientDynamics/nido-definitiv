@@ -964,6 +964,9 @@
 				"defaultValue": "Preceda_Payslip_2"
 			}
 		},
+		"folder": {
+			"name": "01_Payslips"
+		},
 		"annotations": [],
 		"lastPublishTime": "2022-01-11T01:56:08Z"
 	},
