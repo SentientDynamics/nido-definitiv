@@ -1,6 +1,9 @@
 {
 	"name": "df_FlattenOrgPayRuns_UpdateOrgPayRuns",
 	"properties": {
+		"folder": {
+			"name": "07_PayRuns"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
