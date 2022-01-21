@@ -1,0 +1,306 @@
+{
+	"name": "pl_CopyArchiveToDraftSchema_Wages",
+	"properties": {
+		"description": "Copy tnk_001.dbo.* to tnk_001.draft",
+		"activities": [
+			{
+				"name": "CopyArchiveToStaging",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"additionalColumns": [
+							{
+								"name": "RecordCreatedDate",
+								"value": {
+									"value": "@formatDateTime(pipeline().TriggerTime, 'yyyy-MM-dd')",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "RecordModifiedDate",
+								"value": {
+									"value": "@formatDateTime(pipeline().TriggerTime, 'yyyy-MM-dd')",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "PipelineTriggerTime",
+								"value": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "PipelineRunId",
+								"value": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							}
+						],
+						"queryTimeout": "05:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"enableSkipIncompatibleRow": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "RecordCreatedDate"
+								},
+								"sink": {
+									"name": "RecordCreatedDate",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "RecordModifiedDate"
+								},
+								"sink": {
+									"name": "RecordModifiedDate",
+									"type": "DateTime",
+									"physicalType": "datetime2"
+								}
+							},
+							{
+								"source": {
+									"name": "PipelineRunId"
+								},
+								"sink": {
+									"name": "PipelineRunId",
+									"type": "Guid",
+									"physicalType": "uniqueidentifier"
+								}
+							},
+							{
+								"source": {
+									"name": "PipelineTriggerTime"
+								},
+								"sink": {
+									"name": "PipelineTriggerTime",
+									"type": "DateTimeOffset",
+									"physicalType": "datetimeoffset"
+								}
+							},
+							{
+								"source": {
+									"name": "Amount",
+									"type": "Decimal",
+									"physicalType": "money",
+									"scale": 4,
+									"precision": 19
+								},
+								"sink": {
+									"name": "Amount",
+									"type": "Decimal",
+									"physicalType": "money",
+									"scale": 4,
+									"precision": 19
+								}
+							},
+							{
+								"source": {
+									"name": "Department",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "Department",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FirstName",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FirstName",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "FullName",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "FullName",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ID_Number",
+									"type": "Double",
+									"physicalType": "float"
+								},
+								"sink": {
+									"name": "IdNumber",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "PayrunGroup",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "PayRunGroup",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PositionID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "PositionID",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "PositionTitle",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "PositionTitle",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "RoomName",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "Room",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Surname",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "Surname",
+									"type": "String",
+									"physicalType": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "WeekEndingDate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								},
+								"sink": {
+									"name": "WeekEndingDate",
+									"type": "DateTime",
+									"physicalType": "date"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": false,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": {
+								"value": "@pipeline().parameters.sourceSqlSchema",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "@pipeline().parameters.sourceSqlTable",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": {
+								"value": "@pipeline().parameters.sinkSqlSchema",
+								"type": "Expression"
+							},
+							"TableName": {
+								"value": "@pipeline().parameters.sinkSqlTable",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"sourceSqlSchema": {
+				"type": "string",
+				"defaultValue": "archive"
+			},
+			"sourceSqlTable": {
+				"type": "string",
+				"defaultValue": "PreceedaWages"
+			},
+			"sinkSqlSchema": {
+				"type": "string",
+				"defaultValue": "draft"
+			},
+			"sinkSqlTable": {
+				"type": "string",
+				"defaultValue": "StagingPrecedaWages"
+			}
+		},
+		"folder": {
+			"name": "02_Wages"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-01-14T05:41:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

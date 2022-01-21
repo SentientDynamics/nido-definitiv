@@ -1,0 +1,237 @@
+{
+	"name": "pl_B1_Timesheets_ApiToDefinitiv",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEachOrganization",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup2').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "pl_B2_Timesheets_ApiToDefinitiv",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "pl_B2_Timesheets_ApiToDefinitiv",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"paramTimesheetStartDate": {
+										"value": "2022-01-03",
+										"type": "Expression"
+									},
+									"paramTimesheetFinishDate": {
+										"value": "2022-01-07",
+										"type": "Expression"
+									},
+									"paramOrganizationId": {
+										"value": "@item().organizationId",
+										"type": "Expression"
+									},
+									"sourceApiSchema": {
+										"value": "@pipeline().parameters.sourceApiSchema",
+										"type": "Expression"
+									},
+									"sourceApiTable": {
+										"value": "@pipeline().parameters.sourceApiTable",
+										"type": "Expression"
+									},
+									"sourceSqlSchema": {
+										"value": "@pipeline().parameters.sourceSqlSchema",
+										"type": "Expression"
+									},
+									"sourceSqlTable": {
+										"value": "@pipeline().parameters.sourceSqlTable",
+										"type": "Expression"
+									},
+									"sinkSqlSchema": {
+										"value": "@pipeline().parameters.sinkSqlSchema",
+										"type": "Expression"
+									},
+									"sinkSqlTable": {
+										"value": "@pipeline().parameters.sinkSqlTable",
+										"type": "Expression"
+									},
+									"sourceJsonSchema": {
+										"value": "@pipeline().parameters.sourceJsonSchema",
+										"type": "Expression"
+									},
+									"sourceJsonTable": {
+										"value": "@pipeline().parameters.sourceJsonTable",
+										"type": "Expression"
+									},
+									"sinkJsonSchema": {
+										"value": "@pipeline().parameters.sinkJsonSchema",
+										"type": "Expression"
+									},
+									"sinkJsonTable": {
+										"value": "@pipeline().parameters.sinkJsonTable",
+										"type": "Expression"
+									},
+									"MasterPipelineTriggerTime": {
+										"value": "@pipeline().parameters.MasterPipelineTriggerTime",
+										"type": "Expression"
+									},
+									"MasterPipelineRunId": {
+										"value": "@pipeline().parameters.MasterPipelineRunId",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Lookup2",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "SetPipelineTriggerTime",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SetPipelineRunId",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select organizationId from definitiv.Organizations where organizationCode = 'cms-pty-ltd'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": {
+								"value": "definitiv",
+								"type": "Expression"
+							},
+							"TableName": "Organizations"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "SetPipelineTriggerTime",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineTriggerTime",
+					"value": {
+						"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetPipelineRunId",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineRunId",
+					"value": {
+						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"sourceApiSchema": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"sourceApiTable": {
+				"type": "string",
+				"defaultValue": "CustomReportTimesheets"
+			},
+			"sourceSqlSchema": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"sourceSqlTable": {
+				"type": "string",
+				"defaultValue": "CustomReportTimesheetsD"
+			},
+			"sinkSqlSchema": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"sinkSqlTable": {
+				"type": "string",
+				"defaultValue": "CustomReportTimesheetsD"
+			},
+			"sourceJsonSchema": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"sourceJsonTable": {
+				"type": "string",
+				"defaultValue": "CustomReportTimesheets"
+			},
+			"sinkJsonSchema": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"sinkJsonTable": {
+				"type": "string",
+				"defaultValue": "CustomReportTimesheets"
+			},
+			"MasterPipelineTriggerTime": {
+				"type": "string"
+			},
+			"MasterPipelineRunId": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"PipelineTriggerTime": {
+				"type": "String"
+			},
+			"PipelineRunId": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "03_Timesheets"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-01-19T01:05:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

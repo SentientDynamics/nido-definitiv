@@ -1,0 +1,11 @@
+{
+	"name": "ls_keyvault_kvnidoprodeastau100",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kv-nido-prod-eastau-100.vault.azure.net/"
+		}
+	}
+}

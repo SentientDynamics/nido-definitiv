@@ -1,0 +1,17 @@
+{
+	"name": "adf-nido-prod-eastau-100",
+	"properties": {
+		"globalParameters": {
+			"global_SqlSinkErrorOutputStorageFolder": {
+				"type": "string",
+				"value": "container-adf-nido-prod-eastau-100-1"
+			}
+		}
+	},
+	"location": "australiaeast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "27aa473a-8cc2-467f-bcfa-09a7b00cece0",
+		"tenantId": "f939cdb6-206c-4475-90cb-cbebf884b4c2"
+	}
+}

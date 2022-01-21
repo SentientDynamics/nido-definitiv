@@ -1,0 +1,34 @@
+{
+	"name": "ds_adsl2_stnidoprodeastau100_json_4",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls2_stnidoprodeastau100",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"PipelineTriggerTime": {
+				"type": "string"
+			},
+			"PipelineRunId": {
+				"type": "string"
+			},
+			"PipelineName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(\n    'ds_adsl2_stnidoprodeastau100_json/', \n    dataset().PipelineName, '/', \n    formatDateTime(string(dataset().PipelineTriggerTime), 'yyyy-MM-ddTHH:mm:ss'),\n    '_PipelineRunId_', dataset().PipelineRunId, '_Monitoring')",
+					"type": "Expression"
+				},
+				"fileSystem": "container-adf-nido-prod-eastau-100-1"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

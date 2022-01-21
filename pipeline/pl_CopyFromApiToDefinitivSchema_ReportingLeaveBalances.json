@@ -1,0 +1,327 @@
+{
+	"name": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "SetPipelineTriggerTime",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SetPipelineRunId",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select organizationId from definitiv.Organizations",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "definitiv",
+							"TableName": "Organizations"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "CopyToJson",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"additionalColumns": [
+										{
+											"name": "organizationId",
+											"value": {
+												"value": "@item().organizationId",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "pipelineRunId",
+											"value": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "pipelineTriggerTime",
+											"value": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											}
+										}
+									],
+									"httpRequestTimeout": "00:10:00",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_rest_definitiv",
+									"type": "DatasetReference",
+									"parameters": {
+										"sourceRelativeUrl": {
+											"value": "@concat('/api/company/', item().organizationId, '/reporting/leave-balances?asOfDate=2021-11-01')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_adsl2_stnidoprodeastau100_json_2",
+									"type": "DatasetReference",
+									"parameters": {
+										"SchemaName": "definitiv",
+										"TableName": "ReportingLeaveBalances",
+										"PipelineTriggerTime": {
+											"value": "@variables('PipelineRunId')",
+											"type": "Expression"
+										},
+										"PipelineRunId": {
+											"value": "@variables('PipelineTriggerTime')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "df_UpdateReportingLeaveBalances",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_UpdateReportingLeaveBalances",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"source1": {
+								"SchemaName": "definitiv",
+								"TableName": "ReportingLeaveBalances",
+								"PipelineTriggerTime": {
+									"value": "@variables('PipelineTriggerTime')",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@variables('PipelineRunId')",
+									"type": "Expression"
+								}
+							},
+							"sink1": {
+								"SchemaName": "definitiv",
+								"TableName": "ReportingLeaveBalances"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 16,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "CopyToCsv",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "df_UpdateReportingLeaveBalances",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "definitiv",
+							"TableName": "ReportingLeaveBalances"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_adls2_stnidoprodeastau100_csv",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": "definitiv",
+							"tableName": "ReportingLeaveBalances",
+							"pipelineRunId": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"pipelineTriggerTime": "@pipeline().TriggerTime"
+						}
+					}
+				]
+			},
+			{
+				"name": "SetPipelineTriggerTime",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineTriggerTime",
+					"value": {
+						"value": "@coalesce(pipeline().parameters.MasterPipelineTriggerTime,pipeline().TriggerTime)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetPipelineRunId",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineRunId",
+					"value": {
+						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"MasterPipelineTriggerTime": {
+				"type": "string"
+			},
+			"MasterPipelineRunId": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"PipelineTriggerTime": {
+				"type": "String"
+			},
+			"PipelineRunId": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "06_Leave"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-01-18T05:28:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

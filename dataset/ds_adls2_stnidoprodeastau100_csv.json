@@ -1,0 +1,41 @@
+{
+	"name": "ds_adls2_stnidoprodeastau100_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls2_stnidoprodeastau100",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schemaName": {
+				"type": "String"
+			},
+			"tableName": {
+				"type": "String"
+			},
+			"pipelineRunId": {
+				"type": "string"
+			},
+			"pipelineTriggerTime": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat('ds_adsl2_stnidoprodeastau100_csv/', dataset().schemaName, '.', dataset().tableName, '/', formatdatetime(string(dataset().pipelineTriggerTime), 'yyyy-MM-ddTHH:mm:ss'), '_', 'pipelineRunId_', dataset().pipelineRunId)",
+					"type": "Expression"
+				},
+				"fileSystem": "container-adf-nido-prod-eastau-100-1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

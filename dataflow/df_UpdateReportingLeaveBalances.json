@@ -1,0 +1,35 @@
+{
+	"name": "df_UpdateReportingLeaveBalances",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_adsl2_stnidoprodeastau100_json_2",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Flatten1"
+				},
+				{
+					"name": "AlterRow1"
+				}
+			],
+			"script": "source(output(\n\t\taddFooterRow as boolean,\n\t\taddStatusBar as boolean,\n\t\textraReportData as string[],\n\t\theaders as (createDayOfWeekColumn as boolean, customFieldsKeyName as string, dataType as string, defaultPivotAggregation as string, defaultPivotColumnOrder as boolean, defaultPivotRowOrder as short, defaultPivotValueOrder as boolean, defaultSortDirection as string, defaultSortOrder as boolean, disableDefaultAggregation as boolean, falseText as string, fieldName as string, filterDisabled as boolean, hiddenByDefault as boolean, isCustomFields as boolean, isDynamicColumns as boolean, nullDisplayText as string, numericPrecision as string, prependBaseColumnNameToDayOfWeekColumn as boolean, searchDisabled as boolean, sortDisabled as boolean, title as string, trueText as string)[],\n\t\torganizationId as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\treportData as (employeeId as string, employeeNumber as integer, firstName as string, leaveEntitlementHours as double, leaveProRataHours as double, leaveTotalHours as double, leaveTypeId as string, leaveTypeName as string, primaryDepartmentCode as short, primaryDepartmentGlCode as string, primaryDepartmentName as string, primaryLocationCode as string, primaryLocationGlCode as string, primaryLocationName as string, primaryProjectCode as string, primaryProjectGlCode as string, primaryProjectName as string, primaryRoleCode as string, primaryRoleName as string, printName as string, surname as string)[],\n\t\treportVariantTag as string,\n\t\tserverTime as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 foldDown(unroll(reportData, reportData),\n\tmapColumn(\n\t\temployeeId = reportData.employeeId,\n\t\temployeeNumber = reportData.employeeNumber,\n\t\tfirstName = reportData.firstName,\n\t\tleaveEntitlementHours = reportData.leaveEntitlementHours,\n\t\tleaveProRataHours = reportData.leaveProRataHours,\n\t\tleaveTotalHours = reportData.leaveTotalHours,\n\t\tleaveTypeId = reportData.leaveTypeId,\n\t\tleaveTypeName = reportData.leaveTypeName,\n\t\tprimaryDepartmentCode = reportData.primaryDepartmentCode,\n\t\tprimaryDepartmentGlCode = reportData.primaryDepartmentGlCode,\n\t\tprimaryDepartmentName = reportData.primaryDepartmentName,\n\t\tprimaryLocationCode = reportData.primaryLocationCode,\n\t\tprimaryLocationGlCode = reportData.primaryLocationGlCode,\n\t\tprimaryLocationName = reportData.primaryLocationName,\n\t\tprimaryProjectCode = reportData.primaryProjectCode,\n\t\tprimaryProjectGlCode = reportData.primaryProjectGlCode,\n\t\tprimaryProjectName = reportData.primaryProjectName,\n\t\tprimaryRoleCode = reportData.primaryRoleCode,\n\t\tprimaryRoleName = reportData.primaryRoleName,\n\t\tprintName = reportData.printName,\n\t\tsurname = reportData.surname,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Flatten1\nFlatten1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['employeeId','leaveTypeId'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+		}
+	}
+}

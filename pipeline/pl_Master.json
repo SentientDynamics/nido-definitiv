@@ -1,0 +1,142 @@
+{
+	"name": "pl_Master",
+	"properties": {
+		"activities": [
+			{
+				"name": "OrganizationPayRuns",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CustomReportRosters",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "OrganizationPayRuns",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationRosters",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CustomReportWages",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "OrganizationPayRuns",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportWages",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CustomReportPayslips",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "OrganizationPayRuns",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_B1_Payslips_ApiToDefinitiv",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CustomReportTimesheets",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "OrganizationPayRuns",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_B2_Timesheets_ApiToDefinitiv",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "ReportingLeaveApplications",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "ReportingLeaveBalances",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Employees",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_CopyFromApiToDefinitivSchema_Employees",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-01-20T01:50:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

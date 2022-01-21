@@ -1,0 +1,21 @@
+{
+	"name": "ds_adsl2_stnidoprodeastau100_json_3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls2_stnidoprodeastau100",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "DefaultFile.json",
+				"folderPath": "DefaultDirectory",
+				"fileSystem": "container-adf-nido-prod-eastau-100-1"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

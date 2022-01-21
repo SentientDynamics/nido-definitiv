@@ -1,0 +1,142 @@
+{
+	"name": "pl_B0_Payslips_BlobToDefinitiv",
+	"properties": {
+		"activities": [
+			{
+				"name": "df_B1_Payslips_ApiToDefinitiv",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "SetPipelineTriggerTime",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SetPipelineRunId",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_B1_Payslips_ApiToDefinitiv",
+						"type": "DataFlowReference",
+						"parameters": {
+							"PipelineTriggerTime": {
+								"value": "'@{variables('PipelineTriggerTime')}'",
+								"type": "Expression"
+							},
+							"PipelineRunId": {
+								"value": "'@{variables('PipelineRunId')}'",
+								"type": "Expression"
+							},
+							"PipelineName": {
+								"value": "'@{pipeline().Pipeline}'",
+								"type": "Expression"
+							}
+						},
+						"datasetParameters": {
+							"SourceBlobDefinitivPayslips": {
+								"SchemaName": "definitiv",
+								"TableName": "CustomReportPayslips_ARMW",
+								"PipelineTriggerTime": {
+									"value": "@variables('PipelineTriggerTime')",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@variables('PipelineRunId')",
+									"type": "Expression"
+								}
+							},
+							"SourceSqlDefinitivPayslips": {
+								"SchemaName": "definitiv",
+								"TableName": "CustomReportPayslipsE"
+							},
+							"SinkSqlDefinitivPayslips": {
+								"SchemaName": "definitiv",
+								"TableName": "CustomReportPayslipsE"
+							},
+							"sink1": {
+								"schemaName": "definitiv",
+								"tableName": "CustomReportPayslipsE",
+								"pipelineRunId": {
+									"value": "@variables('PipelineRunId')",
+									"type": "Expression"
+								},
+								"pipelineTriggerTime": {
+									"value": "@variables('PipelineTriggerTime')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"integrationRuntime": {
+						"referenceName": "AustraliaEastIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Fine",
+					"runConcurrently": true,
+					"continueOnError": true
+				}
+			},
+			{
+				"name": "SetPipelineTriggerTime",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineTriggerTime",
+					"value": {
+						"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetPipelineRunId",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineRunId",
+					"value": {
+						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"MasterPipelineTriggerTime": {
+				"type": "string"
+			},
+			"MasterPipelineRunId": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"PipelineTriggerTime": {
+				"type": "String"
+			},
+			"PipelineRunId": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "01_Payslips"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-01-21T07:04:53Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

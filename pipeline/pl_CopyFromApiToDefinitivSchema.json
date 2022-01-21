@@ -1,0 +1,749 @@
+{
+	"name": "pl_CopyFromApiToDefinitivSchema",
+	"properties": {
+		"activities": [
+			{
+				"name": "LookupAdfParameters",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select * from [adf].[Parameters] where [PipelineName] = 'pl_CopyFromApiToDefinitivSchema' and [PipelineActivityName] = 'LookupAdfParameters'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "adf",
+							"TableName": "Parameters"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEachAdfParameter",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LookupAdfParameters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LookupAdfParameters').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "CopyFromApiToDefinitivSchema",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"additionalColumns": [
+										{
+											"name": "PipelineTriggerTime",
+											"value": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											}
+										}
+									],
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_rest_definitiv",
+									"type": "DatasetReference",
+									"parameters": {
+										"sourceRelativeUrl": {
+											"value": "@item().SourceRelativeUrl",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_adsl2_stnidoprodeastau100_json_1",
+									"type": "DatasetReference",
+									"parameters": {
+										"DirectoryName": "a",
+										"FileName": "b"
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEachDefinitivEmployee_EmploymentHistory",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LookupDefinitivEmployees",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LookupDefinitivEmployees').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "CopyFromApiToDefinitivSchema_EmploymentHistory",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "LookupAdfParametersEmployees",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"additionalColumns": [
+										{
+											"name": "employeeId",
+											"value": {
+												"value": "@item().employeeId",
+												"type": "Expression"
+											}
+										}
+									],
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"tableOption": "autoCreate",
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mapComplexValuesToString": true
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_rest_definitiv",
+									"type": "DatasetReference",
+									"parameters": {
+										"sourceRelativeUrl": {
+											"value": "@replace(first(activity('LookupAdfParametersEmployees').output.value).SourceRelativeUrl, '{employeeId}', item().employeeId)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_sql_tnk001",
+									"type": "DatasetReference",
+									"parameters": {
+										"SchemaName": {
+											"value": "@first(activity('LookupAdfParametersEmployees').output.value).SinkSchemaName",
+											"type": "Expression"
+										},
+										"TableName": {
+											"value": "@first(activity('LookupAdfParametersEmployees').output.value).SinkTableName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "LookupAdfParametersEmployees",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": "select * from [adf].[Parameters] where [PipelineName] = 'pl_CopyFromApiToDefinitivSchema' and [PipelineActivityName] = 'ForEachDefinitivEmployee_EmploymentHistory'",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_sql_tnk001",
+									"type": "DatasetReference",
+									"parameters": {
+										"SchemaName": "adf",
+										"TableName": "Parameters"
+									}
+								},
+								"firstRowOnly": false
+							}
+						},
+						{
+							"name": "CopyFromApiToDefinitivSchema_EmploymentHistory_copy1",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "LookupAdfParametersEmployees",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"additionalColumns": [
+										{
+											"name": "employeeId",
+											"value": {
+												"value": "@item().employeeId",
+												"type": "Expression"
+											}
+										}
+									],
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_rest_definitiv",
+									"type": "DatasetReference",
+									"parameters": {
+										"sourceRelativeUrl": {
+											"value": "@replace(first(activity('LookupAdfParametersEmployees').output.value).SourceRelativeUrl, '{employeeId}', item().employeeId)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_adsl2_stnidoprodeastau100_json_1",
+									"type": "DatasetReference",
+									"parameters": {
+										"DirectoryName": "a",
+										"FileName": "b"
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "LookupDefinitivEmployees",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "ForEachAdfParameter",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select employeeId from definitiv.Employees",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "definitiv",
+							"TableName": "Employees"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "LookupDefinitivOrganizations",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "ForEachAdfParameter",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select organizationId from definitiv.Organizations",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"SchemaName": "definitiv",
+							"TableName": "Organizations"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEachDefinitivOrganization_LeaveApplications",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LookupDefinitivOrganizations",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LookupDefinitivOrganizations').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "LookupAdfParametersOrganizations_LeaveApplications",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": "select * from [adf].[Parameters] where [PipelineName] = 'pl_CopyFromApiToDefinitivSchema' and [PipelineActivityName] = 'ForEachDefinitivOrganization_LeaveApplications'",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_sql_tnk001",
+									"type": "DatasetReference",
+									"parameters": {
+										"SchemaName": "adf",
+										"TableName": "Parameters"
+									}
+								},
+								"firstRowOnly": false
+							}
+						},
+						{
+							"name": "CopyFromApiToDefinitivSchema_LeaveApplications",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "LookupAdfParametersOrganizations_LeaveApplications",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"additionalColumns": [
+										{
+											"name": "organizationId",
+											"value": {
+												"value": "@item().organizationId",
+												"type": "Expression"
+											}
+										}
+									],
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_rest_definitiv",
+									"type": "DatasetReference",
+									"parameters": {
+										"sourceRelativeUrl": {
+											"value": "@replace(first(activity('LookupAdfParametersOrganizations_LeaveApplications').output.value).SourceRelativeUrl, '{orgId}', item().organizationId)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_adsl2_stnidoprodeastau100_json_1",
+									"type": "DatasetReference",
+									"parameters": {
+										"DirectoryName": "a",
+										"FileName": "b"
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEachDefinitivOrganization_LeaveBalances",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LookupDefinitivOrganizations",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LookupDefinitivOrganizations').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "LookupAdfParametersOrganizations_LeaveBalances",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": "select * from [adf].[Parameters] where [PipelineName] = 'pl_CopyFromApiToDefinitivSchema' and [PipelineActivityName] = 'ForEachDefinitivOrganization_LeaveApplications'",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "ds_sql_tnk001",
+									"type": "DatasetReference",
+									"parameters": {
+										"SchemaName": "adf",
+										"TableName": "Parameters"
+									}
+								},
+								"firstRowOnly": false
+							}
+						},
+						{
+							"name": "CopyFromApiToDefinitivSchema_LeaveBalances",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "LookupAdfParametersOrganizations_LeaveBalances",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"additionalColumns": [
+										{
+											"name": "organizationId",
+											"value": {
+												"value": "@item().organizationId",
+												"type": "Expression"
+											}
+										}
+									],
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_rest_definitiv",
+									"type": "DatasetReference",
+									"parameters": {
+										"sourceRelativeUrl": {
+											"value": "@replace(first(activity('LookupAdfParametersOrganizations_LeaveBalances').output.value).SourceRelativeUrl, '{orgId}', item().organizationId)",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_adsl2_stnidoprodeastau100_json_1",
+									"type": "DatasetReference",
+									"parameters": {
+										"DirectoryName": "a",
+										"FileName": "b"
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "df_FlattenDefinitivReportingArrays_LeaveApplications",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "ForEachDefinitivOrganization_LeaveApplications",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_FlattenDefinitivReportingArrays",
+						"type": "DataFlowReference",
+						"parameters": {
+							"sourceWildcardPathName": {
+								"value": "'@{'ReportingLeaveApplications'}'",
+								"type": "Expression"
+							}
+						},
+						"datasetParameters": {
+							"source1": {
+								"DirectoryName": "a",
+								"FileName": "b"
+							},
+							"sink1": {
+								"DirectoryName": "a",
+								"FileName": "b"
+							},
+							"sink2": {
+								"SchemaName": "definitiv",
+								"TableName": "ReportingLeaveApplications"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "df_FlattenReportingArrays_LeaveBalances",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "ForEachDefinitivOrganization_LeaveBalances",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_FlattenDefinitivReportingArrays",
+						"type": "DataFlowReference",
+						"parameters": {
+							"sourceWildcardPathName": {
+								"value": "'@{'ReportingLeaveBalances'}'",
+								"type": "Expression"
+							}
+						},
+						"datasetParameters": {
+							"source1": {
+								"DirectoryName": "a",
+								"FileName": "b"
+							},
+							"sink1": {
+								"DirectoryName": "a",
+								"FileName": "b"
+							},
+							"sink2": {
+								"SchemaName": "definitiv",
+								"TableName": "ReportingLeaveBalances"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-01-14T00:01:48Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,135 @@
+{
+	"name": "pl_C1_Payslips_DraftReportViews",
+	"properties": {
+		"activities": [
+			{
+				"name": "df_C1_Payslips_DraftReportViews",
+				"description": "Sync changes.",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "SetPipelineTriggerTime",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SetPipelineRunId",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_C1_Payslips_DraftReportViews",
+						"type": "DataFlowReference",
+						"parameters": {
+							"PipelineRunId": {
+								"value": "'@{variables('PipelineRunId')}'",
+								"type": "Expression"
+							},
+							"PipelineTriggerTime": {
+								"value": "'@{variables('PipelineTriggerTime')}'",
+								"type": "Expression"
+							},
+							"PipelineName": {
+								"value": "'@{pipeline().Pipeline}'",
+								"type": "Expression"
+							}
+						},
+						"datasetParameters": {
+							"SourceSqlPrecedaPayslip2": {
+								"SchemaName": "draft",
+								"TableName": "Preceda_Payslip_2"
+							},
+							"SourceSqlServiceList": {
+								"SchemaName": "dbo",
+								"TableName": "ServiceList"
+							},
+							"SourceSqlPrecedaMap": {
+								"SchemaName": "dbo",
+								"TableName": "Preceeda_Map"
+							},
+							"SourceSqlPreceedaPayCodes": {
+								"SchemaName": "dbo",
+								"TableName": "Preceeda_Pay_Codes"
+							},
+							"SourceSqlDefinitivPayCodes": {
+								"SchemaName": "dbo",
+								"TableName": "definitiv_Pay_Codes"
+							},
+							"SinkSqlDraftPayslipReportView": {
+								"SchemaName": "draft",
+								"TableName": "ReportViewPayslips"
+							}
+						}
+					},
+					"integrationRuntime": {
+						"referenceName": "AustraliaEastIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Fine",
+					"runConcurrently": true,
+					"continueOnError": true
+				}
+			},
+			{
+				"name": "SetPipelineTriggerTime",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineTriggerTime",
+					"value": {
+						"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "SetPipelineRunId",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "PipelineRunId",
+					"value": {
+						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"MasterPipelineTriggerTime": {
+				"type": "string"
+			},
+			"MasterPipelineRunId": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"PipelineTriggerTime": {
+				"type": "String"
+			},
+			"PipelineRunId": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "01_Payslips"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-01-19T01:04:06Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

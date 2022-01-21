@@ -1,0 +1,28 @@
+{
+	"name": "df_UpdateEmployeesEmploymentHistory",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_adsl2_stnidoprodeastau100_json_2",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tbaseRate as double,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as string,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tnumberOfUnits as double,\n\t\torganizationId as string,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayRunId as string,\n\t\tpayRunPeriodEndDate as date,\n\t\tpayRunPeriodStartDate as date,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpositionTitle as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+		}
+	}
+}
