@@ -1,6 +1,9 @@
 {
 	"name": "df_UpdateEmployeesEmploymentHistory",
 	"properties": {
+		"folder": {
+			"name": "05_Employees"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

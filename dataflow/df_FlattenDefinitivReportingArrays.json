@@ -1,6 +1,9 @@
 {
 	"name": "df_FlattenDefinitivReportingArrays",
 	"properties": {
+		"folder": {
+			"name": "08_Organizations"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

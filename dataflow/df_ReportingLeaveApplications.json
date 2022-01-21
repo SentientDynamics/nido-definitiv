@@ -1,6 +1,9 @@
 {
 	"name": "df_ReportingLeaveApplications",
 	"properties": {
+		"folder": {
+			"name": "06_Leave"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

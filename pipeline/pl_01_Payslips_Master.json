@@ -5,7 +5,14 @@
 			{
 				"name": "pl_B1_Payslips_ApiToDefinitiv",
 				"type": "ExecutePipeline",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "pl_B1_OrgPayRuns_ApiToDefinitiv",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
@@ -70,6 +77,29 @@
 				"typeProperties": {
 					"pipeline": {
 						"referenceName": "pl_C1_Payslips_DraftReportViews",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"MasterPipelineTriggerTime": {
+							"value": "@pipeline().TriggerTime",
+							"type": "Expression"
+						},
+						"MasterPipelineRunId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "pl_B1_OrgPayRuns_ApiToDefinitiv",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_B1_OrgPayRuns_ApiToDefinitiv",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true,

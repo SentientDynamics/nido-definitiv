@@ -1,6 +1,9 @@
 {
 	"name": "df_FlattenOrgRosters_UpdateOrgRosters",
 	"properties": {
+		"folder": {
+			"name": "04_Rosters"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [

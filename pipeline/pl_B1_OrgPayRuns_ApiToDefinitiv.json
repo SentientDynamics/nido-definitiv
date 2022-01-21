@@ -1,5 +1,5 @@
 {
-	"name": "pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns",
+	"name": "pl_B1_OrgPayRuns_ApiToDefinitiv",
 	"properties": {
 		"activities": [
 			{
@@ -81,28 +81,28 @@
 									"type": "RestSource",
 									"additionalColumns": [
 										{
-											"name": "organizationId",
+											"name": "Org.OrganizationId",
 											"value": {
 												"value": "@item().organizationId",
 												"type": "Expression"
 											}
 										},
 										{
-											"name": "pipelineTriggerTime",
+											"name": "OrgPayRun.PipelineTriggerTime",
+											"value": {
+												"value": "@variables('PipelineTriggerTime')",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "OrgPayRun.PipelineRunId",
 											"value": {
 												"value": "@variables('PipelineRunId')",
 												"type": "Expression"
 											}
 										},
 										{
-											"name": "pipelineRunId",
-											"value": {
-												"value": "@variables('PipelineRunId')",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "legalName",
+											"name": "Org.LegalName",
 											"value": {
 												"value": "@item().legalName",
 												"type": "Expression"
