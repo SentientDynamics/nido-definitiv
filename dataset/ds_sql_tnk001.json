@@ -6,11 +6,13 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"SchemaName": {
-				"type": "string"
+			"ds_SchemaName": {
+				"type": "string",
+				"defaultValue": "adf"
 			},
-			"TableName": {
-				"type": "string"
+			"ds_TableName": {
+				"type": "string",
+				"defaultValue": "Parameters"
 			}
 		},
 		"annotations": [],
@@ -18,11 +20,11 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": {
-				"value": "@dataset().SchemaName",
+				"value": "@dataset().ds_SchemaName",
 				"type": "Expression"
 			},
 			"table": {
-				"value": "@dataset().TableName",
+				"value": "@dataset().ds_TableName",
 				"type": "Expression"
 			}
 		}

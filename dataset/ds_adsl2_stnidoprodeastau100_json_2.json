@@ -37,11 +37,11 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"folderPath": {
-					"value": "@concat(\n    if(not(empty(pipeline().Pipeline)), pipeline().Pipeline, 'pl_00_Default'), '/',\n    if(dataset().InputOutput, 'Input', 'Output'), '/',\n    formatDateTime(\n        string(\n            convertFromUtc(pipeline().TriggerTime, 'AUS Eastern Standard Time'\n            )\n        ) ,'yyyy-MM-ddTHH-mm-ss'\n    ), '_',\n    'PipelineRunId_', pipeline().RunId\n)",
+					"value": "@concat(\n    if(not(empty(pipeline().Pipeline)), pipeline().Pipeline, dataset().ds_PipelineName),\n    '/',\n    if(dataset().ds_InputOutput, 'Input', 'Output'), \n    '/',\n    formatDateTime(string(\n        convertFromUtc(\n            if(not(empty(pipeline().TriggerTime)), pipeline().TriggerTime, dataset().ds_PipelineTriggerTime), \n        'AUS Eastern Standard Time')),\n    'yyyy-MM-ddTHH-mm-ss'),\n    '_', 'PipelineRunId_', \n    if(not(empty(pipeline().RunId)), pipeline().RunId, dataset().ds_PipelineRunId)\n)",
 					"type": "Expression"
 				},
 				"fileSystem": {
-					"value": "@dataset().FileSystem",
+					"value": "@dataset().ds_FileSystem",
 					"type": "Expression"
 				}
 			}

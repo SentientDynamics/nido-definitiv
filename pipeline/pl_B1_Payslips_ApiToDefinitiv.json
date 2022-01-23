@@ -5,20 +5,7 @@
 			{
 				"name": "LookupOrgPayRuns",
 				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "SetPipelineTriggerTime",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "SetPipelineRunId",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -38,8 +25,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "OrganizationPayRuns"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "OrganizationPayRuns"
 						}
 					},
 					"firstRowOnly": false
@@ -158,14 +145,6 @@
 									"referenceName": "ds_adsl2_stnidoprodeastau100_json_2",
 									"type": "DatasetReference",
 									"parameters": {
-										"ds_PipelineTriggerTime": {
-											"value": "@variables('PipelineTriggerTime')",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@variables('PipelineRunId')",
-											"type": "Expression"
-										},
 										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
 										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json/input",
 										"ds_InputOutput": true
@@ -216,8 +195,6 @@
 						},
 						"datasetParameters": {
 							"SourceBlobDefinitivPayslips": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportPayslips",
 								"ds_PipelineTriggerTime": {
 									"value": "@variables('PipelineTriggerTime')",
 									"type": "Expression"
@@ -228,15 +205,16 @@
 								},
 								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
 								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json/input",
-								"ds_InputOutput": true
+								"ds_InputOutput": true,
+								"ds_PipelineName": "pl_00_Default"
 							},
 							"SourceSqlDefinitivPayslips": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportPayslipsD"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportPayslipsD"
 							},
 							"SinkSqlDefinitivPayslips": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportPayslipsD"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportPayslipsD"
 							},
 							"sink1": {
 								"schemaName": "definitiv",
@@ -312,8 +290,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "CustomReportPayslipsD"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "CustomReportPayslipsD"
 						}
 					}
 				],
@@ -335,32 +313,6 @@
 						}
 					}
 				]
-			},
-			{
-				"name": "SetPipelineTriggerTime",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineTriggerTime",
-					"value": {
-						"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "SetPipelineRunId",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineRunId",
-					"value": {
-						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
-						"type": "Expression"
-					}
-				}
 			},
 			{
 				"name": "MonitorPipeline",
@@ -436,22 +388,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"MasterPipelineTriggerTime": {
-				"type": "string"
-			},
-			"MasterPipelineRunId": {
-				"type": "string"
-			}
-		},
-		"variables": {
-			"PipelineTriggerTime": {
-				"type": "String"
-			},
-			"PipelineRunId": {
-				"type": "String"
-			}
-		},
 		"folder": {
 			"name": "01_Payslips"
 		},
