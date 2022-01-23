@@ -37,13 +37,9 @@
 								"ds_PipelineTriggerTime": "2000-01-01T12-00-00",
 								"ds_PipelineRunId": "PipelineRunId_0123",
 								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json",
-								"ds_InputOutput": {
-									"value": "\"true\"",
-									"type": "Expression"
-								},
-								"ds_InputPipelineName": {
-									"value": "@pipeline().parameters.InputPipelineName",
+								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+								"ds_PipelineName": {
+									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
 							},
@@ -80,10 +76,6 @@
 			}
 		],
 		"parameters": {
-			"InputPipelineName": {
-				"type": "string",
-				"defaultValue": "pl_B1_Payslips_ApiToDefinitiv"
-			},
 			"SourceSqlSchema": {
 				"type": "string",
 				"defaultValue": "definitiv"
