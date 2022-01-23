@@ -9,6 +9,10 @@
 			"global_adls2_InputDirectory_Json": {
 				"type": "string",
 				"value": "ds_adls2_stnidoprodeastau100_json_input"
+			},
+			"global_adls2_OutputDirectory_Json": {
+				"type": "string",
+				"value": "ds_adls2_stnidoprodeastau100_json_output"
 			}
 		}
 	},
