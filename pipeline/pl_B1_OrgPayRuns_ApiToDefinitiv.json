@@ -128,7 +128,7 @@
 												"path": "$['payRuns'][0]['payRunId']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['payRunId']"
+												"path": "PayRunId"
 											}
 										},
 										{
