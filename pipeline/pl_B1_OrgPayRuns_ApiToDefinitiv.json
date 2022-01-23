@@ -141,7 +141,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_adsl2_stnidoprodeastau100_json_2",
+									"referenceName": "ds_adsl2_stnidoprodeastau100_json_input",
 									"type": "DatasetReference",
 									"parameters": {
 										"SchemaName": "definitiv",
