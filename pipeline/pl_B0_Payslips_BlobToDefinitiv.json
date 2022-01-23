@@ -5,14 +5,7 @@
 			{
 				"name": "df_B1_Payslips_ApiToDefinitiv",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [
-					{
-						"activity": "Set InputPipelineName",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "1.00:00:00",
 					"retry": 0,
@@ -88,19 +81,6 @@
 					"runConcurrently": true,
 					"continueOnError": true
 				}
-			},
-			{
-				"name": "Set InputPipelineName",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "InputPipelineName",
-					"value": {
-						"value": "@pipeline().parameters.InputPipelineName",
-						"type": "Expression"
-					}
-				}
 			}
 		],
 		"parameters": {
@@ -123,12 +103,6 @@
 			"SinkSqlTable": {
 				"type": "string",
 				"defaultValue": "CustomReportPayslipsE"
-			}
-		},
-		"variables": {
-			"InputPipelineName": {
-				"type": "String",
-				"defaultValue": "pl_00_Default"
 			}
 		},
 		"folder": {
