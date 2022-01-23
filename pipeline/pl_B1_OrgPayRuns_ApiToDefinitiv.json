@@ -3,22 +3,9 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup1",
+				"name": "LookupOrganizations",
 				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "SetPipelineTriggerTime",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "SetPipelineRunId",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -50,7 +37,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "LookupOrganizations",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -59,7 +46,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup1').output.value",
+						"value": "@activity('LookupOrganizations').output.value",
 						"type": "Expression"
 					},
 					"isSequential": false,
@@ -90,14 +77,14 @@
 										{
 											"name": "OrgPayRun.PipelineTriggerTime",
 											"value": {
-												"value": "@variables('PipelineTriggerTime')",
+												"value": "@pipeline().TriggerTime",
 												"type": "Expression"
 											}
 										},
 										{
 											"name": "OrgPayRun.PipelineRunId",
 											"value": {
-												"value": "@variables('PipelineRunId')",
+												"value": "@pipeline().RunId",
 												"type": "Expression"
 											}
 										},
@@ -105,6 +92,13 @@
 											"name": "Org.LegalName",
 											"value": {
 												"value": "@item().legalName",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "OrgPayRun.PipelineName",
+											"value": {
+												"value": "@pipeline().Pipeline",
 												"type": "Expression"
 											}
 										}
@@ -144,14 +138,18 @@
 									"referenceName": "ds_adsl2_stnidoprodeastau100_json_input",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": "definitiv",
-										"TableName": "OrganizationPayRuns",
 										"ds_PipelineTriggerTime": {
-											"value": "@variables('PipelineTriggerTime')",
+											"value": "@pipeline().TriggerTime",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
-											"value": "@variables('PipelineRunId')",
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_output",
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
 											"type": "Expression"
 										}
 									}
@@ -269,50 +267,8 @@
 						}
 					}
 				]
-			},
-			{
-				"name": "SetPipelineTriggerTime",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineTriggerTime",
-					"value": {
-						"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "SetPipelineRunId",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineRunId",
-					"value": {
-						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
-						"type": "Expression"
-					}
-				}
 			}
 		],
-		"parameters": {
-			"MasterPipelineTriggerTime": {
-				"type": "string"
-			},
-			"MasterPipelineRunId": {
-				"type": "string"
-			}
-		},
-		"variables": {
-			"PipelineTriggerTime": {
-				"type": "String"
-			},
-			"PipelineRunId": {
-				"type": "String"
-			}
-		},
 		"folder": {
 			"name": "07_PayRuns"
 		},
