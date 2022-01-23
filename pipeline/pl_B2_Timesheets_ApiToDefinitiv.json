@@ -463,17 +463,9 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_adsl2_stnidoprodeastau100_json_input",
+									"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": {
-											"value": "@pipeline().parameters.sinkJsonSchema",
-											"type": "Expression"
-										},
-										"TableName": {
-											"value": "@pipeline().parameters.sinkJsonTable",
-											"type": "Expression"
-										},
 										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"

@@ -133,11 +133,9 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_adsl2_stnidoprodeastau100_json_input",
+									"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": "definitiv",
-										"TableName": "ReportingLeaveBalances",
 										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
