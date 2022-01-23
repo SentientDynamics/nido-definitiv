@@ -38,8 +38,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "Organizations"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
@@ -186,8 +186,8 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"SinkSqlDefinitivPayRuns": {
-								"SchemaName": "definitiv",
-								"TableName": "OrganizationPayRuns"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "OrganizationPayRuns"
 							}
 						}
 					},
@@ -249,8 +249,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "OrganizationPayRuns"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "OrganizationPayRuns"
 						}
 					}
 				],

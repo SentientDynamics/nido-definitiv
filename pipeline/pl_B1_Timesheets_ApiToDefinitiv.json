@@ -134,11 +134,11 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": {
+							"ds_SchemaName": {
 								"value": "definitiv",
 								"type": "Expression"
 							},
-							"TableName": "Organizations"
+							"ds_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false

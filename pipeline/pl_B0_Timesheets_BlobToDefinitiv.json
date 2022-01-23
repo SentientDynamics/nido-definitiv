@@ -47,16 +47,16 @@
 						},
 						"datasetParameters": {
 							"SourceSqlDefinitivTimesheets": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportTimesheetsD"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportTimesheetsD"
 							},
 							"SourceSqlOrgRosters": {
-								"SchemaName": "definitiv",
-								"TableName": "OrganizationRosters"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "OrganizationRosters"
 							},
 							"SinkSqlDefinitivTimesheets": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportTimesheetsD"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportTimesheetsD"
 							}
 						}
 					},

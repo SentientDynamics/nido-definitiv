@@ -38,8 +38,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "OrganizationPayRuns"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "OrganizationPayRuns"
 						}
 					},
 					"firstRowOnly": false
@@ -210,12 +210,12 @@
 						},
 						"datasetParameters": {
 							"sourceSql": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportWagesD"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportWagesD"
 							},
 							"sink1": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportWagesD"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportWagesD"
 							}
 						}
 					},
@@ -280,8 +280,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "CustomReportWagesD"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "CustomReportWagesD"
 						}
 					}
 				],

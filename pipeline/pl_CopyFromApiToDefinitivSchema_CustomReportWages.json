@@ -38,8 +38,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "OrganizationPayRuns"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "OrganizationPayRuns"
 						}
 					},
 					"firstRowOnly": false
@@ -210,12 +210,12 @@
 						},
 						"datasetParameters": {
 							"sourceSql": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportWagesA"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportWagesA"
 							},
 							"sink1": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportWagesA"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportWagesA"
 							}
 						}
 					},
@@ -280,8 +280,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "CustomReportWages"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "CustomReportWages"
 						}
 					}
 				],
@@ -330,12 +330,12 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"source1": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportWagesA"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportWagesA"
 							},
 							"sink1": {
-								"SchemaName": "draft",
-								"TableName": "PreceedaWages"
+								"ds_SchemaName": "draft",
+								"ds_TableName": "PreceedaWages"
 							}
 						}
 					},
@@ -397,8 +397,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "draft",
-							"TableName": "PreceedaWages"
+							"ds_SchemaName": "draft",
+							"ds_TableName": "PreceedaWages"
 						}
 					}
 				],
@@ -456,8 +456,8 @@
 						},
 						"datasetParameters": {
 							"sink1": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportWagesB"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportWagesB"
 							}
 						}
 					},
@@ -522,8 +522,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "CustomReportWagesB"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "CustomReportWagesB"
 						}
 					}
 				],

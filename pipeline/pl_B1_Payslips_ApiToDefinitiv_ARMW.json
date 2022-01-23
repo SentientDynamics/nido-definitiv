@@ -38,8 +38,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "OrganizationPayRuns"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "OrganizationPayRuns"
 						}
 					},
 					"firstRowOnly": false
@@ -158,14 +158,18 @@
 									"referenceName": "ds_adsl2_stnidoprodeastau100_json_2",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": "definitiv",
-										"TableName": "CustomReportPayslips_ARMW",
 										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
+											"type": "Expression"
+										},
+										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json",
+										"ds_InputOutput": {
+											"value": "false",
 											"type": "Expression"
 										}
 									}
@@ -215,12 +219,12 @@
 						},
 						"datasetParameters": {
 							"SourceSqlDefinitivPayslips": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportPayslipsE"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportPayslipsE"
 							},
 							"SinkSqlDefinitivPayslips": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportPayslipsE"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportPayslipsE"
 							},
 							"sink1": {
 								"schemaName": "definitiv",
@@ -294,8 +298,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "CustomReportPayslipsD"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "CustomReportPayslipsD"
 						}
 					}
 				],

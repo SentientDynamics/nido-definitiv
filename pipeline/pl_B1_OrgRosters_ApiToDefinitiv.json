@@ -38,8 +38,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "Organization"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "Organization"
 						}
 					},
 					"firstRowOnly": false
@@ -192,12 +192,12 @@
 						},
 						"datasetParameters": {
 							"sourceSql": {
-								"SchemaName": "definitiv",
-								"TableName": "OrganizationRosters"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "OrganizationRosters"
 							},
 							"sinkSql": {
-								"SchemaName": "definitiv",
-								"TableName": "OrganizationRosters"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "OrganizationRosters"
 							}
 						}
 					},

@@ -32,8 +32,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "Employees"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "Employees"
 						}
 					},
 					"firstRowOnly": false
@@ -179,8 +179,8 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"sink1": {
-								"SchemaName": "definitiv",
-								"TableName": "EmployeesEmploymentHistory"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "EmployeesEmploymentHistory"
 							}
 						}
 					},
@@ -242,8 +242,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "EmployeesEmploymentHistory"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "EmployeesEmploymentHistory"
 						}
 					}
 				],
@@ -381,8 +381,8 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"sink1": {
-								"SchemaName": "definitiv",
-								"TableName": "Employees"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "Employees"
 							}
 						}
 					},
@@ -444,8 +444,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "Employees"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "Employees"
 						}
 					}
 				],

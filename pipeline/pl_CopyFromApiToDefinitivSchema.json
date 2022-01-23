@@ -25,8 +25,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "adf",
-							"TableName": "Parameters"
+							"ds_SchemaName": "adf",
+							"ds_TableName": "Parameters"
 						}
 					},
 					"firstRowOnly": false
@@ -202,11 +202,11 @@
 									"referenceName": "ds_sql_tnk001",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": {
+										"ds_SchemaName": {
 											"value": "@first(activity('LookupAdfParametersEmployees').output.value).SinkSchemaName",
 											"type": "Expression"
 										},
-										"TableName": {
+										"ds_TableName": {
 											"value": "@first(activity('LookupAdfParametersEmployees').output.value).SinkTableName",
 											"type": "Expression"
 										}
@@ -237,8 +237,8 @@
 									"referenceName": "ds_sql_tnk001",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": "adf",
-										"TableName": "Parameters"
+										"ds_SchemaName": "adf",
+										"ds_TableName": "Parameters"
 									}
 								},
 								"firstRowOnly": false
@@ -349,8 +349,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "Employees"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "Employees"
 						}
 					},
 					"firstRowOnly": false
@@ -386,8 +386,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "Organizations"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
@@ -434,8 +434,8 @@
 									"referenceName": "ds_sql_tnk001",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": "adf",
-										"TableName": "Parameters"
+										"ds_SchemaName": "adf",
+										"ds_TableName": "Parameters"
 									}
 								},
 								"firstRowOnly": false
@@ -557,8 +557,8 @@
 									"referenceName": "ds_sql_tnk001",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": "adf",
-										"TableName": "Parameters"
+										"ds_SchemaName": "adf",
+										"ds_TableName": "Parameters"
 									}
 								},
 								"firstRowOnly": false
@@ -676,10 +676,6 @@
 							"sink1": {
 								"DirectoryName": "a",
 								"FileName": "b"
-							},
-							"sink2": {
-								"SchemaName": "definitiv",
-								"TableName": "ReportingLeaveApplications"
 							}
 						}
 					},
@@ -727,10 +723,6 @@
 							"sink1": {
 								"DirectoryName": "a",
 								"FileName": "b"
-							},
-							"sink2": {
-								"SchemaName": "definitiv",
-								"TableName": "ReportingLeaveBalances"
 							}
 						}
 					},

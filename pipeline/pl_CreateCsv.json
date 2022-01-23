@@ -336,8 +336,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "CustomReportRostersB"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "CustomReportRostersB"
 						}
 					}
 				],

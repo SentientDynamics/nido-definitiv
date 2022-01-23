@@ -45,32 +45,6 @@
 								"value": "'@{pipeline().Pipeline}'",
 								"type": "Expression"
 							}
-						},
-						"datasetParameters": {
-							"SourceSqlPrecedaPayslip2": {
-								"SchemaName": "draft",
-								"TableName": "Preceda_Payslip_2"
-							},
-							"SourceSqlServiceList": {
-								"SchemaName": "dbo",
-								"TableName": "ServiceList"
-							},
-							"SourceSqlPrecedaMap": {
-								"SchemaName": "dbo",
-								"TableName": "Preceeda_Map"
-							},
-							"SourceSqlPreceedaPayCodes": {
-								"SchemaName": "dbo",
-								"TableName": "Preceeda_Pay_Codes"
-							},
-							"SourceSqlDefinitivPayCodes": {
-								"SchemaName": "dbo",
-								"TableName": "definitiv_Pay_Codes"
-							},
-							"SinkSqlDraftPayslipReportView": {
-								"SchemaName": "draft",
-								"TableName": "ReportViewPayslips"
-							}
 						}
 					},
 					"integrationRuntime": {

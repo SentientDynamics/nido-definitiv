@@ -25,8 +25,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "adf",
-							"TableName": "Parameters"
+							"ds_SchemaName": "adf",
+							"ds_TableName": "Parameters"
 						}
 					},
 					"firstRowOnly": false
@@ -87,11 +87,11 @@
 									"referenceName": "ds_sql_tnk001",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": {
+										"ds_SchemaName": {
 											"value": "@item().SinkSchemName",
 											"type": "Expression"
 										},
-										"TableName": {
+										"ds_TableName": {
 											"value": "@item().SinkTableName",
 											"type": "Expression"
 										}
@@ -103,11 +103,11 @@
 									"referenceName": "ds_sql_tnk001",
 									"type": "DatasetReference",
 									"parameters": {
-										"SchemaName": {
+										"ds_SchemaName": {
 											"value": "@item().SinkSchemaName",
 											"type": "Expression"
 										},
-										"TableName": {
+										"ds_TableName": {
 											"value": "@item().SinkTableName",
 											"type": "Expression"
 										}

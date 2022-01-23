@@ -38,8 +38,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "Organizations"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
@@ -178,8 +178,8 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"sink1": {
-								"SchemaName": "definitiv",
-								"TableName": "ReportingLeaveApplications"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "ReportingLeaveApplications"
 							}
 						}
 					},
@@ -241,8 +241,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": "definitiv",
-							"TableName": "ReportingLeaveApplications"
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "ReportingLeaveApplications"
 						}
 					}
 				],

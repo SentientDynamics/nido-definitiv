@@ -462,11 +462,11 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": {
+							"ds_SchemaName": {
 								"value": "@pipeline().parameters.sourceSqlSchema",
 								"type": "Expression"
 							},
-							"TableName": {
+							"ds_TableName": {
 								"value": "@pipeline().parameters.sourceSqlTable",
 								"type": "Expression"
 							}
@@ -478,11 +478,11 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"SchemaName": {
+							"ds_SchemaName": {
 								"value": "@pipeline().parameters.sinkSqlSchema",
 								"type": "Expression"
 							},
-							"TableName": {
+							"ds_TableName": {
 								"value": "@pipeline().parameters.sinkSqlTable",
 								"type": "Expression"
 							}
