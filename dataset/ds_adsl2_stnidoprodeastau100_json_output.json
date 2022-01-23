@@ -1,0 +1,48 @@
+{
+	"name": "ds_adsl2_stnidoprodeastau100_json_output",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls2_stnidoprodeastau100",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ds_PipelineTriggerTime": {
+				"type": "String",
+				"defaultValue": "2000-01-01T12-00-00"
+			},
+			"ds_PipelineRunId": {
+				"type": "string",
+				"defaultValue": "PipelineRunId_0123"
+			},
+			"ds_FileSystem": {
+				"type": "string",
+				"defaultValue": "container-adf-nido-prod-eastau-100-1"
+			},
+			"ds_Directory": {
+				"type": "string",
+				"defaultValue": "ds_adsl2_stnidoprodeastau100_json_output"
+			},
+			"ds_PipelineName": {
+				"type": "string",
+				"defaultValue": "pl_00_Default"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(\n    if(not(empty(pipeline().Pipeline)), pipeline().Pipeline, dataset().ds_PipelineName),\n    '/',\n    formatDateTime(string(\n        convertFromUtc(\n            if(not(empty(pipeline().TriggerTime)), pipeline().TriggerTime, dataset().ds_PipelineTriggerTime), \n        'AUS Eastern Standard Time')),\n    'yyyy-MM-ddTHH-mm-ss'),\n    '_', 'PipelineRunId_', \n    if(not(empty(pipeline().RunId)), pipeline().RunId, dataset().ds_PipelineRunId)\n)",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().ds_FileSystem",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
