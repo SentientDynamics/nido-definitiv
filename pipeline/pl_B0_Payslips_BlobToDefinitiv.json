@@ -7,13 +7,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "SetPipelineTriggerTime",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "SetPipelineRunId",
+						"activity": "Set InputPipelineName",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -33,11 +27,11 @@
 						"type": "DataFlowReference",
 						"parameters": {
 							"PipelineTriggerTime": {
-								"value": "'@{variables('PipelineTriggerTime')}'",
+								"value": "'@{pipeline().TriggerTime}'",
 								"type": "Expression"
 							},
 							"PipelineRunId": {
-								"value": "'@{variables('PipelineRunId')}'",
+								"value": "'@{pipeline().RunId}'",
 								"type": "Expression"
 							},
 							"PipelineName": {
@@ -51,31 +45,38 @@
 								"ds_PipelineRunId": "PipelineRunId_0123",
 								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
 								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json",
-								"ds_InputOutput": true,
+								"ds_InputOutput": {
+									"value": "true",
+									"type": "Expression"
+								},
 								"ds_PipelineName": {
-									"value": "@pipeline().Pipeline",
+									"value": "@variables('InputPipelineName')",
 									"type": "Expression"
 								}
 							},
 							"SourceSqlDefinitivPayslips": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportPayslipsE"
+								"ds_SchemaName": {
+									"value": "@pipeline().parameters.SourceSqlSchema",
+									"type": "Expression"
+								},
+								"ds_TableName": {
+									"value": "@pipeline().parameters.SourceSqlTable",
+									"type": "Expression"
+								}
 							},
 							"SinkSqlDefinitivPayslips": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportPayslipsE"
+								"ds_SchemaName": {
+									"value": "@pipeline().parameters.SinkSqlSchema",
+									"type": "Expression"
+								},
+								"ds_TableName": {
+									"value": "@pipeline().parameters.SinkSqlTable",
+									"type": "Expression"
+								}
 							},
 							"sink1": {
 								"schemaName": "definitiv",
-								"tableName": "CustomReportPayslipsE",
-								"pipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								},
-								"pipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								}
+								"tableName": "CustomReportPayslipsE"
 							}
 						}
 					},
@@ -89,46 +90,45 @@
 				}
 			},
 			{
-				"name": "SetPipelineTriggerTime",
+				"name": "Set InputPipelineName",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "PipelineTriggerTime",
+					"variableName": "InputPipelineName",
 					"value": {
-						"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "SetPipelineRunId",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineRunId",
-					"value": {
-						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+						"value": "@pipeline().parameters.InputPipelineName",
 						"type": "Expression"
 					}
 				}
 			}
 		],
 		"parameters": {
-			"MasterPipelineTriggerTime": {
-				"type": "string"
+			"InputPipelineName": {
+				"type": "string",
+				"defaultValue": "pl_00_Default"
 			},
-			"MasterPipelineRunId": {
-				"type": "string"
+			"SourceSqlSchema": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"SourceSqlTable": {
+				"type": "string",
+				"defaultValue": "CustomReportPayslipsE"
+			},
+			"SinkSqlSchema": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"SinkSqlTable": {
+				"type": "string",
+				"defaultValue": "CustomReportPayslipsE"
 			}
 		},
 		"variables": {
-			"PipelineTriggerTime": {
-				"type": "String"
-			},
-			"PipelineRunId": {
-				"type": "String"
+			"InputPipelineName": {
+				"type": "String",
+				"defaultValue": "pl_00_Default"
 			}
 		},
 		"folder": {
