@@ -2,7 +2,7 @@
 	"name": "adf-nido-prod-eastau-100",
 	"properties": {
 		"globalParameters": {
-			"global_SqlSinkErrorOutputStorageFolder": {
+			"global_adls2_FileSystem": {
 				"type": "string",
 				"value": "container-adf-nido-prod-eastau-100-1"
 			}
