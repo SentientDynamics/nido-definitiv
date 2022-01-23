@@ -33,7 +33,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"folderPath": {
-					"value": "@concat(\n    if(not(empty(pipeline().Pipeline)), pipeline().Pipeline, dataset().ds_PipelineName),\n    '/',\n    formatDateTime(string(\n        convertFromUtc(\n            if(not(empty(pipeline().TriggerTime)), pipeline().TriggerTime, dataset().ds_PipelineTriggerTime), \n        'AUS Eastern Standard Time')),\n    'yyyy-MM-ddTHH-mm-ss'),\n    '_', 'PipelineRunId_', \n    if(not(empty(pipeline().RunId)), pipeline().RunId, dataset().ds_PipelineRunId)\n)",
+					"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(\n        convertFromUtc(\n            string(\n                dataset().ds_PipelineTriggerTime),\n            'AUS Eastern Standard Time'),\n        'yyyy-MM-ddTHH-mm-ss'),\n    '_', 'PipelineRunId_', \n    dataset().ds_PipelineRunId\n)",
 					"type": "Expression"
 				},
 				"fileSystem": {

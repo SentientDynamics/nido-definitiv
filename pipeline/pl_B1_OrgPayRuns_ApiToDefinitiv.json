@@ -130,6 +130,10 @@
 										"linkedServiceName": {
 											"referenceName": "ls_adls2_stnidoprodeastau100",
 											"type": "LinkedServiceReference"
+										},
+										"path": {
+											"value": "@concat(\n    pipeline().globalParameters.global_adls2_FileSystem,\n    '/',\n    pipeline().globalParameters.global_adls2_LogDirectory\n)",
+											"type": "Expression"
 										}
 									}
 								},
@@ -520,6 +524,28 @@
 						"referenceName": "df_FlattenOrgPayRuns_UpdateOrgPayRuns",
 						"type": "DataFlowReference",
 						"datasetParameters": {
+							"SourceBlobDefinitivPayRuns": {
+								"ds_PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"ds_PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"ds_FileSystem": {
+									"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+									"type": "Expression"
+								},
+								"ds_Directory": {
+									"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+									"type": "Expression"
+								},
+								"ds_PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
 							"SinkSqlDefinitivPayRuns": {
 								"ds_SchemaName": "definitiv",
 								"ds_TableName": "OrganizationPayRuns"
