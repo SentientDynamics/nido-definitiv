@@ -138,11 +138,11 @@
 									"parameters": {
 										"SchemaName": "definitiv",
 										"TableName": "ReportingLeaveApplications",
-										"PipelineTriggerTime": {
+										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"
 										},
-										"PipelineRunId": {
+										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
 										}
@@ -177,18 +177,6 @@
 						"referenceName": "df_UpdateReportingLeaveApplications",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"source1": {
-								"SchemaName": "definitiv",
-								"TableName": "ReportingLeaveApplications",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"sink1": {
 								"SchemaName": "definitiv",
 								"TableName": "ReportingLeaveApplications"

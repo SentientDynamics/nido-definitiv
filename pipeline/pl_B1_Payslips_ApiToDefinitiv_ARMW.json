@@ -160,11 +160,11 @@
 									"parameters": {
 										"SchemaName": "definitiv",
 										"TableName": "CustomReportPayslips_ARMW",
-										"PipelineTriggerTime": {
+										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"
 										},
-										"PipelineRunId": {
+										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
 										}
@@ -214,18 +214,6 @@
 							}
 						},
 						"datasetParameters": {
-							"SourceBlobDefinitivPayslips": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportPayslips_ARMW",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"SourceSqlDefinitivPayslips": {
 								"SchemaName": "definitiv",
 								"TableName": "CustomReportPayslipsE"

@@ -138,11 +138,11 @@
 									"parameters": {
 										"SchemaName": "definitiv",
 										"TableName": "OrganizationRosters",
-										"PipelineTriggerTime": {
+										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"
 										},
-										"PipelineRunId": {
+										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
 										}
@@ -191,18 +191,6 @@
 							}
 						},
 						"datasetParameters": {
-							"sourceApi": {
-								"SchemaName": "definitiv",
-								"TableName": "OrganizationRosters",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"sourceSql": {
 								"SchemaName": "definitiv",
 								"TableName": "OrganizationRosters"

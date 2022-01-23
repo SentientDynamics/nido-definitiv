@@ -160,11 +160,11 @@
 									"parameters": {
 										"SchemaName": "definitiv",
 										"TableName": "CustomReportWages",
-										"PipelineTriggerTime": {
+										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"
 										},
-										"PipelineRunId": {
+										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
 										}
@@ -209,18 +209,6 @@
 							}
 						},
 						"datasetParameters": {
-							"sourceApi": {
-								"SchemaName": "definitiv",
-								"TableName": "definitiv",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"sourceSql": {
 								"SchemaName": "definitiv",
 								"TableName": "CustomReportWagesA"
@@ -467,18 +455,6 @@
 							}
 						},
 						"datasetParameters": {
-							"sourceApi": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportWages",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"sink1": {
 								"SchemaName": "definitiv",
 								"TableName": "CustomReportWagesB"

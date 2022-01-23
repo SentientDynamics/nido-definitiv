@@ -139,11 +139,11 @@
 									"parameters": {
 										"SchemaName": "definitiv",
 										"TableName": "EmployeesEmploymentHistory",
-										"PipelineTriggerTime": {
+										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"
 										},
-										"PipelineRunId": {
+										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
 										}
@@ -178,18 +178,6 @@
 						"referenceName": "df_UpdateEmployeesEmploymentHistory",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"source1": {
-								"SchemaName": "definitiv",
-								"TableName": "EmployeesEmploymentHistory",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"sink1": {
 								"SchemaName": "definitiv",
 								"TableName": "EmployeesEmploymentHistory"
@@ -356,11 +344,11 @@
 						"parameters": {
 							"SchemaName": "definitiv",
 							"TableName": "Employees",
-							"PipelineTriggerTime": {
+							"ds_PipelineTriggerTime": {
 								"value": "@variables('PipelineRunId')",
 								"type": "Expression"
 							},
-							"PipelineRunId": {
+							"ds_PipelineRunId": {
 								"value": "@variables('PipelineTriggerTime')",
 								"type": "Expression"
 							}
@@ -392,18 +380,6 @@
 						"referenceName": "df_UpdateEmployees",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"source1": {
-								"SchemaName": "definitiv",
-								"TableName": "Employees",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"sink1": {
 								"SchemaName": "definitiv",
 								"TableName": "Employees"

@@ -40,18 +40,6 @@
 							}
 						},
 						"datasetParameters": {
-							"SourceBlobDefinitivTimesheets": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportTimesheets",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"SourceSqlDefinitivTimesheets": {
 								"SchemaName": "definitiv",
 								"TableName": "CustomReportTimesheetsD"
@@ -486,11 +474,11 @@
 											"value": "@pipeline().parameters.sinkJsonTable",
 											"type": "Expression"
 										},
-										"PipelineTriggerTime": {
+										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"
 										},
-										"PipelineRunId": {
+										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
 										}

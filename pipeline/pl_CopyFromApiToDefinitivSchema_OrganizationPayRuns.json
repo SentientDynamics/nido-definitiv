@@ -146,11 +146,11 @@
 									"parameters": {
 										"SchemaName": "definitiv",
 										"TableName": "OrganizationPayRuns",
-										"PipelineTriggerTime": {
+										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"
 										},
-										"PipelineRunId": {
+										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
 										}
@@ -185,18 +185,6 @@
 						"referenceName": "df_FlattenOrgPayRuns_UpdateOrgPayRuns",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"SourceBlobDefinitivPayRuns": {
-								"SchemaName": "definitiv",
-								"TableName": "OrganizationPayRuns",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"SinkSqlDefinitivPayRuns": {
 								"SchemaName": "definitiv",
 								"TableName": "OrganizationPayRuns"

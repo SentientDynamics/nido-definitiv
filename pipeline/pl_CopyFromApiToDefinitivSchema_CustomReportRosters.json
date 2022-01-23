@@ -36,18 +36,6 @@
 							}
 						},
 						"datasetParameters": {
-							"sourceApi": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportRosters",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"sinkSql": {
 								"SchemaName": "definitiv",
 								"TableName": "CustomReportRostersB"
@@ -282,11 +270,11 @@
 									"parameters": {
 										"SchemaName": "definitiv",
 										"TableName": "CustomReportRosters",
-										"PipelineTriggerTime": {
+										"ds_PipelineTriggerTime": {
 											"value": "@variables('PipelineTriggerTime')",
 											"type": "Expression"
 										},
-										"PipelineRunId": {
+										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
 										}

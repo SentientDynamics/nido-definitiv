@@ -46,18 +46,6 @@
 							}
 						},
 						"datasetParameters": {
-							"SourceBlobDefinitivTimesheets": {
-								"SchemaName": "definitiv",
-								"TableName": "CustomReportTimesheets",
-								"PipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								},
-								"PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								}
-							},
 							"SourceSqlDefinitivTimesheets": {
 								"SchemaName": "definitiv",
 								"TableName": "CustomReportTimesheetsD"
