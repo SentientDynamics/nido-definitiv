@@ -39,7 +39,7 @@
 								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
 								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json",
 								"ds_InputOutput": {
-									"value": "true",
+									"value": "true()",
 									"type": "Expression"
 								},
 								"ds_InputPipelineName": {
