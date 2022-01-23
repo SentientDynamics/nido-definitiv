@@ -225,18 +225,6 @@
 							"SinkSqlDefinitivPayslips": {
 								"ds_SchemaName": "definitiv",
 								"ds_TableName": "CustomReportPayslipsE"
-							},
-							"sink1": {
-								"schemaName": "definitiv",
-								"tableName": "CustomReportPayslipsE",
-								"pipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								},
-								"pipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								}
 							}
 						}
 					},

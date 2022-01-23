@@ -206,7 +206,7 @@
 								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
 								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json/input",
 								"ds_InputOutput": true,
-								"ds_PipelineName": "pl_00_Default"
+								"ds_InputPipelineName": "pl_00_Default"
 							},
 							"SourceSqlDefinitivPayslips": {
 								"ds_SchemaName": "definitiv",
@@ -215,18 +215,6 @@
 							"SinkSqlDefinitivPayslips": {
 								"ds_SchemaName": "definitiv",
 								"ds_TableName": "CustomReportPayslipsD"
-							},
-							"sink1": {
-								"schemaName": "definitiv",
-								"tableName": "CustomReportPayslipsD",
-								"pipelineRunId": {
-									"value": "@variables('PipelineRunId')",
-									"type": "Expression"
-								},
-								"pipelineTriggerTime": {
-									"value": "@variables('PipelineTriggerTime')",
-									"type": "Expression"
-								}
 							}
 						}
 					},

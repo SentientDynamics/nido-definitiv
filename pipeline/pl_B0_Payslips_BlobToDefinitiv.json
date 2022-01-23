@@ -42,8 +42,8 @@
 									"value": "true",
 									"type": "Expression"
 								},
-								"ds_PipelineName": {
-									"value": "@variables('InputPipelineName')",
+								"ds_InputPipelineName": {
+									"value": "@pipeline().parameters.InputPipelineName",
 									"type": "Expression"
 								}
 							},
@@ -66,10 +66,6 @@
 									"value": "@pipeline().parameters.SinkSqlTable",
 									"type": "Expression"
 								}
-							},
-							"sink1": {
-								"schemaName": "definitiv",
-								"tableName": "CustomReportPayslipsE"
 							}
 						}
 					},
@@ -86,7 +82,7 @@
 		"parameters": {
 			"InputPipelineName": {
 				"type": "string",
-				"defaultValue": "pl_00_Default"
+				"defaultValue": "pl_B1_Payslips_ApiToDefinitiv"
 			},
 			"SourceSqlSchema": {
 				"type": "string",
