@@ -1,5 +1,5 @@
 {
-	"name": "ds_adsl2_stnidoprodeastau100_json_2",
+	"name": "ds_adsl2_stnidoprodeastau100_json_input",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls2_stnidoprodeastau100",
@@ -20,12 +20,9 @@
 			},
 			"ds_Directory": {
 				"type": "string",
-				"defaultValue": "ds_adsl2_stnidoprodeastau100_json"
+				"defaultValue": "ds_adsl2_stnidoprodeastau100_json_input"
 			},
-			"ds_InputOutput": {
-				"type": "bool"
-			},
-			"ds_InputPipelineName": {
+			"ds_PipelineName": {
 				"type": "string",
 				"defaultValue": "pl_00_Default"
 			}
@@ -36,7 +33,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"folderPath": {
-					"value": "@concat(\n    if(not(empty(dataset().ds_InputPipelineName)), dataset().ds_InputPipelineName, pipeline().Pipeline),\n    '/',\n    if(dataset().ds_InputOutput, 'Input', 'Output'), \n    '/',\n    formatDateTime(string(\n        convertFromUtc(\n            if(not(empty(pipeline().TriggerTime)), pipeline().TriggerTime, dataset().ds_PipelineTriggerTime), \n        'AUS Eastern Standard Time')),\n    'yyyy-MM-ddTHH-mm-ss'),\n    '_', 'PipelineRunId_', \n    if(not(empty(pipeline().RunId)), pipeline().RunId, dataset().ds_PipelineRunId)\n)",
+					"value": "@concat(\n    if(not(empty(pipeline().Pipeline)), pipeline().Pipeline, dataset().ds_PipelineName),\n    '/',\n    formatDateTime(string(\n        convertFromUtc(\n            if(not(empty(pipeline().TriggerTime)), pipeline().TriggerTime, dataset().ds_PipelineTriggerTime), \n        'AUS Eastern Standard Time')),\n    'yyyy-MM-ddTHH-mm-ss'),\n    '_', 'PipelineRunId_', \n    if(not(empty(pipeline().RunId)), pipeline().RunId, dataset().ds_PipelineRunId)\n)",
 					"type": "Expression"
 				},
 				"fileSystem": {
