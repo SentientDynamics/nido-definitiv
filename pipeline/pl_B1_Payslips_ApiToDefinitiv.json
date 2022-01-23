@@ -142,12 +142,11 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_adsl2_stnidoprodeastau100_json_2",
+									"referenceName": "ds_adsl2_stnidoprodeastau100_json_input",
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json/input",
-										"ds_InputOutput": true
+										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json/input"
 									}
 								}
 							]
@@ -204,9 +203,7 @@
 									"type": "Expression"
 								},
 								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json/input",
-								"ds_InputOutput": true,
-								"ds_InputPipelineName": "pl_00_Default"
+								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json/input"
 							},
 							"SourceSqlDefinitivPayslips": {
 								"ds_SchemaName": "definitiv",
