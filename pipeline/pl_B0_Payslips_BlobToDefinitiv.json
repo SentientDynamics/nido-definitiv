@@ -38,10 +38,7 @@
 								"ds_PipelineRunId": "PipelineRunId_0123",
 								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
 								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
-								"ds_PipelineName": {
-									"value": "@pipeline().Pipeline",
-									"type": "Expression"
-								}
+								"ds_PipelineName": "pl_00_Default"
 							},
 							"SourceSqlDefinitivPayslips": {
 								"ds_SchemaName": {
