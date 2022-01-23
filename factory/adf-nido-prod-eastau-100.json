@@ -13,6 +13,10 @@
 			"global_adls2_OutputDirectory_Json": {
 				"type": "string",
 				"value": "ds_adls2_stnidoprodeastau100_json_output"
+			},
+			"global_adls2_LogDirectory": {
+				"type": "string",
+				"value": "ds_adls2_stnidoprodeastau100_log"
 			}
 		}
 	},
