@@ -6,7 +6,7 @@
 				"type": "string",
 				"value": "container-adf-nido-prod-eastau-100-1"
 			},
-			"global_adls2_Directory_Json_Input": {
+			"global_adls2_InputDirectory_Json": {
 				"type": "string",
 				"value": "ds_adls2_stnidoprodeastau100_json_input"
 			}
