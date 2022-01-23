@@ -5,6 +5,10 @@
 			"global_adls2_FileSystem": {
 				"type": "string",
 				"value": "container-adf-nido-prod-eastau-100-1"
+			},
+			"global_adls2_Directory_Json_Input": {
+				"type": "string",
+				"value": "ds_adls2_stnidoprodeastau100_json_input"
 			}
 		}
 	},
