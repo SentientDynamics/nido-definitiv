@@ -181,13 +181,7 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "df_FlattenOrgPayRuns_UpdateOrgPayRuns",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"SinkSqlDefinitivPayRuns": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "OrganizationPayRuns"
-							}
-						}
+						"type": "DataFlowReference"
 					},
 					"integrationRuntime": {
 						"referenceName": "AustraliaEastIntegrationRuntime",
