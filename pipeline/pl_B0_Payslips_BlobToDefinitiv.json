@@ -34,7 +34,7 @@
 						},
 						"datasetParameters": {
 							"SourceBlobDefinitivPayslips": {
-								"ds_PipelineTriggerTime": "2000-01-01T12-00-00",
+								"ds_PipelineTriggerTime": "2000-01-01T12:00:00Z",
 								"ds_PipelineRunId": "PipelineRunId_0123",
 								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
 								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
