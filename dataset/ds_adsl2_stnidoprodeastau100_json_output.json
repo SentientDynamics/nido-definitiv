@@ -8,11 +8,11 @@
 		"parameters": {
 			"ds_PipelineTriggerTime": {
 				"type": "String",
-				"defaultValue": "2000-01-01T12:00:00Z"
+				"defaultValue": "123"
 			},
 			"ds_PipelineRunId": {
 				"type": "string",
-				"defaultValue": "PipelineRunId_0123"
+				"defaultValue": "123"
 			},
 			"ds_FileSystem": {
 				"type": "string",
@@ -20,11 +20,11 @@
 			},
 			"ds_Directory": {
 				"type": "string",
-				"defaultValue": "ds_adsl2_stnidoprodeastau100_json_output"
+				"defaultValue": "ds_adls2_stnidoprodeastau100_json_input"
 			},
 			"ds_PipelineName": {
 				"type": "string",
-				"defaultValue": "pl_00_Default"
+				"defaultValue": "123"
 			}
 		},
 		"annotations": [],

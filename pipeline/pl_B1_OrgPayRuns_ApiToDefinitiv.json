@@ -120,6 +120,19 @@
 									}
 								},
 								"enableStaging": false,
+								"logSettings": {
+									"enableCopyActivityLog": true,
+									"copyActivityLogSettings": {
+										"logLevel": "Info",
+										"enableReliableLogging": true
+									},
+									"logLocationSettings": {
+										"linkedServiceName": {
+											"referenceName": "ls_adls2_stnidoprodeastau100",
+											"type": "LinkedServiceReference"
+										}
+									}
+								},
 								"translator": {
 									"type": "TabularTranslator",
 									"mappings": [
