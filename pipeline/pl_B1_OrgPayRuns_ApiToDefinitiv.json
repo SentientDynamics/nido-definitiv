@@ -125,194 +125,194 @@
 									"mappings": [
 										{
 											"source": {
-												"path": "$['payRuns'][0]['payRunId']"
+												"path": "['payRunId']"
 											},
 											"sink": {
-												"path": "PayRunId"
+												"path": "payRunId"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['runNumber']"
+												"path": "['runNumber']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['runNumber']"
+												"path": "runNumber"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['status']"
+												"path": "['status']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['status']"
+												"path": "status"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['payslipGenerationStatus']"
+												"path": "['payslipGenerationStatus']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['payslipGenerationStatus']"
+												"path": "payslipGenerationStatus"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['lodgementStatus']"
+												"path": "['lodgementStatus']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['lodgementStatus']"
+												"path": "lodgementStatus"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['eofyLodgementStatus']"
+												"path": "['eofyLodgementStatus']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['eofyLodgementStatus']"
+												"path": "eofyLodgementStatus"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['type']"
+												"path": "['type']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['type']"
+												"path": "type"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['dateOpened']"
+												"path": "['dateOpened']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['dateOpened']"
+												"path": "dateOpened"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['dateLastCalculated']"
+												"path": "['dateLastCalculated']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['dateLastCalculated']"
+												"path": "dateLastCalculated"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['datePublished']"
+												"path": "['datePublished']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['datePublished']"
+												"path": "datePublished"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['periodStart']"
+												"path": "['periodStart']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['periodStart']"
+												"path": "periodStart"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['periodEnd']"
+												"path": "['periodEnd']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['periodEnd']"
+												"path": "periodEnd"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['paymentDate']"
+												"path": "['paymentDate']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['paymentDate']"
+												"path": "paymentDate"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['superannuationPaymentDate']"
+												"path": "['superannuationPaymentDate']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['superannuationPaymentDate']"
+												"path": "superannuationPaymentDate"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['initiatingUserId']"
+												"path": "['initiatingUserId']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['initiatingUserId']"
+												"path": "initiatingUserId"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['publishingUserId']"
+												"path": "['publishingUserId']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['publishingUserId']"
+												"path": "publishingUserId"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['initiatingUserName']"
+												"path": "['initiatingUserName']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['initiatingUserName']"
+												"path": "initiatingUserName"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['publishingUserName']"
+												"path": "['publishingUserName']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['publishingUserName']"
+												"path": "publishingUserName"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['employeeCount']"
+												"path": "['employeeCount']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['employeeCount']"
+												"path": "employeeCount"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['notes']"
+												"path": "['notes']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['notes']"
+												"path": "notes"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['payCalendarId']"
+												"path": "['payCalendarId']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['payCalendarId']"
+												"path": "payCalendarId"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['payCalendarName']"
+												"path": "['payCalendarName']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['payCalendarName']"
+												"path": "payCalendarName"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['financialYearStartDate']"
+												"path": "['financialYearStartDate']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['financialYearStartDate']"
+												"path": "financialYearStartDate"
 											}
 										},
 										{
 											"source": {
-												"path": "$['payRuns'][0]['financialYearEndDate']"
+												"path": "['financialYearEndDate']"
 											},
 											"sink": {
-												"path": "$['payRuns'][0]['financialYearEndDate']"
+												"path": "financialYearEndDate"
 											}
 										},
 										{
@@ -320,7 +320,7 @@
 												"path": "$['payCalendars'][0]['payCalendarId']"
 											},
 											"sink": {
-												"path": "$['payCalendars'][0]['payCalendarId']"
+												"path": "PayCalendar.payCalendarId"
 											}
 										},
 										{
@@ -328,7 +328,7 @@
 												"path": "$['payCalendars'][0]['description']"
 											},
 											"sink": {
-												"path": "$['payCalendars'][0]['description']"
+												"path": "PayCalendar.description"
 											}
 										},
 										{
@@ -336,7 +336,7 @@
 												"path": "$['payCalendars'][0]['weeklyFactorEquation']"
 											},
 											"sink": {
-												"path": "$['payCalendars'][0]['weeklyFactorEquation']"
+												"path": "PayCalendar.weeklyFactorEquation"
 											}
 										},
 										{
@@ -344,7 +344,7 @@
 												"path": "$['payCalendars'][0]['weeklyFactor']"
 											},
 											"sink": {
-												"path": "$['payCalendars'][0]['weeklyFactor']"
+												"path": "PayCalendar.weeklyFactor"
 											}
 										},
 										{
@@ -352,7 +352,7 @@
 												"path": "$['payCalendars'][0]['period']"
 											},
 											"sink": {
-												"path": "$['payCalendars'][0]['period']"
+												"path": "PayCalendar.period"
 											}
 										},
 										{
@@ -360,7 +360,7 @@
 												"path": "$['payCalendars'][0]['periodStartDate']"
 											},
 											"sink": {
-												"path": "$['payCalendars'][0]['periodStartDate']"
+												"path": "PayCalendar.periodStartDate"
 											}
 										},
 										{
@@ -368,7 +368,7 @@
 												"path": "$['payCalendars'][0]['proRataMode']"
 											},
 											"sink": {
-												"path": "$['payCalendars'][0]['proRataMode']"
+												"path": "PayCalendar.proRataMode"
 											}
 										},
 										{
@@ -376,7 +376,7 @@
 												"path": "$['payCalendars'][0]['atoLodgementsEnabled']"
 											},
 											"sink": {
-												"path": "$['payCalendars'][0]['atoLodgementsEnabled']"
+												"path": "PayCalendar.atoLodgementsEnabled"
 											}
 										},
 										{
@@ -384,7 +384,7 @@
 												"path": "$['currentFinancialYearStartDate']"
 											},
 											"sink": {
-												"path": "$['currentFinancialYearStartDate']"
+												"path": "currentFinancialYearStartDate"
 											}
 										},
 										{
@@ -392,7 +392,7 @@
 												"path": "$['currentFinancialYearEndDate']"
 											},
 											"sink": {
-												"path": "$['currentFinancialYearEndDate']"
+												"path": "currentFinancialYearEndDate"
 											}
 										},
 										{
@@ -400,7 +400,7 @@
 												"path": "$['Org.OrganizationId']"
 											},
 											"sink": {
-												"path": "$['Org.OrganizationId']"
+												"path": "Org.OrganizationId"
 											}
 										},
 										{
@@ -408,7 +408,7 @@
 												"path": "$['OrgPayRun.PipelineTriggerTime']"
 											},
 											"sink": {
-												"path": "$['OrgPayRun.PipelineTriggerTime']"
+												"path": "OrgPayRun.PipelineTriggerTime"
 											}
 										},
 										{
@@ -416,7 +416,7 @@
 												"path": "$['OrgPayRun.PipelineRunId']"
 											},
 											"sink": {
-												"path": "$['OrgPayRun.PipelineRunId']"
+												"path": "OrgPayRun.PipelineRunId"
 											}
 										},
 										{
@@ -424,7 +424,7 @@
 												"path": "$['Org.LegalName']"
 											},
 											"sink": {
-												"path": "$['Org.LegalName']"
+												"path": "Org.LegalName"
 											}
 										},
 										{
@@ -432,10 +432,11 @@
 												"path": "$['OrgPayRun.PipelineName']"
 											},
 											"sink": {
-												"path": "$['OrgPayRun.PipelineName']"
+												"path": "OrgPayRun.PipelineName"
 											}
 										}
-									]
+									],
+									"collectionReference": "$['payRuns']"
 								}
 							},
 							"inputs": [
