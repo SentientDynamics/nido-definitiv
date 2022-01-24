@@ -1,0 +1,1310 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-nido-prod-eastau-100"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/df_FlattenOrgPayRuns_UpdateOrgPayRuns')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "07_PayRuns"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "SourceBlobDefinitivPayRuns"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "SinkSqlDefinitiv",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "AlterRow1"
+						},
+						{
+							"name": "SelectSourceBlobDefinitivPayRuns"
+						}
+					],
+					"script": "source(output(\n\t\tOrg as (LegalName as string, OrganizationId as string),\n\t\tOrgPayRun as (PipelineName as string, PipelineRunId as string, PipelineTriggerTime as string),\n\t\tPayCalendar as (atoLodgementsEnabled as boolean, description as string, payCalendarId as string, period as string, periodStartDate as string, proRataMode as string, weeklyFactor as double, weeklyFactorEquation as short),\n\t\tcurrentFinancialYearEndDate as string,\n\t\tcurrentFinancialYearStartDate as string,\n\t\tdateLastCalculated as string,\n\t\tdateOpened as string,\n\t\tdatePublished as string,\n\t\temployeeCount as short,\n\t\teofyLodgementStatus as string,\n\t\tfinancialYearEndDate as string,\n\t\tfinancialYearStartDate as string,\n\t\tinitiatingUserId as string,\n\t\tinitiatingUserName as string,\n\t\tlodgementStatus as string,\n\t\tnotes as string,\n\t\tpayCalendarId as string,\n\t\tpayCalendarName as string,\n\t\tpayRunId as string,\n\t\tpaymentDate as string,\n\t\tpayslipGenerationStatus as string,\n\t\tperiodEnd as string,\n\t\tperiodStart as string,\n\t\tpublishingUserId as string,\n\t\tpublishingUserName as string,\n\t\trunNumber as short,\n\t\tstatus as string,\n\t\tsuperannuationPaymentDate as string,\n\t\ttype as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitivPayRuns\nSelectSourceBlobDefinitivPayRuns alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nSourceBlobDefinitivPayRuns select(mapColumn(\n\t\t{Org.LegalName} = Org.LegalName,\n\t\t{Org.OrganizationId} = Org.OrganizationId,\n\t\t{OrgPayRun.PayCalendar} = OrgPayRun.PipelineName,\n\t\t{OrgPayRun.PipelineRunId} = OrgPayRun.PipelineRunId,\n\t\t{OrgPayRun.PipelineTriggerTime} = OrgPayRun.PipelineTriggerTime,\n\t\t{PayCalendar.atoLodgementsEnabled} = PayCalendar.atoLodgementsEnabled,\n\t\t{PayCalendar.payCalendarId} = PayCalendar.payCalendarId,\n\t\t{PayCalendar.period} = PayCalendar.period,\n\t\t{PayCalendar.periodStartDate} = PayCalendar.periodStartDate,\n\t\t{PayCalendar.proRataMode} = PayCalendar.proRataMode,\n\t\t{PayCalendar.weeklyFactor} = PayCalendar.weeklyFactor,\n\t\t{PayCalendar.weeklyFactorEquation} = PayCalendar.weeklyFactorEquation,\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate,\n\t\tdateLastCalculated,\n\t\tdateOpened,\n\t\tdatePublished,\n\t\temployeeCount,\n\t\teofyLodgementStatus,\n\t\tfinancialYearEndDate,\n\t\tfinancialYearStartDate,\n\t\tinitiatingUserId,\n\t\tinitiatingUserName,\n\t\tlodgementStatus,\n\t\tnotes,\n\t\tpayCalendarId,\n\t\tpayCalendarName,\n\t\tpayRunId,\n\t\tpaymentDate,\n\t\tpayslipGenerationStatus,\n\t\tperiodEnd,\n\t\tperiodStart,\n\t\tpublishingUserId,\n\t\tpublishingUserName,\n\t\trunNumber,\n\t\tstatus,\n\t\tsuperannuationPaymentDate,\n\t\ttype,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectSourceBlobDefinitivPayRuns\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['payRunId'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: 'ds_adls2_stnidoprodeastau100_log',\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tLegalName = {Org.LegalName},\n\t\tOrganizationId = {Org.OrganizationId},\n\t\tPayCalendar = {OrgPayRun.PayCalendar},\n\t\tPipelineRunId = {OrgPayRun.PipelineRunId},\n\t\tPipelineTriggerTime = {OrgPayRun.PipelineTriggerTime},\n\t\tatoLodgementsEnabled = {PayCalendar.atoLodgementsEnabled},\n\t\tpayCalendarId = {PayCalendar.payCalendarId},\n\t\tperiod = {PayCalendar.period},\n\t\tperiodStartDate = {PayCalendar.periodStartDate},\n\t\tproRataMode = {PayCalendar.proRataMode},\n\t\tweeklyFactor = {PayCalendar.weeklyFactor},\n\t\tweeklyFactorEquation = {PayCalendar.weeklyFactorEquation},\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate,\n\t\tdateLastCalculated,\n\t\tdateOpened,\n\t\tdatePublished,\n\t\temployeeCount,\n\t\teofyLodgementStatus,\n\t\tfinancialYearEndDate,\n\t\tfinancialYearStartDate,\n\t\tinitiatingUserId,\n\t\tinitiatingUserName,\n\t\tlodgementStatus,\n\t\tnotes,\n\t\tpayCalendarId,\n\t\tpayCalendarName,\n\t\tpayRunId,\n\t\tpaymentDate,\n\t\tpayslipGenerationStatus,\n\t\tperiodEnd,\n\t\tperiodStart,\n\t\tpublishingUserId,\n\t\tpublishingUserName,\n\t\trunNumber,\n\t\tstatus,\n\t\tsuperannuationPaymentDate,\n\t\ttype,\n\t\tSourceFileName\n\t)) ~> SinkSqlDefinitiv"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_FlattenOrgRosters_UpdateOrgRosters')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "04_Rosters"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "sourceApi"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sourceSql"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSql",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "FlattenItems"
+						},
+						{
+							"name": "AlterRow1"
+						},
+						{
+							"name": "SelectOutArrayColumns1"
+						},
+						{
+							"name": "CastDateType1"
+						},
+						{
+							"name": "FlattenIncludedRosterEmployees"
+						},
+						{
+							"name": "Join1"
+						},
+						{
+							"name": "NotExistsDelete"
+						},
+						{
+							"name": "NotExistsInsert"
+						},
+						{
+							"name": "ExistsUpdate"
+						},
+						{
+							"name": "Update"
+						},
+						{
+							"name": "Insert"
+						},
+						{
+							"name": "Delete"
+						},
+						{
+							"name": "UnionAlterRowCondition"
+						},
+						{
+							"name": "CastDateType2"
+						}
+					],
+					"script": "parameters{\n\tPipelineTriggerTime as string,\n\tPipelineRunId as string,\n\tPipelineName as string\n}\nsource(output(\n\t\titems as (ceaseDate as string, commencementDate as string, costingSettings as string, customPeriodDuration as short, defaultPeriodDurationType as string, definedCostingPayItems as string[], description as string, includedRosterEmployees as (employee as (id as string, name as string), includedRosterEmployeeId as string, primaryAssignments as string)[], includedRosterRoles as (includedRosterRoleId as string, role as (id as string, name as string))[], isTemplate as boolean, name as string, notifyEmployeesByDefault as boolean, paid as boolean, rosterId as string, showAsTwelveHourTime as boolean)[],\n\t\torganizationId as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceApi\nsource(output(\n\t\tceaseDate as date,\n\t\tcommencementDate as date,\n\t\tcostingSettings as string,\n\t\tcustomPeriodDuration as short,\n\t\tdefaultPeriodDurationType as string,\n\t\tdescription as string,\n\t\tisTemplate as boolean,\n\t\tname as string,\n\t\tnotifyEmployeesByDefault as boolean,\n\t\tpaid as boolean,\n\t\trosterId as string,\n\t\tshowAsTwelveHourTime as boolean,\n\t\torganizationId as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tSourceFileName as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> sourceSql\nsourceApi foldDown(unroll(items, items),\n\tmapColumn(\n\t\tceaseDate = items.ceaseDate,\n\t\tcommencementDate = items.commencementDate,\n\t\tcostingSettings = items.costingSettings,\n\t\tcustomPeriodDuration = items.customPeriodDuration,\n\t\tdefaultPeriodDurationType = items.defaultPeriodDurationType,\n\t\tdefinedCostingPayItems = items.definedCostingPayItems,\n\t\tdescription = items.description,\n\t\tincludedRosterEmployees = items.includedRosterEmployees,\n\t\tincludedRosterRoles = items.includedRosterRoles,\n\t\tisTemplate = items.isTemplate,\n\t\tname = items.name,\n\t\tnotifyEmployeesByDefault = items.notifyEmployeesByDefault,\n\t\tpaid = items.paid,\n\t\trosterId = items.rosterId,\n\t\tshowAsTwelveHourTime = items.showAsTwelveHourTime,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> FlattenItems\nUnionAlterRowCondition alterRow(insertIf(equals(AlterRowCondition,\"Insert\")),\n\tupdateIf(equals(AlterRowCondition,\"Update\")),\n\tdeleteIf(equals(AlterRowCondition,\"Delete\"))) ~> AlterRow1\nCastDateType1 select(mapColumn(\n\t\tceaseDate,\n\t\tcommencementDate,\n\t\tcostingSettings,\n\t\tcustomPeriodDuration,\n\t\tdefaultPeriodDurationType,\n\t\tdescription,\n\t\tisTemplate,\n\t\tname,\n\t\tnotifyEmployeesByDefault,\n\t\tpaid,\n\t\trosterId,\n\t\tshowAsTwelveHourTime,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectOutArrayColumns1\nFlattenItems derive(ceaseDate = toDate(ceaseDate),\n\t\tcommencementDate = toDate(commencementDate),\n\t\tpipelineTriggerTime = fromUTC(toTimestamp(pipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss'), 'A.U.S. Eastern Standard Time')) ~> CastDateType1\nFlattenItems foldDown(unroll(includedRosterEmployees, includedRosterEmployees),\n\tmapColumn(\n\t\temployeeId = includedRosterEmployees.employee.id,\n\t\temployeeName = includedRosterEmployees.employee.name,\n\t\tincludedRosterEmployeeId = includedRosterEmployees.includedRosterEmployeeId,\n\t\tprimaryAssignments = includedRosterEmployees.primaryAssignments,\n\t\trosterId\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> FlattenIncludedRosterEmployees\nFlattenItems, FlattenIncludedRosterEmployees join(FlattenItems@rosterId == FlattenIncludedRosterEmployees@rosterId,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> Join1\nCastDateType2, SelectOutArrayColumns1 exists(sourceSql@rosterId == SelectOutArrayColumns1@rosterId,\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsDelete\nSelectOutArrayColumns1, CastDateType2 exists(SelectOutArrayColumns1@rosterId == sourceSql@rosterId,\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsInsert\nSelectOutArrayColumns1, CastDateType2 exists(SelectOutArrayColumns1@rosterId == sourceSql@rosterId,\n\tnegate:true,\n\tbroadcast: 'auto')~> ExistsUpdate\nExistsUpdate derive(AlterRowCondition = \"Update\") ~> Update\nNotExistsInsert derive(AlterRowCondition = \"Insert\") ~> Insert\nNotExistsDelete derive(AlterRowCondition = \"Delete\") ~> Delete\nInsert, Update, Delete union(byName: true)~> UnionAlterRowCondition\nsourceSql derive(pipelineTriggerTime = fromUTC(toTimestamp(pipelineTriggerTime))) ~> CastDateType2\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['rosterId'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (concat(\"ds_adsl2_stnidoprodeastau100_json/\", $PipelineName, \"/\",\r\n    toString(toTimestamp(left($PipelineTriggerTime, 20), 'yyyy-MM-dd\\'T\\'HH:mm:ss'), 'yyyy-MM-dd\\'T\\'HH-mm-ss'),\r\n    \"_PipelineRunId_\", $PipelineRunId, \"_ErrorOutput\")),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false) ~> sinkSql"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_ReportingLeaveApplications')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "06_Leave"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adsl2_stnidoprodeastau100_json_1",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_csv",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Flatten1"
+						}
+					],
+					"script": "source(output(\n\t\taddFooterRow as boolean,\n\t\taddStatusBar as boolean,\n\t\textraReportData as string[],\n\t\theaders as (createDayOfWeekColumn as boolean, customFieldsKeyName as string, dataType as string, defaultPivotAggregation as string, defaultPivotColumnOrder as boolean, defaultPivotRowOrder as short, defaultPivotValueOrder as boolean, defaultSortDirection as string, defaultSortOrder as boolean, disableDefaultAggregation as boolean, falseText as string, fieldName as string, filterDisabled as boolean, hiddenByDefault as boolean, isCustomFields as boolean, isDynamicColumns as boolean, nullDisplayText as string, numericPrecision as string, prependBaseColumnNameToDayOfWeekColumn as boolean, searchDisabled as boolean, sortDisabled as boolean, title as string, trueText as string)[],\n\t\torganizationId as string,\n\t\treportData as (approvers as string, dateSubmitted as string, employeeId as string, employeeNumber as integer, firstName as string, gender as string, leaveAppNumDays as short, leaveApplicationId as string, leaveDateEnd as date, leaveDateStart as date, leaveNotes as string, leavePaymentStatus as string, leaveReasonName as string, leaveTypeId as string, leaveTypeName as string, leaveUnitOfMeasure as string, leaveUnits as double, printName as string, status as string, surname as string)[],\n\t\treportVariantTag as string,\n\t\tserverTime as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine',\n\twildcardPaths:['ReportingLeaveApplications']) ~> source1\nsource1 foldDown(unroll(reportData),\n\tmapColumn(\n\t\tapprovers = reportData.approvers,\n\t\tdateSubmitted = reportData.dateSubmitted,\n\t\temployeeId = reportData.employeeId,\n\t\temployeeNumber = reportData.employeeNumber,\n\t\tfirstName = reportData.firstName,\n\t\tgender = reportData.gender,\n\t\tleaveAppNumDays = reportData.leaveAppNumDays,\n\t\tleaveApplicationId = reportData.leaveApplicationId,\n\t\tleaveDateEnd = reportData.leaveDateEnd,\n\t\tleaveDateStart = reportData.leaveDateStart,\n\t\tleaveNotes = reportData.leaveNotes,\n\t\tleavePaymentStatus = reportData.leavePaymentStatus,\n\t\tleaveReasonName = reportData.leaveReasonName,\n\t\tleaveTypeId = reportData.leaveTypeId,\n\t\tleaveTypeName = reportData.leaveTypeName,\n\t\tleaveUnitOfMeasure = reportData.leaveUnitOfMeasure,\n\t\tleaveUnits = reportData.leaveUnits,\n\t\tprintName = reportData.printName,\n\t\tstatus = reportData.status,\n\t\tsurname = reportData.surname\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten1\nFlatten1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['ReportingLeaveApplications.csv'],\n\ttruncate: true,\n\tumask: 0022,\n\tpreCommands: [],\n\tpostCommands: [],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tpartitionBy('hash', 1)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_TruncateInsertCusomReportWages')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "02_Wages"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "sourceApi"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sink1",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "FilterWeekEndingDate"
+						},
+						{
+							"name": "CastDateType"
+						},
+						{
+							"name": "Select1"
+						}
+					],
+					"script": "parameters{\n\tpipelineRunId as string (uuid()),\n\tpipelineTriggerTime as string\n}\nsource(output(\n\t\tamount as double,\n\t\tdepartment as string,\n\t\temployeeId as string,\n\t\tfirstName as string,\n\t\tfullName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tpayItemId as string,\n\t\tpayRunId as string,\n\t\tpayRunOrganizationId as string,\n\t\tpayRunPayRunId as string,\n\t\tpayRunPeriodEndDate as date,\n\t\tpayRunPeriodStartDate as date,\n\t\tpayrunGroup as string,\n\t\tpayslipId as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpositionID as string,\n\t\tpositionTitle as string,\n\t\troom as string,\n\t\tsurname as string,\n\t\tweekEndingDate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceApi\nCastDateType filter(greater(weekEndingDate, toDate(\"2021-10-15\"))) ~> FilterWeekEndingDate\nSelect1 derive(weekEndingDate = toDate(weekEndingDate),\n\t\t{hoursOrA/DCode} = toInteger({hoursOrA/DCode})) ~> CastDateType\nsourceApi select(mapColumn(\n\t\tamount,\n\t\tdepartment,\n\t\temployeeId,\n\t\tfirstName,\n\t\tfullName,\n\t\t{hoursOrA/DCode},\n\t\t{hoursOrA/DCodeDesc},\n\t\tidNumber,\n\t\tlevel1Code,\n\t\tlevel2Code,\n\t\twageLineItemId = lineItemId,\n\t\tpayItemId,\n\t\tpayRunId,\n\t\tpayRunOrganizationId,\n\t\tpayRunPayRunId,\n\t\tpayRunPeriodEndDate,\n\t\tpayRunPeriodStartDate,\n\t\tpayrunGroup,\n\t\tpayslipId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tpositionID,\n\t\tpositionTitle,\n\t\troom,\n\t\tsurname,\n\t\tweekEndingDate,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nFilterWeekEndingDate sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (concat(\"ds_adsl2_stnidoprodeastau100_json/definitiv.CustomReportWagesErrorOutput/\", toString($pipelineTriggerTime, 'yyyy-MM-ddTHH-mm'), \"_\", $pipelineRunId)),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tamount,\n\t\tdepartment,\n\t\temployeeId,\n\t\tfirstName,\n\t\tfullName,\n\t\t{hoursOrA/DCode},\n\t\t{hoursOrA/DCodeDesc},\n\t\tidNumber,\n\t\tlevel1Code,\n\t\tlevel2Code,\n\t\twageLineItemId,\n\t\tpayItemId,\n\t\tpayRunId,\n\t\tpayRunOrganizationId,\n\t\tpayRunPayRunId,\n\t\tpayRunPeriodEndDate,\n\t\tpayRunPeriodStartDate,\n\t\tpayrunGroup,\n\t\tpayslipId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tpositionID,\n\t\tpositionTitle,\n\t\troom,\n\t\tsurname,\n\t\tweekEndingDate,\n\t\tSourceFileName\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_TruncateInsertCustomReportPayslips')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "01_Payslips"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "SourceApi"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSql",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "CastDateType1"
+						},
+						{
+							"name": "Select2"
+						},
+						{
+							"name": "Filter1"
+						}
+					],
+					"script": "parameters{\n\tPipelineRunId as string,\n\tPipelineTriggerTime as string,\n\tPipelineName as string\n}\nsource(output(\n\t\tbaseRate as double,\n\t\tdepartmentCode as string,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tnumberOfUnits as double,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayRunOrganizationId as string,\n\t\tpayRunPayRunId as string,\n\t\tpayRunPeriodEndDate as date,\n\t\tpayRunPeriodStartDate as date,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpositionTitle as string,\n\t\tprojectCode as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceApi\nSelect2 derive(periodEndingDate = toDate(periodEndingDate),\n\t\tperiodStartDate = toDate(periodStartDate),\n\t\tpipelineTriggerTime = fromUTC(toTimestamp(pipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss'), 'A.U.S. Eastern Standard Time'),\n\t\tpayDate = toDate(payDate)) ~> CastDateType1\nSourceApi select(mapColumn(\n\t\tbaseRate,\n\t\tdepartmentCode,\n\t\temployeeId,\n\t\temploymentTypeCode,\n\t\temploymentTypeCodeDesc,\n\t\tfirstName,\n\t\t{hoursOrA/DCode},\n\t\t{hoursOrA/DCodeDesc},\n\t\tidNumber,\n\t\tlevel1Code,\n\t\tlevel2Code,\n\t\tlineItemId,\n\t\tnumberOfUnits,\n\t\tpayDate,\n\t\tpayMethodCode,\n\t\tpayMethodCodeDesc,\n\t\tpayRunOrganizationId,\n\t\tpayRunPayRunId,\n\t\tpayRunPeriodEndDate,\n\t\tpayRunPeriodStartDate,\n\t\tpayslipId,\n\t\tpayslipNumber,\n\t\tperiodEndingDate,\n\t\tperiodStartDate,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tpositionTitle,\n\t\tprojectCode,\n\t\trate,\n\t\tsurname,\n\t\tvalue,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nCastDateType1 filter(greater(periodEndingDate, toDate(\"2021-10-15\", 'yyyy-MM-dd'))) ~> Filter1\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (concat(\"ds_adsl2_stnidoprodeastau100_json/\", $PipelineName, \"/\",\r\n    toString(toTimestamp(left($PipelineTriggerTime, 26), 'yyyy-MM-dd\\'T\\'HH:mm:ss')),\r\n    \"_PipelineRunId_\", $PipelineRunId, \"_ErrorOutput\")),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false) ~> sinkSql"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateCusomReportRosters')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "04_Rosters"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "sourceApi"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSql",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "CastDateType"
+						}
+					],
+					"script": "parameters{\n\tpipelineRunId as string,\n\tpipelineTriggerTime as string\n}\nsource(output(\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tparamOrganizationId as string,\n\t\tparamRosterId as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string,\n\t\tvarRosterDate as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceApi\nsourceApi derive(date = toDate(date),\n\t\tcreatedDate = toDate(createdDate),\n\t\tmodifiedDate = toDate(modifiedDate),\n\t\tpipelineTriggerTime = fromUTC(toTimestamp(pipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss'), 'A.U.S. Eastern Standard Time')) ~> CastDateType\nCastDateType sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (concat(\"ds_adsl2_stnidoprodeastau100_json/definitiv.CustomReportRostersBErrorOutput/\", toString($pipelineTriggerTime, 'yyyy-MM-ddTHH-mm'), \"_\", $pipelineRunId)),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false) ~> sinkSql"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateCusomReportTimesheets')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "03_Timesheets"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AlterRow1"
+						}
+					],
+					"script": "source(output(\n\t\tapprovalStatus as string,\n\t\tcentreCostCode as string,\n\t\tdate as string,\n\t\temployee as string,\n\t\temployeeId as string,\n\t\t{employeeRef.No} as integer,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tleaveApplicationId as string,\n\t\torganizationId as string,\n\t\tpayRunId as string,\n\t\tperiodEndDate as date,\n\t\tperiodStartDate as date,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\troom as string,\n\t\troomCostCode as string,\n\t\troster as string,\n\t\trosterId as string,\n\t\tstart as string,\n\t\ttimesheetId as string,\n\t\ttotalCost as double,\n\t\ttotalHours as double,\n\t\tworkType as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['timesheetId','leaveApplicationId','date'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateCusomReportTimesheets1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "03_Timesheets"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "sourceApi"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSql",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "CastDateType"
+						}
+					],
+					"script": "parameters{\n\tpipelineRunId as string,\n\tpipelineTriggerTime as string\n}\nsource(output(\n\t\tapprovalStatus as string,\n\t\tcentreCostCode as string,\n\t\tdate as string,\n\t\temployee as string,\n\t\temployeeId as string,\n\t\t{employeeRef.No} as integer,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tleaveApplicationId as string,\n\t\torganizationOrganizationId as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\troom as string,\n\t\troomCostCode as string,\n\t\troster as string,\n\t\trosterId as string,\n\t\tstart as string,\n\t\ttimesheetId as string,\n\t\ttotalCost as double,\n\t\ttotalHours as double,\n\t\tworkType as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceApi\nsourceApi derive(date = toDate(date),\n\t\tpipelineTriggerTime = fromUTC(toTimestamp(pipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss'), 'A.U.S. Eastern Standard Time')) ~> CastDateType\nCastDateType sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (concat(\"ds_adsl2_stnidoprodeastau100_json/definitiv.CustomReportTimesheetsErrorOutput/\", toString($pipelineTriggerTime, 'yyyy-MM-ddTHH-mm'), \"_\", $pipelineRunId)),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tapprovalStatus,\n\t\tcentreCostCode,\n\t\tdate,\n\t\temployee,\n\t\temployeeId,\n\t\tNo = {employeeRef.No},\n\t\temploymentType,\n\t\tend,\n\t\tleaveApplicationId,\n\t\torganizationOrganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\troom,\n\t\troomCostCode,\n\t\troster,\n\t\trosterId,\n\t\tstart,\n\t\ttimesheetId,\n\t\ttotalCost,\n\t\ttotalHours,\n\t\tworkType,\n\t\tSourceFileName\n\t)) ~> sinkSql"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateCusomReportWages')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "02_Wages"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "sourceApi"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sourceSql"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sink1",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "AlterRow1"
+						},
+						{
+							"name": "FilterWeekEndingDate"
+						},
+						{
+							"name": "CastDateType1"
+						},
+						{
+							"name": "Select1"
+						},
+						{
+							"name": "Select2"
+						},
+						{
+							"name": "Insert"
+						},
+						{
+							"name": "Update"
+						},
+						{
+							"name": "Delete"
+						},
+						{
+							"name": "UnionAlterRowCondition"
+						},
+						{
+							"name": "NotExistsDelete"
+						},
+						{
+							"name": "CastDateType2"
+						},
+						{
+							"name": "NotExistsInsert"
+						},
+						{
+							"name": "ExistsUpdate"
+						}
+					],
+					"script": "parameters{\n\tpipelineRunId as string (\"1b8c16e7-2b69-4758-b37c-06a6aa153d3c\"),\n\tpipelineTriggerTime as string (\"2022-01-14T00:59:42.8892361Z\")\n}\nsource(output(\n\t\tamount as double,\n\t\tdepartment as string,\n\t\temployeeId as string,\n\t\tfirstName as string,\n\t\tfullName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tpayItemId as string,\n\t\tpayRunId as string,\n\t\tpayRunOrganizationId as string,\n\t\tpayRunPayRunId as string,\n\t\tpayRunPeriodEndDate as date,\n\t\tpayRunPeriodStartDate as date,\n\t\tpayrunGroup as string,\n\t\tpayslipId as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpositionID as string,\n\t\tpositionTitle as string,\n\t\troom as string,\n\t\tsurname as string,\n\t\tweekEndingDate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceApi\nsource(output(\n\t\tRecordId as string,\n\t\tRecordVersion as binary,\n\t\tRecordCreatedDate as timestamp,\n\t\tRecordModifiedDate as timestamp,\n\t\tRecordIsDeleted as boolean,\n\t\tPipelineRunId as string,\n\t\tPipelineSourceFileName as string,\n\t\tPipelineTriggerTime as string,\n\t\tEmployeeId as string,\n\t\tOrganizationId as string,\n\t\tPayItemId as string,\n\t\tPayRunId as string,\n\t\tPayslipId as string,\n\t\tPayRunPeriodEndDate as date,\n\t\tPayRunPeriodStartDate as date,\n\t\tWageLineItemId as integer,\n\t\tAmount as decimal(19,4),\n\t\tDepartment as string,\n\t\tFirstName as string,\n\t\tFullName as string,\n\t\tHoursOrADCode as integer,\n\t\tHoursOrADCodeDesc as string,\n\t\tIdNumber as integer,\n\t\tLevel1Code as string,\n\t\tLevel2Code as string,\n\t\tPayRunGroup as string,\n\t\tPositionID as string,\n\t\tPositionTitle as string,\n\t\tRoom as string,\n\t\tSurname as string,\n\t\tWeekEndingDate as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> sourceSql\nUnionAlterRowCondition alterRow(insertIf(AlterRowCondition==\"Insert\"),\n\tupdateIf(AlterRowCondition==\"Update\"),\n\tdeleteIf(AlterRowCondition==\"Delete\")) ~> AlterRow1\nCastDateType1 filter(greater(WeekEndingDate, toDate(\"2021-10-15\"))) ~> FilterWeekEndingDate\nSelect1 derive(WeekEndingDate = toDate(WeekEndingDate),\n\t\tHoursOrADCode = toInteger(HoursOrADCode),\n\t\tPipelineTriggerTime = fromUTC(toTimestamp(PipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss'), 'A.U.S. Eastern Standard Time')) ~> CastDateType1\nsourceApi select(mapColumn(\n\t\tAmount = amount,\n\t\tDepartment = department,\n\t\tEmployeeId = employeeId,\n\t\tFirstName = firstName,\n\t\tFullName = fullName,\n\t\tHoursOrADCode = {hoursOrA/DCode},\n\t\tHoursOrADCodeDesc = {hoursOrA/DCodeDesc},\n\t\tIdNumber = idNumber,\n\t\tLevel1Code = level1Code,\n\t\tLevel2Code = level2Code,\n\t\tLineItemId = lineItemId,\n\t\tPayItemId = payItemId,\n\t\tPayRunId = payRunId,\n\t\tOrganizationId = payRunOrganizationId,\n\t\tPayRunId = payRunPayRunId,\n\t\tPayRunPeriodEndDate = payRunPeriodEndDate,\n\t\tPayRunPeriodStartDate = payRunPeriodStartDate,\n\t\tPayrunGroup = payrunGroup,\n\t\tPayslipId = payslipId,\n\t\tPipelineRunId = pipelineRunId,\n\t\tPipelineTriggerTime = pipelineTriggerTime,\n\t\tPositionID = positionID,\n\t\tPositionTitle = positionTitle,\n\t\tRoom = room,\n\t\tSurname = surname,\n\t\tWeekEndingDate = weekEndingDate,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nsourceSql select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nNotExistsInsert derive(AlterRowCondition = \"Insert\",\n\t\tRecordCreatedDate = PipelineTriggerTime) ~> Insert\nExistsUpdate derive(AlterRowCondition = \"Update\",\n\t\tRecordModifiedDate = PipelineTriggerTime) ~> Update\nNotExistsDelete derive(AlterRowCondition = \"Delete\",\n\t\tRecordModifiedDate = PipelineTriggerTime,\n\t\tRecordIsDeleted = true()) ~> Delete\nUpdate, Insert, Delete union(byName: true)~> UnionAlterRowCondition\nCastDateType2, FilterWeekEndingDate exists(Select2@OrganizationId == Select1@OrganizationId,\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsDelete\nSelect2 derive(PipelineTriggerTime = fromUTC(toTimestamp(PipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss'), 'A.U.S. Eastern Standard Time')) ~> CastDateType2\nFilterWeekEndingDate, CastDateType2 exists(Select1@OrganizationId == Select2@OrganizationId\n\t&& Select1@EmployeeId == Select2@EmployeeId\n\t&& Select1@PayRunId == Select2@PayRunId\n\t&& Select1@PayItemId == Select2@PayItemId\n\t&& LineItemId == WageLineItemId\n\t&& Select1@Department == Select2@Department\n\t&& Select1@PositionTitle == Select2@PositionTitle\n\t&& CastDateType1@HoursOrADCode == Select2@HoursOrADCode\n\t&& Select1@HoursOrADCodeDesc == Select2@HoursOrADCodeDesc\n\t&& Select1@Level1Code == Select2@Level1Code\n\t&& Select1@Level2Code == Select2@Level2Code\n\t&& CastDateType1@WeekEndingDate == Select2@WeekEndingDate,\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsInsert\nFilterWeekEndingDate, CastDateType2 exists(Select1@OrganizationId == Select2@OrganizationId,\n\tnegate:false,\n\tbroadcast: 'auto')~> ExistsUpdate\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['OrganizationId','EmployeeId','PayRunId','PayslipId','PayItemId','WageLineItemId','Department','PositionTitle','Level1Code','Level2Code','HoursOrADCode','HoursOrADCodeDesc','WeekEndingDate'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (concat(\"ds_adsl2_stnidoprodeastau100_json/definitiv.CustomReportRostersWagesOutput/\", toString($pipelineTriggerTime, 'yyyy-MM-ddTHH-mm'), \"_\", $pipelineRunId)),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tAmount,\n\t\tDepartment,\n\t\tEmployeeId,\n\t\tFirstName,\n\t\tFullName,\n\t\tHoursOrADCode,\n\t\tHoursOrADCodeDesc,\n\t\tIdNumber,\n\t\tLevel1Code,\n\t\tLevel2Code,\n\t\tLineItemId,\n\t\tPayItemId,\n\t\tPayRunId,\n\t\tOrganizationId,\n\t\tPayRunPeriodEndDate,\n\t\tPayRunPeriodStartDate,\n\t\tPayrunGroup = UnionAlterRowCondition@PayrunGroup,\n\t\tPayslipId,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tPositionID,\n\t\tPositionTitle,\n\t\tRoom,\n\t\tSurname,\n\t\tWeekEndingDate,\n\t\tSourceFileName,\n\t\tAlterRowCondition,\n\t\tRecordModifiedDate,\n\t\tRecordCreatedDate,\n\t\tRecordId,\n\t\tRecordVersion,\n\t\tRecordIsDeleted,\n\t\tPipelineSourceFileName,\n\t\tWageLineItemId,\n\t\tPayRunGroup = UnionAlterRowCondition@PayRunGroup\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateDraftPayslips')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "01_Payslips"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AlterRow1"
+						},
+						{
+							"name": "Select1"
+						}
+					],
+					"script": "source(output(\n\t\tbaseRate as double,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as string,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tnumberOfUnits as double,\n\t\torganizationId as string,\n\t\tpayDate as timestamp,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayRunId as string,\n\t\tpayRunPeriodEndDate as date,\n\t\tpayRunPeriodStartDate as date,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as timestamp,\n\t\tperiodStartDate as timestamp,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpositionTitle as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\trowUrlColumn: 'SourceFileName',\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nSelect1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nsource1 select(mapColumn(\n\t\t{Base Rate} = baseRate,\n\t\t{Employment Type Code} = employmentTypeCode,\n\t\t{Employment Type Code Desc} = employmentTypeCodeDesc,\n\t\t{First Name} = firstName,\n\t\thoursOrADCode_definitiv = {hoursOrA/DCode},\n\t\thoursOrADCodeDesc_definitiv = {hoursOrA/DCodeDesc},\n\t\t{ID Number} = idNumber,\n\t\t{Level 1 Code} = level1Code,\n\t\t{Level 2 Code} = level2Code,\n\t\t{Number of Units} = numberOfUnits,\n\t\t{Pay Date} = payDate,\n\t\t{Pay Method Code} = payMethodCode,\n\t\t{Pay Method Code Desc} = payMethodCodeDesc,\n\t\t{Payslip Number} = payslipNumber,\n\t\t{Period Start Date} = periodStartDate,\n\t\t{Period Ending Date} = periodEndingDate,\n\t\t{Position Title} = positionTitle,\n\t\tRate = rate,\n\t\tSurname = surname,\n\t\tValue = value,\n\t\tpayslipId,\n\t\tpayRunId,\n\t\temployeeId,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['employeeId','payslipId','Employment Type Code','Level 1 Code','Level 2 Code','Period Start Date','Period Ending Date'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tmapColumn(\n\t\t{Base Rate},\n\t\t{Employment Type Code},\n\t\t{Employment Type Code Desc},\n\t\t{First Name},\n\t\thoursOrADCode_definitiv,\n\t\thoursOrADCodeDesc_definitiv,\n\t\t{ID Number},\n\t\t{Level 1 Code},\n\t\t{Level 2 Code},\n\t\t{Number of Units},\n\t\t{Pay Date},\n\t\t{Pay Method Code},\n\t\t{Pay Method Code Desc},\n\t\t{Payslip Number},\n\t\t{Period Start Date},\n\t\t{Period Ending Date},\n\t\t{Position Title},\n\t\tRate,\n\t\tSurname,\n\t\tValue,\n\t\tpayslipId,\n\t\tpayRunId,\n\t\temployeeId,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime\n\t)) ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateDraftPayslips_Definitiv')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "01_Payslips"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "SourceSqlDraft"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "SourceSqlDefinitiv"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "SinkSql",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "AlterRow1"
+						},
+						{
+							"name": "UnionAlterRowCondition"
+						},
+						{
+							"name": "ExistsUpdate"
+						},
+						{
+							"name": "NotExistsInsert"
+						},
+						{
+							"name": "Update"
+						},
+						{
+							"name": "Insert"
+						}
+					],
+					"script": "parameters{\n\tPipelineRunId as string,\n\tPipelineTriggerTime as string\n}\nsource(output(\n\t\tRecordId as string,\n\t\tRecordVersion as binary,\n\t\tRecordCreatedDate as timestamp,\n\t\tRecordModifiedDate as timestamp,\n\t\tRecordIsDeleted as boolean,\n\t\tRecordIsDefinitiv as boolean,\n\t\tRecordIsPreceda as boolean,\n\t\tPipelineRunId as string,\n\t\tPipelineSourceFileName as string,\n\t\tPipelineTriggerTime as string,\n\t\tPayslipNumber as string,\n\t\tBaseRate as double,\n\t\tDepartmentCode as string,\n\t\tEmploymentTypeCode as string,\n\t\tEmploymentTypeCodeDesc as string,\n\t\tFirstName as string,\n\t\tHoursOrADCode as integer,\n\t\tHoursOrADCodeDesc as string,\n\t\tIdNumber as integer,\n\t\tLevel1Code as string,\n\t\tLevel2Code as string,\n\t\tNumberOfUnits as double,\n\t\tPayDate as date,\n\t\tPayMethodCode as string,\n\t\tPayMethodCodeDesc as string,\n\t\tPeriodEndingDate as date,\n\t\tPeriodStartDate as date,\n\t\tPositionTitle as string,\n\t\tRate as double,\n\t\tSurname as string,\n\t\tValue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SourceSqlDraft\nsource(output(\n\t\tRecordId as string,\n\t\tRecordVersion as binary,\n\t\tRecordCreatedDate as timestamp,\n\t\tRecordModifiedDate as timestamp,\n\t\tRecordIsDeleted as boolean,\n\t\tRecordIsDefinitiv as boolean,\n\t\tRecordIsPreceda as boolean,\n\t\tPipelineRunId as string,\n\t\tPipelineSourceFileName as string,\n\t\tPipelineTriggerTime as string,\n\t\tEmployeeId as string,\n\t\tOrganizationId as string,\n\t\tPayRunId as string,\n\t\tPayslipId as string,\n\t\tPayRunPeriodEndDate as date,\n\t\tPayRunPeriodStartDate as date,\n\t\tPayslipLineItemId as integer,\n\t\tPayslipNumber as string,\n\t\tBaseRate as double,\n\t\tDepartmentCode as string,\n\t\tEmploymentTypeCode as string,\n\t\tEmploymentTypeCodeDesc as string,\n\t\tFirstName as string,\n\t\tHoursOrADCode as integer,\n\t\tHoursOrADCodeDesc as string,\n\t\tIdNumber as integer,\n\t\tLevel1Code as string,\n\t\tLevel2Code as string,\n\t\tNumberOfUnits as double,\n\t\tPayDate as date,\n\t\tPayMethodCode as string,\n\t\tPayMethodCodeDesc as string,\n\t\tPeriodEndingDate as date,\n\t\tPeriodStartDate as date,\n\t\tPositionTitle as string,\n\t\tProjectCode as string,\n\t\tRate as double,\n\t\tSurname as string,\n\t\tValue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SourceSqlDefinitiv\nUnionAlterRowCondition alterRow(insertIf(AlterRowCondition==\"Insert\"),\n\tupdateIf(AlterRowCondition==\"Update\")) ~> AlterRow1\nUpdate, Insert union(byName: true)~> UnionAlterRowCondition\nSourceSqlDefinitiv, SourceSqlDraft exists(SourceSqlDefinitiv@RecordId == SourceSqlDraft@RecordId \r\n    && SourceSqlDefinitiv@RecordVersion != SourceSqlDraft@RecordVersion,\n\tnegate:false,\n\tbroadcast: 'left')~> ExistsUpdate\nSourceSqlDefinitiv, SourceSqlDraft exists(SourceSqlDefinitiv@RecordId == SourceSqlDraft@RecordId,\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsInsert\nExistsUpdate derive(AlterRowCondition = \"Update\") ~> Update\nNotExistsInsert derive(AlterRowCondition = \"Insert\") ~> Insert\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['RecordId'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (concat(\"ds_adsl2_stnidoprodeastau100_json/definitiv.CustomReportPayslipsErrorOutput/\", toString($PipelineTriggerTime, 'yyyy-MM-ddTHH-mm'), \"_\", $PipelineRunId)),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tRecordId,\n\t\tRecordCreatedDate,\n\t\tRecordModifiedDate,\n\t\tRecordIsDeleted,\n\t\tRecordIsDefinitiv,\n\t\tRecordIsPreceda,\n\t\tPipelineRunId,\n\t\tPipelineSourceFileName,\n\t\tPipelineTriggerTime,\n\t\tEmployeeId,\n\t\tOrganizationId,\n\t\tPayRunId,\n\t\tPayslipId,\n\t\tPayRunPeriodEndDate,\n\t\tPayRunPeriodStartDate,\n\t\tPayslipLineItemId,\n\t\tPayslipNumber,\n\t\tBaseRate,\n\t\tDepartmentCode,\n\t\tEmploymentTypeCode,\n\t\tEmploymentTypeCodeDesc,\n\t\tFirstName,\n\t\tHoursOrADCode,\n\t\tHoursOrADCodeDesc,\n\t\tIdNumber,\n\t\tLevel1Code,\n\t\tLevel2Code,\n\t\tNumberOfUnits,\n\t\tPayDate,\n\t\tPayMethodCode,\n\t\tPayMethodCodeDesc,\n\t\tPeriodEndingDate,\n\t\tPeriodStartDate,\n\t\tPositionTitle,\n\t\tProjectCode,\n\t\tRate,\n\t\tSurname,\n\t\tValue,\n\t\tAlterRowCondition\n\t)) ~> SinkSql"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateDraftWages')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "02_Wages"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "AlterRow1"
+						},
+						{
+							"name": "Select1"
+						}
+					],
+					"script": "source(output(\n\t\tamount as double,\n\t\tdepartment as string,\n\t\tfirstName as string,\n\t\tfullName as string,\n\t\t{hoursOrA/DCode} as string,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\torganizationId as string,\n\t\tpayRunId as string,\n\t\tpayrunGroup as string,\n\t\tperiodEndDate as date,\n\t\tperiodStartDate as date,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpositionID as string,\n\t\tpositionTitle as string,\n\t\troom as string,\n\t\tsurname as string,\n\t\tweekEndingDate as timestamp,\n\t\temployeeId as string,\n\t\tpayItemId as string,\n\t\tpayRunOrganizationId as string,\n\t\tpayRunPayRunId as string,\n\t\tpayRunPeriodEndDate as date,\n\t\tpayRunPeriodStartDate as date,\n\t\tpayslipId as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\trowUrlColumn: 'SourceFileName',\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nSelect1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nsource1 select(mapColumn(\n\t\tAmount = amount,\n\t\tDepartment = department,\n\t\tFirstName = firstName,\n\t\tFullName = fullName,\n\t\thoursOrADCode_definitiv = {hoursOrA/DCode},\n\t\thoursOrADCodeDesc_definitiv = {hoursOrA/DCodeDesc},\n\t\tID_Number = idNumber,\n\t\tPayrollEntity = level1Code,\n\t\tPayrollState = level2Code,\n\t\tPayrunGroup = payrunGroup,\n\t\tPositionID = positionID,\n\t\tPositionTitle = positionTitle,\n\t\tRoomName = room,\n\t\tSurname = surname,\n\t\tWeekEndingDate = weekEndingDate,\n\t\tperiodStartDate,\n\t\tperiodEndDate,\n\t\tpayItemId,\n\t\tpayslipId,\n\t\tpayRunId,\n\t\temployeeId,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['employeeId','payslipId','payItemId','WeekEndingDate','PayrollState','Department'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateEmployees')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "05_Employees"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Select1"
+						}
+					],
+					"script": "source(output(\n\t\tdateOfBirth as date,\n\t\temailAddress as string,\n\t\temployeeId as string,\n\t\temployeeNumber as integer,\n\t\tfirstName as string,\n\t\tgender as string,\n\t\thiredDate as date,\n\t\tlastModified as string,\n\t\tmiddleName as string,\n\t\torganization as (name as string, organizationId as string),\n\t\torganizationId as string,\n\t\tpaymentAccounts as (bankAccount as (accountName as string, accountNumber as integer, bsb as integer, reference as string), employeePaymentAccountId as string, paySplit as (amount as double, type as string), sortOrder as boolean)[],\n\t\tphoneNumbers as (type as string, value as string)[],\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpreferredName as string,\n\t\tstreetAddresses as (components as string, coordinate as string, countryCode as string, fullAddress as string, postCode as short, state as string, street as string, suburb as string, type as string)[],\n\t\tsuperAccounts as (ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, fundABN as long, fundESA as string, fundName as string, fundType as string, fundUSI as string, membershipNumber as string, smsfBankAccount as (accountName as string, accountNumber as integer, bsb as integer, reference as string))[],\n\t\tsuperContributions as (amount as double, ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, employeeSuperannuationContributionId as string, minimumAmount as string, payItemDescription as string, payItemId as string, valueType as string)[],\n\t\tsurname as string,\n\t\ttaxDeclaration as (australianResidentForTaxPurposes as boolean, canEdit as boolean, claimDependantsOrSpecialTaxOffset as boolean, claimMedicareLevyVariation as boolean, claimSeniorsPensionersOffset as boolean, claimTaxFreeThreshold as boolean, effectiveDate as string, employeeId as string, employeeTaxDeclarationId as string, financialSupplementDebt as boolean, helpDebt as boolean, lodgementDate as string, lodgementStatus as string, signatureDate as string, signaturePresent as string, taxFileNumber as integer, taxFileNumberExemption as string, workingHolidayMaker as boolean),\n\t\ttitle as string,\n\t\tusername as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 select(mapColumn(\n\t\tdateOfBirth,\n\t\temailAddress,\n\t\temployeeId,\n\t\temployeeNumber,\n\t\tfirstName,\n\t\tgender,\n\t\thiredDate,\n\t\tlastModified,\n\t\tmiddleName,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tpreferredName,\n\t\tsurname,\n\t\ttitle,\n\t\tusername,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateEmployeesEmploymentHistory')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "05_Employees"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"script": "source(output(\n\t\tbaseRate as double,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as string,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tnumberOfUnits as double,\n\t\torganizationId as string,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayRunId as string,\n\t\tpayRunPeriodEndDate as date,\n\t\tpayRunPeriodStartDate as date,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpositionTitle as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateReportingLeaveApplications')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "06_Leave"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Flatten1"
+						},
+						{
+							"name": "AlterRow1"
+						}
+					],
+					"script": "source(output(\n\t\taddFooterRow as boolean,\n\t\taddStatusBar as boolean,\n\t\textraReportData as string[],\n\t\theaders as (createDayOfWeekColumn as boolean, customFieldsKeyName as string, dataType as string, defaultPivotAggregation as string, defaultPivotColumnOrder as boolean, defaultPivotRowOrder as short, defaultPivotValueOrder as boolean, defaultSortDirection as string, defaultSortOrder as boolean, disableDefaultAggregation as boolean, falseText as string, fieldName as string, filterDisabled as boolean, hiddenByDefault as boolean, isCustomFields as boolean, isDynamicColumns as boolean, nullDisplayText as string, numericPrecision as string, prependBaseColumnNameToDayOfWeekColumn as boolean, searchDisabled as boolean, sortDisabled as boolean, title as string, trueText as string)[],\n\t\torganizationId as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\treportData as (approvers as string, dateSubmitted as string, employeeId as string, employeeNumber as integer, firstName as string, gender as string, leaveAppNumDays as short, leaveApplicationId as string, leaveDateEnd as date, leaveDateStart as date, leaveNotes as string, leavePaymentStatus as string, leaveReasonName as string, leaveTypeId as string, leaveTypeName as string, leaveUnitOfMeasure as string, leaveUnits as double, printName as string, status as string, surname as string)[],\n\t\treportVariantTag as string,\n\t\tserverTime as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 foldDown(unroll(reportData, reportData),\n\tmapColumn(\n\t\tapprovers = reportData.approvers,\n\t\tdateSubmitted = reportData.dateSubmitted,\n\t\temployeeId = reportData.employeeId,\n\t\temployeeNumber = reportData.employeeNumber,\n\t\tfirstName = reportData.firstName,\n\t\tgender = reportData.gender,\n\t\tleaveAppNumDays = reportData.leaveAppNumDays,\n\t\tleaveApplicationId = reportData.leaveApplicationId,\n\t\tleaveDateEnd = reportData.leaveDateEnd,\n\t\tleaveDateStart = reportData.leaveDateStart,\n\t\tleaveNotes = reportData.leaveNotes,\n\t\tleavePaymentStatus = reportData.leavePaymentStatus,\n\t\tleaveReasonName = reportData.leaveReasonName,\n\t\tleaveTypeId = reportData.leaveTypeId,\n\t\tleaveTypeName = reportData.leaveTypeName,\n\t\tleaveUnitOfMeasure = reportData.leaveUnitOfMeasure,\n\t\tleaveUnits = reportData.leaveUnits,\n\t\tprintName = reportData.printName,\n\t\tstatus = reportData.status,\n\t\tsurname = reportData.surname,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Flatten1\nFlatten1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['leaveApplicationId'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_UpdateReportingLeaveBalances')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "06_Leave"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Flatten1"
+						},
+						{
+							"name": "AlterRow1"
+						}
+					],
+					"script": "source(output(\n\t\taddFooterRow as boolean,\n\t\taddStatusBar as boolean,\n\t\textraReportData as string[],\n\t\theaders as (createDayOfWeekColumn as boolean, customFieldsKeyName as string, dataType as string, defaultPivotAggregation as string, defaultPivotColumnOrder as boolean, defaultPivotRowOrder as short, defaultPivotValueOrder as boolean, defaultSortDirection as string, defaultSortOrder as boolean, disableDefaultAggregation as boolean, falseText as string, fieldName as string, filterDisabled as boolean, hiddenByDefault as boolean, isCustomFields as boolean, isDynamicColumns as boolean, nullDisplayText as string, numericPrecision as string, prependBaseColumnNameToDayOfWeekColumn as boolean, searchDisabled as boolean, sortDisabled as boolean, title as string, trueText as string)[],\n\t\torganizationId as string,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\treportData as (employeeId as string, employeeNumber as integer, firstName as string, leaveEntitlementHours as double, leaveProRataHours as double, leaveTotalHours as double, leaveTypeId as string, leaveTypeName as string, primaryDepartmentCode as short, primaryDepartmentGlCode as string, primaryDepartmentName as string, primaryLocationCode as string, primaryLocationGlCode as string, primaryLocationName as string, primaryProjectCode as string, primaryProjectGlCode as string, primaryProjectName as string, primaryRoleCode as string, primaryRoleName as string, printName as string, surname as string)[],\n\t\treportVariantTag as string,\n\t\tserverTime as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 foldDown(unroll(reportData, reportData),\n\tmapColumn(\n\t\temployeeId = reportData.employeeId,\n\t\temployeeNumber = reportData.employeeNumber,\n\t\tfirstName = reportData.firstName,\n\t\tleaveEntitlementHours = reportData.leaveEntitlementHours,\n\t\tleaveProRataHours = reportData.leaveProRataHours,\n\t\tleaveTotalHours = reportData.leaveTotalHours,\n\t\tleaveTypeId = reportData.leaveTypeId,\n\t\tleaveTypeName = reportData.leaveTypeName,\n\t\tprimaryDepartmentCode = reportData.primaryDepartmentCode,\n\t\tprimaryDepartmentGlCode = reportData.primaryDepartmentGlCode,\n\t\tprimaryDepartmentName = reportData.primaryDepartmentName,\n\t\tprimaryLocationCode = reportData.primaryLocationCode,\n\t\tprimaryLocationGlCode = reportData.primaryLocationGlCode,\n\t\tprimaryLocationName = reportData.primaryLocationName,\n\t\tprimaryProjectCode = reportData.primaryProjectCode,\n\t\tprimaryProjectGlCode = reportData.primaryProjectGlCode,\n\t\tprimaryProjectName = reportData.primaryProjectName,\n\t\tprimaryRoleCode = reportData.primaryRoleCode,\n\t\tprimaryRoleName = reportData.primaryRoleName,\n\t\tprintName = reportData.printName,\n\t\tsurname = reportData.surname,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Flatten1\nFlatten1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['employeeId','leaveTypeId'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_A3_Payslips_DraftStagingToDraft')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Copy tnk_001.dbo.* to tnk_001.draft",
+				"activities": [
+					{
+						"name": "df_A3_Payslips_DraftStagingToDraft",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "SetPipelineRunId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "SetPipelineTriggerTime",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_A3_Payslips_DraftStagingToDraft",
+								"type": "DataFlowReference",
+								"parameters": {
+									"PipelineTriggerTime": {
+										"value": "'@{variables('PipelineTriggerTime')}'",
+										"type": "Expression"
+									},
+									"PipelineRunId": {
+										"value": "'@{variables('PipelineRunId')}'",
+										"type": "Expression"
+									},
+									"PipelineName": {
+										"value": "'@{pipeline().Pipeline}'",
+										"type": "Expression"
+									}
+								},
+								"datasetParameters": {
+									"SourceSqlDraftStagingPreceda": {},
+									"SinkSqlDraftPreceda": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "SetPipelineTriggerTime",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineTriggerTime",
+							"value": {
+								"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "SetPipelineRunId",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineRunId",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sourceSqlSchema": {
+						"type": "string",
+						"defaultValue": "draft"
+					},
+					"sourceSqlTable": {
+						"type": "string",
+						"defaultValue": "StagingPrecedaPayslips"
+					},
+					"sinkSqlSchema": {
+						"type": "string",
+						"defaultValue": "draft"
+					},
+					"sinkSqlTable": {
+						"type": "string",
+						"defaultValue": "Preceda_Payslip_2"
+					},
+					"MasterPipelineTriggerTime": {
+						"type": "string"
+					},
+					"MasterPipelineRunId": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"PipelineTriggerTime": {
+						"type": "String"
+					},
+					"PipelineRunId": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "01_Payslips"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-19T01:04:06Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_A3_Timesheets_DraftStagingToDraft')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Copy tnk_001.dbo.* to tnk_001.draft",
+				"activities": [
+					{
+						"name": "df_A3_Payslips_DraftStagingToDraft",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "SetPipelineRunId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "SetPipelineTriggerTime",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_A3_Payslips_DraftStagingToDraft",
+								"type": "DataFlowReference",
+								"parameters": {
+									"PipelineTriggerTime": {
+										"value": "'@{variables('PipelineTriggerTime')}'",
+										"type": "Expression"
+									},
+									"PipelineRunId": {
+										"value": "'@{variables('PipelineRunId')}'",
+										"type": "Expression"
+									},
+									"PipelineName": {
+										"value": "'@{pipeline().Pipeline}'",
+										"type": "Expression"
+									}
+								},
+								"datasetParameters": {
+									"SourceSqlDraftStagingPreceda": {},
+									"SinkSqlDraftPreceda": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "SetPipelineTriggerTime",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineTriggerTime",
+							"value": {
+								"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "SetPipelineRunId",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineRunId",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sourceSqlSchema": {
+						"type": "string",
+						"defaultValue": "draft"
+					},
+					"sourceSqlTable": {
+						"type": "string",
+						"defaultValue": "StagingPrecedaPayslips"
+					},
+					"sinkSqlSchema": {
+						"type": "string",
+						"defaultValue": "draft"
+					},
+					"sinkSqlTable": {
+						"type": "string",
+						"defaultValue": "Preceda_Payslip_2"
+					},
+					"MasterPipelineTriggerTime": {
+						"type": "string"
+					},
+					"MasterPipelineRunId": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"PipelineTriggerTime": {
+						"type": "String"
+					},
+					"PipelineRunId": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "03_Timesheets"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-19T01:04:06Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_B0_Payslips_BlobToDefinitiv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "df_B1_Payslips_ApiToDefinitiv",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_B1_Payslips_ApiToDefinitiv",
+								"type": "DataFlowReference",
+								"parameters": {
+									"PipelineTriggerTime": {
+										"value": "'@{pipeline().TriggerTime}'",
+										"type": "Expression"
+									},
+									"PipelineRunId": {
+										"value": "'@{pipeline().RunId}'",
+										"type": "Expression"
+									},
+									"PipelineName": {
+										"value": "'@{pipeline().Pipeline}'",
+										"type": "Expression"
+									}
+								},
+								"datasetParameters": {
+									"SourceBlobDefinitivPayslips": {
+										"ds_PipelineTriggerTime": "2000-01-01T12:00:00",
+										"ds_PipelineRunId": "PipelineRunId_0123",
+										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+										"ds_PipelineName": "pl_00_Default"
+									},
+									"SourceSqlDefinitivPayslips": {
+										"ds_SchemaName": {
+											"value": "@pipeline().parameters.SourceSqlSchema",
+											"type": "Expression"
+										},
+										"ds_TableName": {
+											"value": "@pipeline().parameters.SourceSqlTable",
+											"type": "Expression"
+										}
+									},
+									"SinkSqlDefinitivPayslips": {
+										"ds_SchemaName": {
+											"value": "@pipeline().parameters.SinkSqlSchema",
+											"type": "Expression"
+										},
+										"ds_TableName": {
+											"value": "@pipeline().parameters.SinkSqlTable",
+											"type": "Expression"
+										}
+									}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine",
+							"runConcurrently": true,
+							"continueOnError": true
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"SourceSqlSchema": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"SourceSqlTable": {
+						"type": "string",
+						"defaultValue": "CustomReportPayslipsE"
+					},
+					"SinkSqlSchema": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"SinkSqlTable": {
+						"type": "string",
+						"defaultValue": "CustomReportPayslipsE"
+					}
+				},
+				"folder": {
+					"name": "01_Payslips"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-21T07:04:53Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_B0_Timesheets_BlobToDefinitiv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "df_B2_Timesheets_ApiToDefinitiv",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "SetPipelineTriggerTime",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "SetPipelineRunId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_B2_Timesheets_ApiToDefinitiv",
+								"type": "DataFlowReference",
+								"parameters": {
+									"PipelineRunId": {
+										"value": "'@{variables('PipelineRunId')}'",
+										"type": "Expression"
+									},
+									"PipelineTriggerTime": {
+										"value": "'@{variables('PipelineTriggerTime')}'",
+										"type": "Expression"
+									},
+									"PipelineName": {
+										"value": "'@{pipeline().Pipeline}'",
+										"type": "Expression"
+									}
+								},
+								"datasetParameters": {
+									"SourceBlobDefinitivTimesheets": {},
+									"SourceSqlDefinitivTimesheets": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportTimesheetsD"
+									},
+									"SourceSqlOrgRosters": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "OrganizationRosters"
+									},
+									"SinkSqlDefinitivTimesheets": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportTimesheetsD"
+									}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine",
+							"runConcurrently": true,
+							"continueOnError": true
+						}
+					},
+					{
+						"name": "SetPipelineTriggerTime",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineTriggerTime",
+							"value": {
+								"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "SetPipelineRunId",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineRunId",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"MasterPipelineTriggerTime": {
+						"type": "string"
+					},
+					"MasterPipelineRunId": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"varTimesheetStartDate": {
+						"type": "String",
+						"defaultValue": "2021-10-01"
+					},
+					"varTimesheetFinishDate": {
+						"type": "String"
+					},
+					"varTimesheetDate": {
+						"type": "String",
+						"defaultValue": "2021-10-01"
+					},
+					"varTimesheetDatePlus1": {
+						"type": "String",
+						"defaultValue": "2021-10-01"
+					},
+					"PipelineTriggerTime": {
+						"type": "String"
+					},
+					"PipelineRunId": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "03_Timesheets"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-19T03:45:11Z"
+			},
+			"dependsOn": []
+		}
+	]
+}

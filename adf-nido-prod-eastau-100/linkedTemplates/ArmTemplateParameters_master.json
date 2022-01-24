@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-nido-prod-eastau-100"
+		},
+		"ls_sql_tnk001_connectionString": {
+			"value": ""
+		},
+		"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
+			"value": "https://stnidoprodeastau100.dfs.core.windows.net/"
+		},
+		"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
+			"value": "https://kv-nido-prod-eastau-100.vault.azure.net/"
+		},
+		"ls_rest_definitiv_properties_typeProperties_url": {
+			"value": "@{linkedService().sourceBaseUrl}"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
