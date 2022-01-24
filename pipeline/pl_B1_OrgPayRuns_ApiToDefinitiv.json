@@ -545,10 +545,6 @@
 									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
-							},
-							"sink1": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "OrganizationPayRuns"
 							}
 						}
 					},
