@@ -198,7 +198,10 @@
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"SourceBlobDefinitivPayslips": {
-								"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
+								"ds_PipelineTriggerTime": {
+									"value": "@convertFromUtc(pipeline().TriggerTime, 'AUS. Eastern Standard Time')",
+									"type": "Expression"
+								},
 								"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
 								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
 								"ds_Directory": "ds_adls2_stnidoprodeastau100_json_output",
