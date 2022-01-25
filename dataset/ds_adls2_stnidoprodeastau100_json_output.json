@@ -8,11 +8,11 @@
 		"parameters": {
 			"ds_PipelineTriggerTime": {
 				"type": "String",
-				"defaultValue": "123"
+				"defaultValue": "2022-01-25T00:18:17.611502Z"
 			},
 			"ds_PipelineRunId": {
 				"type": "string",
-				"defaultValue": "123"
+				"defaultValue": "187d99be-a307-4534-9acc-0a17fc03d0ab"
 			},
 			"ds_FileSystem": {
 				"type": "string",
@@ -20,11 +20,11 @@
 			},
 			"ds_Directory": {
 				"type": "string",
-				"defaultValue": "ds_adls2_stnidoprodeastau100_json_input"
+				"defaultValue": "ds_adls2_stnidoprodeastau100_json_output"
 			},
 			"ds_PipelineName": {
 				"type": "string",
-				"defaultValue": "123"
+				"defaultValue": "pl_B1_Payslips_ApiToDefinitiv"
 			}
 		},
 		"annotations": [],
