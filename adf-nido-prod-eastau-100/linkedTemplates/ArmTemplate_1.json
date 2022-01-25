@@ -10787,6 +10787,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "SourceSqlDefinitivPayslips"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "SourceSqlDraftPayslip"
 						}
 					],
 					"sinks": [
@@ -10805,9 +10812,30 @@
 					"transformations": [
 						{
 							"name": "AlterRow1"
+						},
+						{
+							"name": "ExistsUpdate"
+						},
+						{
+							"name": "Update"
+						},
+						{
+							"name": "NotExistsInsert"
+						},
+						{
+							"name": "Insert"
+						},
+						{
+							"name": "NotExistsDelete"
+						},
+						{
+							"name": "Delete"
+						},
+						{
+							"name": "Union1"
 						}
 					],
-					"script": "source(output(\n\t\tRecordId as string,\n\t\tRecordVersion as binary,\n\t\tRecordCreatedDate as timestamp,\n\t\tRecordModifiedDate as timestamp,\n\t\tRecordIsDeleted as boolean,\n\t\tRecordIsDefinitiv as boolean,\n\t\tRecordIsPreceda as boolean,\n\t\tPipelineRunId as string,\n\t\tPipelineSourceFileName as string,\n\t\tPipelineTriggerTime as string,\n\t\tEmployeeId as string,\n\t\tOrganizationId as string,\n\t\tPayRunId as string,\n\t\tPayslipId as string,\n\t\tPayRunPeriodEndDate as date,\n\t\tPayRunPeriodStartDate as date,\n\t\tPayslipLineItemId as integer,\n\t\tPayslipNumber as string,\n\t\tBaseRate as double,\n\t\tDepartmentCode as string,\n\t\tEmploymentTypeCode as string,\n\t\tEmploymentTypeCodeDesc as string,\n\t\tFirstName as string,\n\t\tHoursOrADCode as string,\n\t\tHoursOrADCodeDesc as string,\n\t\tIdNumber as integer,\n\t\tLevel1Code as string,\n\t\tLevel2Code as string,\n\t\tNumberOfUnits as double,\n\t\tPayDate as date,\n\t\tPayMethodCode as string,\n\t\tPayMethodCodeDesc as string,\n\t\tPeriodEndingDate as date,\n\t\tPeriodStartDate as date,\n\t\tPositionTitle as string,\n\t\tProjectCode as string,\n\t\tRate as double,\n\t\tSurname as string,\n\t\tValue as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SourceSqlDefinitivPayslips\nSourceSqlDefinitivPayslips alterRow(deleteIf(true()),\n\tupsertIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['RecordId'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (\"ds_adls2_stnidoprodeastau100_log\"),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tRecordId,\n\t\tRecordWatermark = RecordVersion,\n\t\tRecordCreatedDate,\n\t\tRecordModifiedDate,\n\t\tRecordIsDeleted,\n\t\tRecordIsDefinitiv,\n\t\tRecordIsPreceda,\n\t\tPipelineRunId,\n\t\tPipelineSourceFileName,\n\t\tPipelineTriggerTime,\n\t\tEmployeeId,\n\t\tOrganizationId,\n\t\tPayRunId,\n\t\tPayslipId,\n\t\tPayRunPeriodEndDate,\n\t\tPayRunPeriodStartDate,\n\t\tPayslipLineItemId,\n\t\tPayslipNumber,\n\t\tBaseRate,\n\t\tDepartmentCode,\n\t\tEmploymentTypeCode,\n\t\tEmploymentTypeCodeDesc,\n\t\tFirstName,\n\t\tHoursOrADCode,\n\t\tHoursOrADCodeDesc,\n\t\tIdNumber,\n\t\tLevel1Code,\n\t\tLevel2Code,\n\t\tNumberOfUnits,\n\t\tPayDate,\n\t\tPayMethodCode,\n\t\tPayMethodCodeDesc,\n\t\tPeriodEndingDate,\n\t\tPeriodStartDate,\n\t\tPositionTitle,\n\t\tProjectCode,\n\t\tRate,\n\t\tSurname,\n\t\tValue\n\t)) ~> SinkSqlDraftPreceda"
+					"script": "source(output(\n\t\tRecordId as string,\n\t\tRecordVersion as binary,\n\t\tRecordCreatedDate as timestamp,\n\t\tRecordModifiedDate as timestamp,\n\t\tRecordIsDeleted as boolean,\n\t\tRecordIsDefinitiv as boolean,\n\t\tRecordIsPreceda as boolean,\n\t\tPipelineRunId as string,\n\t\tPipelineSourceFileName as string,\n\t\tPipelineTriggerTime as string,\n\t\tEmployeeId as string,\n\t\tOrganizationId as string,\n\t\tPayRunId as string,\n\t\tPayslipId as string,\n\t\tPayRunPeriodEndDate as date,\n\t\tPayRunPeriodStartDate as date,\n\t\tPayslipLineItemId as integer,\n\t\tPayslipNumber as string,\n\t\tBaseRate as double,\n\t\tDepartmentCode as string,\n\t\tEmploymentTypeCode as string,\n\t\tEmploymentTypeCodeDesc as string,\n\t\tFirstName as string,\n\t\tHoursOrADCode as string,\n\t\tHoursOrADCodeDesc as string,\n\t\tIdNumber as integer,\n\t\tLevel1Code as string,\n\t\tLevel2Code as string,\n\t\tNumberOfUnits as double,\n\t\tPayDate as date,\n\t\tPayMethodCode as string,\n\t\tPayMethodCodeDesc as string,\n\t\tPeriodEndingDate as date,\n\t\tPeriodStartDate as date,\n\t\tPositionTitle as string,\n\t\tProjectCode as string,\n\t\tRate as double,\n\t\tSurname as string,\n\t\tValue as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SourceSqlDefinitivPayslips\nsource(output(\n\t\tRecordId as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'select RecordId from draft.Preceda_Payslip_2 where RecordIsDefinitiv=1',\n\tformat: 'query') ~> SourceSqlDraftPayslip\nUnion1 alterRow(insertIf(AlterRowCondition==\"Insert\"),\n\tupdateIf(AlterRowCondition==\"Update\"),\n\tdeleteIf(AlterRowCondition==\"Delete\")) ~> AlterRow1\nSourceSqlDefinitivPayslips, SourceSqlDraftPayslip exists(SourceSqlDefinitivPayslips@RecordId == SourceSqlDraftPayslip@RecordId,\n\tnegate:false,\n\tbroadcast: 'auto')~> ExistsUpdate\nExistsUpdate derive(AlterRowCondition = \"Update\") ~> Update\nSourceSqlDefinitivPayslips, SourceSqlDraftPayslip exists(SourceSqlDefinitivPayslips@RecordId == SourceSqlDraftPayslip@RecordId,\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsInsert\nNotExistsInsert derive(AlterRowCondition = \"Insert\") ~> Insert\nSourceSqlDraftPayslip, SourceSqlDefinitivPayslips exists(SourceSqlDraftPayslip@RecordId == SourceSqlDefinitivPayslips@RecordId,\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsDelete\nNotExistsDelete derive(AlterRowCondition = \"Delete\") ~> Delete\nUpdate, Insert, Delete union(byName: true)~> Union1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tdeletable:true,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['RecordId'],\n\tformat: 'table',\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (\"ds_adls2_stnidoprodeastau100_log\"),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tRecordId,\n\t\tRecordVersion,\n\t\tRecordCreatedDate,\n\t\tRecordModifiedDate,\n\t\tRecordIsDeleted,\n\t\tRecordIsDefinitiv,\n\t\tRecordIsPreceda,\n\t\tPipelineRunId,\n\t\tPipelineSourceFileName,\n\t\tPipelineTriggerTime,\n\t\tEmployeeId,\n\t\tOrganizationId,\n\t\tPayRunId,\n\t\tPayslipId,\n\t\tPayRunPeriodEndDate,\n\t\tPayRunPeriodStartDate,\n\t\tPayslipLineItemId,\n\t\tPayslipNumber,\n\t\tBaseRate,\n\t\tDepartmentCode,\n\t\tEmploymentTypeCode,\n\t\tEmploymentTypeCodeDesc,\n\t\tFirstName,\n\t\tHoursOrADCode,\n\t\tHoursOrADCodeDesc,\n\t\tIdNumber,\n\t\tLevel1Code,\n\t\tLevel2Code,\n\t\tNumberOfUnits,\n\t\tPayDate,\n\t\tPayMethodCode,\n\t\tPayMethodCodeDesc,\n\t\tPeriodEndingDate,\n\t\tPeriodStartDate,\n\t\tPositionTitle,\n\t\tProjectCode,\n\t\tRate,\n\t\tSurname,\n\t\tValue,\n\t\tAlterRowCondition\n\t)) ~> SinkSqlDraftPreceda"
 				}
 			},
 			"dependsOn": []
