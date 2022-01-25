@@ -490,7 +490,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
-													"value": "@convertFromUtc(pipeline().TriggerTime, 'AUS Eastern Standard Time')",
+													"value": "@pipeline().TriggerTime",
 													"type": "Expression"
 												},
 												"ds_PipelineRunId": {
@@ -543,7 +543,7 @@
 								"datasetParameters": {
 									"SourceBlobDefinitivPayRuns": {
 										"ds_PipelineTriggerTime": {
-											"value": "@convertFromUtc(pipeline().TriggerTime, 'AUS Eastern Standard Time')",
+											"value": "@pipeline().TriggerTime",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
@@ -1135,7 +1135,7 @@
 								"datasetParameters": {
 									"SourceBlobDefinitivPayslips": {
 										"ds_PipelineTriggerTime": {
-											"value": "@convertFromUtc(pipeline().TriggerTime, 'AUS. Eastern Standard Time')",
+											"value": "@pipeline().TriggerTime",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
