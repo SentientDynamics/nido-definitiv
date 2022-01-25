@@ -1699,20 +1699,7 @@
 					{
 						"name": "df_B2_Payslips_DefinitivToDraft",
 						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "SetPipelineTriggerTime",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "SetPipelineRunId",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"dependsOn": [],
 						"policy": {
 							"timeout": "1.00:00:00",
 							"retry": 0,
@@ -1725,23 +1712,16 @@
 							"dataflow": {
 								"referenceName": "df_B2_Payslips_DefinitivToDraft",
 								"type": "DataFlowReference",
-								"parameters": {
-									"PipelineTriggerTime": {
-										"value": "'@{variables('PipelineTriggerTime')}'",
-										"type": "Expression"
-									},
-									"PipelineRunId": {
-										"value": "'@{variables('PipelineRunId')}'",
-										"type": "Expression"
-									},
-									"PipelineName": {
-										"value": "'@{pipeline().Pipeline}'",
-										"type": "Expression"
-									}
-								},
+								"parameters": {},
 								"datasetParameters": {
-									"SourceSqlDefinitivPayslips": {},
-									"SinkSqlDraftPreceda": {}
+									"SourceSqlDefinitivPayslips": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportPayslipsE"
+									},
+									"SinkSqlDraftPreceda": {
+										"ds_SchemaName": "draft",
+										"ds_TableName": "Preceda_Payslip_2"
+									}
 								}
 							},
 							"staging": {},
@@ -1751,53 +1731,11 @@
 							},
 							"traceLevel": "Fine"
 						}
-					},
-					{
-						"name": "SetPipelineTriggerTime",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "PipelineTriggerTime",
-							"value": {
-								"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "SetPipelineRunId",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "PipelineRunId",
-							"value": {
-								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
-								"type": "Expression"
-							}
-						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
-				},
-				"parameters": {
-					"MasterPipelineTriggerTime": {
-						"type": "string"
-					},
-					"MasterPipelineRunId": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"PipelineTriggerTime": {
-						"type": "String"
-					},
-					"PipelineRunId": {
-						"type": "String"
-					}
 				},
 				"folder": {
 					"name": "01_Payslips"
