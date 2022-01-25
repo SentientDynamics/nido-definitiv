@@ -24,6 +24,10 @@
 								"ds_SchemaName": "definitiv",
 								"ds_TableName": "CustomReportPayslipsE"
 							},
+							"SourceSqlDraftPayslip": {
+								"ds_SchemaName": "adf",
+								"ds_TableName": "Parameters"
+							},
 							"SinkSqlDraftPreceda": {
 								"ds_SchemaName": "draft",
 								"ds_TableName": "Preceda_Payslip_2"
