@@ -22,8 +22,14 @@
 							"SourceBlobDefinitivPayslips": {
 								"ds_PipelineTriggerTime": "2022-01-25T03:01:19.7790293Z",
 								"ds_PipelineRunId": "d3742ac8-3234-4d57-991b-ef7908b6941c",
-								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-								"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_output",
+								"ds_FileSystem": {
+									"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+									"type": "Expression"
+								},
+								"ds_Directory": {
+									"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+									"type": "Expression"
+								},
 								"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
 							},
 							"SourceSqlDefinitivPayslips": {
@@ -52,9 +58,7 @@
 						"referenceName": "AustraliaEastIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
 					},
-					"traceLevel": "Fine",
-					"runConcurrently": false,
-					"continueOnError": false
+					"traceLevel": "Fine"
 				}
 			}
 		],
