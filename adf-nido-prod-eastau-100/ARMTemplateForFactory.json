@@ -3458,7 +3458,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
+													"value": "@convertFromUtc(pipeline().TriggerTime, 'AUS Eastern Standard Time')",
 													"type": "Expression"
 												},
 												"ds_PipelineRunId": {
@@ -3511,7 +3511,7 @@
 								"datasetParameters": {
 									"SourceBlobDefinitivPayRuns": {
 										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
+											"value": "@convertFromUtc(pipeline().TriggerTime, 'AUS Eastern Standard Time')",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
