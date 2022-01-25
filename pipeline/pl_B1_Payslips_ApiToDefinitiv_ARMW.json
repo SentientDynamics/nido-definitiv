@@ -199,20 +199,6 @@
 					"dataflow": {
 						"referenceName": "df_B1_Payslips_ApiToDefinitiv",
 						"type": "DataFlowReference",
-						"parameters": {
-							"PipelineTriggerTime": {
-								"value": "'@{variables('PipelineTriggerTime')}'",
-								"type": "Expression"
-							},
-							"PipelineRunId": {
-								"value": "'@{variables('PipelineRunId')}'",
-								"type": "Expression"
-							},
-							"PipelineName": {
-								"value": "'@{pipeline().Pipeline}'",
-								"type": "Expression"
-							}
-						},
 						"datasetParameters": {
 							"SourceSqlDefinitivPayslips": {
 								"ds_SchemaName": "definitiv",
