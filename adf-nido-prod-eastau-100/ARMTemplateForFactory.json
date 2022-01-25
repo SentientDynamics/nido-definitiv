@@ -4117,7 +4117,7 @@
 								"datasetParameters": {
 									"SourceBlobDefinitivPayslips": {
 										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerName",
+											"value": "@convertFromUtc(pipeline().TriggerTime, 'AUS. Eastern Standard Time')",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
@@ -4133,7 +4133,7 @@
 											"type": "Expression"
 										},
 										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
+											"value": "@pipeline().TriggerName",
 											"type": "Expression"
 										}
 									},
@@ -21298,12 +21298,12 @@
 				},
 				"parameters": {
 					"ds_PipelineTriggerTime": {
-						"type": "String",
-						"defaultValue": "2000-01-01T12:00:00"
+						"type": "object",
+						"defaultValue": "2022-01-25T00:18:17.611502Z"
 					},
 					"ds_PipelineRunId": {
 						"type": "string",
-						"defaultValue": "PipelineRunId_0123"
+						"defaultValue": "187d99be-a307-4534-9acc-0a17fc03d0ab"
 					},
 					"ds_FileSystem": {
 						"type": "string",
@@ -21315,7 +21315,7 @@
 					},
 					"ds_PipelineName": {
 						"type": "string",
-						"defaultValue": "pl_00_Default"
+						"defaultValue": "pl_B1_Payslips_ApiToDefinitiv"
 					}
 				},
 				"annotations": [],
@@ -21324,7 +21324,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"folderPath": {
-							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(\n        dataset().ds_PipelineTriggerTime,\n        'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
 							"type": "Expression"
 						},
 						"fileSystem": {
@@ -21376,7 +21376,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"folderPath": {
-							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(\n        dataset().ds_PipelineTriggerTime),\n        'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
 							"type": "Expression"
 						},
 						"fileSystem": {
@@ -21786,7 +21786,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 								"type": "DatasetReference"
 							},
 							"name": "SourceBlobDefinitivPayslips"
@@ -21857,7 +21857,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]

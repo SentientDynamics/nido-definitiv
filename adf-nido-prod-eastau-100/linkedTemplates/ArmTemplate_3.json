@@ -1135,7 +1135,7 @@
 								"datasetParameters": {
 									"SourceBlobDefinitivPayslips": {
 										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerName",
+											"value": "@convertFromUtc(pipeline().TriggerTime, 'AUS. Eastern Standard Time')",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
@@ -1151,7 +1151,7 @@
 											"type": "Expression"
 										},
 										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
+											"value": "@pipeline().TriggerName",
 											"type": "Expression"
 										}
 									},

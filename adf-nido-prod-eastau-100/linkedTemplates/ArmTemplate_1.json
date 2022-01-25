@@ -10698,7 +10698,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 								"type": "DatasetReference"
 							},
 							"name": "SourceBlobDefinitivPayslips"
