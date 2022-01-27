@@ -1077,7 +1077,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
@@ -1718,7 +1718,10 @@
 										"ds_SchemaName": "definitiv",
 										"ds_TableName": "CustomReportPayslipsE"
 									},
-									"SourceSqlDraftPayslip": {},
+									"SourceSqlDraftPayslip": {
+										"ds_SchemaName": "adf",
+										"ds_TableName": "Parameters"
+									},
 									"SinkSqlDraftPreceda": {
 										"ds_SchemaName": "draft",
 										"ds_TableName": "Preceda_Payslip_2"
