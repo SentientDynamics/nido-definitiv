@@ -142,7 +142,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+									"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_PipelineTriggerTime": {
