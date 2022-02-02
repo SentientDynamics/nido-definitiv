@@ -2760,8 +2760,8 @@
 								"parameters": {},
 								"datasetParameters": {
 									"SourceBlobDefinitivPayslips": {
-										"ds_PipelineTriggerTime": "2022-01-26T20:54:31.5648858Z",
-										"ds_PipelineRunId": "ee874530-c190-40a2-9cb9-742881496c91",
+										"ds_PipelineTriggerTime": "2022-01-27T01:06:48.8574787Z",
+										"ds_PipelineRunId": "a36b4e80-3800-47d9-ba93-af1de62e186b",
 										"ds_FileSystem": {
 											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
 											"type": "Expression"
@@ -4137,7 +4137,7 @@
 											"type": "Expression"
 										},
 										"ds_PipelineName": {
-											"value": "@pipeline().TriggerName",
+											"value": "@pipeline().Pipeline",
 											"type": "Expression"
 										}
 									},
@@ -5797,20 +5797,7 @@
 						"name": "df_C1_Payslips_DraftReportViews",
 						"description": "Sync changes.",
 						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "SetPipelineTriggerTime",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "SetPipelineRunId",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"dependsOn": [],
 						"policy": {
 							"timeout": "1.00:00:00",
 							"retry": 0,
@@ -5838,12 +5825,30 @@
 									}
 								},
 								"datasetParameters": {
-									"SourceSqlPrecedaPayslip2": {},
-									"SourceSqlServiceList": {},
-									"SourceSqlPrecedaMap": {},
-									"SourceSqlPreceedaPayCodes": {},
-									"SourceSqlDefinitivPayCodes": {},
-									"SinkSqlDraftPayslipReportView": {}
+									"SourceSqlPrecedaPayslip2": {
+										"ds_SchemaName": "draft",
+										"ds_TableName": "Preceda_Payslip_2"
+									},
+									"SourceSqlServiceList": {
+										"ds_SchemaName": "dbo",
+										"ds_TableName": "ServiceList"
+									},
+									"SourceSqlPrecedaMap": {
+										"ds_SchemaName": "dbo",
+										"ds_TableName": "Preceeda_Map"
+									},
+									"SourceSqlPreceedaPayCodes": {
+										"ds_SchemaName": "adf",
+										"ds_TableName": "Parameters"
+									},
+									"SourceSqlDefinitivPayCodes": {
+										"ds_SchemaName": "dbo",
+										"ds_TableName": "Preceeda_Pay_Codes"
+									},
+									"SinkSqlDraftPayslipReportView": {
+										"ds_SchemaName": "draft",
+										"ds_TableName": "ReportViewPayslips"
+									}
 								}
 							},
 							"staging": {},
@@ -5854,32 +5859,6 @@
 							"traceLevel": "Fine",
 							"runConcurrently": true,
 							"continueOnError": true
-						}
-					},
-					{
-						"name": "SetPipelineTriggerTime",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "PipelineTriggerTime",
-							"value": {
-								"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "SetPipelineRunId",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "PipelineRunId",
-							"value": {
-								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
-								"type": "Expression"
-							}
 						}
 					}
 				],
