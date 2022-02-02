@@ -6,20 +6,7 @@
 				"name": "df_C1_Payslips_DraftReportViews",
 				"description": "Sync changes.",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [
-					{
-						"activity": "SetPipelineTriggerTime",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "SetPipelineRunId",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "1.00:00:00",
 					"retry": 0,
@@ -80,32 +67,6 @@
 					"traceLevel": "Fine",
 					"runConcurrently": true,
 					"continueOnError": true
-				}
-			},
-			{
-				"name": "SetPipelineTriggerTime",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineTriggerTime",
-					"value": {
-						"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "SetPipelineRunId",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineRunId",
-					"value": {
-						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
-						"type": "Expression"
-					}
 				}
 			}
 		],
