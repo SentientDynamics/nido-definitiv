@@ -2985,6 +2985,723 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_B1_OrgPayItems_ApiToDefinitiv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "LookupOrganizations",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select organizationId, legalName from definitiv.Organizations",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_SchemaName": "definitiv",
+									"ds_TableName": "Organizations"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "LookupOrganizations",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('LookupOrganizations').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "CopyToJson1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "Org.OrganizationId",
+													"value": {
+														"value": "@item().organizationId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "OrgPayItem.PipelineTriggerTime",
+													"value": {
+														"value": "@pipeline().TriggerTime",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "OrgPayItem.PipelineRunId",
+													"value": {
+														"value": "@pipeline().RunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "Org.LegalName",
+													"value": {
+														"value": "@item().legalName",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "OrgPayItem.PipelineName",
+													"value": {
+														"value": "@pipeline().Pipeline",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Info",
+												"enableReliableLogging": true
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "ls_adls2_stnidoprodeastau100",
+													"type": "LinkedServiceReference"
+												},
+												"path": {
+													"value": "@concat(\n    pipeline().globalParameters.global_adls2_FileSystem,\n    '/',\n    pipeline().globalParameters.global_adls2_LogDirectory\n)",
+													"type": "Expression"
+												}
+											}
+										},
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"path": "$['payItems'][0]['payItemId']"
+													},
+													"sink": {
+														"path": "payItemId"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['description']"
+													},
+													"sink": {
+														"path": "description"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['unitOfMeasureId']"
+													},
+													"sink": {
+														"path": "unitOfMeasureId"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['type']"
+													},
+													"sink": {
+														"path": "type"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['category']"
+													},
+													"sink": {
+														"path": "category"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['exportCode']"
+													},
+													"sink": {
+														"path": "exportCode"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['glDebitCode']"
+													},
+													"sink": {
+														"path": "glDebitCode"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['glCreditCode']"
+													},
+													"sink": {
+														"path": "glCreditCode"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['organizationId']"
+													},
+													"sink": {
+														"path": "organizationId"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['isSystem']"
+													},
+													"sink": {
+														"path": "isSystem"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['hidden']"
+													},
+													"sink": {
+														"path": "hidden"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['showOnPayslip']"
+													},
+													"sink": {
+														"path": "showOnPayslip"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['payslipDisplayName']"
+													},
+													"sink": {
+														"path": "payslipDisplayName"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['thirdPartyPaymentEnabled']"
+													},
+													"sink": {
+														"path": "thirdPartyPaymentEnabled"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['deletedTime']"
+													},
+													"sink": {
+														"path": "deletedTime"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['deletedByUserId']"
+													},
+													"sink": {
+														"path": "deletedByUserId"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['atoCategory']"
+													},
+													"sink": {
+														"path": "atoCategory"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['superStreamContributionCategory']"
+													},
+													"sink": {
+														"path": "superStreamContributionCategory"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['isSuperable']"
+													},
+													"sink": {
+														"path": "isSuperable"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['isTaxable']"
+													},
+													"sink": {
+														"path": "isTaxable"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['includeInTotalPackage']"
+													},
+													"sink": {
+														"path": "includeInTotalPackage"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['includeInSalaryAndWages']"
+													},
+													"sink": {
+														"path": "includeInSalaryAndWages"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['specialTaxRate']"
+													},
+													"sink": {
+														"path": "specialTaxRate"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['costingStrategy']"
+													},
+													"sink": {
+														"path": "costingStrategy"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['proportionPeriodCostingPayItems'][0]"
+													},
+													"sink": {
+														"path": "proportionPeriodCostingPayItems"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['percentagePayItems'][0]"
+													},
+													"sink": {
+														"path": "percentagePayItems"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['isPercentage']"
+													},
+													"sink": {
+														"path": "isPercentage"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['deductionBankAccount']"
+													},
+													"sink": {
+														"path": "deductionBankAccount"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['rollupMode']"
+													},
+													"sink": {
+														"path": "rollupMode"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['onlyProcessWhenOtherEarningsExist']"
+													},
+													"sink": {
+														"path": "onlyProcessWhenOtherEarningsExist"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['isForeign']"
+													},
+													"sink": {
+														"path": "isForeign"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['isContractor']"
+													},
+													"sink": {
+														"path": "isContractor"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['targetEntity']"
+													},
+													"sink": {
+														"path": "customFields.targetEntity"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['dataType']"
+													},
+													"sink": {
+														"path": "customFields.dataType"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['value']"
+													},
+													"sink": {
+														"path": "customFields.value"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['name']"
+													},
+													"sink": {
+														"path": "customFields.name"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['displayName']"
+													},
+													"sink": {
+														"path": "customFields.displayName"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['description']"
+													},
+													"sink": {
+														"path": "customFields.description"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['enabled']"
+													},
+													"sink": {
+														"path": "customFields.enabled"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['global']"
+													},
+													"sink": {
+														"path": "customFields.global"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['options'][0]"
+													},
+													"sink": {
+														"path": "customFields.options"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['isMandatory']"
+													},
+													"sink": {
+														"path": "customFields.isMandatory"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['order']"
+													},
+													"sink": {
+														"path": "customFields.order"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['dateDriven']"
+													},
+													"sink": {
+														"path": "customFields.dateDriven"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['timeBased']"
+													},
+													"sink": {
+														"path": "customFields.timeBased"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['displayOnTimesheetSummary']"
+													},
+													"sink": {
+														"path": "customFields.displayOnTimesheetSummary"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['preventMultipleEntries']"
+													},
+													"sink": {
+														"path": "customFields.preventMultipleEntries"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['timePeriodMode']"
+													},
+													"sink": {
+														"path": "customFields.timePeriodMode"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['inheritTimesheetPeriod']"
+													},
+													"sink": {
+														"path": "customFields.inheritTimesheetPeriod"
+													}
+												},
+												{
+													"source": {
+														"path": "$['payItems'][0]['customFields'][0]['customFieldDisplayStatus']"
+													},
+													"sink": {
+														"path": "customFields.customFieldDisplayStatus"
+													}
+												},
+												{
+													"source": {
+														"path": "$['Org.OrganizationId']"
+													},
+													"sink": {
+														"path": "$['Org.OrganizationId']"
+													}
+												},
+												{
+													"source": {
+														"path": "$['OrgPayItem.PipelineTriggerTime']"
+													},
+													"sink": {
+														"path": "$['OrgPayItem.PipelineTriggerTime']"
+													}
+												},
+												{
+													"source": {
+														"path": "$['OrgPayItem.PipelineRunId']"
+													},
+													"sink": {
+														"path": "$['OrgPayItem.PipelineRunId']"
+													}
+												},
+												{
+													"source": {
+														"path": "$['Org.LegalName']"
+													},
+													"sink": {
+														"path": "$['Org.LegalName']"
+													}
+												},
+												{
+													"source": {
+														"path": "$['OrgPayItem.PipelineName']"
+													},
+													"sink": {
+														"path": "$['OrgPayItem.PipelineName']"
+													}
+												}
+											],
+											"collectionReference": "$['payRuns']"
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat('/api/admin/company/', item().organizationId, '/pay-items')",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "df_B1_OrgPayItems_ApiToDefintiv",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_B1_OrgPayItems_ApiToDefinitiv",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SourceBlobDefinitivPayslips": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"SourceSqlDefinitivPayslips": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "OrganizationPayItems"
+									},
+									"SinkSqlDefinitivPayslips": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "OrganizationPayItems"
+									}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "09_PayItems"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-21T07:04:52Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/dataflows/df_B1_OrgPayItems_ApiToDefinitiv')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_B1_OrgPayRuns_ApiToDefinitiv')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -21699,6 +22416,95 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/df_B1_OrgPayItems_ApiToDefinitiv')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "09_PayItems"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference"
+							},
+							"name": "SourceBlobDefinitivPayslips"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "SourceSqlDefinitivPayslips"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "SinkSqlDefinitivPayslips",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "AlterRow1"
+						},
+						{
+							"name": "CastDateType1"
+						},
+						{
+							"name": "FilterPeriodEndDate"
+						},
+						{
+							"name": "Insert"
+						},
+						{
+							"name": "NotExistsDelete"
+						},
+						{
+							"name": "Delete"
+						},
+						{
+							"name": "Update"
+						},
+						{
+							"name": "UnionAlterRowCondition"
+						},
+						{
+							"name": "SelectSqlDefinitivPayslips"
+						},
+						{
+							"name": "SelectBlobDefinitivPayslips"
+						},
+						{
+							"name": "ExistsUpdate"
+						},
+						{
+							"name": "NotExistsInsert"
+						},
+						{
+							"name": "Aggregate1"
+						}
+					],
+					"script": "source(output(\n\t\t{OrgPayRun.OrganizationId} as string,\n\t\t{OrgPayRun.PayRunId} as string,\n\t\t{OrgPayRun.PeriodEndDate} as date,\n\t\t{OrgPayRun.PeriodStartDate} as date,\n\t\t{OrgPayRun.PipelineRunId} as string,\n\t\t{OrgPayRun.PipelineTriggerTime} as string,\n\t\tbaseRate as double,\n\t\tdepartmentCode as string,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tnumberOfUnits as double,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpositionTitle as string,\n\t\tprojectCode as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitivPayslips\nsource(output(\n\t\tRecordId as string,\n\t\tRecordVersion as binary,\n\t\tRecordCreatedDate as timestamp,\n\t\tRecordModifiedDate as timestamp,\n\t\tRecordIsDeleted as boolean,\n\t\tRecordIsDefinitiv as boolean,\n\t\tRecordIsPreceda as boolean,\n\t\tPipelineRunId as string,\n\t\tPipelineSourceFileName as string,\n\t\tPipelineTriggerTime as string,\n\t\tEmployeeId as string,\n\t\tOrganizationId as string,\n\t\tPayRunId as string,\n\t\tPayslipId as string,\n\t\tPayRunPeriodEndDate as date,\n\t\tPayRunPeriodStartDate as date,\n\t\tPayslipLineItemId as integer,\n\t\tPayslipNumber as string,\n\t\tBaseRate as double,\n\t\tDepartmentCode as string,\n\t\tEmploymentTypeCode as string,\n\t\tEmploymentTypeCodeDesc as string,\n\t\tFirstName as string,\n\t\tHoursOrADCode as string,\n\t\tHoursOrADCodeDesc as string,\n\t\tIdNumber as integer,\n\t\tLevel1Code as string,\n\t\tLevel2Code as string,\n\t\tNumberOfUnits as double,\n\t\tPayDate as date,\n\t\tPayMethodCode as string,\n\t\tPayMethodCodeDesc as string,\n\t\tPeriodEndingDate as date,\n\t\tPeriodStartDate as date,\n\t\tPositionTitle as string,\n\t\tProjectCode as string,\n\t\tRate as double,\n\t\tSurname as string,\n\t\tValue as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SourceSqlDefinitivPayslips\nUnionAlterRowCondition alterRow(insertIf(AlterRowCondition==\"Insert\"),\n\tupdateIf(AlterRowCondition==\"Update\"),\n\tdeleteIf(AlterRowCondition==\"Delete\")) ~> AlterRow1\nSelectBlobDefinitivPayslips derive(PayDate = toDate(PayDate),\n\t\tHoursOrADCode = toString(HoursOrADCode)) ~> CastDateType1\nCastDateType1 filter(greater({OrgPayRun.PeriodEndDate}, toDate(\"2021-10-15\", 'yyyy-MM-dd'))) ~> FilterPeriodEndDate\nNotExistsInsert derive(AlterRowCondition = \"Insert\",\n\t\tRecordCreatedDate = currentUTC('A.U.S. Eastern Standard Time'),\n\t\tRecordIsDeleted = false()) ~> Insert\nSelectSqlDefinitivPayslips, FilterPeriodEndDate exists({Sql.DepartmentCode} == DepartmentCode\n\t&& {Sql.OrganizationId} == {OrgPayRun.OrganizationId}\n\t&& {Sql.PayRunId} == {OrgPayRun.PayRunId}\n\t&& {Sql.EmployeeId} == EmployeeId\n\t&& {Sql.HoursOrADCode} == HoursOrADCode\n\t&& {Sql.HoursOrADCodeDesc} == HoursOrADCodeDesc\n\t&& {Sql.Level1Code} == Level1Code\n\t&& {Sql.Level2Code} == Level2Code\n\t&& {Sql.PayslipId} == PayslipId\n\t&& {Sql.PayslipLineItemId} == PayslipLineItemId\n\t&& {Sql.PositionTitle} == PositionTitle\n\t&& {Sql.ProjectCode} == ProjectCode\n\t&& {Sql.Rate} == Rate,\n\tnegate:true,\n\tbroadcast: 'right')~> NotExistsDelete\nNotExistsDelete derive(AlterRowCondition = \"Delete\",\n\t\tRecordModifiedDate = currentUTC('A.U.S. Eastern Standard Time'),\n\t\tRecordIsDeleted = true()) ~> Delete\nExistsUpdate derive(AlterRowCondition = \"Update\",\n\t\tRecordModifiedDate = currentUTC('A.U.S. Eastern Standard Time'),\n\t\tRecordIsDeleted = false()) ~> Update\nUpdate, Insert, Delete union(byName: true)~> UnionAlterRowCondition\nSourceSqlDefinitivPayslips select(mapColumn(\n\t\t{Sql.EmployeeId} = EmployeeId,\n\t\t{Sql.OrganizationId} = OrganizationId,\n\t\t{Sql.PayRunId} = PayRunId,\n\t\t{Sql.PayslipId} = PayslipId,\n\t\t{Sql.PayslipLineItemId} = PayslipLineItemId,\n\t\t{Sql.DepartmentCode} = DepartmentCode,\n\t\t{Sql.HoursOrADCode} = HoursOrADCode,\n\t\t{Sql.HoursOrADCodeDesc} = HoursOrADCodeDesc,\n\t\t{Sql.Level1Code} = Level1Code,\n\t\t{Sql.Level2Code} = Level2Code,\n\t\t{Sql.PositionTitle} = PositionTitle,\n\t\t{Sql.ProjectCode} = ProjectCode,\n\t\t{Sql.Rate} = Rate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> SelectSqlDefinitivPayslips\nSourceBlobDefinitivPayslips select(mapColumn(\n\t\t{OrgPayRun.OrganizationId},\n\t\t{OrgPayRun.PayRunId},\n\t\t{OrgPayRun.PeriodEndDate},\n\t\t{OrgPayRun.PeriodStartDate},\n\t\t{OrgPayRun.PipelineRunId},\n\t\t{OrgPayRun.PipelineTriggerTime},\n\t\tBaseRate = baseRate,\n\t\tDepartmentCode = departmentCode,\n\t\tEmployeeId = employeeId,\n\t\tEmploymentTypeCode = employmentTypeCode,\n\t\tEmploymentTypeCodeDesc = employmentTypeCodeDesc,\n\t\tFirstName = firstName,\n\t\tHoursOrADCode = {hoursOrA/DCode},\n\t\tHoursOrADCodeDesc = {hoursOrA/DCodeDesc},\n\t\tIdNumber = idNumber,\n\t\tLevel1Code = level1Code,\n\t\tLevel2Code = level2Code,\n\t\tPayslipLineItemId = lineItemId,\n\t\tNumberOfUnits = numberOfUnits,\n\t\tPayDate = payDate,\n\t\tPayMethodCode = payMethodCode,\n\t\tPayMethodCodeDesc = payMethodCodeDesc,\n\t\tPayslipId = payslipId,\n\t\tPayslipNumber = payslipNumber,\n\t\tPeriodEndingDate = periodEndingDate,\n\t\tPeriodStartDate = periodStartDate,\n\t\tPositionTitle = positionTitle,\n\t\tProjectCode = projectCode,\n\t\tRate = rate,\n\t\tSurname = surname,\n\t\tValue = value,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> SelectBlobDefinitivPayslips\nFilterPeriodEndDate, SelectSqlDefinitivPayslips exists(DepartmentCode == {Sql.DepartmentCode}\n\t&& EmployeeId == {Sql.EmployeeId}\n\t&& HoursOrADCode == {Sql.HoursOrADCode}\n\t&& HoursOrADCodeDesc == {Sql.HoursOrADCodeDesc}\n\t&& Level1Code == {Sql.Level1Code}\n\t&& Level2Code == {Sql.Level2Code}\n\t&& {OrgPayRun.OrganizationId} == {Sql.OrganizationId}\n\t&& {OrgPayRun.PayRunId} == {Sql.PayRunId}\n\t&& PayslipId == {Sql.PayslipId}\n\t&& PayslipLineItemId == {Sql.PayslipLineItemId}\n\t&& PositionTitle == {Sql.PositionTitle}\n\t&& ProjectCode == {Sql.ProjectCode}\n\t&& Rate == {Sql.Rate},\n\tnegate:false,\n\tbroadcast: 'auto')~> ExistsUpdate\nFilterPeriodEndDate, SelectSqlDefinitivPayslips exists(DepartmentCode == {Sql.DepartmentCode}\n\t&& EmployeeId == {Sql.EmployeeId}\n\t&& HoursOrADCode == {Sql.HoursOrADCode}\n\t&& HoursOrADCodeDesc == {Sql.HoursOrADCodeDesc}\n\t&& Level1Code == {Sql.Level1Code}\n\t&& Level2Code == {Sql.Level2Code}\n\t&& {OrgPayRun.OrganizationId} == {Sql.OrganizationId}\n\t&& {OrgPayRun.PayRunId} == {Sql.PayRunId}\n\t&& PayslipId == {Sql.PayslipId}\n\t&& PayslipLineItemId == {Sql.PayslipLineItemId}\n\t&& PositionTitle == {Sql.PositionTitle}\n\t&& ProjectCode == {Sql.ProjectCode}\n\t&& Rate == {Sql.Rate},\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsInsert\nUnionAlterRowCondition aggregate(groupBy(AlterRowCondition),\n\tCountAlterRowCondition = count(AlterRowCondition)) ~> Aggregate1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tdeletable:true,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['DepartmentCode','EmployeeId','HoursOrADCode','HoursOrADCodeDesc','Level1Code','Level2Code','OrganizationId','PayRunId','PayslipId','PayslipLineItemId','PositionTitle','ProjectCode','Rate'],\n\tformat: 'table',\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (\"ds_adls2_stnidoprodeastau100_log\"),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tOrganizationId = {OrgPayRun.OrganizationId},\n\t\tPayRunId = {OrgPayRun.PayRunId},\n\t\tPeriodEndDate = {OrgPayRun.PeriodEndDate},\n\t\tPeriodStartDate = {OrgPayRun.PeriodStartDate},\n\t\tPipelineRunId = {OrgPayRun.PipelineRunId},\n\t\tPipelineTriggerTime = {OrgPayRun.PipelineTriggerTime},\n\t\tBaseRate,\n\t\tDepartmentCode,\n\t\tEmployeeId,\n\t\tEmploymentTypeCode,\n\t\tEmploymentTypeCodeDesc,\n\t\tFirstName,\n\t\tHoursOrADCode,\n\t\tHoursOrADCodeDesc,\n\t\tIdNumber,\n\t\tLevel1Code,\n\t\tLevel2Code,\n\t\tPayslipLineItemId,\n\t\tNumberOfUnits,\n\t\tPayDate,\n\t\tPayMethodCode,\n\t\tPayMethodCodeDesc,\n\t\tPayslipId,\n\t\tPayslipNumber,\n\t\tPeriodEndingDate,\n\t\tPeriodStartDate,\n\t\tPositionTitle,\n\t\tProjectCode,\n\t\tRate,\n\t\tSurname,\n\t\tValue,\n\t\tSourceFileName,\n\t\tAlterRowCondition,\n\t\tRecordModifiedDate,\n\t\tRecordIsDeleted,\n\t\tRecordCreatedDate,\n\t\tEmployeeId = {Sql.EmployeeId},\n\t\tOrganizationId = {Sql.OrganizationId},\n\t\tPayRunId = {Sql.PayRunId},\n\t\tPayslipId = {Sql.PayslipId},\n\t\tPayslipLineItemId = {Sql.PayslipLineItemId},\n\t\tDepartmentCode = {Sql.DepartmentCode},\n\t\tHoursOrADCode = {Sql.HoursOrADCode},\n\t\tHoursOrADCodeDesc = {Sql.HoursOrADCodeDesc},\n\t\tLevel1Code = {Sql.Level1Code},\n\t\tLevel2Code = {Sql.Level2Code},\n\t\tPositionTitle = {Sql.PositionTitle},\n\t\tProjectCode = {Sql.ProjectCode},\n\t\tRate = {Sql.Rate}\n\t)) ~> SinkSqlDefinitivPayslips"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/df_B1_Payslips_ApiToDefinitiv')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -21778,7 +22584,7 @@
 							"name": "Aggregate1"
 						}
 					],
-					"script": "source(output(\n\t\t{OrgPayRun.OrganizationId} as string,\n\t\t{OrgPayRun.PayRunId} as string,\n\t\t{OrgPayRun.PeriodEndDate} as date,\n\t\t{OrgPayRun.PeriodStartDate} as date,\n\t\t{OrgPayRun.PipelineRunId} as string,\n\t\t{OrgPayRun.PipelineTriggerTime} as string,\n\t\tbaseRate as double,\n\t\tdepartmentCode as string,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tnumberOfUnits as double,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpositionTitle as string,\n\t\tprojectCode as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitivPayslips\nsource(output(\n\t\tRecordId as string,\n\t\tRecordVersion as binary,\n\t\tRecordCreatedDate as timestamp,\n\t\tRecordModifiedDate as timestamp,\n\t\tRecordIsDeleted as boolean,\n\t\tRecordIsDefinitiv as boolean,\n\t\tRecordIsPreceda as boolean,\n\t\tPipelineRunId as string,\n\t\tPipelineSourceFileName as string,\n\t\tPipelineTriggerTime as string,\n\t\tEmployeeId as string,\n\t\tOrganizationId as string,\n\t\tPayRunId as string,\n\t\tPayslipId as string,\n\t\tPayRunPeriodEndDate as date,\n\t\tPayRunPeriodStartDate as date,\n\t\tPayslipLineItemId as integer,\n\t\tPayslipNumber as string,\n\t\tBaseRate as double,\n\t\tDepartmentCode as string,\n\t\tEmploymentTypeCode as string,\n\t\tEmploymentTypeCodeDesc as string,\n\t\tFirstName as string,\n\t\tHoursOrADCode as string,\n\t\tHoursOrADCodeDesc as string,\n\t\tIdNumber as integer,\n\t\tLevel1Code as string,\n\t\tLevel2Code as string,\n\t\tNumberOfUnits as double,\n\t\tPayDate as date,\n\t\tPayMethodCode as string,\n\t\tPayMethodCodeDesc as string,\n\t\tPeriodEndingDate as date,\n\t\tPeriodStartDate as date,\n\t\tPositionTitle as string,\n\t\tProjectCode as string,\n\t\tRate as double,\n\t\tSurname as string,\n\t\tValue as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SourceSqlDefinitivPayslips\nUnionAlterRowCondition alterRow(insertIf(AlterRowCondition==\"Insert\"),\n\tupdateIf(AlterRowCondition==\"Update\"),\n\tdeleteIf(AlterRowCondition==\"Delete\")) ~> AlterRow1\nSelectBlobDefinitivPayslips derive(PayDate = toDate(PayDate),\n\t\tHoursOrADCode = toString(HoursOrADCode)) ~> CastDateType1\nCastDateType1 filter(greater({OrgPayRun.PeriodEndDate}, toDate(\"2021-10-15\", 'yyyy-MM-dd'))) ~> FilterPeriodEndDate\nNotExistsInsert derive(AlterRowCondition = \"Insert\",\n\t\tRecordCreatedDate = currentUTC('A.U.S. Eastern Standard Time'),\n\t\tRecordIsDeleted = false()) ~> Insert\nSelectSqlDefinitivPayslips, FilterPeriodEndDate exists({Sql.DepartmentCode} == DepartmentCode\n\t&& {Sql.OrganizationId} == {OrgPayRun.OrganizationId}\n\t&& {Sql.PayRunId} == {OrgPayRun.PayRunId}\n\t&& {Sql.EmployeeId} == EmployeeId\n\t&& {Sql.HoursOrADCode} == HoursOrADCode\n\t&& {Sql.HoursOrADCodeDesc} == HoursOrADCodeDesc\n\t&& {Sql.Level1Code} == Level1Code\n\t&& {Sql.Level2Code} == Level2Code\n\t&& {Sql.PayslipId} == PayslipId\n\t&& {Sql.PayslipLineItemId} == PayslipLineItemId\n\t&& {Sql.PositionTitle} == PositionTitle\n\t&& {Sql.ProjectCode} == ProjectCode\n\t&& {Sql.Rate} == Rate,\n\tnegate:true,\n\tbroadcast: 'right')~> NotExistsDelete\nNotExistsDelete derive(AlterRowCondition = \"Delete\",\n\t\tRecordModifiedDate = currentUTC('A.U.S. Eastern Standard Time'),\n\t\tRecordIsDeleted = true()) ~> Delete\nExistsUpdate derive(AlterRowCondition = \"Update\",\n\t\tRecordModifiedDate = currentUTC('A.U.S. Eastern Standard Time'),\n\t\tRecordIsDeleted = false()) ~> Update\nUpdate, Insert, Delete union(byName: true)~> UnionAlterRowCondition\nSourceSqlDefinitivPayslips select(mapColumn(\n\t\t{Sql.EmployeeId} = EmployeeId,\n\t\t{Sql.OrganizationId} = OrganizationId,\n\t\t{Sql.PayRunId} = PayRunId,\n\t\t{Sql.PayslipId} = PayslipId,\n\t\t{Sql.PayslipLineItemId} = PayslipLineItemId,\n\t\t{Sql.DepartmentCode} = DepartmentCode,\n\t\t{Sql.HoursOrADCode} = HoursOrADCode,\n\t\t{Sql.HoursOrADCodeDesc} = HoursOrADCodeDesc,\n\t\t{Sql.Level1Code} = Level1Code,\n\t\t{Sql.Level2Code} = Level2Code,\n\t\t{Sql.PositionTitle} = PositionTitle,\n\t\t{Sql.ProjectCode} = ProjectCode,\n\t\t{Sql.Rate} = Rate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> SelectSqlDefinitivPayslips\nSourceBlobDefinitivPayslips select(mapColumn(\n\t\t{OrgPayRun.OrganizationId},\n\t\t{OrgPayRun.PayRunId},\n\t\t{OrgPayRun.PeriodEndDate},\n\t\t{OrgPayRun.PeriodStartDate},\n\t\t{OrgPayRun.PipelineRunId},\n\t\t{OrgPayRun.PipelineTriggerTime},\n\t\tBaseRate = baseRate,\n\t\tDepartmentCode = departmentCode,\n\t\tEmployeeId = employeeId,\n\t\tEmploymentTypeCode = employmentTypeCode,\n\t\tEmploymentTypeCodeDesc = employmentTypeCodeDesc,\n\t\tFirstName = firstName,\n\t\tHoursOrADCode = {hoursOrA/DCode},\n\t\tHoursOrADCodeDesc = {hoursOrA/DCodeDesc},\n\t\tIdNumber = idNumber,\n\t\tLevel1Code = level1Code,\n\t\tLevel2Code = level2Code,\n\t\tPayslipLineItemId = lineItemId,\n\t\tNumberOfUnits = numberOfUnits,\n\t\tPayDate = payDate,\n\t\tPayMethodCode = payMethodCode,\n\t\tPayMethodCodeDesc = payMethodCodeDesc,\n\t\tPayslipId = payslipId,\n\t\tPayslipNumber = payslipNumber,\n\t\tPeriodEndingDate = periodEndingDate,\n\t\tPeriodStartDate = periodStartDate,\n\t\tPositionTitle = positionTitle,\n\t\tProjectCode = projectCode,\n\t\tRate = rate,\n\t\tSurname = surname,\n\t\tValue = value,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> SelectBlobDefinitivPayslips\nFilterPeriodEndDate, SelectSqlDefinitivPayslips exists(DepartmentCode == {Sql.DepartmentCode}\n\t&& EmployeeId == {Sql.EmployeeId}\n\t&& HoursOrADCode == {Sql.HoursOrADCode}\n\t&& HoursOrADCodeDesc == {Sql.HoursOrADCodeDesc}\n\t&& Level1Code == {Sql.Level1Code}\n\t&& Level2Code == {Sql.Level2Code}\n\t&& {OrgPayRun.OrganizationId} == {Sql.OrganizationId}\n\t&& {OrgPayRun.PayRunId} == {Sql.PayRunId}\n\t&& PayslipId == {Sql.PayslipId}\n\t&& PayslipLineItemId == {Sql.PayslipLineItemId}\n\t&& PositionTitle == {Sql.PositionTitle}\n\t&& ProjectCode == {Sql.ProjectCode}\n\t&& Rate == {Sql.Rate},\n\tnegate:false,\n\tbroadcast: 'auto')~> ExistsUpdate\nFilterPeriodEndDate, SelectSqlDefinitivPayslips exists(DepartmentCode == {Sql.DepartmentCode}\n\t&& EmployeeId == {Sql.EmployeeId}\n\t&& HoursOrADCode == {Sql.HoursOrADCode}\n\t&& HoursOrADCodeDesc == {Sql.HoursOrADCodeDesc}\n\t&& Level1Code == {Sql.Level1Code}\n\t&& Level2Code == {Sql.Level2Code}\n\t&& {OrgPayRun.OrganizationId} == {Sql.OrganizationId}\n\t&& {OrgPayRun.PayRunId} == {Sql.PayRunId}\n\t&& PayslipId == {Sql.PayslipId}\n\t&& PayslipLineItemId == {Sql.PayslipLineItemId}\n\t&& PositionTitle == {Sql.PositionTitle}\n\t&& ProjectCode == {Sql.ProjectCode}\n\t&& Rate == {Sql.Rate},\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsInsert\nUnionAlterRowCondition aggregate(groupBy(AlterRowCondition),\n\tCountAlterRowCondition = count(AlterRowCondition)) ~> Aggregate1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tdeletable:true,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['DepartmentCode','EmployeeId','HoursOrADCode','HoursOrADCodeDesc','Level1Code','Level2Code','OrganizationId','PayRunId','PayslipId','PayslipLineItemId','PositionTitle','ProjectCode','Rate'],\n\tformat: 'table',\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (\"ds_adls2_stnidoprodeastau100_log\"),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tOrganizationId = {OrgPayRun.OrganizationId},\n\t\tPayRunId = {OrgPayRun.PayRunId},\n\t\tPeriodEndDate = {OrgPayRun.PeriodEndDate},\n\t\tPeriodStartDate = {OrgPayRun.PeriodStartDate},\n\t\tPipelineRunId = {OrgPayRun.PipelineRunId},\n\t\tPipelineTriggerTime = {OrgPayRun.PipelineTriggerTime},\n\t\tBaseRate,\n\t\tDepartmentCode,\n\t\tEmployeeId,\n\t\tEmploymentTypeCode,\n\t\tEmploymentTypeCodeDesc,\n\t\tFirstName,\n\t\tHoursOrADCode,\n\t\tHoursOrADCodeDesc,\n\t\tIdNumber,\n\t\tLevel1Code,\n\t\tLevel2Code,\n\t\tPayslipLineItemId,\n\t\tNumberOfUnits,\n\t\tPayDate,\n\t\tPayMethodCode,\n\t\tPayMethodCodeDesc,\n\t\tPayslipId,\n\t\tPayslipNumber,\n\t\tPeriodEndingDate,\n\t\tPeriodStartDate,\n\t\tPositionTitle,\n\t\tProjectCode,\n\t\tRate,\n\t\tSurname,\n\t\tValue,\n\t\tSourceFileName,\n\t\tAlterRowCondition,\n\t\tRecordModifiedDate,\n\t\tRecordIsDeleted,\n\t\tRecordCreatedDate,\n\t\tEmployeeId = {Sql.EmployeeId},\n\t\tOrganizationId = {Sql.OrganizationId},\n\t\tPayRunId = {Sql.PayRunId},\n\t\tPayslipId = {Sql.PayslipId},\n\t\tPayslipLineItemId = {Sql.PayslipLineItemId},\n\t\tDepartmentCode = {Sql.DepartmentCode},\n\t\tHoursOrADCode = {Sql.HoursOrADCode},\n\t\tHoursOrADCodeDesc = {Sql.HoursOrADCodeDesc},\n\t\tLevel1Code = {Sql.Level1Code},\n\t\tLevel2Code = {Sql.Level2Code},\n\t\tPositionTitle = {Sql.PositionTitle},\n\t\tProjectCode = {Sql.ProjectCode},\n\t\tRate = {Sql.Rate}\n\t)) ~> SinkSqlDefinitivPayslips"
+					"script": "source(output(\n\t\t{OrgPayRun.OrganizationId} as string,\n\t\t{OrgPayRun.PayRunId} as string,\n\t\t{OrgPayRun.PeriodEndDate} as date,\n\t\t{OrgPayRun.PeriodStartDate} as date,\n\t\t{OrgPayRun.PipelineRunId} as string,\n\t\t{OrgPayRun.PipelineTriggerTime} as string,\n\t\tbaseRate as double,\n\t\tdepartmentCode as string,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tnumberOfUnits as double,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpositionTitle as string,\n\t\tprojectCode as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitivPayslips\nsource(output(\n\t\tRecordId as string,\n\t\tRecordVersion as binary,\n\t\tRecordCreatedDate as timestamp,\n\t\tRecordModifiedDate as timestamp,\n\t\tRecordIsDeleted as boolean,\n\t\tRecordIsDefinitiv as boolean,\n\t\tRecordIsPreceda as boolean,\n\t\tPipelineRunId as string,\n\t\tPipelineSourceFileName as string,\n\t\tPipelineTriggerTime as string,\n\t\tEmployeeId as string,\n\t\tOrganizationId as string,\n\t\tPayRunId as string,\n\t\tPayslipId as string,\n\t\tPayRunPeriodEndDate as date,\n\t\tPayRunPeriodStartDate as date,\n\t\tPayslipLineItemId as integer,\n\t\tPayslipNumber as string,\n\t\tBaseRate as double,\n\t\tDepartmentCode as string,\n\t\tEmploymentTypeCode as string,\n\t\tEmploymentTypeCodeDesc as string,\n\t\tFirstName as string,\n\t\tHoursOrADCode as string,\n\t\tHoursOrADCodeDesc as string,\n\t\tIdNumber as integer,\n\t\tLevel1Code as string,\n\t\tLevel2Code as string,\n\t\tNumberOfUnits as double,\n\t\tPayDate as date,\n\t\tPayMethodCode as string,\n\t\tPayMethodCodeDesc as string,\n\t\tPeriodEndingDate as date,\n\t\tPeriodStartDate as date,\n\t\tPositionTitle as string,\n\t\tProjectCode as string,\n\t\tRate as double,\n\t\tSurname as string,\n\t\tValue as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> SourceSqlDefinitivPayslips\nUnionAlterRowCondition alterRow(insertIf(AlterRowCondition==\"Insert\"),\n\tupdateIf(AlterRowCondition==\"Update\"),\n\tdeleteIf(AlterRowCondition==\"Delete\")) ~> AlterRow1\nSelectBlobDefinitivPayslips derive(PayDate = toDate(PayDate),\n\t\tHoursOrADCode = toString(HoursOrADCode)) ~> CastDateType1\nCastDateType1 filter(greater({OrgPayRun.PeriodEndDate}, toDate(\"2021-10-15\", 'yyyy-MM-dd'))) ~> FilterPeriodEndDate\nNotExistsInsert derive(AlterRowCondition = \"Insert\",\n\t\tRecordCreatedDate = currentUTC('A.U.S. Eastern Standard Time'),\n\t\tRecordIsDeleted = false()) ~> Insert\nSelectSqlDefinitivPayslips, FilterPeriodEndDate exists({Sql.DepartmentCode} == DepartmentCode\n\t&& {Sql.OrganizationId} == {OrgPayRun.OrganizationId}\n\t&& {Sql.PayRunId} == {OrgPayRun.PayRunId}\n\t&& {Sql.EmployeeId} == EmployeeId\n\t&& {Sql.HoursOrADCode} == HoursOrADCode\n\t&& {Sql.HoursOrADCodeDesc} == HoursOrADCodeDesc\n\t&& {Sql.Level1Code} == Level1Code\n\t&& {Sql.Level2Code} == Level2Code\n\t&& {Sql.PayslipId} == PayslipId\n\t&& {Sql.PayslipLineItemId} == PayslipLineItemId\n\t&& {Sql.PositionTitle} == PositionTitle\n\t&& {Sql.ProjectCode} == ProjectCode\n\t&& {Sql.Rate} == Rate,\n\tnegate:true,\n\tbroadcast: 'right')~> NotExistsDelete\nNotExistsDelete derive(AlterRowCondition = \"Delete\",\n\t\tRecordModifiedDate = currentUTC('A.U.S. Eastern Standard Time'),\n\t\tRecordIsDeleted = true()) ~> Delete\nExistsUpdate derive(AlterRowCondition = \"Update\",\n\t\tRecordModifiedDate = currentUTC('A.U.S. Eastern Standard Time'),\n\t\tRecordIsDeleted = false()) ~> Update\nUpdate, Insert, Delete union(byName: true)~> UnionAlterRowCondition\nSourceSqlDefinitivPayslips select(mapColumn(\n\t\t{Sql.EmployeeId} = EmployeeId,\n\t\t{Sql.OrganizationId} = OrganizationId,\n\t\t{Sql.PayRunId} = PayRunId,\n\t\t{Sql.PayslipId} = PayslipId,\n\t\t{Sql.PayslipLineItemId} = PayslipLineItemId,\n\t\t{Sql.DepartmentCode} = DepartmentCode,\n\t\t{Sql.HoursOrADCode} = HoursOrADCode,\n\t\t{Sql.HoursOrADCodeDesc} = HoursOrADCodeDesc,\n\t\t{Sql.Level1Code} = Level1Code,\n\t\t{Sql.Level2Code} = Level2Code,\n\t\t{Sql.PositionTitle} = PositionTitle,\n\t\t{Sql.ProjectCode} = ProjectCode,\n\t\t{Sql.Rate} = Rate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> SelectSqlDefinitivPayslips\nSourceBlobDefinitivPayslips select(mapColumn(\n\t\t{OrgPayRun.OrganizationId},\n\t\t{OrgPayRun.PayRunId},\n\t\t{OrgPayRun.PeriodEndDate},\n\t\t{OrgPayRun.PeriodStartDate},\n\t\t{OrgPayRun.PipelineRunId},\n\t\t{OrgPayRun.PipelineTriggerTime},\n\t\tBaseRate = baseRate,\n\t\tDepartmentCode = departmentCode,\n\t\tEmployeeId = employeeId,\n\t\tEmploymentTypeCode = employmentTypeCode,\n\t\tEmploymentTypeCodeDesc = employmentTypeCodeDesc,\n\t\tFirstName = firstName,\n\t\tHoursOrADCode = {hoursOrA/DCode},\n\t\tHoursOrADCodeDesc = {hoursOrA/DCodeDesc},\n\t\tIdNumber = idNumber,\n\t\tLevel1Code = level1Code,\n\t\tLevel2Code = level2Code,\n\t\tPayslipLineItemId = lineItemId,\n\t\tNumberOfUnits = numberOfUnits,\n\t\tPayDate = payDate,\n\t\tPayMethodCode = payMethodCode,\n\t\tPayMethodCodeDesc = payMethodCodeDesc,\n\t\tPayslipId = payslipId,\n\t\tPayslipNumber = payslipNumber,\n\t\tPeriodEndingDate = periodEndingDate,\n\t\tPeriodStartDate = periodStartDate,\n\t\tPositionTitle = positionTitle,\n\t\tProjectCode = projectCode,\n\t\tRate = rate,\n\t\tSurname = surname,\n\t\tValue = value,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: true) ~> SelectBlobDefinitivPayslips\nFilterPeriodEndDate, SelectSqlDefinitivPayslips exists(DepartmentCode == {Sql.DepartmentCode}\n\t&& EmployeeId == {Sql.EmployeeId}\n\t&& HoursOrADCode == {Sql.HoursOrADCode}\n\t&& HoursOrADCodeDesc == {Sql.HoursOrADCodeDesc}\n\t&& Level1Code == {Sql.Level1Code}\n\t&& Level2Code == {Sql.Level2Code}\n\t&& {OrgPayRun.OrganizationId} == {Sql.OrganizationId}\n\t&& {OrgPayRun.PayRunId} == {Sql.PayRunId}\n\t&& PayslipId == {Sql.PayslipId}\n\t&& PayslipLineItemId == {Sql.PayslipLineItemId}\n\t&& PositionTitle == {Sql.PositionTitle}\n\t&& ProjectCode == {Sql.ProjectCode}\n\t&& Rate == {Sql.Rate},\n\tnegate:false,\n\tbroadcast: 'auto')~> ExistsUpdate\nFilterPeriodEndDate, SelectSqlDefinitivPayslips exists(DepartmentCode == {Sql.DepartmentCode}\n\t&& EmployeeId == {Sql.EmployeeId}\n\t&& HoursOrADCode == {Sql.HoursOrADCode}\n\t&& HoursOrADCodeDesc == {Sql.HoursOrADCodeDesc}\n\t&& Level1Code == {Sql.Level1Code}\n\t&& Level2Code == {Sql.Level2Code}\n\t&& {OrgPayRun.OrganizationId} == {Sql.OrganizationId}\n\t&& {OrgPayRun.PayRunId} == {Sql.PayRunId}\n\t&& PayslipId == {Sql.PayslipId}\n\t&& PayslipLineItemId == {Sql.PayslipLineItemId}\n\t&& PositionTitle == {Sql.PositionTitle}\n\t&& ProjectCode == {Sql.ProjectCode}\n\t&& Rate == {Sql.Rate},\n\tnegate:true,\n\tbroadcast: 'auto')~> NotExistsInsert\nUnionAlterRowCondition aggregate(groupBy(AlterRowCondition),\n\tCountAlterRowCondition = count(AlterRowCondition)) ~> Aggregate1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tdeletable:true,\n\tinsertable:true,\n\tupdateable:true,\n\tupsertable:false,\n\tkeys:['DepartmentCode','EmployeeId','HoursOrADCode','HoursOrADCodeDesc','Level1Code','Level2Code','OrganizationId','PayRunId','PayslipId','PayslipLineItemId','PositionTitle','ProjectCode','Rate'],\n\tformat: 'table',\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (\"ds_adls2_stnidoprodeastau100_log\"),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tOrganizationId = {OrgPayRun.OrganizationId},\n\t\tPayRunId = {OrgPayRun.PayRunId},\n\t\tPeriodEndDate = {OrgPayRun.PeriodEndDate},\n\t\tPeriodStartDate = {OrgPayRun.PeriodStartDate},\n\t\tPipelineRunId = {OrgPayRun.PipelineRunId},\n\t\tPipelineTriggerTime = {OrgPayRun.PipelineTriggerTime},\n\t\tBaseRate,\n\t\tDepartmentCode,\n\t\tEmployeeId,\n\t\tEmploymentTypeCode,\n\t\tEmploymentTypeCodeDesc,\n\t\tFirstName,\n\t\tHoursOrADCode,\n\t\tHoursOrADCodeDesc,\n\t\tIdNumber,\n\t\tLevel1Code,\n\t\tLevel2Code,\n\t\tPayslipLineItemId,\n\t\tNumberOfUnits,\n\t\tPayDate,\n\t\tPayMethodCode,\n\t\tPayMethodCodeDesc,\n\t\tPayslipId,\n\t\tPayslipNumber,\n\t\tPeriodEndingDate,\n\t\tPositionTitle,\n\t\tProjectCode,\n\t\tRate,\n\t\tSurname,\n\t\tValue,\n\t\tSourceFileName,\n\t\tAlterRowCondition,\n\t\tRecordModifiedDate,\n\t\tRecordIsDeleted,\n\t\tRecordCreatedDate\n\t)) ~> SinkSqlDefinitivPayslips"
 				}
 			},
 			"dependsOn": [
