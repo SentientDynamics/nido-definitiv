@@ -13,6 +13,104 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_B0_Payslips_BlobToDefinitiv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "df_B1_Payslips_ApiToDefinitiv",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_B1_Payslips_ApiToDefinitiv",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SourceBlobDefinitivPayslips": {
+										"ds_PipelineTriggerTime": "2022-02-24T02:35:58.9472761Z",
+										"ds_PipelineRunId": "bef609c0-060d-4c9b-b6f2-20d73f3d06ed",
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+									},
+									"SourceSqlDefinitivPayslips": {
+										"ds_SchemaName": {
+											"value": "@pipeline().parameters.SourceSqlSchema",
+											"type": "Expression"
+										},
+										"ds_TableName": {
+											"value": "@pipeline().parameters.SourceSqlTable",
+											"type": "Expression"
+										}
+									},
+									"SinkSqlDefinitivPayslips": {
+										"ds_SchemaName": {
+											"value": "@pipeline().parameters.SinkSqlSchema",
+											"type": "Expression"
+										},
+										"ds_TableName": {
+											"value": "@pipeline().parameters.SinkSqlTable",
+											"type": "Expression"
+										}
+									}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"SourceSqlSchema": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"SourceSqlTable": {
+						"type": "string",
+						"defaultValue": "CustomReportPayslipsE"
+					},
+					"SinkSqlSchema": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"SinkSqlTable": {
+						"type": "string",
+						"defaultValue": "CustomReportPayslipsE"
+					}
+				},
+				"folder": {
+					"name": "01_Payslips"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-21T07:04:53Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_B0_Timesheets_BlobToDefinitiv')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -790,7 +888,7 @@
 						}
 					},
 					{
-						"name": "df_B1_OrgPayItems_ApiToDefintiv",
+						"name": "df_B1_OrgPayItems_ApiToDefintiv_copy1",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -7195,143 +7293,6 @@
 				"lastPublishTime": "2021-12-02T04:30:07Z"
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_01_Payslips_Master')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "pl_B1_Payslips_ApiToDefinitiv",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B1_Payslips_ApiToDefinitiv",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_B2_Payslips_DefinitivToDraft1",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pl_B1_Payslips_ApiToDefinitiv",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B2_Payslips_DefinitivToDraft1",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_C1_Payslips_DraftReportViews",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pl_B2_Payslips_DefinitivToDraft1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_C1_Payslips_DraftReportViews",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "01_Payslips"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-20T01:50:41Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_B1_Payslips_ApiToDefinitiv')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_B2_Payslips_DefinitivToDraft1')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_C1_Payslips_DraftReportViews')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_B1_OrgPayRuns_ApiToDefinitiv')]"
-			]
 		}
 	]
 }

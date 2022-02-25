@@ -13,6 +13,138 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_01_Payslips_Master')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "pl_B1_Payslips_ApiToDefinitiv",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pl_B1_OrgPayRuns_ApiToDefinitiv",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_B1_Payslips_ApiToDefinitiv",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"MasterPipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"MasterPipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "pl_B2_Payslips_DefinitivToDraft1",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pl_B1_Payslips_ApiToDefinitiv",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_B2_Payslips_DefinitivToDraft1",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"MasterPipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"MasterPipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "pl_C1_Payslips_DraftReportViews",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "pl_B2_Payslips_DefinitivToDraft1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_C1_Payslips_DraftReportViews",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"MasterPipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"MasterPipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "pl_B1_OrgPayRuns_ApiToDefinitiv",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_B1_OrgPayRuns_ApiToDefinitiv",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"MasterPipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"MasterPipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "01_Payslips"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-20T01:50:41Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_B1_Timesheets_ApiToDefinitiv')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -800,7 +932,9 @@
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_01_Payslips_Master')]"
+			]
 		}
 	]
 }
