@@ -581,7 +581,7 @@
 											}
 										}
 									],
-									"collectionReference": "$['payRuns']"
+									"collectionReference": ""
 								}
 							},
 							"inputs": [
