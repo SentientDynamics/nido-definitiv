@@ -690,6 +690,69 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "df_B1_OrgPayItems_ApiToDefintiv_copy1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_B1_OrgPayItems_ApiToDefinitiv",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"SourceBlobDefinitivPayslips": {
+								"ds_PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"ds_PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"ds_FileSystem": {
+									"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+									"type": "Expression"
+								},
+								"ds_Directory": {
+									"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+									"type": "Expression"
+								},
+								"ds_PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"SourceSqlDefinitivPayslips": {
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "OrganizationPayItems"
+							},
+							"SinkSqlDefinitivPayslips": {
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "OrganizationPayItems"
+							}
+						}
+					},
+					"integrationRuntime": {
+						"referenceName": "AustraliaEastIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					},
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"folder": {
