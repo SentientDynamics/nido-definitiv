@@ -3130,7 +3130,7 @@
 											"mappings": [
 												{
 													"source": {
-														"path": "$['payItems'][0]['payItemId']"
+														"path": "[['payItemId']"
 													},
 													"sink": {
 														"path": "payItemId"
@@ -3138,7 +3138,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['description']"
+														"path": "[['description']"
 													},
 													"sink": {
 														"path": "description"
@@ -3146,7 +3146,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['unitOfMeasureId']"
+														"path": "[['unitOfMeasureId']"
 													},
 													"sink": {
 														"path": "unitOfMeasureId"
@@ -3154,7 +3154,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['type']"
+														"path": "[['type']"
 													},
 													"sink": {
 														"path": "type"
@@ -3162,7 +3162,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['category']"
+														"path": "[['category']"
 													},
 													"sink": {
 														"path": "category"
@@ -3170,7 +3170,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['exportCode']"
+														"path": "[['exportCode']"
 													},
 													"sink": {
 														"path": "exportCode"
@@ -3178,7 +3178,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['glDebitCode']"
+														"path": "[['glDebitCode']"
 													},
 													"sink": {
 														"path": "glDebitCode"
@@ -3186,7 +3186,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['glCreditCode']"
+														"path": "[['glCreditCode']"
 													},
 													"sink": {
 														"path": "glCreditCode"
@@ -3194,7 +3194,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['organizationId']"
+														"path": "[['organizationId']"
 													},
 													"sink": {
 														"path": "organizationId"
@@ -3202,7 +3202,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['isSystem']"
+														"path": "[['isSystem']"
 													},
 													"sink": {
 														"path": "isSystem"
@@ -3210,7 +3210,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['hidden']"
+														"path": "[['hidden']"
 													},
 													"sink": {
 														"path": "hidden"
@@ -3218,7 +3218,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['showOnPayslip']"
+														"path": "[['showOnPayslip']"
 													},
 													"sink": {
 														"path": "showOnPayslip"
@@ -3226,7 +3226,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['payslipDisplayName']"
+														"path": "[['payslipDisplayName']"
 													},
 													"sink": {
 														"path": "payslipDisplayName"
@@ -3234,7 +3234,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['thirdPartyPaymentEnabled']"
+														"path": "[['thirdPartyPaymentEnabled']"
 													},
 													"sink": {
 														"path": "thirdPartyPaymentEnabled"
@@ -3242,7 +3242,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['deletedTime']"
+														"path": "[['deletedTime']"
 													},
 													"sink": {
 														"path": "deletedTime"
@@ -3250,7 +3250,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['deletedByUserId']"
+														"path": "[['deletedByUserId']"
 													},
 													"sink": {
 														"path": "deletedByUserId"
@@ -3258,7 +3258,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['atoCategory']"
+														"path": "[['atoCategory']"
 													},
 													"sink": {
 														"path": "atoCategory"
@@ -3266,7 +3266,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['superStreamContributionCategory']"
+														"path": "[['superStreamContributionCategory']"
 													},
 													"sink": {
 														"path": "superStreamContributionCategory"
@@ -3274,7 +3274,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['isSuperable']"
+														"path": "[['isSuperable']"
 													},
 													"sink": {
 														"path": "isSuperable"
@@ -3282,7 +3282,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['isTaxable']"
+														"path": "[['isTaxable']"
 													},
 													"sink": {
 														"path": "isTaxable"
@@ -3290,7 +3290,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['includeInTotalPackage']"
+														"path": "[['includeInTotalPackage']"
 													},
 													"sink": {
 														"path": "includeInTotalPackage"
@@ -3298,7 +3298,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['includeInSalaryAndWages']"
+														"path": "[['includeInSalaryAndWages']"
 													},
 													"sink": {
 														"path": "includeInSalaryAndWages"
@@ -3306,7 +3306,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['specialTaxRate']"
+														"path": "[['specialTaxRate']"
 													},
 													"sink": {
 														"path": "specialTaxRate"
@@ -3314,7 +3314,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['costingStrategy']"
+														"path": "[['costingStrategy']"
 													},
 													"sink": {
 														"path": "costingStrategy"
@@ -3322,7 +3322,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['proportionPeriodCostingPayItems'][0]"
+														"path": "[['proportionPeriodCostingPayItems'][0]"
 													},
 													"sink": {
 														"path": "proportionPeriodCostingPayItems"
@@ -3330,7 +3330,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['percentagePayItems'][0]"
+														"path": "[['percentagePayItems'][0]"
 													},
 													"sink": {
 														"path": "percentagePayItems"
@@ -3338,7 +3338,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['isPercentage']"
+														"path": "[['isPercentage']"
 													},
 													"sink": {
 														"path": "isPercentage"
@@ -3346,7 +3346,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['deductionBankAccount']"
+														"path": "[['deductionBankAccount']"
 													},
 													"sink": {
 														"path": "deductionBankAccount"
@@ -3354,7 +3354,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['rollupMode']"
+														"path": "[['rollupMode']"
 													},
 													"sink": {
 														"path": "rollupMode"
@@ -3362,7 +3362,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['onlyProcessWhenOtherEarningsExist']"
+														"path": "[['onlyProcessWhenOtherEarningsExist']"
 													},
 													"sink": {
 														"path": "onlyProcessWhenOtherEarningsExist"
@@ -3370,7 +3370,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['isForeign']"
+														"path": "[['isForeign']"
 													},
 													"sink": {
 														"path": "isForeign"
@@ -3378,7 +3378,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['isContractor']"
+														"path": "[['isContractor']"
 													},
 													"sink": {
 														"path": "isContractor"
@@ -3386,7 +3386,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['targetEntity']"
+														"path": "[['customFields'][0]['targetEntity']"
 													},
 													"sink": {
 														"path": "customFields.targetEntity"
@@ -3394,7 +3394,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['dataType']"
+														"path": "[['customFields'][0]['dataType']"
 													},
 													"sink": {
 														"path": "customFields.dataType"
@@ -3402,7 +3402,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['value']"
+														"path": "[['customFields'][0]['value']"
 													},
 													"sink": {
 														"path": "customFields.value"
@@ -3410,7 +3410,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['name']"
+														"path": "[['customFields'][0]['name']"
 													},
 													"sink": {
 														"path": "customFields.name"
@@ -3418,7 +3418,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['displayName']"
+														"path": "[['customFields'][0]['displayName']"
 													},
 													"sink": {
 														"path": "customFields.displayName"
@@ -3426,7 +3426,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['description']"
+														"path": "[['customFields'][0]['description']"
 													},
 													"sink": {
 														"path": "customFields.description"
@@ -3434,7 +3434,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['enabled']"
+														"path": "[['customFields'][0]['enabled']"
 													},
 													"sink": {
 														"path": "customFields.enabled"
@@ -3442,7 +3442,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['global']"
+														"path": "[['customFields'][0]['global']"
 													},
 													"sink": {
 														"path": "customFields.global"
@@ -3450,7 +3450,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['options'][0]"
+														"path": "[['customFields'][0]['options'][0]"
 													},
 													"sink": {
 														"path": "customFields.options"
@@ -3458,7 +3458,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['isMandatory']"
+														"path": "[['customFields'][0]['isMandatory']"
 													},
 													"sink": {
 														"path": "customFields.isMandatory"
@@ -3466,7 +3466,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['order']"
+														"path": "[['customFields'][0]['order']"
 													},
 													"sink": {
 														"path": "customFields.order"
@@ -3474,7 +3474,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['dateDriven']"
+														"path": "[['customFields'][0]['dateDriven']"
 													},
 													"sink": {
 														"path": "customFields.dateDriven"
@@ -3482,7 +3482,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['timeBased']"
+														"path": "[['customFields'][0]['timeBased']"
 													},
 													"sink": {
 														"path": "customFields.timeBased"
@@ -3490,7 +3490,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['displayOnTimesheetSummary']"
+														"path": "[['customFields'][0]['displayOnTimesheetSummary']"
 													},
 													"sink": {
 														"path": "customFields.displayOnTimesheetSummary"
@@ -3498,7 +3498,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['preventMultipleEntries']"
+														"path": "[['customFields'][0]['preventMultipleEntries']"
 													},
 													"sink": {
 														"path": "customFields.preventMultipleEntries"
@@ -3506,7 +3506,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['timePeriodMode']"
+														"path": "[['customFields'][0]['timePeriodMode']"
 													},
 													"sink": {
 														"path": "customFields.timePeriodMode"
@@ -3514,7 +3514,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['inheritTimesheetPeriod']"
+														"path": "[['customFields'][0]['inheritTimesheetPeriod']"
 													},
 													"sink": {
 														"path": "customFields.inheritTimesheetPeriod"
@@ -3522,7 +3522,7 @@
 												},
 												{
 													"source": {
-														"path": "$['payItems'][0]['customFields'][0]['customFieldDisplayStatus']"
+														"path": "[['customFields'][0]['customFieldDisplayStatus']"
 													},
 													"sink": {
 														"path": "customFields.customFieldDisplayStatus"
@@ -3569,7 +3569,7 @@
 													}
 												}
 											],
-											"collectionReference": ""
+											"collectionReference": "$['payItems']"
 										}
 									},
 									"inputs": [
