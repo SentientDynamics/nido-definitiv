@@ -742,7 +742,7 @@
 													}
 												}
 											],
-											"collectionReference": "$['payRuns']"
+											"collectionReference": ""
 										}
 									},
 									"inputs": [
