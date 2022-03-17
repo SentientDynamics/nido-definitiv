@@ -295,14 +295,6 @@
 				}
 			}
 		],
-		"variables": {
-			"PipelineTriggerTime": {
-				"type": "String"
-			},
-			"PipelineRunId": {
-				"type": "String"
-			}
-		},
 		"folder": {
 			"name": "04_Rosters"
 		},
