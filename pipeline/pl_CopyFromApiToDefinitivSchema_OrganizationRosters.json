@@ -90,7 +90,165 @@
 										"type": "JsonWriteSettings"
 									}
 								},
-								"enableStaging": false
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"path": "['rosterId']"
+											},
+											"sink": {
+												"path": "$['items'][0]['rosterId']"
+											}
+										},
+										{
+											"source": {
+												"path": "['isTemplate']"
+											},
+											"sink": {
+												"path": "$['items'][0]['isTemplate']"
+											}
+										},
+										{
+											"source": {
+												"path": "['ceaseDate']"
+											},
+											"sink": {
+												"path": "$['items'][0]['ceaseDate']"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterEmployees'][0]['includedRosterEmployeeId']"
+											},
+											"sink": {
+												"path": "$['items'][0]['includedRosterEmployees'][0]['includedRosterEmployeeId']"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterEmployees'][0]['employee']['id']"
+											},
+											"sink": {
+												"path": "$['items'][0]['includedRosterEmployees'][0]['employee']['id']"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterEmployees'][0]['employee']['name']"
+											},
+											"sink": {
+												"path": "$['items'][0]['includedRosterEmployees'][0]['employee']['name']"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterEmployees'][0]['primaryAssignments']"
+											},
+											"sink": {
+												"path": "$['items'][0]['includedRosterEmployees'][0]['primaryAssignments']"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterRoles'][0]"
+											},
+											"sink": {
+												"path": "$['items'][0]['includedRosterRoles'][0]"
+											}
+										},
+										{
+											"source": {
+												"path": "['paid']"
+											},
+											"sink": {
+												"path": "$['items'][0]['paid']"
+											}
+										},
+										{
+											"source": {
+												"path": "['name']"
+											},
+											"sink": {
+												"path": "$['items'][0]['name']"
+											}
+										},
+										{
+											"source": {
+												"path": "['description']"
+											},
+											"sink": {
+												"path": "$['items'][0]['description']"
+											}
+										},
+										{
+											"source": {
+												"path": "['defaultPeriodDurationType']"
+											},
+											"sink": {
+												"path": "$['items'][0]['defaultPeriodDurationType']"
+											}
+										},
+										{
+											"source": {
+												"path": "['customPeriodDuration']"
+											},
+											"sink": {
+												"path": "$['items'][0]['customPeriodDuration']"
+											}
+										},
+										{
+											"source": {
+												"path": "['commencementDate']"
+											},
+											"sink": {
+												"path": "$['items'][0]['commencementDate']"
+											}
+										},
+										{
+											"source": {
+												"path": "['notifyEmployeesByDefault']"
+											},
+											"sink": {
+												"path": "$['items'][0]['notifyEmployeesByDefault']"
+											}
+										},
+										{
+											"source": {
+												"path": "['costingSettings']"
+											},
+											"sink": {
+												"path": "$['items'][0]['costingSettings']"
+											}
+										},
+										{
+											"source": {
+												"path": "['showAsTwelveHourTime']"
+											},
+											"sink": {
+												"path": "$['items'][0]['showAsTwelveHourTime']"
+											}
+										},
+										{
+											"source": {
+												"path": "['definedCostingPayItems'][0]"
+											},
+											"sink": {
+												"path": "$['items'][0]['definedCostingPayItems'][0]"
+											}
+										},
+										{
+											"source": {
+												"path": "$['Org.OrganizationId']"
+											},
+											"sink": {
+												"path": "$['Org.OrganizationId']"
+											}
+										}
+									],
+									"collectionReference": "$['items']"
+								}
 							},
 							"inputs": [
 								{
@@ -106,11 +264,11 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+									"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
+											"value": "@pipeline().TriggerName",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
