@@ -117,130 +117,146 @@
 									"mappings": [
 										{
 											"source": {
-												"path": "['rosterId']"
+												"path": "$['items'][0]['rosterId']"
 											},
 											"sink": {
-												"path": "rosterId"
+												"path": "$['items'][0]['rosterId']"
 											}
 										},
 										{
 											"source": {
-												"path": "['isTemplate']"
+												"path": "$['items'][0]['isTemplate']"
 											},
 											"sink": {
-												"path": "isTemplate"
+												"path": "$['items'][0]['isTemplate']"
 											}
 										},
 										{
 											"source": {
-												"path": "['ceaseDate']"
+												"path": "$['items'][0]['ceaseDate']"
 											},
 											"sink": {
-												"path": "ceaseDate"
+												"path": "$['items'][0]['ceaseDate']"
 											}
 										},
 										{
 											"source": {
-												"path": "['paid']"
+												"path": "$['items'][0]['includedRosterEmployees'][0]['includedRosterEmployeeId']"
 											},
 											"sink": {
-												"path": "paid"
+												"path": "$['items'][0]['includedRosterEmployees'][0]['includedRosterEmployeeId']"
 											}
 										},
 										{
 											"source": {
-												"path": "['name']"
+												"path": "$['items'][0]['includedRosterEmployees'][0]['employee']['id']"
 											},
 											"sink": {
-												"path": "name"
+												"path": "$['items'][0]['includedRosterEmployees'][0]['employee']['id']"
 											}
 										},
 										{
 											"source": {
-												"path": "['description']"
+												"path": "$['items'][0]['includedRosterEmployees'][0]['employee']['name']"
 											},
 											"sink": {
-												"path": "description"
+												"path": "$['items'][0]['includedRosterEmployees'][0]['employee']['name']"
 											}
 										},
 										{
 											"source": {
-												"path": "['defaultPeriodDurationType']"
+												"path": "$['items'][0]['includedRosterEmployees'][0]['primaryAssignments']"
 											},
 											"sink": {
-												"path": "defaultPeriodDurationType"
+												"path": "$['items'][0]['includedRosterEmployees'][0]['primaryAssignments']"
 											}
 										},
 										{
 											"source": {
-												"path": "['customPeriodDuration']"
+												"path": "$['items'][0]['includedRosterRoles'][0]"
 											},
 											"sink": {
-												"path": "customPeriodDuration"
+												"path": "$['items'][0]['includedRosterRoles'][0]"
 											}
 										},
 										{
 											"source": {
-												"path": "['commencementDate']"
+												"path": "$['items'][0]['paid']"
 											},
 											"sink": {
-												"path": "commencementDate"
+												"path": "$['items'][0]['paid']"
 											}
 										},
 										{
 											"source": {
-												"path": "['notifyEmployeesByDefault']"
+												"path": "$['items'][0]['name']"
 											},
 											"sink": {
-												"path": "notifyEmployeesByDefault"
+												"path": "$['items'][0]['name']"
 											}
 										},
 										{
 											"source": {
-												"path": "['costingSettings']"
+												"path": "$['items'][0]['description']"
 											},
 											"sink": {
-												"path": "costingSettings"
+												"path": "$['items'][0]['description']"
 											}
 										},
 										{
 											"source": {
-												"path": "['showAsTwelveHourTime']"
+												"path": "$['items'][0]['defaultPeriodDurationType']"
 											},
 											"sink": {
-												"path": "showAsTwelveHourTime"
+												"path": "$['items'][0]['defaultPeriodDurationType']"
 											}
 										},
 										{
 											"source": {
-												"path": "['includedRosterEmployees'][0]['includedRosterEmployeeId']"
+												"path": "$['items'][0]['customPeriodDuration']"
 											},
 											"sink": {
-												"path": "includedRosterEmployees.includedRosterEmployeeId"
+												"path": "$['items'][0]['customPeriodDuration']"
 											}
 										},
 										{
 											"source": {
-												"path": "['includedRosterEmployees'][0]['primaryAssignments']"
+												"path": "$['items'][0]['commencementDate']"
 											},
 											"sink": {
-												"path": "includedRosterEmployees.primaryAssignments"
+												"path": "$['items'][0]['commencementDate']"
 											}
 										},
 										{
 											"source": {
-												"path": "['includedRosterRoles'][0]"
+												"path": "$['items'][0]['notifyEmployeesByDefault']"
 											},
 											"sink": {
-												"path": "includedRosterRoles"
+												"path": "$['items'][0]['notifyEmployeesByDefault']"
 											}
 										},
 										{
 											"source": {
-												"path": "['definedCostingPayItems'][0]"
+												"path": "$['items'][0]['costingSettings']"
 											},
 											"sink": {
-												"path": "definedCostingPayItems"
+												"path": "$['items'][0]['costingSettings']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['items'][0]['showAsTwelveHourTime']"
+											},
+											"sink": {
+												"path": "$['items'][0]['showAsTwelveHourTime']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['items'][0]['definedCostingPayItems'][0]"
+											},
+											"sink": {
+												"path": "$['items'][0]['definedCostingPayItems'][0]"
 											}
 										},
 										{
@@ -249,10 +265,34 @@
 											},
 											"sink": {
 												"path": "$['Org.OrganizationId']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['OrgRosters.PipelineTriggerTime']"
+											},
+											"sink": {
+												"path": "$['OrgRosters.PipelineTriggerTime']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['OrgRosters.PipelineName']"
+											},
+											"sink": {
+												"path": "$['OrgRosters.PipelineName']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['OrgRosters.PipelineRunId']"
+											},
+											"sink": {
+												"path": "$['OrgRosters.PipelineRunId']"
 											}
 										}
 									],
-									"collectionReference": "$['items']"
+									"collectionReference": ""
 								}
 							},
 							"inputs": [
