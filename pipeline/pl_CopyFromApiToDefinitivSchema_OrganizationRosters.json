@@ -99,7 +99,7 @@
 												"path": "['rosterId']"
 											},
 											"sink": {
-												"path": "$['items'][0]['rosterId']"
+												"path": "rosterId"
 											}
 										},
 										{
@@ -107,7 +107,7 @@
 												"path": "['isTemplate']"
 											},
 											"sink": {
-												"path": "$['items'][0]['isTemplate']"
+												"path": "isTemplate"
 											}
 										},
 										{
@@ -115,47 +115,7 @@
 												"path": "['ceaseDate']"
 											},
 											"sink": {
-												"path": "$['items'][0]['ceaseDate']"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterEmployees'][0]['includedRosterEmployeeId']"
-											},
-											"sink": {
-												"path": "$['items'][0]['includedRosterEmployees'][0]['includedRosterEmployeeId']"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterEmployees'][0]['employee']['id']"
-											},
-											"sink": {
-												"path": "$['items'][0]['includedRosterEmployees'][0]['employee']['id']"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterEmployees'][0]['employee']['name']"
-											},
-											"sink": {
-												"path": "$['items'][0]['includedRosterEmployees'][0]['employee']['name']"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterEmployees'][0]['primaryAssignments']"
-											},
-											"sink": {
-												"path": "$['items'][0]['includedRosterEmployees'][0]['primaryAssignments']"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterRoles'][0]"
-											},
-											"sink": {
-												"path": "$['items'][0]['includedRosterRoles'][0]"
+												"path": "ceaseDate"
 											}
 										},
 										{
@@ -163,7 +123,7 @@
 												"path": "['paid']"
 											},
 											"sink": {
-												"path": "$['items'][0]['paid']"
+												"path": "paid"
 											}
 										},
 										{
@@ -171,7 +131,7 @@
 												"path": "['name']"
 											},
 											"sink": {
-												"path": "$['items'][0]['name']"
+												"path": "name"
 											}
 										},
 										{
@@ -179,7 +139,7 @@
 												"path": "['description']"
 											},
 											"sink": {
-												"path": "$['items'][0]['description']"
+												"path": "description"
 											}
 										},
 										{
@@ -187,7 +147,7 @@
 												"path": "['defaultPeriodDurationType']"
 											},
 											"sink": {
-												"path": "$['items'][0]['defaultPeriodDurationType']"
+												"path": "defaultPeriodDurationType"
 											}
 										},
 										{
@@ -195,7 +155,7 @@
 												"path": "['customPeriodDuration']"
 											},
 											"sink": {
-												"path": "$['items'][0]['customPeriodDuration']"
+												"path": "customPeriodDuration"
 											}
 										},
 										{
@@ -203,7 +163,7 @@
 												"path": "['commencementDate']"
 											},
 											"sink": {
-												"path": "$['items'][0]['commencementDate']"
+												"path": "commencementDate"
 											}
 										},
 										{
@@ -211,7 +171,7 @@
 												"path": "['notifyEmployeesByDefault']"
 											},
 											"sink": {
-												"path": "$['items'][0]['notifyEmployeesByDefault']"
+												"path": "notifyEmployeesByDefault"
 											}
 										},
 										{
@@ -219,7 +179,7 @@
 												"path": "['costingSettings']"
 											},
 											"sink": {
-												"path": "$['items'][0]['costingSettings']"
+												"path": "costingSettings"
 											}
 										},
 										{
@@ -227,7 +187,47 @@
 												"path": "['showAsTwelveHourTime']"
 											},
 											"sink": {
-												"path": "$['items'][0]['showAsTwelveHourTime']"
+												"path": "showAsTwelveHourTime"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterEmployees'][0]['includedRosterEmployeeId']"
+											},
+											"sink": {
+												"path": "includedRosterEmployees.includedRosterEmployees"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterEmployees'][0]['employee']['id']"
+											},
+											"sink": {
+												"path": "includedRosterEmployees.includedRosterEmployees"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterEmployees'][0]['employee']['name']"
+											},
+											"sink": {
+												"path": "includedRosterEmployees.includedRosterEmployees"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterEmployees'][0]['primaryAssignments']"
+											},
+											"sink": {
+												"path": "includedRosterEmployees.includedRosterEmployees"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterRoles'][0]"
+											},
+											"sink": {
+												"path": "includedRosterEmployees.includedRosterRoles"
 											}
 										},
 										{
@@ -235,7 +235,7 @@
 												"path": "['definedCostingPayItems'][0]"
 											},
 											"sink": {
-												"path": "$['items'][0]['definedCostingPayItems'][0]"
+												"path": "includedRosterEmployees.definedCostingPayItems"
 											}
 										},
 										{
@@ -243,7 +243,7 @@
 												"path": "$['Org.OrganizationId']"
 											},
 											"sink": {
-												"path": "$['Org.OrganizationId']"
+												"path": "Org.OrganizationId"
 											}
 										}
 									],
