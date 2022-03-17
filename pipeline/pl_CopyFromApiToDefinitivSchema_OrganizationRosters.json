@@ -288,14 +288,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"MasterPipelineTriggerTime": {
-				"type": "string"
-			},
-			"MasterPipelineRunId": {
-				"type": "string"
-			}
-		},
 		"variables": {
 			"PipelineTriggerTime": {
 				"type": "String"
