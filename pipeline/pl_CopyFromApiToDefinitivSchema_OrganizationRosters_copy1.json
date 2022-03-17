@@ -72,6 +72,27 @@
 												"value": "@item().organizationId",
 												"type": "Expression"
 											}
+										},
+										{
+											"name": "OrgRosters.PipelineTriggerTime",
+											"value": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "OrgRosters.PipelineName",
+											"value": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "OrgRosters.PipelineRunId",
+											"value": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											}
 										}
 									],
 									"httpRequestTimeout": "00:10:00",
