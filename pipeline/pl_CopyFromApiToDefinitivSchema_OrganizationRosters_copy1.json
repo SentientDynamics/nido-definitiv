@@ -192,6 +192,38 @@
 										},
 										{
 											"source": {
+												"path": "['includedRosterEmployees'][0]['includedRosterEmployeeId']"
+											},
+											"sink": {
+												"path": "includedRosterEmployees.includedRosterEmployeeId"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterEmployees'][0]['primaryAssignments']"
+											},
+											"sink": {
+												"path": "includedRosterEmployees.primaryAssignments"
+											}
+										},
+										{
+											"source": {
+												"path": "['includedRosterRoles'][0]"
+											},
+											"sink": {
+												"path": "includedRosterRoles"
+											}
+										},
+										{
+											"source": {
+												"path": "['definedCostingPayItems'][0]"
+											},
+											"sink": {
+												"path": "definedCostingPayItems"
+											}
+										},
+										{
+											"source": {
 												"path": "$['Org.OrganizationId']"
 											},
 											"sink": {
