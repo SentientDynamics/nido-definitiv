@@ -111,7 +111,141 @@
 										"type": "JsonWriteSettings"
 									}
 								},
-								"enableStaging": false
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"path": "['rosterId']"
+											},
+											"sink": {
+												"path": "rosterId"
+											}
+										},
+										{
+											"source": {
+												"path": "['isTemplate']"
+											},
+											"sink": {
+												"path": "isTemplate"
+											}
+										},
+										{
+											"source": {
+												"path": "['ceaseDate']"
+											},
+											"sink": {
+												"path": "ceaseDate"
+											}
+										},
+										{
+											"source": {
+												"path": "['paid']"
+											},
+											"sink": {
+												"path": "paid"
+											}
+										},
+										{
+											"source": {
+												"path": "['name']"
+											},
+											"sink": {
+												"path": "name"
+											}
+										},
+										{
+											"source": {
+												"path": "['description']"
+											},
+											"sink": {
+												"path": "description"
+											}
+										},
+										{
+											"source": {
+												"path": "['defaultPeriodDurationType']"
+											},
+											"sink": {
+												"path": "defaultPeriodDurationType"
+											}
+										},
+										{
+											"source": {
+												"path": "['customPeriodDuration']"
+											},
+											"sink": {
+												"path": "customPeriodDuration"
+											}
+										},
+										{
+											"source": {
+												"path": "['commencementDate']"
+											},
+											"sink": {
+												"path": "commencementDate"
+											}
+										},
+										{
+											"source": {
+												"path": "['notifyEmployeesByDefault']"
+											},
+											"sink": {
+												"path": "notifyEmployeesByDefault"
+											}
+										},
+										{
+											"source": {
+												"path": "['costingSettings']"
+											},
+											"sink": {
+												"path": "costingSettings"
+											}
+										},
+										{
+											"source": {
+												"path": "['showAsTwelveHourTime']"
+											},
+											"sink": {
+												"path": "showAsTwelveHourTime"
+											}
+										},
+										{
+											"source": {
+												"path": "$['Org.OrganizationId']"
+											},
+											"sink": {
+												"path": "$['Org.OrganizationId']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['OrgRosters.PipelineTriggerTime']"
+											},
+											"sink": {
+												"path": "$['OrgRosters.PipelineTriggerTime']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['OrgRosters.PipelineName']"
+											},
+											"sink": {
+												"path": "$['OrgRosters.PipelineName']"
+											}
+										},
+										{
+											"source": {
+												"path": "$['OrgRosters.PipelineRunId']"
+											},
+											"sink": {
+												"path": "$['OrgRosters.PipelineRunId']"
+											}
+										}
+									],
+									"collectionReference": "$['items']"
+								}
 							},
 							"inputs": [
 								{
