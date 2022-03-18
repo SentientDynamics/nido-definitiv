@@ -346,7 +346,14 @@
 			{
 				"name": "Lookup2",
 				"type": "Lookup",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "df_FlattenOrgRosters_UpdateOrgRosters1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -418,6 +425,10 @@
 									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
+							},
+							"SinkSqlDefinitiv": {
+								"ds_SchemaName": "adf",
+								"ds_TableName": "Parameters"
 							}
 						}
 					},
