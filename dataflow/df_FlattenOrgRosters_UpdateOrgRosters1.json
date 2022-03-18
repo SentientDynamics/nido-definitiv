@@ -10,6 +10,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "SourceBlobDefinitiv"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference"
+					},
+					"name": "SourceSqlDefinitiv"
 				}
 			],
 			"sinks": [
@@ -18,26 +25,91 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference"
 					},
-					"name": "SinkSqlDefinitiv"
+					"name": "SinkSqlDefinitiv",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_adls2_stnidoprodeastau100",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "AlterRow1"
+				},
+				{
+					"name": "NotExistsInsert"
+				},
+				{
+					"name": "AlterRowConditionInsert"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          {Org.OrganizationId} as string,",
+				"          {OrgRosters.PipelineName} as string,",
+				"          {OrgRosters.PipelineRunId} as string,",
+				"          {OrgRosters.PipelineTriggerTime} as string,",
+				"          ceaseDate as string,",
+				"          commencementDate as string,",
+				"          costingSettings as string,",
+				"          customPeriodDuration as short,",
+				"          defaultPeriodDurationType as string,",
+				"          description as string,",
+				"          isTemplate as boolean,",
+				"          name as string,",
+				"          notifyEmployeesByDefault as boolean,",
+				"          paid as boolean,",
+				"          rosterId as string,",
+				"          showAsTwelveHourTime as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     limit: 100,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'documentPerLine') ~> SourceBlobDefinitiv",
-				"SourceBlobDefinitiv sink(allowSchemaDrift: true,",
+				"source(output(",
+				"          ceaseDate as date,",
+				"          commencementDate as date,",
+				"          costingSettings as string,",
+				"          customPeriodDuration as short,",
+				"          defaultPeriodDurationType as string,",
+				"          description as string,",
+				"          isTemplate as boolean,",
+				"          name as string,",
+				"          notifyEmployeesByDefault as boolean,",
+				"          paid as boolean,",
+				"          rosterId as string,",
+				"          showAsTwelveHourTime as boolean,",
+				"          organizationId as string,",
+				"          pipelineRunId as string,",
+				"          pipelineTriggerTime as string,",
+				"          SourceFileName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     deletable:false,",
+				"     limit: 100,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> SourceSqlDefinitiv",
+				"AlterRowConditionInsert alterRow(insertIf(AlterRowCondition==\"Insert\"),",
+				"     updateIf(AlterRowCondition==\"Update\"),",
+				"     deleteIf(AlterRowCondition==\"Delete\")) ~> AlterRow1",
+				"SourceBlobDefinitiv, SourceSqlDefinitiv exists(upper(SourceBlobDefinitiv@rosterId) == upper(SourceSqlDefinitiv@rosterId),",
+				"     negate:true,",
+				"     broadcast: 'auto')~> NotExistsInsert",
+				"NotExistsInsert derive(AlterRowCondition = \"Insert\") ~> AlterRowConditionInsert",
+				"AlterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:true,",
 				"     insertable:true,",
-				"     updateable:false,",
+				"     updateable:true,",
 				"     upsertable:false,",
+				"     keys:['rosterId'],",
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> SinkSqlDefinitiv"
+				"     errorHandlingOption: 'allErrors',",
+				"     transactionCommit: 'single',",
+				"     reportSuccessOnError: false) ~> SinkSqlDefinitiv"
 			]
 		}
 	}
