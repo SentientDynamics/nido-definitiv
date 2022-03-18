@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "df_FlattenOrgRosters_UpdateOrgRosters1",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -9,7 +9,7 @@
 						"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "SourceBlobDefinitiv"
 				}
 			],
 			"sinks": [],
@@ -18,7 +18,7 @@
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> source1"
+				"     documentForm: 'arrayOfDocuments') ~> SourceBlobDefinitiv"
 			]
 		}
 	}
