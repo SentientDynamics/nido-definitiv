@@ -109,7 +109,7 @@
 									},
 									"formatSettings": {
 										"type": "JsonWriteSettings",
-										"filePattern": "arrayOfObjects"
+										"filePattern": "setOfObjects"
 									}
 								},
 								"enableStaging": false
@@ -159,7 +159,7 @@
 				}
 			},
 			{
-				"name": "df_FlattenOrgRosters_UpdateOrgRosters",
+				"name": "Data flow1",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -179,52 +179,15 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_FlattenOrgRosters_UpdateOrgRosters",
+						"referenceName": "dataflow1",
 						"type": "DataFlowReference",
-						"parameters": {
-							"PipelineTriggerTime": {
-								"value": "'@{pipeline().TriggerTime}'",
-								"type": "Expression"
-							},
-							"PipelineRunId": {
-								"value": "'@{pipeline().RunId}'",
-								"type": "Expression"
-							},
-							"PipelineName": {
-								"value": "'@{pipeline().Pipeline}'",
-								"type": "Expression"
-							}
-						},
 						"datasetParameters": {
-							"SourceBlobDefinitiv": {
-								"ds_PipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"ds_PipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								},
-								"ds_FileSystem": {
-									"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-									"type": "Expression"
-								},
-								"ds_Directory": {
-									"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-									"type": "Expression"
-								},
-								"ds_PipelineName": {
-									"value": "@pipeline().Pipeline",
-									"type": "Expression"
-								}
-							},
-							"sourceSql": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "OrganizationRosters"
-							},
-							"sinkSql": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "OrganizationRosters"
+							"source1": {
+								"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
+								"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
+								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+								"ds_Directory": "ds_adls2_stnidoprodeastau100_json_output",
+								"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
 							}
 						}
 					},
@@ -232,9 +195,7 @@
 						"referenceName": "AustraliaEastIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
 					},
-					"traceLevel": "Fine",
-					"runConcurrently": true,
-					"continueOnError": true
+					"traceLevel": "Fine"
 				}
 			}
 		],
