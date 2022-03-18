@@ -426,9 +426,13 @@
 									"type": "Expression"
 								}
 							},
+							"SourceSqlDefinitiv": {
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "OrganizationRosters"
+							},
 							"SinkSqlDefinitiv": {
-								"ds_SchemaName": "adf",
-								"ds_TableName": "Parameters"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "OrganizationRosters"
 							}
 						}
 					},
