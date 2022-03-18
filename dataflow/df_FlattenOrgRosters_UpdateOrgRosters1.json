@@ -138,7 +138,24 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'allErrors',",
 				"     transactionCommit: 'single',",
-				"     reportSuccessOnError: false) ~> SinkSqlDefinitiv"
+				"     reportSuccessOnError: false,",
+				"     mapColumn(",
+				"          organizationId = {Org.OrganizationId},",
+				"          pipelineRunId = {OrgRosters.PipelineRunId},",
+				"          pipelineTriggerTime = {OrgRosters.PipelineTriggerTime},",
+				"          ceaseDate,",
+				"          commencementDate,",
+				"          costingSettings,",
+				"          customPeriodDuration,",
+				"          defaultPeriodDurationType,",
+				"          description,",
+				"          isTemplate,",
+				"          name,",
+				"          notifyEmployeesByDefault,",
+				"          paid,",
+				"          rosterId,",
+				"          showAsTwelveHourTime",
+				"     )) ~> SinkSqlDefinitiv"
 			]
 		}
 	}
