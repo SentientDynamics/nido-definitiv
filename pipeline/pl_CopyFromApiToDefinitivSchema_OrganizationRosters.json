@@ -72,6 +72,27 @@
 												"value": "@item().organizationId",
 												"type": "Expression"
 											}
+										},
+										{
+											"name": "OrgRosters.PipelineTriggerTime",
+											"value": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "OrgRosters.PipelineName",
+											"value": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "OrgRosters.PipelineRunId",
+											"value": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											}
 										}
 									],
 									"httpRequestTimeout": "00:10:00",
@@ -90,165 +111,7 @@
 										"type": "JsonWriteSettings"
 									}
 								},
-								"enableStaging": false,
-								"translator": {
-									"type": "TabularTranslator",
-									"mappings": [
-										{
-											"source": {
-												"path": "['rosterId']"
-											},
-											"sink": {
-												"path": "rosterId"
-											}
-										},
-										{
-											"source": {
-												"path": "['isTemplate']"
-											},
-											"sink": {
-												"path": "isTemplate"
-											}
-										},
-										{
-											"source": {
-												"path": "['ceaseDate']"
-											},
-											"sink": {
-												"path": "ceaseDate"
-											}
-										},
-										{
-											"source": {
-												"path": "['paid']"
-											},
-											"sink": {
-												"path": "paid"
-											}
-										},
-										{
-											"source": {
-												"path": "['name']"
-											},
-											"sink": {
-												"path": "name"
-											}
-										},
-										{
-											"source": {
-												"path": "['description']"
-											},
-											"sink": {
-												"path": "description"
-											}
-										},
-										{
-											"source": {
-												"path": "['defaultPeriodDurationType']"
-											},
-											"sink": {
-												"path": "defaultPeriodDurationType"
-											}
-										},
-										{
-											"source": {
-												"path": "['customPeriodDuration']"
-											},
-											"sink": {
-												"path": "customPeriodDuration"
-											}
-										},
-										{
-											"source": {
-												"path": "['commencementDate']"
-											},
-											"sink": {
-												"path": "commencementDate"
-											}
-										},
-										{
-											"source": {
-												"path": "['notifyEmployeesByDefault']"
-											},
-											"sink": {
-												"path": "notifyEmployeesByDefault"
-											}
-										},
-										{
-											"source": {
-												"path": "['costingSettings']"
-											},
-											"sink": {
-												"path": "costingSettings"
-											}
-										},
-										{
-											"source": {
-												"path": "['showAsTwelveHourTime']"
-											},
-											"sink": {
-												"path": "showAsTwelveHourTime"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterEmployees'][0]['includedRosterEmployeeId']"
-											},
-											"sink": {
-												"path": "includedRosterEmployees.includedRosterEmployees"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterEmployees'][0]['employee']['id']"
-											},
-											"sink": {
-												"path": "includedRosterEmployees.includedRosterEmployees"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterEmployees'][0]['employee']['name']"
-											},
-											"sink": {
-												"path": "includedRosterEmployees.includedRosterEmployees"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterEmployees'][0]['primaryAssignments']"
-											},
-											"sink": {
-												"path": "includedRosterEmployees.includedRosterEmployees"
-											}
-										},
-										{
-											"source": {
-												"path": "['includedRosterRoles'][0]"
-											},
-											"sink": {
-												"path": "includedRosterEmployees.includedRosterRoles"
-											}
-										},
-										{
-											"source": {
-												"path": "['definedCostingPayItems'][0]"
-											},
-											"sink": {
-												"path": "includedRosterEmployees.definedCostingPayItems"
-											}
-										},
-										{
-											"source": {
-												"path": "$['Org.OrganizationId']"
-											},
-											"sink": {
-												"path": "Org.OrganizationId"
-											}
-										}
-									],
-									"collectionReference": "$['items']"
-								}
+								"enableStaging": false
 							},
 							"inputs": [
 								{
@@ -268,7 +131,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerName",
+											"value": "@pipeline().TriggerTime",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
@@ -384,13 +247,6 @@
 							}
 						},
 						"datasetParameters": {
-							"SourceBlobDefinitiv": {
-								"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
-								"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
-								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-								"ds_Directory": "ds_adls2_stnidoprodeastau100_json_output",
-								"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
-							},
 							"sourceSql": {
 								"ds_SchemaName": "definitiv",
 								"ds_TableName": "OrganizationRosters"
