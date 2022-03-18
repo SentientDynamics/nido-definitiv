@@ -41,6 +41,24 @@
 				},
 				{
 					"name": "AlterRowConditionInsert"
+				},
+				{
+					"name": "ExistsUpdate"
+				},
+				{
+					"name": "AlterRowConditionUpdate"
+				},
+				{
+					"name": "NotExistsDelete"
+				},
+				{
+					"name": "AlterRowConditionDelete"
+				},
+				{
+					"name": "UnionAlterRowCondtions"
+				},
+				{
+					"name": "CastTypes"
 				}
 			],
 			"scriptLines": [
@@ -90,13 +108,24 @@
 				"     limit: 100,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> SourceSqlDefinitiv",
-				"AlterRowConditionInsert alterRow(insertIf(AlterRowCondition==\"Insert\"),",
+				"UnionAlterRowCondtions alterRow(insertIf(AlterRowCondition==\"Insert\"),",
 				"     updateIf(AlterRowCondition==\"Update\"),",
 				"     deleteIf(AlterRowCondition==\"Delete\")) ~> AlterRow1",
-				"SourceBlobDefinitiv, SourceSqlDefinitiv exists(upper(SourceBlobDefinitiv@rosterId) == upper(SourceSqlDefinitiv@rosterId),",
+				"CastTypes, SourceSqlDefinitiv exists(upper(SourceBlobDefinitiv@rosterId) == upper(SourceSqlDefinitiv@rosterId),",
 				"     negate:true,",
 				"     broadcast: 'auto')~> NotExistsInsert",
 				"NotExistsInsert derive(AlterRowCondition = \"Insert\") ~> AlterRowConditionInsert",
+				"CastTypes, SourceSqlDefinitiv exists(upper(SourceBlobDefinitiv@rosterId) == upper(SourceSqlDefinitiv@rosterId),",
+				"     negate:false,",
+				"     broadcast: 'auto')~> ExistsUpdate",
+				"ExistsUpdate derive(AlterRowCondition = \"Update\") ~> AlterRowConditionUpdate",
+				"SourceSqlDefinitiv, SourceBlobDefinitiv exists(upper(SourceSqlDefinitiv@rosterId) == upper(SourceBlobDefinitiv@rosterId),",
+				"     negate:true,",
+				"     broadcast: 'auto')~> NotExistsDelete",
+				"NotExistsDelete derive(AlterRowCondition = \"Delete\") ~> AlterRowConditionDelete",
+				"AlterRowConditionInsert, AlterRowConditionUpdate, AlterRowConditionDelete union(byName: true)~> UnionAlterRowCondtions",
+				"SourceBlobDefinitiv derive(ceaseDate = toDate(ceaseDate),",
+				"          commencementDate = toDate(commencementDate)) ~> CastTypes",
 				"AlterRow1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:true,",
