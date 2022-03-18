@@ -25,8 +25,9 @@
 			"scriptLines": [
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     limit: 100,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> SourceBlobDefinitiv",
+				"     documentForm: 'documentPerLine') ~> SourceBlobDefinitiv",
 				"SourceBlobDefinitiv sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
