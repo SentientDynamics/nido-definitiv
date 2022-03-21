@@ -53,9 +53,7 @@
 						"referenceName": "AustraliaEastIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
 					},
-					"traceLevel": "Fine",
-					"runConcurrently": false,
-					"continueOnError": false
+					"traceLevel": "Fine"
 				}
 			},
 			{
@@ -261,17 +259,19 @@
 		"parameters": {
 			"paramRosterStartDate": {
 				"type": "string",
-				"defaultValue": "2021-10-01"
+				"defaultValue": "2022-01-01"
 			},
 			"paramRosterFinishDate": {
 				"type": "string",
-				"defaultValue": "2021-10-01"
+				"defaultValue": "2022-01-01"
 			},
 			"paramOrganizationId": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "DCA2633E-578E-4358-A5BF-0C38A96BB4CB"
 			},
 			"paramRosterId": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "F4DA8091-4517-46C6-A5E0-E2A06D792924"
 			}
 		},
 		"variables": {
