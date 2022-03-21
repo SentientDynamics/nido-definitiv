@@ -40,7 +40,7 @@
 							},
 							"sink1": {
 								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportPayslipsD"
+								"ds_TableName": "CustomReportRostersD"
 							}
 						}
 					},
