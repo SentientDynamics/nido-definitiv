@@ -2893,8 +2893,7 @@
 										"ds_SchemaName": "adf",
 										"ds_TableName": "Parameters"
 									}
-								},
-								"linkedServiceParameters": {}
+								}
 							},
 							"staging": {},
 							"integrationRuntime": {
@@ -2975,8 +2974,8 @@
 				"lastPublishTime": "2022-01-19T03:45:11Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportTimesheets1')]"
+				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportTimesheets1')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
 		},
 		{
@@ -4616,8 +4615,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/dataflows/df_FlattenOrgRosters_UpdateOrgRosters1')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]"
 			]
@@ -7288,6 +7287,79 @@
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_CustomReportRosters_copy1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_UpdateCusomReportRosters",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SourceBlobDefinitiv": {
+										"ds_PipelineTriggerTime": "2022-03-21T06:17:42.7688208Z",
+										"ds_PipelineRunId": {
+											"value": "80db095d-4edf-4ba7-aea6-0bf49b28d97c",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters",
+											"type": "Expression"
+										}
+									},
+									"sink1": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportRostersD"
+									}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "04_Rosters"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportRosters')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
 		},
 		{
