@@ -9867,6 +9867,110 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_OrganizationRosters_copy2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEachRoster",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup2').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "pl_CustomReportRosters",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"paramRosterStartDate": {
+												"value": "@item().commencementDate",
+												"type": "Expression"
+											},
+											"paramRosterFinishDate": {
+												"value": "@item().ceaseDate",
+												"type": "Expression"
+											},
+											"paramOrganizationId": {
+												"value": "@item().organizationId",
+												"type": "Expression"
+											},
+											"paramRosterId": {
+												"value": "@item().rosterId",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Lookup2",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select rosterId, organizationId, commencementDate, ceaseDate, defaultPeriodDurationType \nfrom definitiv.OrganizationRosters \nwhere commencementDate > '2021-12-31'\norder by commencementDate, ceaseDate",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_SchemaName": "definitiv",
+									"ds_TableName": "OrganizationRosters"
+								}
+							},
+							"firstRowOnly": false
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "04_Rosters"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-20T04:04:15Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_CustomReportRosters')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
