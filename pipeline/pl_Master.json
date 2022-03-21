@@ -88,6 +88,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_A1_Timesheets_DboToArchive",
+						"type": "PipelineReference"
+					},
 					"waitOnCompletion": true
 				}
 			},

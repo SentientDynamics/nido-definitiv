@@ -144,7 +144,10 @@
 										"ds_PipelineRunId": {
 											"value": "@variables('PipelineRunId')",
 											"type": "Expression"
-										}
+										},
+										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+										"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
 									}
 								}
 							]
