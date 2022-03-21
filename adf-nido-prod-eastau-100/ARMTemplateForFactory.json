@@ -7329,7 +7329,10 @@
 											"type": "Expression"
 										}
 									},
-									"SinkSqlDefintiv": {}
+									"SinkSqlDefintiv": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportRostersD"
+									}
 								}
 							},
 							"staging": {},
