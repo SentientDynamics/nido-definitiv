@@ -255,6 +255,10 @@
 									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
+							},
+							"SinkSqlDefintiv": {
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "CustomReportRostersD"
 							}
 						}
 					},
