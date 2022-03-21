@@ -227,14 +227,6 @@
 			"paramRosterId": {
 				"type": "string",
 				"defaultValue": "F4DA8091-4517-46C6-A5E0-E2A06D792924"
-			},
-			"OrgRosters.pipelineTriggerTime": {
-				"type": "string",
-				"defaultValue": "2022-03-21T05:38:57.465645Z"
-			},
-			"OrgRosters.pipelineRunId": {
-				"type": "string",
-				"defaultValue": "3493ebfa-7599-4140-9880-3467c78ef29e"
 			}
 		},
 		"variables": {
