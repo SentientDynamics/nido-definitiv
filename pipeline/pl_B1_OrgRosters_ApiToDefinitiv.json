@@ -171,34 +171,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "df_FlattenOrgRosters_UpdateOrgRosters",
-						"type": "DataFlowReference",
-						"parameters": {
-							"PipelineTriggerTime": {
-								"value": "'@{variables('PipelineTriggerTime')}'",
-								"type": "Expression"
-							},
-							"PipelineRunId": {
-								"value": "'@{variables('PipelineRunId')}'",
-								"type": "Expression"
-							},
-							"PipelineName": {
-								"value": "'@{pipeline().Pipeline}'",
-								"type": "Expression"
-							}
-						},
-						"datasetParameters": {
-							"sourceSql": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "OrganizationRosters"
-							},
-							"sinkSql": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "OrganizationRosters"
-							}
-						}
-					},
 					"integrationRuntime": {
 						"referenceName": "AustraliaEastIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
