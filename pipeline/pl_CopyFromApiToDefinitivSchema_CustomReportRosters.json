@@ -3,17 +3,17 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "RosterDateIsFinishDate",
+				"name": "RosterCurrentDateIsFinishDate",
 				"type": "Until",
 				"dependsOn": [
 					{
-						"activity": "RosterStartDate",
+						"activity": "RosterFinishDate",
 						"dependencyConditions": [
 							"Succeeded"
 						]
 					},
 					{
-						"activity": "RosterFinishDate",
+						"activity": "RosterCurrentDate",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -42,7 +42,7 @@
 							"typeProperties": {
 								"variableName": "varRosterDatePlus1",
 								"value": {
-									"value": "@formatDateTime(addDays(variables('varRosterStartDate'),1), 'yyyy-MM-dd')",
+									"value": "@formatDateTime(addDays(variables('varRosterCurrentDate'),1), 'yyyy-MM-dd')",
 									"type": "Expression"
 								}
 							}
@@ -87,7 +87,7 @@
 										{
 											"name": "varRosterDate",
 											"value": {
-												"value": "@variables('varRosterDate')",
+												"value": "@variables('varRosterCurrentDate')",
 												"type": "Expression"
 											}
 										},
@@ -123,7 +123,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat('/api/custom-reports/BE1BFE92-8295-4F80-A36C-1A63608C1433?organizationId=',pipeline().parameters.paramOrganizationId,'&startDate=', formatDateTime(variables('varRosterDate'), 'yyyy-MM-dd'))",
+											"value": "@concat('/api/custom-reports/BE1BFE92-8295-4F80-A36C-1A63608C1433?organizationId=',pipeline().parameters.paramOrganizationId,'&startDate=', formatDateTime(variables('varRosterCurrentDate'), 'yyyy-MM-dd'))",
 											"type": "Expression"
 										}
 									}
@@ -171,7 +171,7 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "varRosterStartDate",
+								"variableName": "varRosterCurrentDate",
 								"value": {
 									"value": "@variables('varRosterDatePlus1')",
 									"type": "Expression"
@@ -215,7 +215,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "RosterDateIsFinishDate",
+						"activity": "RosterCurrentDateIsFinishDate",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -267,6 +267,27 @@
 						"type": "IntegrationRuntimeReference"
 					},
 					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "RosterCurrentDate",
+				"description": "",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "RosterStartDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "varRosterCurrentDate",
+					"value": {
+						"value": "@variables('varRosterStartDate')",
+						"type": "Expression"
+					}
 				}
 			}
 		],
