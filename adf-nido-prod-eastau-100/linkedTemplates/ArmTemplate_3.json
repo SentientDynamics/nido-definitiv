@@ -4026,10 +4026,7 @@
 											"type": "Expression"
 										}
 									},
-									"sink1": {
-										"ds_SchemaName": "definitiv",
-										"ds_TableName": "CustomReportRostersD"
-									}
+									"SinkDefinitivSql": {}
 								}
 							},
 							"staging": {},
@@ -4132,7 +4129,7 @@
 											"type": "Expression"
 										}
 									},
-									"sink1": {
+									"SinkDefinitivSql": {
 										"ds_SchemaName": "definitiv",
 										"ds_TableName": "CustomReportRostersD"
 									}
