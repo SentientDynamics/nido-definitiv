@@ -7242,38 +7242,30 @@
 				},
 				"parameters": {
 					"paramRosterStartDate": {
-						"type": "string",
-						"defaultValue": "2022-01-01"
+						"type": "string"
 					},
 					"paramRosterFinishDate": {
-						"type": "string",
-						"defaultValue": "2022-01-01"
+						"type": "string"
 					},
 					"paramOrganizationId": {
-						"type": "string",
-						"defaultValue": "DCA2633E-578E-4358-A5BF-0C38A96BB4CB"
+						"type": "string"
 					},
 					"paramRosterId": {
-						"type": "string",
-						"defaultValue": "F4DA8091-4517-46C6-A5E0-E2A06D792924"
+						"type": "string"
 					}
 				},
 				"variables": {
 					"varRosterStartDate": {
-						"type": "String",
-						"defaultValue": "2022-01-01"
+						"type": "String"
 					},
 					"varRosterFinishDate": {
-						"type": "String",
-						"defaultValue": "2022-01-01"
+						"type": "String"
 					},
 					"varRosterDate": {
-						"type": "String",
-						"defaultValue": "2022-01-01"
+						"type": "String"
 					},
 					"varRosterDatePlus1": {
-						"type": "String",
-						"defaultValue": "2022-01-01"
+						"type": "String"
 					}
 				},
 				"folder": {
