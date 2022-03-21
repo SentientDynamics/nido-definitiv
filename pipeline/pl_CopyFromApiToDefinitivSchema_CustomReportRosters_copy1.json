@@ -38,7 +38,7 @@
 									"type": "Expression"
 								}
 							},
-							"sink1": {
+							"SinkSqlDefintiv": {
 								"ds_SchemaName": "definitiv",
 								"ds_TableName": "CustomReportRostersD"
 							}
