@@ -69,7 +69,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select rosterId, organizationId, commencementDate, ceaseDate, defaultPeriodDurationType \nfrom definitiv.OrganizationRosters \nwhere commencementDate > '2021-12-31'\norder by commencementDate, ceaseDate",
+						"sqlReaderQuery": "select rosterId, organizationId, commencementDate, ceaseDate, defaultPeriodDurationType \nfrom definitiv.OrganizationRosters \nwhere commencementDate > '2022-02-28'\norder by commencementDate, ceaseDate",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
