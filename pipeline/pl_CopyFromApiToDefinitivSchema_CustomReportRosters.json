@@ -71,16 +71,16 @@
 											}
 										},
 										{
-											"name": "pipelineRunId",
+											"name": "CustomReportRosters.PipelineTriggerTime",
 											"value": {
-												"value": "@variables('PipelineRunId')",
+												"value": "@pipeline().TriggerTime",
 												"type": "Expression"
 											}
 										},
 										{
-											"name": "pipelineTriggerTime",
+											"name": "CustomReportRosters.PipelineRunId",
 											"value": {
-												"value": "@variables('PipelineTriggerTime')",
+												"value": "@pipeline().RunId",
 												"type": "Expression"
 											}
 										},
@@ -227,6 +227,14 @@
 			"paramRosterId": {
 				"type": "string",
 				"defaultValue": "F4DA8091-4517-46C6-A5E0-E2A06D792924"
+			},
+			"OrgRosters.pipelineTriggerTime": {
+				"type": "string",
+				"defaultValue": "2022-03-21T05:38:57.465645Z"
+			},
+			"OrgRosters.pipelineRunId": {
+				"type": "string",
+				"defaultValue": "3493ebfa-7599-4140-9880-3467c78ef29e"
 			}
 		},
 		"variables": {
@@ -245,12 +253,6 @@
 			"varRosterDatePlus1": {
 				"type": "String",
 				"defaultValue": "2022-01-01"
-			},
-			"PipelineTriggerTime": {
-				"type": "String"
-			},
-			"PipelineRunId": {
-				"type": "String"
 			}
 		},
 		"folder": {
