@@ -7169,7 +7169,7 @@
 						"typeProperties": {
 							"variableName": "varRosterFinishDate",
 							"value": {
-								"value": "@if(not(empty(pipeline().parameters.paramRosterFinishDate)), formatDateTime(pipeline().parameters.paramRosterFinishDate, 'yyyy-MM-dd'), formatDateTime(adddays(utcnow(),14), 'yyyy-MM-dd'))",
+								"value": "@if(not(empty(pipeline().parameters.paramRosterFinishDate)), formatDateTime(pipeline().parameters.paramRosterFinishDate, 'yyyy-MM-dd'), formatDateTime(adddays(utcnow(),28), 'yyyy-MM-dd'))",
 								"type": "Expression"
 							}
 						}
@@ -7221,7 +7221,10 @@
 											"type": "Expression"
 										}
 									},
-									"SinkSqlDefintiv": {}
+									"SinkSqlDefintiv": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportRostersD"
+									}
 								}
 							},
 							"staging": {},
