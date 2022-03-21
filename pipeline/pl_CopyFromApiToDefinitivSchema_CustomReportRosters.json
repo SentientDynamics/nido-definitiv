@@ -277,19 +277,19 @@
 		"variables": {
 			"varRosterStartDate": {
 				"type": "String",
-				"defaultValue": "2021-10-01"
+				"defaultValue": "2022-01-01"
 			},
 			"varRosterFinishDate": {
 				"type": "String",
-				"defaultValue": "2021-10-01"
+				"defaultValue": "2022-01-01"
 			},
 			"varRosterDate": {
 				"type": "String",
-				"defaultValue": "2021-10-01"
+				"defaultValue": "2022-01-01"
 			},
 			"varRosterDatePlus1": {
 				"type": "String",
-				"defaultValue": "2021-10-01"
+				"defaultValue": "2022-01-01"
 			},
 			"PipelineTriggerTime": {
 				"type": "String"
