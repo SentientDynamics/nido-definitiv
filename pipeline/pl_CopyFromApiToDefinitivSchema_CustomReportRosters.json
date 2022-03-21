@@ -3,60 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "df_UpdateCusomReportRosters",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [
-					{
-						"activity": "RosterDateIsFinishDate",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "1.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "df_UpdateCusomReportRosters",
-						"type": "DataFlowReference",
-						"parameters": {
-							"pipelineRunId": {
-								"value": "'@{pipeline().RunId}'",
-								"type": "Expression"
-							},
-							"pipelineTriggerTime": {
-								"value": "'@{pipeline().TriggerTime}'",
-								"type": "Expression"
-							}
-						},
-						"datasetParameters": {
-							"SourceBlobDefinitiv": {
-								"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
-								"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
-								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-								"ds_Directory": "ds_adls2_stnidoprodeastau100_json_output",
-								"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
-							},
-							"sinkSql": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportRostersD"
-							}
-						}
-					},
-					"integrationRuntime": {
-						"referenceName": "AustraliaEastIntegrationRuntime",
-						"type": "IntegrationRuntimeReference"
-					},
-					"traceLevel": "Fine"
-				}
-			},
-			{
 				"name": "RosterDateIsFinishDate",
 				"type": "Until",
 				"dependsOn": [
