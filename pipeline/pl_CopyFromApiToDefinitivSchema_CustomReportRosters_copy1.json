@@ -39,8 +39,8 @@
 								}
 							},
 							"sink1": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportRostersD"
+								"ds_SchemaName": "adf",
+								"ds_TableName": "Parameters"
 							}
 						}
 					},
