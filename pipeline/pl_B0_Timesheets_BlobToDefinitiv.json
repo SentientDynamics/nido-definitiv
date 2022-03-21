@@ -31,6 +31,16 @@
 					"dataflow": {
 						"referenceName": "df_UpdateCusomReportTimesheets1",
 						"type": "DataFlowReference",
+						"parameters": {
+							"pipelineRunId": {
+								"value": "'@{pipeline().RunId}'",
+								"type": "Expression"
+							},
+							"pipelineTriggerTime": {
+								"value": "'@{pipeline().TriggerName}'",
+								"type": "Expression"
+							}
+						},
 						"datasetParameters": {
 							"sourceApi": {
 								"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
