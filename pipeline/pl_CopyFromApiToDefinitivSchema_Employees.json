@@ -138,11 +138,11 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_PipelineTriggerTime": {
-											"value": "@variables('PipelineTriggerTime')",
+											"value": "@pipeline().TriggerTime",
 											"type": "Expression"
 										},
 										"ds_PipelineRunId": {
-											"value": "@variables('PipelineRunId')",
+											"value": "@pipeline().RunId",
 											"type": "Expression"
 										},
 										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",

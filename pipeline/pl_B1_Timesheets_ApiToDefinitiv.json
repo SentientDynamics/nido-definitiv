@@ -26,28 +26,12 @@
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
+								"pipeline": {
+									"referenceName": "pl_A1_Timesheets_DboToArchive",
+									"type": "PipelineReference"
+								},
 								"waitOnCompletion": true,
 								"parameters": {
-									"paramTimesheetStartDate": {
-										"value": "2022-01-03",
-										"type": "Expression"
-									},
-									"paramTimesheetFinishDate": {
-										"value": "2022-01-07",
-										"type": "Expression"
-									},
-									"paramOrganizationId": {
-										"value": "@item().organizationId",
-										"type": "Expression"
-									},
-									"sourceApiSchema": {
-										"value": "@pipeline().parameters.sourceApiSchema",
-										"type": "Expression"
-									},
-									"sourceApiTable": {
-										"value": "@pipeline().parameters.sourceApiTable",
-										"type": "Expression"
-									},
 									"sourceSqlSchema": {
 										"value": "@pipeline().parameters.sourceSqlSchema",
 										"type": "Expression"
@@ -62,30 +46,6 @@
 									},
 									"sinkSqlTable": {
 										"value": "@pipeline().parameters.sinkSqlTable",
-										"type": "Expression"
-									},
-									"sourceJsonSchema": {
-										"value": "@pipeline().parameters.sourceJsonSchema",
-										"type": "Expression"
-									},
-									"sourceJsonTable": {
-										"value": "@pipeline().parameters.sourceJsonTable",
-										"type": "Expression"
-									},
-									"sinkJsonSchema": {
-										"value": "@pipeline().parameters.sinkJsonSchema",
-										"type": "Expression"
-									},
-									"sinkJsonTable": {
-										"value": "@pipeline().parameters.sinkJsonTable",
-										"type": "Expression"
-									},
-									"MasterPipelineTriggerTime": {
-										"value": "@pipeline().parameters.MasterPipelineTriggerTime",
-										"type": "Expression"
-									},
-									"MasterPipelineRunId": {
-										"value": "@pipeline().parameters.MasterPipelineRunId",
 										"type": "Expression"
 									}
 								}
