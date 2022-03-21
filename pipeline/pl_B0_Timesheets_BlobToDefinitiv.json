@@ -28,38 +28,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"dataflow": {
-						"referenceName": "df_B2_Timesheets_ApiToDefinitiv",
-						"type": "DataFlowReference",
-						"parameters": {
-							"PipelineRunId": {
-								"value": "'@{variables('PipelineRunId')}'",
-								"type": "Expression"
-							},
-							"PipelineTriggerTime": {
-								"value": "'@{variables('PipelineTriggerTime')}'",
-								"type": "Expression"
-							},
-							"PipelineName": {
-								"value": "'@{pipeline().Pipeline}'",
-								"type": "Expression"
-							}
-						},
-						"datasetParameters": {
-							"SourceSqlDefinitivTimesheets": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportTimesheetsD"
-							},
-							"SourceSqlOrgRosters": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "OrganizationRosters"
-							},
-							"SinkSqlDefinitivTimesheets": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportTimesheetsD"
-							}
-						}
-					},
 					"integrationRuntime": {
 						"referenceName": "AustraliaEastIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
