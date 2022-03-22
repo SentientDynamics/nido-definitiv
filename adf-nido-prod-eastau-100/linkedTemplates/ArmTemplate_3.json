@@ -3791,7 +3791,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"expression": {
-								"value": "@equals(formatDateTime(variables('varRosterStartDate'), 'yyyy-MM-dd'), formatDateTime(variables('varRosterFinishDate'), 'yyyy-MM-dd'))",
+								"value": "@equals(formatDateTime(variables('varRosterCurrentDate'), 'yyyy-MM-dd'), formatDateTime(variables('varRosterFinishDate'), 'yyyy-MM-dd'))",
 								"type": "Expression"
 							},
 							"activities": [
@@ -3952,13 +3952,13 @@
 						}
 					},
 					{
-						"name": "RosterStartDate",
-						"description": "",
+						"name": "RosterCurrentDate",
+						"description": "Set RosterCurrentDate to RosterStartDate (param)",
 						"type": "SetVariable",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
-							"variableName": "varRosterStartDate",
+							"variableName": "varRosterCurrentDate",
 							"value": {
 								"value": "@formatDateTime(pipeline().parameters.paramRosterStartDate, 'yyyy-MM-dd')",
 								"type": "Expression"
@@ -3974,7 +3974,7 @@
 						"typeProperties": {
 							"variableName": "varRosterFinishDate",
 							"value": {
-								"value": "@if(not(empty(pipeline().parameters.paramRosterFinishDate)), formatDateTime(pipeline().parameters.paramRosterFinishDate, 'yyyy-MM-dd'), formatDateTime(adddays(utcnow(),28), 'yyyy-MM-dd'))",
+								"value": "@if(not(empty(pipeline().parameters.paramRosterFinishDate)), formatDateTime(pipeline().parameters.paramRosterFinishDate, 'yyyy-MM-dd'), formatDateTime(addDays(utcNow(),28), 'yyyy-MM-dd'))",
 								"type": "Expression"
 							}
 						}
@@ -4038,27 +4038,6 @@
 								"type": "IntegrationRuntimeReference"
 							},
 							"traceLevel": "Fine"
-						}
-					},
-					{
-						"name": "RosterCurrentDate",
-						"description": "",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "RosterStartDate",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "varRosterCurrentDate",
-							"value": {
-								"value": "@variables('varRosterStartDate')",
-								"type": "Expression"
-							}
 						}
 					}
 				],
