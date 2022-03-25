@@ -9932,7 +9932,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select rosterId, organizationId, commencementDate, ceaseDate, defaultPeriodDurationType \nfrom definitiv.OrganizationRosters \nwhere rosterId in (\n'A3AC240D-A6EB-45A5-A5C5-792B8B20ADA1',\n'3A9AAAE6-32E7-4CAC-8CAA-29F75C2A3130',\n'591BA203-0059-45EC-8063-B84A8E27C4B3'\n)\norder by commencementDate, ceaseDate",
+								"sqlReaderQuery": "select rosterId, organizationId, commencementDate, ceaseDate, defaultPeriodDurationType \nfrom definitiv.OrganizationRosters \nwhere rosterId in (\n'A3AC240D-A6EB-45A5-A5C5-792B8B20ADA1'\n)\norder by commencementDate, ceaseDate",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
