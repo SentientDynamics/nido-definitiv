@@ -22749,7 +22749,7 @@
 						"     rejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',",
 						"     rejectedData_folderPath: 'ds_adsl2_stnidoprodeastau100_csv/definitiv.OrganizationRosters',",
 						"     transactionCommit: 'single',",
-						"     reportSuccessOnError: false,",
+						"     reportSuccessOnError: true,",
 						"     mapColumn(",
 						"          organizationId = {Org.OrganizationId},",
 						"          pipelineRunId = {OrgRosters.PipelineRunId},",
