@@ -211,7 +211,7 @@
 				}
 			},
 			{
-				"name": "df_UpdateCusomReportRosters",
+				"name": "df_CombineCusomReportRosters",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -231,7 +231,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_UpdateCusomReportRosters",
+						"referenceName": "df_CombineCustomReportRosters",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"SourceBlobDefinitiv": {
