@@ -228,7 +228,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select organizationId from definitiv.Organizations where organizationId='DCA2633E-578E-4358-A5BF-0C38A96BB4CB'",
+								"sqlReaderQuery": "select organizationId from definitiv.Organizations",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -533,11 +533,11 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"paramRosterStartDate": {
-												"value": "@item().commencementDate",
+												"value": "@formatDateTime(addDays(utcNow(),-7), 'yyyy-MM-dd')",
 												"type": "Expression"
 											},
 											"paramRosterFinishDate": {
-												"value": "@item().ceaseDate",
+												"value": "@formatDateTime(addDays(utcNow(),28), 'yyyy-MM-dd')",
 												"type": "Expression"
 											},
 											"paramOrganizationId": {
@@ -576,7 +576,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select rosterId, organizationId, commencementDate, ceaseDate, defaultPeriodDurationType \nfrom definitiv.OrganizationRosters \nwhere commencementDate > '2021-12-31'\norder by commencementDate, ceaseDate",
+								"sqlReaderQuery": "select rosterId, organizationId from definitiv.OrganizationRosters \nwhere ceaseDate is not null",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
