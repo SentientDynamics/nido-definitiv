@@ -209,6 +209,50 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "df_UpdateCusomReportRosters",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "RosterCurrentDateIsFinishDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_UpdateCusomReportRosters",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"SourceBlobDefinitiv": {
+								"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
+								"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
+								"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+								"ds_Directory": "ds_adls2_stnidoprodeastau100_json_output",
+								"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+							},
+							"SinkSqlDefintiv": {
+								"ds_SchemaName": "adf",
+								"ds_TableName": "Parameters"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"parameters": {
