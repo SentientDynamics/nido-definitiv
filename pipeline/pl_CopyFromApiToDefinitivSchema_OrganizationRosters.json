@@ -336,6 +336,14 @@
 									"paramRosterId": {
 										"value": "@item().rosterId",
 										"type": "Expression"
+									},
+									"TriggeredByPipelineTriggerTime": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									},
+									"TriggeredByPipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
 									}
 								}
 							}
@@ -485,7 +493,7 @@
 									"type": "Expression"
 								},
 								"ds_PipelineName": {
-									"value": "@pipeline().Pipeline",
+									"value": "@pipeline().parameters.ExecutePipelineName",
 									"type": "Expression"
 								}
 							},
@@ -503,6 +511,12 @@
 				}
 			}
 		],
+		"parameters": {
+			"ExecutePipelineName": {
+				"type": "string",
+				"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
+			}
+		},
 		"folder": {
 			"name": "04_Rosters"
 		},
