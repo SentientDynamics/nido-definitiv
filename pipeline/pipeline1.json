@@ -21,7 +21,10 @@
 						"type": "IntegrationRuntimeReference"
 					},
 					"method": "POST",
-					"body": ""
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"body": "{\n\"Hello Logic Apps\"\n}"
 				}
 			}
 		],
