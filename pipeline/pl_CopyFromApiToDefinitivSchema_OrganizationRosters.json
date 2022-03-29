@@ -321,14 +321,6 @@
 								},
 								"waitOnCompletion": true,
 								"parameters": {
-									"paramRosterStartDate": {
-										"value": "@formatDateTime(addDays(utcNow(),-7), 'yyyy-MM-dd')",
-										"type": "Expression"
-									},
-									"paramRosterFinishDate": {
-										"value": "@formatDateTime(addDays(utcNow(),28), 'yyyy-MM-dd')",
-										"type": "Expression"
-									},
 									"paramOrganizationId": {
 										"value": "@item().organizationId",
 										"type": "Expression"
