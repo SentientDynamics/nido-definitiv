@@ -24,7 +24,9 @@
 					"headers": {
 						"Content-Type": "application/json"
 					},
-					"body": "{\n\"Hello Logic Apps\"\n}"
+					"body": {
+						"Message": "Hello Logic Apps"
+					}
 				}
 			}
 		],
