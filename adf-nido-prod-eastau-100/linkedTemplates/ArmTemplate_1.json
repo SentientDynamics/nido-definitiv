@@ -151,11 +151,11 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
+													"value": "@pipeline().parameters.TriggeredByPipelineTriggerTime",
 													"type": "Expression"
 												},
 												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
+													"value": "@pipeline().parameters.TriggeredByPipelineRunId",
 													"type": "Expression"
 												},
 												"ds_FileSystem": {
@@ -221,7 +221,7 @@
 						"typeProperties": {
 							"variableName": "varRosterFinishDate",
 							"value": {
-								"value": "@formatDateTime(pipeline().parameters.paramRosterStartDate, 'yyyy-MM-dd')",
+								"value": "@formatDateTime(pipeline().parameters.paramRosterFinishDate, 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
@@ -242,6 +242,12 @@
 						"type": "string"
 					},
 					"paramRosterId": {
+						"type": "string"
+					},
+					"TriggeredByPipelineTriggerTime": {
+						"type": "string"
+					},
+					"TriggeredByPipelineRunId": {
 						"type": "string"
 					}
 				},
