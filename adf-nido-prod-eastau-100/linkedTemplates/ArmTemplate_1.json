@@ -38,7 +38,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"expression": {
-								"value": "@equals(formatDateTime(variables('varRosterCurrentDate'), 'yyyy-MM-dd'), formatDateTime(variables('varRosterFinishDate'), 'yyyy-MM-dd'))",
+								"value": "@equals(variables('varRosterCurrentDate'), variables('varRosterFinishDate'))",
 								"type": "Expression"
 							},
 							"activities": [
@@ -207,7 +207,7 @@
 						"typeProperties": {
 							"variableName": "varRosterCurrentDate",
 							"value": {
-								"value": "@formatDateTime(pipeline().parameters.paramRosterStartDate, 'yyyy-MM-dd')",
+								"value": "@variables('varRosterStartDate')",
 								"type": "Expression"
 							}
 						}
@@ -221,7 +221,7 @@
 						"typeProperties": {
 							"variableName": "varRosterFinishDate",
 							"value": {
-								"value": "@formatDateTime(pipeline().parameters.paramRosterFinishDate, 'yyyy-MM-dd')",
+								"value": "@formatDateTime(addDays(utcNow(),28), 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
@@ -232,12 +232,6 @@
 					"cancelAfter": {}
 				},
 				"parameters": {
-					"paramRosterStartDate": {
-						"type": "string"
-					},
-					"paramRosterFinishDate": {
-						"type": "string"
-					},
 					"paramOrganizationId": {
 						"type": "string"
 					},
@@ -253,10 +247,12 @@
 				},
 				"variables": {
 					"varRosterStartDate": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "@formatDateTime(addDays(utcNow(),-7), 'yyyy-MM-dd')"
 					},
 					"varRosterFinishDate": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "@formatDateTime(addDays(utcNow(),28), 'yyyy-MM-dd')"
 					},
 					"varRosterCurrentDate": {
 						"type": "String"
