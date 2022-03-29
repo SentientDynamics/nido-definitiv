@@ -38,6 +38,9 @@
 			"PipelineRunId": {
 				"type": "string",
 				"defaultValue": "eba92669-8272-4930-b2be-99059548fd28"
+			},
+			"df_UpdateCustomReportRostersOutput": {
+				"type": "object"
 			}
 		},
 		"annotations": []
