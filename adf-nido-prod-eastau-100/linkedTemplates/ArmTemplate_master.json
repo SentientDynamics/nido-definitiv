@@ -23,6 +23,10 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
 		},
+		"tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
+			"type": "string",
+			"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -139,6 +143,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
+						"value": "[parameters('tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName')]"
 					}
 				}
 			},

@@ -17,6 +17,9 @@
 		"ls_rest_definitiv_properties_typeProperties_url": {
 			"value": "@{linkedService().sourceBaseUrl}"
 		},
+		"tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
+			"value": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
+		},
 		"containerUri": {
 			"value": ""
 		},

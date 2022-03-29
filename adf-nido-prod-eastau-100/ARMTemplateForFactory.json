@@ -22,6 +22,10 @@
 		"ls_rest_definitiv_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
+		},
+		"tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
+			"type": "string",
+			"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
 		}
 	},
 	"variables": {
@@ -23476,6 +23480,38 @@
 			"apiVersion": "2018-06-01",
 			"properties": {},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Rosters_Scheduled_2h')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationRosters",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"ExecutePipelineName": "[parameters('tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Hour",
+						"interval": 2,
+						"startTime": "2022-03-29T22:00:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationRosters')]"
+			]
 		}
 	]
 }
