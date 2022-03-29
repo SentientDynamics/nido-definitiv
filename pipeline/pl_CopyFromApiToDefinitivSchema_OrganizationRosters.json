@@ -501,6 +501,32 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "pl_monitoring_logic-nido-prod-eastau-100",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "df_UpdateCustomReportRosters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"PipelineRunId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
