@@ -13,6 +13,140 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_A3_Timesheets_DraftStagingToDraft')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Copy tnk_001.dbo.* to tnk_001.draft",
+				"activities": [
+					{
+						"name": "df_A3_Payslips_DraftStagingToDraft",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "SetPipelineRunId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "SetPipelineTriggerTime",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_A3_Payslips_DraftStagingToDraft",
+								"type": "DataFlowReference",
+								"parameters": {
+									"PipelineTriggerTime": {
+										"value": "'@{variables('PipelineTriggerTime')}'",
+										"type": "Expression"
+									},
+									"PipelineRunId": {
+										"value": "'@{variables('PipelineRunId')}'",
+										"type": "Expression"
+									},
+									"PipelineName": {
+										"value": "'@{pipeline().Pipeline}'",
+										"type": "Expression"
+									}
+								},
+								"datasetParameters": {
+									"SourceSqlDraftStagingPreceda": {},
+									"SinkSqlDraftPreceda": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "SetPipelineTriggerTime",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineTriggerTime",
+							"value": {
+								"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "SetPipelineRunId",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineRunId",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"sourceSqlSchema": {
+						"type": "string",
+						"defaultValue": "draft"
+					},
+					"sourceSqlTable": {
+						"type": "string",
+						"defaultValue": "StagingPrecedaPayslips"
+					},
+					"sinkSqlSchema": {
+						"type": "string",
+						"defaultValue": "draft"
+					},
+					"sinkSqlTable": {
+						"type": "string",
+						"defaultValue": "Preceda_Payslip_2"
+					},
+					"MasterPipelineTriggerTime": {
+						"type": "string"
+					},
+					"MasterPipelineRunId": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"PipelineTriggerTime": {
+						"type": "String"
+					},
+					"PipelineRunId": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "04_Rosters/03_Timesheets"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-19T01:04:06Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_B0_Payslips_BlobToDefinitiv')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -242,7 +376,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-19T03:45:11Z"
@@ -1864,7 +1998,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-20T04:05:09Z"
@@ -2821,7 +2955,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-19T01:05:25Z"
@@ -6227,6 +6361,32 @@
 							},
 							"traceLevel": "Fine"
 						}
+					},
+					{
+						"name": "pl_monitoring_logic-nido-prod-eastau-100",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_UpdateCustomReportRosters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -6445,108 +6605,6 @@
 								"type": "IntegrationRuntimeReference"
 							},
 							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "04_Rosters"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-20T04:04:15Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_OrganizationRosters_copy2')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "ForEachRoster",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Lookup2",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Lookup2').output.value",
-								"type": "Expression"
-							},
-							"isSequential": false,
-							"activities": [
-								{
-									"name": "pl_CustomReportRosters",
-									"type": "ExecutePipeline",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"pipeline": {
-											"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters",
-											"type": "PipelineReference"
-										},
-										"waitOnCompletion": true,
-										"parameters": {
-											"paramRosterStartDate": {
-												"value": "@item().commencementDate",
-												"type": "Expression"
-											},
-											"paramRosterFinishDate": {
-												"value": "@item().ceaseDate",
-												"type": "Expression"
-											},
-											"paramOrganizationId": {
-												"value": "@item().organizationId",
-												"type": "Expression"
-											},
-											"paramRosterId": {
-												"value": "@item().rosterId",
-												"type": "Expression"
-											}
-										}
-									}
-								}
-							]
-						}
-					},
-					{
-						"name": "Lookup2",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select rosterId, organizationId, commencementDate, ceaseDate, defaultPeriodDurationType \nfrom definitiv.OrganizationRosters \nwhere rosterId in (\n'A3AC240D-A6EB-45A5-A5C5-792B8B20ADA1'\n)\norder by commencementDate, ceaseDate",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "OrganizationRosters"
-								}
-							},
-							"firstRowOnly": false
 						}
 					}
 				],

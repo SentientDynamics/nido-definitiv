@@ -1670,7 +1670,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-17T01:49:18Z"
@@ -2458,7 +2458,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-17T21:51:24Z"
@@ -2730,7 +2730,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-19T01:04:06Z"
@@ -2972,7 +2972,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-19T03:45:11Z"
@@ -4612,7 +4612,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-20T04:05:09Z"
@@ -5591,7 +5591,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-19T01:05:25Z"
@@ -9622,6 +9622,32 @@
 							},
 							"traceLevel": "Fine"
 						}
+					},
+					{
+						"name": "pl_monitoring_logic-nido-prod-eastau-100",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_UpdateCustomReportRosters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -9645,6 +9671,7 @@
 				"[concat(variables('factoryId'), '/dataflows/df_FlattenOrgRosters_UpdateOrgRosters1')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportRosters')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-100')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_CustomReportRosters')]"
@@ -17958,7 +17985,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-14T05:41:14Z"
@@ -18941,7 +18968,7 @@
 					}
 				},
 				"folder": {
-					"name": "03_Timesheets"
+					"name": "04_Rosters/03_Timesheets"
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-14T05:41:14Z"
@@ -21526,6 +21553,56 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_monitoring_logic-nido-prod-eastau-100')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "logic-nido-prod-eastau-100",
+						"description": "Pipeline monitoring and notification",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-30.australiaeast.logic.azure.com:443/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE",
+							"connectVia": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"Message": "Hello Logic Apps"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"PipelineRunId": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_adls2_stnidoprodeastau100_csv')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -21957,6 +22034,38 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_01_Payslips_Master')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Rosters_Scheduled_2h')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationRosters",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"ExecutePipelineName": "[parameters('tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Hour",
+						"interval": 2,
+						"startTime": "2022-03-29T22:00:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationRosters')]"
 			]
 		},
 		{
@@ -23480,38 +23589,6 @@
 			"apiVersion": "2018-06-01",
 			"properties": {},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_Rosters_Scheduled_2h')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationRosters",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"ExecutePipelineName": "[parameters('tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName')]"
-						}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Hour",
-						"interval": 2,
-						"startTime": "2022-03-29T22:00:00Z",
-						"timeZone": "UTC"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationRosters')]"
-			]
 		}
 	]
 }
