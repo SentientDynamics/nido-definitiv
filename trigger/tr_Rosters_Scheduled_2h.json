@@ -1,0 +1,27 @@
+{
+	"name": "tr_Rosters_Scheduled_2h",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationRosters",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"ExecutePipelineName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 2,
+				"startTime": "2022-03-29T22:00:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
