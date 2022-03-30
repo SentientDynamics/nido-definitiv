@@ -90,13 +90,6 @@
 												"value": "@variables('varRosterCurrentDate')",
 												"type": "Expression"
 											}
-										},
-										{
-											"name": "paramRosterId",
-											"value": {
-												"value": "@pipeline().parameters.paramRosterId",
-												"type": "Expression"
-											}
 										}
 									],
 									"httpRequestTimeout": "00:10:00",
@@ -213,9 +206,6 @@
 		],
 		"parameters": {
 			"paramOrganizationId": {
-				"type": "string"
-			},
-			"paramRosterId": {
 				"type": "string"
 			},
 			"TriggeredByPipelineTriggerTime": {

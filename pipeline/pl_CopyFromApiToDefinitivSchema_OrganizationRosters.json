@@ -325,10 +325,6 @@
 										"value": "@item().organizationId",
 										"type": "Expression"
 									},
-									"paramRosterId": {
-										"value": "@item().rosterId",
-										"type": "Expression"
-									},
 									"TriggeredByPipelineTriggerTime": {
 										"value": "@pipeline().TriggerTime",
 										"type": "Expression"
