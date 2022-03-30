@@ -524,6 +524,10 @@
 						"PipelineRunId": {
 							"value": "@pipeline().RunId",
 							"type": "Expression"
+						},
+						"df_UpdateCustomReportRostersOutput": {
+							"value": "@activity('df_UpdateCustomReportRosters').output",
+							"type": "Expression"
 						}
 					}
 				}
