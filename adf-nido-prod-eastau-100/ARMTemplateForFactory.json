@@ -9482,7 +9482,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select rosterId, organizationId from definitiv.OrganizationRosters \nwhere ceaseDate is not null",
+								"sqlReaderQuery": "select rosterId, organizationId from definitiv.OrganizationRosters \nwhere ceaseDate is null",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -9644,6 +9644,10 @@
 							"parameters": {
 								"PipelineRunId": {
 									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"df_UpdateCustomReportRostersOutput": {
+									"value": "@activity('df_UpdateCustomReportRosters').output",
 									"type": "Expression"
 								}
 							}
@@ -21572,7 +21576,10 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-30.australiaeast.logic.azure.com:443/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE",
+							"url": {
+								"value": "@concat('https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke/PipelineRunId/', pipeline().parameters.PipelineRunId, '?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE')",
+								"type": "Expression"
+							},
 							"connectVia": {
 								"referenceName": "AustraliaEastIntegrationRuntime",
 								"type": "IntegrationRuntimeReference"
@@ -21582,7 +21589,8 @@
 								"Content-Type": "application/json"
 							},
 							"body": {
-								"Message": "Hello Logic Apps"
+								"value": "@pipeline().parameters.df_UpdateCustomReportRostersOutput",
+								"type": "Expression"
 							}
 						}
 					}
@@ -21593,7 +21601,84 @@
 				},
 				"parameters": {
 					"PipelineRunId": {
-						"type": "string"
+						"type": "string",
+						"defaultValue": "eba92669-8272-4930-b2be-99059548fd28"
+					},
+					"df_UpdateCustomReportRostersOutput": {
+						"type": "string",
+						"defaultValue": {
+							"dataRead": 522332,
+							"dataWritten": 525051,
+							"filesWritten": 1,
+							"sourcePeakConnections": 1,
+							"sinkPeakConnections": 1,
+							"rowsRead": 663,
+							"rowsCopied": 663,
+							"copyDuration": 62,
+							"throughput": 8.227,
+							"errors": [],
+							"effectiveIntegrationRuntime": "AutoResolveIntegrationRuntime (Australia East)",
+							"usedDataIntegrationUnits": 4,
+							"billingReference": {
+								"activityType": "DataMovement",
+								"billableDuration": [
+									{
+										"meterType": "ManagedVNetIR",
+										"duration": 0.03333333333333333,
+										"unit": "DIUHours"
+									}
+								]
+							},
+							"usedParallelCopies": 1,
+							"executionDetails": [
+								{
+									"source": {
+										"type": "RestService"
+									},
+									"sink": {
+										"type": "AzureBlobFS",
+										"region": "Australia East"
+									},
+									"status": "Succeeded",
+									"start": "2022-03-29T22:42:52.4641719Z",
+									"duration": 62,
+									"usedDataIntegrationUnits": 4,
+									"usedParallelCopies": 1,
+									"profile": {
+										"queue": {
+											"status": "Completed",
+											"duration": 57
+										},
+										"transfer": {
+											"status": "Completed",
+											"duration": 4,
+											"details": {
+												"readingFromSource": {
+													"type": "RestService",
+													"workingDuration": 1,
+													"timeToFirstByte": 1
+												},
+												"writingToSink": {
+													"type": "AzureBlobFS",
+													"workingDuration": 1
+												}
+											}
+										}
+									},
+									"detailedDurations": {
+										"queuingDuration": 57,
+										"timeToFirstByte": 1,
+										"transferDuration": 3
+									}
+								}
+							],
+							"dataConsistencyVerification": {
+								"VerificationResult": "NotVerified"
+							},
+							"durationInQueue": {
+								"integrationRuntimeQueue": 0
+							}
+						}
 					}
 				},
 				"annotations": []
