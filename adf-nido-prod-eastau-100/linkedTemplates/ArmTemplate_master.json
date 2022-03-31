@@ -23,7 +23,11 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
 		},
-		"tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
+			"type": "string",
+			"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
+		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReport Rosters_1_0_parameters_ExecutePipelineName": {
 			"type": "string",
 			"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
 		},
@@ -144,8 +148,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
-						"value": "[parameters('tr_Rosters_Scheduled_2h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName')]"
+					"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName')]"
+					},
+					"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReport Rosters_1_0_parameters_ExecutePipelineName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReport Rosters_1_0_parameters_ExecutePipelineName')]"
 					}
 				}
 			},

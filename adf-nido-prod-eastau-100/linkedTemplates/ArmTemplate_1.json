@@ -325,7 +325,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_CustomReportRosters')]",
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_1')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -550,11 +550,11 @@
 				"variables": {
 					"varRosterStartDate": {
 						"type": "String",
-						"defaultValue": "@formatDateTime(addDays(utcNow(), -1), 'yyyy-MM-dd')"
+						"defaultValue": "@formatDateTime(addDays(utcNow(), -7), 'yyyy-MM-dd')"
 					},
 					"varRosterFinishDate": {
 						"type": "String",
-						"defaultValue": "@formatDateTime(addDays(utcNow(), 14), 'yyyy-MM-dd')"
+						"defaultValue": "@formatDateTime(addDays(utcNow(), 28), 'yyyy-MM-dd')"
 					},
 					"varRosterCurrentDate": {
 						"type": "String"
