@@ -1,12 +1,21 @@
 {
-	"name": "tr_Rosters_Scheduled_2h",
+	"name": "tr_Rosters_Scheduled_1h",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
 					"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationRosters",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"ExecutePipelineName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReport Rosters_v1",
 					"type": "PipelineReference"
 				},
 				"parameters": {
@@ -18,9 +27,9 @@
 		"typeProperties": {
 			"recurrence": {
 				"frequency": "Hour",
-				"interval": 2,
-				"startTime": "2022-03-29T22:00:00Z",
-				"timeZone": "UTC"
+				"interval": 1,
+				"startTime": "2022-03-29T22:00:00",
+				"timeZone": "AUS Eastern Standard Time"
 			}
 		}
 	}
