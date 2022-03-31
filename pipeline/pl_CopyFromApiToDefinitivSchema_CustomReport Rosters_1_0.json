@@ -57,7 +57,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters",
+									"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_1",
 									"type": "PipelineReference"
 								},
 								"waitOnCompletion": true,
