@@ -41,6 +41,12 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
+					},
+					{
+						"activity": "lookup_PreRowCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
 				],
 				"userProperties": [],
@@ -577,6 +583,111 @@
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "pl_monitoring_logic-nido-prod-eastau-100",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "lookup_PostRowCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"PipelineRunId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"DataflowActivityOutput": {
+							"value": "@activity('df_FlattenPayRuns').output",
+							"type": "Expression"
+						},
+						"PreRowCount": {
+							"value": "@activity('lookup_PreRowCount').output",
+							"type": "Expression"
+						},
+						"PostRowCount": {
+							"value": "@activity('lookup_PostRowCount').output",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "lookup_PreRowCount",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select count(*) from definitiv.OrganizationRosters",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "OrganizationRosters"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "lookup_PostRowCount",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "df_FlattenPayRuns",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select count(*) from definitiv.OrganizationRosters",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"ds_SchemaName": "definitiv",
+							"ds_TableName": "OrganizationRosters"
+						}
+					},
+					"firstRowOnly": false
 				}
 			}
 		],
