@@ -57,7 +57,7 @@
 					},
 					"activities": [
 						{
-							"name": "pl_CustomReportRosters_copy1",
+							"name": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_1",
 							"type": "ExecutePipeline",
 							"dependsOn": [],
 							"userProperties": [],
@@ -254,7 +254,7 @@
 		"parameters": {
 			"ExecutePipelineName": {
 				"type": "string",
-				"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
+				"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_1"
 			}
 		},
 		"folder": {
