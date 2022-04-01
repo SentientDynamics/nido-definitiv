@@ -48,9 +48,9 @@
 									"type": "Expression"
 								}
 							},
-							"SinkSqlDefintiv": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "Organizations"
+							"SinkSqlDefinitiv": {
+								"ds_SchemaName": "adf",
+								"ds_TableName": "Parameters"
 							}
 						}
 					},
@@ -85,7 +85,7 @@
 							"type": "Expression"
 						},
 						"DataflowActivityOutput": {
-							"value": "@activity('df_UpdateCustomReportRosters').output",
+							"value": "@activity('df_UpdateOrganizations').output",
 							"type": "Expression"
 						},
 						"PreRowCount": {
@@ -151,7 +151,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) from definitiv.CustomReportRostersD",
+						"sqlReaderQuery": "select count(*) from definitiv.Organizations",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -160,7 +160,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_SchemaName": "definitiv",
-							"ds_TableName": "CustomReportRostersD"
+							"ds_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
