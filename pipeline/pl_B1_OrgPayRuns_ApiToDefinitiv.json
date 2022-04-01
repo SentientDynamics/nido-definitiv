@@ -560,8 +560,8 @@
 				}
 			},
 			{
-				"name": "CopyToCsv",
-				"type": "Copy",
+				"name": "pl_B1_Payslips_ApiToDefinitiv",
+				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
 						"activity": "df_FlattenPayRuns",
@@ -570,66 +570,14 @@
 						]
 					}
 				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
+					"pipeline": {
+						"referenceName": "pl_B1_Payslips_ApiToDefinitiv",
+						"type": "PipelineReference"
 					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".csv"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "ds_sql_tnk001",
-						"type": "DatasetReference",
-						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "OrganizationPayRuns"
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "ds_adls2_stnidoprodeastau100_csv",
-						"type": "DatasetReference",
-						"parameters": {
-							"schemaName": "definitiv",
-							"tableName": "OrganizationPayRuns",
-							"pipelineRunId": {
-								"value": "@pipeline().RunId",
-								"type": "Expression"
-							},
-							"pipelineTriggerTime": "@pipeline().TriggerTime"
-						}
-					}
-				]
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"folder": {
