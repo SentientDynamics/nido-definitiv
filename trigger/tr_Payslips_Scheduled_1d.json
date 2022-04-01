@@ -1,0 +1,29 @@
+{
+	"name": "tr_Payslips_Scheduled_1d",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_B1_OrgPayRuns_ApiToDefinitiv",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-04-01T01:00:00",
+				"timeZone": "AUS Eastern Standard Time",
+				"schedule": {
+					"hours": [
+						1
+					]
+				}
+			}
+		}
+	}
+}
