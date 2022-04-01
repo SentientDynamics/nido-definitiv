@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "df_UpdateCustomReportRosters",
+				"name": "df_UpdateOrganizations",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_UpdateCusomReportRosters",
+						"referenceName": "df_UpdateOrganizations",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"SourceBlobDefinitiv": {
@@ -44,13 +44,13 @@
 									"type": "Expression"
 								},
 								"ds_PipelineName": {
-									"value": "@pipeline().parameters.ExecutePipelineName",
+									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
 							},
 							"SinkSqlDefintiv": {
 								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportRostersD"
+								"ds_TableName": "Organizations"
 							}
 						}
 					},
@@ -114,7 +114,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) from definitiv.CustomReportRostersD",
+						"sqlReaderQuery": "select count(*) from definitiv.Organizations",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -123,7 +123,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_SchemaName": "definitiv",
-							"ds_TableName": "CustomReportRostersD"
+							"ds_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
@@ -134,7 +134,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "df_UpdateCustomReportRosters",
+						"activity": "df_UpdateOrganizations",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -268,12 +268,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"ExecutePipelineName": {
-				"type": "string",
-				"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_1"
-			}
-		},
 		"folder": {
 			"name": "08_Organizations"
 		},
