@@ -40,7 +40,7 @@
 				"type": "string",
 				"defaultValue": "eba92669-8272-4930-b2be-99059548fd28"
 			},
-			"df_UpdateCustomReportRostersOutput": {
+			"DataflowActivityOutput": {
 				"type": "string",
 				"defaultValue": {
 					"dataRead": 522332,
@@ -115,6 +115,14 @@
 						"integrationRuntimeQueue": 0
 					}
 				}
+			},
+			"PreRowCount": {
+				"type": "string",
+				"defaultValue": "0"
+			},
+			"PostRowCount": {
+				"type": "string",
+				"defaultValue": "0"
 			}
 		},
 		"annotations": []
