@@ -167,6 +167,18 @@
 						"PipelineRunId": {
 							"value": "@pipeline().RunId",
 							"type": "Expression"
+						},
+						"DataflowActivityOutput": {
+							"value": "@activity('df_UpdateCustomReportRosters').output",
+							"type": "Expression"
+						},
+						"PreRowCount": {
+							"value": "@activity('lookup_PreRowCount').output",
+							"type": "Expression"
+						},
+						"PostRowCount": {
+							"value": "@activity('lookup_PostRowCount').output",
+							"type": "Expression"
 						}
 					}
 				}
