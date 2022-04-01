@@ -121,7 +121,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"url": {
-								"value": "@concat('https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke/PipelineRunId/', pipeline().parameters.PipelineRunId, '?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE')",
+								"value": "@concat(\npipeline().globalParameters.global_logic_Monitoring_baseUrl,\npipeline().parameters.PipelineRunId, \npipeline().globalParameters.global_logic_Monitoring_SAS)",
 								"type": "Expression"
 							},
 							"connectVia": {
@@ -133,7 +133,7 @@
 								"Content-Type": "application/json"
 							},
 							"body": {
-								"value": "@pipeline().parameters.df_UpdateCustomReportRostersOutput",
+								"value": "@{pipeline().parameters.DataflowActivityOutput}\n@{pipeline().parameters.PreRowCount}\n@{pipeline().parameters.PostRowCount}\n",
 								"type": "Expression"
 							}
 						}
@@ -148,7 +148,7 @@
 						"type": "string",
 						"defaultValue": "eba92669-8272-4930-b2be-99059548fd28"
 					},
-					"df_UpdateCustomReportRostersOutput": {
+					"DataflowActivityOutput": {
 						"type": "string",
 						"defaultValue": {
 							"dataRead": 522332,
@@ -223,6 +223,14 @@
 								"integrationRuntimeQueue": 0
 							}
 						}
+					},
+					"PreRowCount": {
+						"type": "string",
+						"defaultValue": "0"
+					},
+					"PostRowCount": {
+						"type": "string",
+						"defaultValue": "0"
 					}
 				},
 				"annotations": []

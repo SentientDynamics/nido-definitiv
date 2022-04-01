@@ -14,5 +14,13 @@
 	"global_adls2_LogDirectory": {
 		"type": "string",
 		"value": "ds_adls2_stnidoprodeastau100_log"
+	},
+	"global_logic_Monitoring_baseUrl": {
+		"type": "string",
+		"value": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke/PipelineRunId/"
+	},
+	"global_logic_Monitoring_SAS": {
+		"type": "string",
+		"value": "?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE"
 	}
 }
