@@ -49,8 +49,8 @@
 								}
 							},
 							"SinkSqlDefinitiv": {
-								"ds_SchemaName": "adf",
-								"ds_TableName": "Parameters"
+								"ds_SchemaName": "definitiv",
+								"ds_TableName": "Organizations"
 							}
 						}
 					},
