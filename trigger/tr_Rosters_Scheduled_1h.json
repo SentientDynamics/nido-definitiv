@@ -15,7 +15,7 @@
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReport Rosters_1_0",
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0",
 					"type": "PipelineReference"
 				},
 				"parameters": {
