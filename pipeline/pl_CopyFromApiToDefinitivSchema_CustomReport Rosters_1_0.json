@@ -41,6 +41,12 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
+					},
+					{
+						"activity": "lookup_PreRowCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
 					}
 				],
 				"userProperties": [],
@@ -86,12 +92,6 @@
 				"dependsOn": [
 					{
 						"activity": "ForEachOrganization",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "lookup_PreRowCount",
 						"dependencyConditions": [
 							"Succeeded"
 						]
