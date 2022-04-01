@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@pipeline().parameters.df_UpdateCustomReportRostersOutput",
+						"value": "@{pipeline().parameters.DataflowActivityOutput}\n@{pipeline().parameters.PreRowCount}\n@{pipeline().parameters.PostRowCount}\n",
 						"type": "Expression"
 					}
 				}
