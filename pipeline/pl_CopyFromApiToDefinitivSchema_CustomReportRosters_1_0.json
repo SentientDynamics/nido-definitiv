@@ -26,7 +26,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_SchemaName": "definitiv",
-							"ds_TableName": "Organization"
+							"ds_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
