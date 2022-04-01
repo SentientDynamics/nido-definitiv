@@ -20,7 +20,7 @@
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
 			"value": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
 		},
-		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReport Rosters_1_0_parameters_ExecutePipelineName": {
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0_parameters_ExecutePipelineName": {
 			"value": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
 		},
 		"containerUri": {
