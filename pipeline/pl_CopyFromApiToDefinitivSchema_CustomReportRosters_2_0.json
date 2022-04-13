@@ -60,13 +60,6 @@
 						"type": "RestSource",
 						"additionalColumns": [
 							{
-								"name": "paramOrganizationId",
-								"value": {
-									"value": "@pipeline().parameters.paramOrganizationId",
-									"type": "Expression"
-								}
-							},
-							{
 								"name": "CustomReportRosters.PipelineTriggerTime",
 								"value": {
 									"value": "@pipeline().TriggerTime",
@@ -77,13 +70,6 @@
 								"name": "CustomReportRosters.PipelineRunId",
 								"value": {
 									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							},
-							{
-								"name": "varRosterDate",
-								"value": {
-									"value": "@variables('varRosterCurrentDate')",
 									"type": "Expression"
 								}
 							}
