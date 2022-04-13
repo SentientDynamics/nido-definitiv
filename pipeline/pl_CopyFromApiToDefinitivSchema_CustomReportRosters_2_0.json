@@ -209,12 +209,10 @@
 		],
 		"variables": {
 			"varRosterStartDate": {
-				"type": "String",
-				"defaultValue": "@formatDateTime(addDays(utcNow(), -7), 'yyyy-MM-dd')"
+				"type": "String"
 			},
 			"varRosterFinishDate": {
-				"type": "String",
-				"defaultValue": "@formatDateTime(addDays(utcNow(), 28), 'yyyy-MM-dd')"
+				"type": "String"
 			}
 		},
 		"folder": {
