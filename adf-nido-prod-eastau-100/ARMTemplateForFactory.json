@@ -22,14 +22,6 @@
 		"ls_rest_definitiv_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
-		},
-		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
-			"type": "string",
-			"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
-		},
-		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0_parameters_ExecutePipelineName": {
-			"type": "string",
-			"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
 		}
 	},
 	"variables": {
@@ -7095,7 +7087,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_SchemaName": "definitiv",
-									"ds_TableName": "Organization"
+									"ds_TableName": "Organizations"
 								}
 							},
 							"firstRowOnly": false
@@ -23327,7 +23319,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
@@ -23354,48 +23346,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_B1_OrgPayRuns_ApiToDefinitiv')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_Rosters_Scheduled_1h')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationRosters",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"ExecutePipelineName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName')]"
-						}
-					},
-					{
-						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"ExecutePipelineName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0_parameters_ExecutePipelineName')]"
-						}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Hour",
-						"interval": 1,
-						"startTime": "2022-03-29T22:00:00",
-						"timeZone": "AUS Eastern Standard Time"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationRosters')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0')]"
 			]
 		},
 		{
@@ -24409,7 +24359,7 @@
 							"name": "CastDateType"
 						}
 					],
-					"script": "source(output(\n\t\t{CustomReportRosters.PipelineRunId} as string,\n\t\t{CustomReportRosters.PipelineTriggerTime} as string,\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tparamOrganizationId as string,\n\t\tparamRosterId as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string,\n\t\tvarRosterDate as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitiv\nSourceBlobDefinitiv derive(date = toDate(date),\n\t\tcreatedDate = toDate(createdDate),\n\t\tmodifiedDate = toDate(modifiedDate),\n\t\tRecordCreatedDate = toDate({CustomReportRosters.PipelineTriggerTime}),\n\t\tRecordIsDeleted = false(),\n\t\tRecordModifiedDate = toDate({CustomReportRosters.PipelineTriggerTime}),\n\t\tend = concat(\"'\", toString(end), \"'\"),\n\t\tstart = concat(\"'\", toString(start), \"'\")) ~> CastDateType\nCastDateType sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: 'ds_adsl2_stnidoprodeastau100_csv/definitiv.CustomReportRostersD',\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tPipelineRunId = {CustomReportRosters.PipelineRunId},\n\t\tPipelineTriggerTime = {CustomReportRosters.PipelineTriggerTime},\n\t\tAmount = amount,\n\t\tCreatedByUser = createdByUser,\n\t\tCreatedDate = createdDate,\n\t\tDate = date,\n\t\tEmployeeId = employeeId,\n\t\tEmploymentType = employmentType,\n\t\tEnd = end,\n\t\tFirstName = firstName,\n\t\tLastName = lastName,\n\t\tModifiedByUser = modifiedByUser,\n\t\tModifiedDate = modifiedDate,\n\t\tOrganizationId = paramOrganizationId,\n\t\tParamRosterId = paramRosterId,\n\t\tQuantity = quantity,\n\t\tRoom = room,\n\t\tRosterEntryId = rosterEntryId,\n\t\tRosterId = rosterId,\n\t\tServiceCode = serviceCode,\n\t\tStart = start,\n\t\tVarRosterDate = varRosterDate,\n\t\tSourceFileName,\n\t\tRecordCreatedDate,\n\t\tRecordIsDeleted,\n\t\tRecordModifiedDate\n\t)) ~> SinkSqlDefintiv"
+					"script": "source(output(\n\t\t{CustomReportRosters.PipelineRunId} as string,\n\t\t{CustomReportRosters.PipelineTriggerTime} as string,\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tparamOrganizationId as string,\n\t\tparamRosterId as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string,\n\t\tvarRosterDate as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitiv\nSourceBlobDefinitiv derive(date = toDate(date),\n\t\tcreatedDate = toDate(createdDate),\n\t\tmodifiedDate = toDate(modifiedDate),\n\t\tRecordCreatedDate = toDate({CustomReportRosters.PipelineTriggerTime}),\n\t\tRecordIsDeleted = false(),\n\t\tRecordModifiedDate = toDate({CustomReportRosters.PipelineTriggerTime}),\n\t\tend = hour(currentUTC()),\n\t\tstart = hour(currentUTC())) ~> CastDateType\nCastDateType sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: 'ds_adsl2_stnidoprodeastau100_csv/definitiv.CustomReportRostersD',\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tPipelineRunId = {CustomReportRosters.PipelineRunId},\n\t\tPipelineTriggerTime = {CustomReportRosters.PipelineTriggerTime},\n\t\tAmount = amount,\n\t\tCreatedByUser = createdByUser,\n\t\tCreatedDate = createdDate,\n\t\tDate = date,\n\t\tEmployeeId = employeeId,\n\t\tEmploymentType = employmentType,\n\t\tEnd = end,\n\t\tFirstName = firstName,\n\t\tLastName = lastName,\n\t\tModifiedByUser = modifiedByUser,\n\t\tModifiedDate = modifiedDate,\n\t\tOrganizationId = paramOrganizationId,\n\t\tParamRosterId = paramRosterId,\n\t\tQuantity = quantity,\n\t\tRoom = room,\n\t\tRosterEntryId = rosterEntryId,\n\t\tRosterId = rosterId,\n\t\tServiceCode = serviceCode,\n\t\tStart = start,\n\t\tVarRosterDate = varRosterDate,\n\t\tSourceFileName,\n\t\tRecordCreatedDate,\n\t\tRecordIsDeleted,\n\t\tRecordModifiedDate\n\t)) ~> SinkSqlDefintiv"
 				}
 			},
 			"dependsOn": [
@@ -24961,6 +24911,261 @@
 			"apiVersion": "2018-06-01",
 			"properties": {},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_CustomReportRosters_2_0')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "RosterStartDate",
+						"description": "",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varRosterStartDate",
+							"value": {
+								"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "RosterFinishDate",
+						"description": "",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varRosterFinishDate",
+							"value": {
+								"value": "@formatDateTime(addDays(utcNow(),28), 'yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "CopyToJson_CustomReportRosters_copy2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "RosterStartDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "RosterFinishDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"additionalColumns": [
+									{
+										"name": "CustomReportRosters.PipelineTriggerTime",
+										"value": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "CustomReportRosters.PipelineRunId",
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									}
+								],
+								"httpRequestTimeout": "00:10:00",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_rest_definitiv",
+								"type": "DatasetReference",
+								"parameters": {
+									"sourceRelativeUrl": {
+										"value": "@concat(\n'/api/custom-reports/BE1BFE92-8295-4F80-A36C-1A63608C1433?organizationId=',\n'aaaaaaaa-bbbb-cccc-dddd-000000000000',\n'&startDate=', \nformatDateTime(variables('varRosterStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varRosterFinishDate'), 'yyyy-MM-dd')\n)",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_PipelineTriggerTime": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									},
+									"ds_PipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"ds_FileSystem": {
+										"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+										"type": "Expression"
+									},
+									"ds_Directory": {
+										"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+										"type": "Expression"
+									},
+									"ds_PipelineName": {
+										"value": "@pipeline().Pipeline",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "df_UpdateCustomReportRosters",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "CopyToJson_CustomReportRosters_copy2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_UpdateCusomReportRosters",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SourceBlobDefinitiv": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"SinkSqlDefintiv": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportRostersD"
+									}
+								},
+								"linkedServiceParameters": {}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"varRosterStartDate": {
+						"type": "String"
+					},
+					"varRosterFinishDate": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "04_Rosters"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
+				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportRosters')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Rosters_Scheduled_1h')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_2_0",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Hour",
+						"interval": 1,
+						"startTime": "2022-04-14T09:00:00",
+						"timeZone": "AUS Eastern Standard Time"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_CustomReportRosters_2_0')]"
+			]
 		}
 	]
 }

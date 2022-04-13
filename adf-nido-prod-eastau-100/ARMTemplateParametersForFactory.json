@@ -16,12 +16,6 @@
 		},
 		"ls_rest_definitiv_properties_typeProperties_url": {
 			"value": "@{linkedService().sourceBaseUrl}"
-		},
-		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
-			"value": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
-		},
-		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0_parameters_ExecutePipelineName": {
-			"value": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
 		}
 	}
 }

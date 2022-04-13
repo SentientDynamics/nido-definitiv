@@ -6,14 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
-		},
-		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName": {
-			"type": "string",
-			"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
-		},
-		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0_parameters_ExecutePipelineName": {
-			"type": "string",
-			"defaultValue": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters"
 		}
 	},
 	"variables": {
@@ -2214,6 +2206,226 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_CustomReportRosters_2_0')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "RosterStartDate",
+						"description": "",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varRosterStartDate",
+							"value": {
+								"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "RosterFinishDate",
+						"description": "",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varRosterFinishDate",
+							"value": {
+								"value": "@formatDateTime(addDays(utcNow(),28), 'yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "CopyToJson_CustomReportRosters_copy2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "RosterStartDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "RosterFinishDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"additionalColumns": [
+									{
+										"name": "CustomReportRosters.PipelineTriggerTime",
+										"value": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "CustomReportRosters.PipelineRunId",
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									}
+								],
+								"httpRequestTimeout": "00:10:00",
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_rest_definitiv",
+								"type": "DatasetReference",
+								"parameters": {
+									"sourceRelativeUrl": {
+										"value": "@concat(\n'/api/custom-reports/BE1BFE92-8295-4F80-A36C-1A63608C1433?organizationId=',\n'aaaaaaaa-bbbb-cccc-dddd-000000000000',\n'&startDate=', \nformatDateTime(variables('varRosterStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varRosterFinishDate'), 'yyyy-MM-dd')\n)",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_PipelineTriggerTime": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									},
+									"ds_PipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"ds_FileSystem": {
+										"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+										"type": "Expression"
+									},
+									"ds_Directory": {
+										"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+										"type": "Expression"
+									},
+									"ds_PipelineName": {
+										"value": "@pipeline().Pipeline",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "df_UpdateCustomReportRosters",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "CopyToJson_CustomReportRosters_copy2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_UpdateCusomReportRosters",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"SourceBlobDefinitiv": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"SinkSqlDefintiv": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportRostersD"
+									}
+								},
+								"linkedServiceParameters": {}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"varRosterStartDate": {
+						"type": "String"
+					},
+					"varRosterFinishDate": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "04_Rosters"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_B1_OrgPayRuns_ApiToDefinitiv')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -3097,21 +3309,10 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationRosters",
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_2_0",
 							"type": "PipelineReference"
 						},
-						"parameters": {
-							"ExecutePipelineName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_OrganizationRosters_parameters_ExecutePipelineName')]"
-						}
-					},
-					{
-						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"ExecutePipelineName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_0_parameters_ExecutePipelineName')]"
-						}
+						"parameters": {}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -3119,13 +3320,13 @@
 					"recurrence": {
 						"frequency": "Hour",
 						"interval": 1,
-						"startTime": "2022-03-29T22:00:00",
+						"startTime": "2022-04-14T09:00:00",
 						"timeZone": "AUS Eastern Standard Time"
 					}
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationRosters')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_CustomReportRosters_2_0')]"
 			]
 		},
 		{
@@ -3268,7 +3469,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {
