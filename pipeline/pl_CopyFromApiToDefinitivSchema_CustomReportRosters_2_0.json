@@ -10,10 +10,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "varRosterStartDate",
-					"value": {
-						"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
-						"type": "Expression"
-					}
+					"value": ""
 				}
 			},
 			{
