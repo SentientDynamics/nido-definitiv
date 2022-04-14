@@ -193,14 +193,6 @@
 				}
 			}
 		],
-		"variables": {
-			"varRosterStartDate": {
-				"type": "String"
-			},
-			"varRosterFinishDate": {
-				"type": "String"
-			}
-		},
 		"folder": {
 			"name": "04_Rosters"
 		},
