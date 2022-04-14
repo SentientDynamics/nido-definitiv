@@ -10,7 +10,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "varRosterStartDate",
-					"value": ""
+					"value": {
+						"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+						"type": "Expression"
+					}
 				}
 			},
 			{
@@ -190,6 +193,14 @@
 				}
 			}
 		],
+		"variables": {
+			"varRosterStartDate": {
+				"type": "String"
+			},
+			"varRosterFinishDate": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "04_Rosters"
 		},
