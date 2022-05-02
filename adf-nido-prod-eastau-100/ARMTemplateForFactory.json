@@ -10053,7 +10053,10 @@
 												"ds_PipelineRunId": {
 													"value": "@variables('PipelineRunId')",
 													"type": "Expression"
-												}
+												},
+												"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+												"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+												"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
 											}
 										}
 									]
@@ -10086,8 +10089,17 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"SourceBlobDefinitivPayRuns": {},
-									"SinkSqlDefinitiv": {}
+									"SourceBlobDefinitivPayRuns": {
+										"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
+										"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
+										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+										"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+									},
+									"SinkSqlDefinitiv": {
+										"ds_SchemaName": "adf",
+										"ds_TableName": "Parameters"
+									}
 								}
 							},
 							"staging": {},
@@ -23543,7 +23555,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
