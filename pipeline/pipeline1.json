@@ -20,6 +20,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFolderPath": "2022-05-04T15-02-36_7cc94de2-7ef0-42d2-8767-84dad4ffa7dd",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
