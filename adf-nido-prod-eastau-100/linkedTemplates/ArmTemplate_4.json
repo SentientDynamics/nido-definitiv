@@ -13,6 +13,369 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_CustomReportWages_A')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "SetPipelineTriggerTime",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "SetPipelineRunId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select organizationId, payrunId, periodStart, periodEnd from definitiv.OrganizationPayRuns",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_SchemaName": "definitiv",
+									"ds_TableName": "OrganizationPayRuns"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "CopyToJson",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "payRunOrganizationId",
+													"value": {
+														"value": "@item().organizationId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "payRunPayRunId",
+													"value": {
+														"value": "@item().payRunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "pipelineRunId",
+													"value": {
+														"value": "@pipeline().RunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "pipelineTriggerTime",
+													"value": {
+														"value": "@pipeline().TriggerTime",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "payRunPeriodStartDate",
+													"value": {
+														"value": "@formatDateTime(item().periodStart, 'yyyy-MM-dd')",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "payRunPeriodEndDate",
+													"value": {
+														"value": "@formatDateTime(item().periodEnd, 'yyyy-MM-dd')",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat('/api/custom-reports/16F9B79E-D95C-4759-B5BE-A8EE599E777D?organizationId=',item().organizationId,'&selectedPayRunId=',item().payRunId,'&startDate=',formatDateTime(item().periodStart, 'yyyy-MM-dd'),'&endDate=', formatDateTime(item().periodEnd, 'yyyy-MM-dd'))",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@variables('PipelineTriggerTime')",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@variables('PipelineRunId')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "df_UpdateCusomReportWagesA",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_UpdateCusomReportWages",
+								"type": "DataFlowReference",
+								"parameters": {
+									"pipelineRunId": {
+										"value": "'@{pipeline().RunId}'",
+										"type": "Expression"
+									},
+									"pipelineTriggerTime": {
+										"value": "'@{pipeline().TriggerTime}'",
+										"type": "Expression"
+									}
+								},
+								"datasetParameters": {
+									"sourceApi": {},
+									"sourceSql": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportWagesD"
+									},
+									"sink1": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportWagesD"
+									}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine",
+							"runConcurrently": true,
+							"continueOnError": true
+						}
+					},
+					{
+						"name": "CopyToCsv1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "df_UpdateCusomReportWagesA",
+								"dependencyConditions": [
+									"Succeeded",
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_SchemaName": "definitiv",
+									"ds_TableName": "CustomReportWagesD"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_stnidoprodeastau100_csv",
+								"type": "DatasetReference",
+								"parameters": {
+									"schemaName": "definitiv",
+									"tableName": "CustomReportWagesD",
+									"pipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"pipelineTriggerTime": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "SetPipelineTriggerTime",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineTriggerTime",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.MasterPipelineTriggerTime,pipeline().TriggerTime)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "SetPipelineRunId",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineRunId",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"MasterPipelineTriggerTime": {
+						"type": "string"
+					},
+					"MasterPipelineRunId": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"PipelineTriggerTime": {
+						"type": "String"
+					},
+					"PipelineRunId": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "02_Wages"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:42Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_Employees')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
