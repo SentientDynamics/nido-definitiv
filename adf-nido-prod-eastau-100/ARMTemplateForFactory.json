@@ -76,7 +76,7 @@
 										},
 										"sink": {
 											"name": "lineItemId",
-											"type": "Int16"
+											"type": "Int64"
 										}
 									},
 									{
@@ -103,7 +103,7 @@
 										},
 										"sink": {
 											"name": "idNumber",
-											"type": "Int16"
+											"type": "Int64"
 										}
 									},
 									{
