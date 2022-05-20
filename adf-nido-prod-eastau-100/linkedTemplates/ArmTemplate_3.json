@@ -1803,11 +1803,11 @@
 									},
 									"SourceSqlDefinitivPayslips": {
 										"ds_SchemaName": "definitiv",
-										"ds_TableName": "CustomReportPayslipsD"
+										"ds_TableName": "CustomReportPayslipsE"
 									},
 									"SinkSqlDefinitivPayslips": {
 										"ds_SchemaName": "definitiv",
-										"ds_TableName": "CustomReportPayslipsD"
+										"ds_TableName": "CustomReportPayslipsE"
 									}
 								}
 							},
