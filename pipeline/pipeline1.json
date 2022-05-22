@@ -151,7 +151,7 @@
 									"path": "$['periodStartDate']"
 								},
 								"sink": {
-									"name": "PeriodEndingDate",
+									"name": "PeriodStartDate",
 									"type": "DateTime"
 								}
 							},
