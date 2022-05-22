@@ -43,7 +43,7 @@
 									"path": "$['lineItemId']"
 								},
 								"sink": {
-									"name": "lineItemId",
+									"name": "PayslipLineItemId",
 									"type": "Int64"
 								}
 							},
@@ -52,7 +52,7 @@
 									"path": "$['payslipId']"
 								},
 								"sink": {
-									"name": "payslipId",
+									"name": "PayslipId",
 									"type": "Guid"
 								}
 							},
@@ -61,7 +61,7 @@
 									"path": "$['employeeId']"
 								},
 								"sink": {
-									"name": "employeeId",
+									"name": "EmployeeId",
 									"type": "Guid"
 								}
 							},
@@ -70,7 +70,7 @@
 									"path": "$['idNumber']"
 								},
 								"sink": {
-									"name": "idNumber",
+									"name": "IdNumber",
 									"type": "Int64"
 								}
 							},
@@ -79,7 +79,7 @@
 									"path": "$['payMethodCode']"
 								},
 								"sink": {
-									"name": "payMethodCode",
+									"name": "PayMethodCode",
 									"type": "String"
 								}
 							},
@@ -97,7 +97,7 @@
 									"path": "$['firstName']"
 								},
 								"sink": {
-									"name": "firstName",
+									"name": "FirstName",
 									"type": "String"
 								}
 							},
@@ -106,7 +106,7 @@
 									"path": "$['surname']"
 								},
 								"sink": {
-									"name": "surname",
+									"name": "Surname",
 									"type": "String"
 								}
 							},
@@ -115,7 +115,7 @@
 									"path": "$['positionTitle']"
 								},
 								"sink": {
-									"name": "positionTitle",
+									"name": "PositionTitle",
 									"type": "String"
 								}
 							},
@@ -124,7 +124,7 @@
 									"path": "$['level2Code']"
 								},
 								"sink": {
-									"name": "level2Code",
+									"name": "Level2Code",
 									"type": "String"
 								}
 							},
@@ -133,7 +133,7 @@
 									"path": "$['payslipNumber']"
 								},
 								"sink": {
-									"name": "payslipNumber",
+									"name": "PayslipNumber",
 									"type": "String"
 								}
 							},
@@ -142,7 +142,7 @@
 									"path": "$['payDate']"
 								},
 								"sink": {
-									"name": "payDate",
+									"name": "PayDate",
 									"type": "DateTime"
 								}
 							},
@@ -151,7 +151,7 @@
 									"path": "$['periodStartDate']"
 								},
 								"sink": {
-									"name": "periodStartDate",
+									"name": "PeriodEndingDate",
 									"type": "DateTime"
 								}
 							},
@@ -160,7 +160,7 @@
 									"path": "$['periodEndingDate']"
 								},
 								"sink": {
-									"name": "periodEndingDate",
+									"name": "PeriodEndingDate",
 									"type": "DateTime"
 								}
 							},
@@ -169,7 +169,7 @@
 									"path": "$['hoursOrA/DCode']"
 								},
 								"sink": {
-									"name": "hoursOrA/DCode",
+									"name": "HoursOrADCode",
 									"type": "String"
 								}
 							},
@@ -178,7 +178,7 @@
 									"path": "$['hoursOrA/DCodeDesc']"
 								},
 								"sink": {
-									"name": "hoursOrA/DCodeDesc",
+									"name": "HoursOrADCodeDesc",
 									"type": "String"
 								}
 							},
@@ -187,7 +187,7 @@
 									"path": "$['numberOfUnits']"
 								},
 								"sink": {
-									"name": "numberOfUnits",
+									"name": "NumberOfUnits",
 									"type": "Double"
 								}
 							},
@@ -196,7 +196,7 @@
 									"path": "$['rate']"
 								},
 								"sink": {
-									"name": "rate",
+									"name": "Rate",
 									"type": "Double"
 								}
 							},
@@ -205,7 +205,7 @@
 									"path": "$['value']"
 								},
 								"sink": {
-									"name": "value",
+									"name": "Value",
 									"type": "Double"
 								}
 							},
@@ -214,7 +214,7 @@
 									"path": "$['level1Code']"
 								},
 								"sink": {
-									"name": "level1Code",
+									"name": "Level1Code",
 									"type": "String"
 								}
 							},
@@ -223,7 +223,7 @@
 									"path": "$['baseRate']"
 								},
 								"sink": {
-									"name": "baseRate",
+									"name": "BaseRate",
 									"type": "Double"
 								}
 							},
@@ -232,7 +232,7 @@
 									"path": "$['employmentTypeCode']"
 								},
 								"sink": {
-									"name": "employmentTypeCode",
+									"name": "EmploymentTypeCode",
 									"type": "String"
 								}
 							},
@@ -241,7 +241,7 @@
 									"path": "$['employmentTypeCodeDesc']"
 								},
 								"sink": {
-									"name": "employmentTypeCodeDesc",
+									"name": "EmploymentTypeCodeDesc",
 									"type": "String"
 								}
 							},
@@ -250,7 +250,7 @@
 									"path": "$['departmentCode']"
 								},
 								"sink": {
-									"name": "departmentCode",
+									"name": "DepartmentCode",
 									"type": "String"
 								}
 							},
@@ -259,7 +259,7 @@
 									"path": "$['projectCode']"
 								},
 								"sink": {
-									"name": "projectCode",
+									"name": "ProjectCode",
 									"type": "String"
 								}
 							},
@@ -268,7 +268,7 @@
 									"path": "$['OrgPayRun.OrganizationId']"
 								},
 								"sink": {
-									"name": "OrgPayRun.OrganizationId",
+									"name": "OrgPayRunOrganizationId",
 									"type": "Guid"
 								}
 							},
@@ -277,7 +277,7 @@
 									"path": "$['OrgPayRun.PayRunId']"
 								},
 								"sink": {
-									"name": "OrgPayRun.PayRunId",
+									"name": "OrgPayRunPayRunId",
 									"type": "Guid"
 								}
 							},
@@ -286,7 +286,7 @@
 									"path": "$['OrgPayRun.PeriodStartDate']"
 								},
 								"sink": {
-									"name": "OrgPayRun.PeriodStartDate",
+									"name": "OrgPayRunPeriodStartDate",
 									"type": "DateTime"
 								}
 							},
@@ -295,7 +295,7 @@
 									"path": "$['OrgPayRun.PeriodEndDate']"
 								},
 								"sink": {
-									"name": "OrgPayRun.PeriodEndDate",
+									"name": "OrgPayRunPeriodEndDate",
 									"type": "DateTime"
 								}
 							},
@@ -304,7 +304,7 @@
 									"path": "$['OrgPayRun.PipelineRunId']"
 								},
 								"sink": {
-									"name": "OrgPayRun.PipelineRunId",
+									"name": "OrgPayRunPipelineRunId",
 									"type": "Guid"
 								}
 							},
@@ -313,7 +313,7 @@
 									"path": "$['OrgPayRun.PipelineTriggerTime']"
 								},
 								"sink": {
-									"name": "OrgPayRun.PipelineTriggerTime",
+									"name": "OrgPayRunPipelineTriggerTime",
 									"type": "DateTimeOffset"
 								}
 							}
