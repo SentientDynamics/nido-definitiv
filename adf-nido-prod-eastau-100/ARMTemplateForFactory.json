@@ -75,7 +75,7 @@
 											"path": "$['lineItemId']"
 										},
 										"sink": {
-											"name": "lineItemId",
+											"name": "PayslipLineItemId",
 											"type": "Int64"
 										}
 									},
@@ -84,7 +84,7 @@
 											"path": "$['payslipId']"
 										},
 										"sink": {
-											"name": "payslipId",
+											"name": "PayslipId",
 											"type": "Guid"
 										}
 									},
@@ -93,7 +93,7 @@
 											"path": "$['employeeId']"
 										},
 										"sink": {
-											"name": "employeeId",
+											"name": "EmployeeId",
 											"type": "Guid"
 										}
 									},
@@ -102,7 +102,7 @@
 											"path": "$['idNumber']"
 										},
 										"sink": {
-											"name": "idNumber",
+											"name": "IdNumber",
 											"type": "Int64"
 										}
 									},
@@ -111,7 +111,7 @@
 											"path": "$['payMethodCode']"
 										},
 										"sink": {
-											"name": "payMethodCode",
+											"name": "PayMethodCode",
 											"type": "String"
 										}
 									},
@@ -129,7 +129,7 @@
 											"path": "$['firstName']"
 										},
 										"sink": {
-											"name": "firstName",
+											"name": "FirstName",
 											"type": "String"
 										}
 									},
@@ -138,7 +138,7 @@
 											"path": "$['surname']"
 										},
 										"sink": {
-											"name": "surname",
+											"name": "Surname",
 											"type": "String"
 										}
 									},
@@ -147,7 +147,7 @@
 											"path": "$['positionTitle']"
 										},
 										"sink": {
-											"name": "positionTitle",
+											"name": "PositionTitle",
 											"type": "String"
 										}
 									},
@@ -156,7 +156,7 @@
 											"path": "$['level2Code']"
 										},
 										"sink": {
-											"name": "level2Code",
+											"name": "Level2Code",
 											"type": "String"
 										}
 									},
@@ -165,7 +165,7 @@
 											"path": "$['payslipNumber']"
 										},
 										"sink": {
-											"name": "payslipNumber",
+											"name": "PayslipNumber",
 											"type": "String"
 										}
 									},
@@ -174,7 +174,7 @@
 											"path": "$['payDate']"
 										},
 										"sink": {
-											"name": "payDate",
+											"name": "PayDate",
 											"type": "DateTime"
 										}
 									},
@@ -183,7 +183,7 @@
 											"path": "$['periodStartDate']"
 										},
 										"sink": {
-											"name": "periodStartDate",
+											"name": "PeriodStartDate",
 											"type": "DateTime"
 										}
 									},
@@ -192,7 +192,7 @@
 											"path": "$['periodEndingDate']"
 										},
 										"sink": {
-											"name": "periodEndingDate",
+											"name": "PeriodEndingDate",
 											"type": "DateTime"
 										}
 									},
@@ -201,7 +201,7 @@
 											"path": "$['hoursOrA/DCode']"
 										},
 										"sink": {
-											"name": "hoursOrA/DCode",
+											"name": "HoursOrADCode",
 											"type": "String"
 										}
 									},
@@ -210,7 +210,7 @@
 											"path": "$['hoursOrA/DCodeDesc']"
 										},
 										"sink": {
-											"name": "hoursOrA/DCodeDesc",
+											"name": "HoursOrADCodeDesc",
 											"type": "String"
 										}
 									},
@@ -219,7 +219,7 @@
 											"path": "$['numberOfUnits']"
 										},
 										"sink": {
-											"name": "numberOfUnits",
+											"name": "NumberOfUnits",
 											"type": "Double"
 										}
 									},
@@ -228,7 +228,7 @@
 											"path": "$['rate']"
 										},
 										"sink": {
-											"name": "rate",
+											"name": "Rate",
 											"type": "Double"
 										}
 									},
@@ -237,7 +237,7 @@
 											"path": "$['value']"
 										},
 										"sink": {
-											"name": "value",
+											"name": "Value",
 											"type": "Double"
 										}
 									},
@@ -246,7 +246,7 @@
 											"path": "$['level1Code']"
 										},
 										"sink": {
-											"name": "level1Code",
+											"name": "Level1Code",
 											"type": "String"
 										}
 									},
@@ -255,7 +255,7 @@
 											"path": "$['baseRate']"
 										},
 										"sink": {
-											"name": "baseRate",
+											"name": "BaseRate",
 											"type": "Double"
 										}
 									},
@@ -264,7 +264,7 @@
 											"path": "$['employmentTypeCode']"
 										},
 										"sink": {
-											"name": "employmentTypeCode",
+											"name": "EmploymentTypeCode",
 											"type": "String"
 										}
 									},
@@ -273,7 +273,7 @@
 											"path": "$['employmentTypeCodeDesc']"
 										},
 										"sink": {
-											"name": "employmentTypeCodeDesc",
+											"name": "EmploymentTypeCodeDesc",
 											"type": "String"
 										}
 									},
@@ -282,7 +282,7 @@
 											"path": "$['departmentCode']"
 										},
 										"sink": {
-											"name": "departmentCode",
+											"name": "DepartmentCode",
 											"type": "String"
 										}
 									},
@@ -291,7 +291,7 @@
 											"path": "$['projectCode']"
 										},
 										"sink": {
-											"name": "projectCode",
+											"name": "ProjectCode",
 											"type": "String"
 										}
 									},
@@ -300,7 +300,7 @@
 											"path": "$['OrgPayRun.OrganizationId']"
 										},
 										"sink": {
-											"name": "OrgPayRun.OrganizationId",
+											"name": "OrgPayRunOrganizationId",
 											"type": "Guid"
 										}
 									},
@@ -309,7 +309,7 @@
 											"path": "$['OrgPayRun.PayRunId']"
 										},
 										"sink": {
-											"name": "OrgPayRun.PayRunId",
+											"name": "OrgPayRunPayRunId",
 											"type": "Guid"
 										}
 									},
@@ -318,7 +318,7 @@
 											"path": "$['OrgPayRun.PeriodStartDate']"
 										},
 										"sink": {
-											"name": "OrgPayRun.PeriodStartDate",
+											"name": "OrgPayRunPeriodStartDate",
 											"type": "DateTime"
 										}
 									},
@@ -327,7 +327,7 @@
 											"path": "$['OrgPayRun.PeriodEndDate']"
 										},
 										"sink": {
-											"name": "OrgPayRun.PeriodEndDate",
+											"name": "OrgPayRunPeriodEndDate",
 											"type": "DateTime"
 										}
 									},
@@ -336,7 +336,7 @@
 											"path": "$['OrgPayRun.PipelineRunId']"
 										},
 										"sink": {
-											"name": "OrgPayRun.PipelineRunId",
+											"name": "OrgPayRunPipelineRunId",
 											"type": "Guid"
 										}
 									},
@@ -345,7 +345,7 @@
 											"path": "$['OrgPayRun.PipelineTriggerTime']"
 										},
 										"sink": {
-											"name": "OrgPayRun.PipelineTriggerTime",
+											"name": "OrgPayRunPipelineTriggerTime",
 											"type": "DateTimeOffset"
 										}
 									}
@@ -7960,7 +7960,7 @@
 						"typeProperties": {
 							"variableName": "varRosterStartDate",
 							"value": {
-								"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+								"value": "@formatDateTime(addDays(utcNow(), -7), 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
@@ -9910,9 +9910,18 @@
 													"value": "@pipeline().RunId",
 													"type": "Expression"
 												},
-												"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-												"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
-												"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
 											}
 										}
 									]
@@ -9945,7 +9954,28 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"source1": {},
+									"source1": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
 									"sink1": {
 										"ds_SchemaName": "definitiv",
 										"ds_TableName": "EmployeesEmploymentHistory"
@@ -9959,78 +9989,6 @@
 							},
 							"traceLevel": "Fine"
 						}
-					},
-					{
-						"name": "CopyToCsv2",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "df_UpdateEmployeesEmploymentHistory",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".csv"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "EmployeesEmploymentHistory"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_adls2_stnidoprodeastau100_csv",
-								"type": "DatasetReference",
-								"parameters": {
-									"schemaName": "definitiv",
-									"tableName": "EmployeesEmploymentHistory",
-									"pipelineRunId": {
-										"value": "@pipeline().RunId",
-										"type": "Expression"
-									},
-									"pipelineTriggerTime": "@pipeline().TriggerTime"
-								}
-							}
-						]
 					},
 					{
 						"name": "CopyToJson1",
@@ -10147,7 +10105,28 @@
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"source1": {},
+									"source1": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
 									"sink1": {
 										"ds_SchemaName": "definitiv",
 										"ds_TableName": "Employees"
@@ -10156,83 +10135,11 @@
 							},
 							"staging": {},
 							"compute": {
-								"coreCount": 16,
+								"coreCount": 8,
 								"computeType": "General"
 							},
 							"traceLevel": "Fine"
 						}
-					},
-					{
-						"name": "CopyToCsv1",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "df_UpdateEmployees",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".csv"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "Employees"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_adls2_stnidoprodeastau100_csv",
-								"type": "DatasetReference",
-								"parameters": {
-									"schemaName": "definitiv",
-									"tableName": "Employees",
-									"pipelineRunId": {
-										"value": "@pipeline().RunId",
-										"type": "Expression"
-									},
-									"pipelineTriggerTime": "@pipeline().TriggerTime"
-								}
-							}
-						]
 					}
 				],
 				"policy": {
@@ -10249,7 +10156,6 @@
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateEmployeesEmploymentHistory')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_csv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateEmployees')]"
@@ -25345,7 +25251,11 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
-							"name": "sink1"
+							"name": "sink1",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
 						}
 					],
 					"transformations": [
@@ -25353,12 +25263,13 @@
 							"name": "Select1"
 						}
 					],
-					"script": "source(output(\n\t\tdateOfBirth as date,\n\t\temailAddress as string,\n\t\temployeeId as string,\n\t\temployeeNumber as integer,\n\t\tfirstName as string,\n\t\tgender as string,\n\t\thiredDate as date,\n\t\tlastModified as string,\n\t\tmiddleName as string,\n\t\torganization as (name as string, organizationId as string),\n\t\torganizationId as string,\n\t\tpaymentAccounts as (bankAccount as (accountName as string, accountNumber as integer, bsb as integer, reference as string), employeePaymentAccountId as string, paySplit as (amount as double, type as string), sortOrder as boolean)[],\n\t\tphoneNumbers as (type as string, value as string)[],\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpreferredName as string,\n\t\tstreetAddresses as (components as string, coordinate as string, countryCode as string, fullAddress as string, postCode as short, state as string, street as string, suburb as string, type as string)[],\n\t\tsuperAccounts as (ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, fundABN as long, fundESA as string, fundName as string, fundType as string, fundUSI as string, membershipNumber as string, smsfBankAccount as (accountName as string, accountNumber as integer, bsb as integer, reference as string))[],\n\t\tsuperContributions as (amount as double, ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, employeeSuperannuationContributionId as string, minimumAmount as string, payItemDescription as string, payItemId as string, valueType as string)[],\n\t\tsurname as string,\n\t\ttaxDeclaration as (australianResidentForTaxPurposes as boolean, canEdit as boolean, claimDependantsOrSpecialTaxOffset as boolean, claimMedicareLevyVariation as boolean, claimSeniorsPensionersOffset as boolean, claimTaxFreeThreshold as boolean, effectiveDate as string, employeeId as string, employeeTaxDeclarationId as string, financialSupplementDebt as boolean, helpDebt as boolean, lodgementDate as string, lodgementStatus as string, signatureDate as string, signaturePresent as string, taxFileNumber as integer, taxFileNumberExemption as string, workingHolidayMaker as boolean),\n\t\ttitle as string,\n\t\tusername as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 select(mapColumn(\n\t\tdateOfBirth,\n\t\temailAddress,\n\t\temployeeId,\n\t\temployeeNumber,\n\t\tfirstName,\n\t\tgender,\n\t\thiredDate,\n\t\tlastModified,\n\t\tmiddleName,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tpreferredName,\n\t\tsurname,\n\t\ttitle,\n\t\tusername,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+					"script": "source(output(\n\t\tdateOfBirth as date,\n\t\temailAddress as string,\n\t\temployeeId as string,\n\t\temployeeNumber as integer,\n\t\tfirstName as string,\n\t\tgender as string,\n\t\thiredDate as date,\n\t\tlastModified as string,\n\t\tmiddleName as string,\n\t\torganization as (name as string, organizationId as string),\n\t\torganizationId as string,\n\t\tpaymentAccounts as (bankAccount as (accountName as string, accountNumber as integer, bsb as integer, reference as string), employeePaymentAccountId as string, paySplit as (amount as double, type as string), sortOrder as boolean)[],\n\t\tphoneNumbers as (type as string, value as string)[],\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpreferredName as string,\n\t\tstreetAddresses as (components as string, coordinate as string, countryCode as string, fullAddress as string, postCode as short, state as string, street as string, suburb as string, type as string)[],\n\t\tsuperAccounts as (ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, fundABN as long, fundESA as string, fundName as string, fundType as string, fundUSI as string, membershipNumber as string, smsfBankAccount as (accountName as string, accountNumber as integer, bsb as integer, reference as string))[],\n\t\tsuperContributions as (amount as double, ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, employeeSuperannuationContributionId as string, minimumAmount as string, payItemDescription as string, payItemId as string, valueType as string)[],\n\t\tsurname as string,\n\t\ttaxDeclaration as (australianResidentForTaxPurposes as boolean, canEdit as boolean, claimDependantsOrSpecialTaxOffset as boolean, claimMedicareLevyVariation as boolean, claimSeniorsPensionersOffset as boolean, claimTaxFreeThreshold as boolean, effectiveDate as string, employeeId as string, employeeTaxDeclarationId as string, financialSupplementDebt as boolean, helpDebt as boolean, lodgementDate as string, lodgementStatus as string, signatureDate as string, signaturePresent as string, taxFileNumber as integer, taxFileNumberExemption as string, workingHolidayMaker as boolean),\n\t\ttitle as string,\n\t\tusername as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 select(mapColumn(\n\t\tdateOfBirth,\n\t\temailAddress,\n\t\temployeeId,\n\t\temployeeNumber,\n\t\tfirstName,\n\t\tgender,\n\t\thiredDate,\n\t\tlastModified,\n\t\tmiddleName,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tpreferredName,\n\t\tsurname,\n\t\ttitle,\n\t\tusername,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (\"ds_adls2_stnidoprodeastau100_log/definitiv.Employees\"),\n\ttransactionCommit: 'single',\n\treportSuccessOnError: true) ~> sink1"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
 		},
 		{
