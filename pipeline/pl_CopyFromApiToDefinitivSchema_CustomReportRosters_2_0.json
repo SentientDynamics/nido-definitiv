@@ -11,7 +11,7 @@
 				"typeProperties": {
 					"variableName": "varRosterStartDate",
 					"value": {
-						"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+						"value": "@formatDateTime(addDays(utcNow(), -7), 'yyyy-MM-dd')",
 						"type": "Expression"
 					}
 				}
