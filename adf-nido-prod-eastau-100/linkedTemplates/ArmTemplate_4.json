@@ -4041,36 +4041,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_B1_OrgPayRuns_ApiToDefinitiv')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_01_Payslips')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_01_Payslips_Master",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Hour",
-						"interval": 4,
-						"startTime": "2022-01-17T23:51:00",
-						"timeZone": "AUS Eastern Standard Time"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_01_Payslips_Master')]"
-			]
 		}
 	]
 }

@@ -1775,11 +1775,24 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "df_B1_Payslips_ApiToDefinitiv",
+								"referenceName": "df_TruncateInsertCustomReportPayslips",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"PipelineRunId": {
+										"value": "'@{pipeline().RunId}'",
+										"type": "Expression"
+									},
+									"PipelineTriggerTime": {
+										"value": "'@{pipeline().TriggerTime}'",
+										"type": "Expression"
+									},
+									"PipelineName": {
+										"value": "'@{pipeline().Pipeline}'",
+										"type": "Expression"
+									}
+								},
 								"datasetParameters": {
-									"SourceBlobDefinitivPayslips": {
+									"SourceApi": {
 										"ds_PipelineTriggerTime": {
 											"value": "@pipeline().TriggerTime",
 											"type": "Expression"
@@ -1801,15 +1814,12 @@
 											"type": "Expression"
 										}
 									},
-									"SourceSqlDefinitivPayslips": {
-										"ds_SchemaName": "definitiv",
-										"ds_TableName": "CustomReportPayslipsE"
-									},
-									"SinkSqlDefinitivPayslips": {
+									"sinkSql": {
 										"ds_SchemaName": "definitiv",
 										"ds_TableName": "CustomReportPayslipsE"
 									}
-								}
+								},
+								"linkedServiceParameters": {}
 							},
 							"staging": {},
 							"integrationRuntime": {
@@ -1871,7 +1881,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) from definitiv.CustomReportPayslipsD",
+								"sqlReaderQuery": "select count(*) from definitiv.CustomReportPayslipsE",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -1880,7 +1890,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"ds_SchemaName": "definitiv",
-									"ds_TableName": "CustomReportPayslipsD"
+									"ds_TableName": "CustomReportPayslipsE"
 								}
 							},
 							"firstRowOnly": false
@@ -4170,13 +4180,13 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "RosterStartDate",
+						"name": "TimesheetStartDate",
 						"description": "",
 						"type": "SetVariable",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
-							"variableName": "varRosterStartDate",
+							"variableName": "varTimesheetStartDate",
 							"value": {
 								"value": "@formatDateTime(addDays(utcNow(), -28), 'yyyy-MM-dd')",
 								"type": "Expression"
@@ -4184,13 +4194,13 @@
 						}
 					},
 					{
-						"name": "RosterFinishDate",
+						"name": "TimesheetFinishDate",
 						"description": "",
 						"type": "SetVariable",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
-							"variableName": "varRosterFinishDate",
+							"variableName": "varTimesheetFinishDate",
 							"value": {
 								"value": "@formatDateTime(addDays(utcNow(), 7), 'yyyy-MM-dd')",
 								"type": "Expression"
@@ -4202,13 +4212,13 @@
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "RosterStartDate",
+								"activity": "TimesheetStartDate",
 								"dependencyConditions": [
 									"Succeeded"
 								]
 							},
 							{
-								"activity": "RosterFinishDate",
+								"activity": "TimesheetFinishDate",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -4227,16 +4237,30 @@
 								"type": "RestSource",
 								"additionalColumns": [
 									{
-										"name": "CustomReportRosters.PipelineTriggerTime",
+										"name": "PipelineTriggerTime",
 										"value": {
 											"value": "@pipeline().TriggerTime",
 											"type": "Expression"
 										}
 									},
 									{
-										"name": "CustomReportRosters.PipelineRunId",
+										"name": "PipelineRunId",
 										"value": {
 											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "PipelineTimesheetStartDate",
+										"value": {
+											"value": "@variables('varTimesheetStartDate')",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "PipelineTimesheetEndDate",
+										"value": {
+											"value": "@variables('varTimesheetFinishDate')",
 											"type": "Expression"
 										}
 									}
@@ -4265,7 +4289,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"sourceRelativeUrl": {
-										"value": "@concat(\n'/api/custom-reports/9B394863-2B5E-4704-8AD4-82352C1111C1?organizationId=',\n'aaaaaaaa-bbbb-cccc-dddd-000000000000',\n'&startDate=', \nformatDateTime(variables('varRosterStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varRosterFinishDate'), 'yyyy-MM-dd')\n)",
+										"value": "@concat(\n'/api/custom-reports/9B394863-2B5E-4704-8AD4-82352C1111C1?organizationId=',\n'aaaaaaaa-bbbb-cccc-dddd-000000000000',\n'&startDate=', \nformatDateTime(variables('varTimesheetStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varTimesheetFinishDate'), 'yyyy-MM-dd')\n)",
 										"type": "Expression"
 									}
 								}
@@ -4367,10 +4391,10 @@
 					"cancelAfter": {}
 				},
 				"variables": {
-					"varRosterStartDate": {
+					"varTimesheetStartDate": {
 						"type": "String"
 					},
-					"varRosterFinishDate": {
+					"varTimesheetFinishDate": {
 						"type": "String"
 					}
 				},
