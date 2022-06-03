@@ -200,10 +200,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_B1_Payslips_ApiToDefinitiv",
+						"referenceName": "df_TruncateInsertCustomReportPayslips",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"SourceBlobDefinitivPayslips": {
+							"SourceApi": {
 								"ds_PipelineTriggerTime": {
 									"value": "@pipeline().TriggerTime",
 									"type": "Expression"
@@ -225,11 +225,7 @@
 									"type": "Expression"
 								}
 							},
-							"SourceSqlDefinitivPayslips": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportPayslipsE"
-							},
-							"SinkSqlDefinitivPayslips": {
+							"sinkSql": {
 								"ds_SchemaName": "definitiv",
 								"ds_TableName": "CustomReportPayslipsE"
 							}
@@ -294,7 +290,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) from definitiv.CustomReportPayslipsD",
+						"sqlReaderQuery": "select count(*) from definitiv.CustomReportPayslipsE",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -303,7 +299,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"ds_SchemaName": "definitiv",
-							"ds_TableName": "CustomReportPayslipsD"
+							"ds_TableName": "CustomReportPayslipsE"
 						}
 					},
 					"firstRowOnly": false
