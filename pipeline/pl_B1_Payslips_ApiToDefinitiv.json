@@ -276,15 +276,7 @@
 							"type": "Expression"
 						},
 						"DataflowActivityOutput": {
-							"value": "@activity('df_B1_Payslips_ApiToDefintiv').output",
-							"type": "Expression"
-						},
-						"PreRowCount": {
-							"value": "@activity('lookup_PreRowCount').output",
-							"type": "Expression"
-						},
-						"PostRowCount": {
-							"value": "@activity('lookup_PostRowCount').output",
+							"value": "@activity('df_Payslips').output",
 							"type": "Expression"
 						}
 					}
