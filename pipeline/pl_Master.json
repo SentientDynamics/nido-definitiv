@@ -28,10 +28,6 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationRosters",
-						"type": "PipelineReference"
-					},
 					"waitOnCompletion": true
 				}
 			},
@@ -48,10 +44,6 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportWages",
-						"type": "PipelineReference"
-					},
 					"waitOnCompletion": true
 				}
 			},

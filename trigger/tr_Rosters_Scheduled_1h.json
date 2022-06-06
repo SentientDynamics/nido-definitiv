@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_CustomReportRosters_2_0",
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_Rosters",
 					"type": "PipelineReference"
 				}
 			}
