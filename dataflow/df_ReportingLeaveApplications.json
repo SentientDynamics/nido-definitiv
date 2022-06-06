@@ -24,12 +24,8 @@
 					"name": "sink1"
 				}
 			],
-			"transformations": [
-				{
-					"name": "Flatten1"
-				}
-			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine',\n\twildcardPaths:['ReportingLeaveApplications']) ~> source1\nsource1 foldDown(unroll(reportData),\n\tmapColumn(\n\t\tapprovers = reportData.approvers,\n\t\tdateSubmitted = reportData.dateSubmitted,\n\t\temployeeId = reportData.employeeId,\n\t\temployeeNumber = reportData.employeeNumber,\n\t\tfirstName = reportData.firstName,\n\t\tgender = reportData.gender,\n\t\tleaveAppNumDays = reportData.leaveAppNumDays,\n\t\tleaveApplicationId = reportData.leaveApplicationId,\n\t\tleaveDateEnd = reportData.leaveDateEnd,\n\t\tleaveDateStart = reportData.leaveDateStart,\n\t\tleaveNotes = reportData.leaveNotes,\n\t\tleavePaymentStatus = reportData.leavePaymentStatus,\n\t\tleaveReasonName = reportData.leaveReasonName,\n\t\tleaveTypeId = reportData.leaveTypeId,\n\t\tleaveTypeName = reportData.leaveTypeName,\n\t\tleaveUnitOfMeasure = reportData.leaveUnitOfMeasure,\n\t\tleaveUnits = reportData.leaveUnits,\n\t\tprintName = reportData.printName,\n\t\tstatus = reportData.status,\n\t\tsurname = reportData.surname\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> Flatten1\nFlatten1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tpartitionBy('hash', 1),\n\tpreCommands: [],\n\tpostCommands: []) ~> sink1"
+			"transformations": [],
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine',\n\twildcardPaths:['ReportingLeaveApplications']) ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError',\n\tpartitionBy('hash', 1),\n\tpreCommands: [],\n\tpostCommands: []) ~> sink1"
 		}
 	}
 }
