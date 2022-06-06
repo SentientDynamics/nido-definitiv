@@ -1,5 +1,5 @@
 {
-	"name": "pl_CopyFromApiToDefinitivSchema_CustomReportTimesheets_2_0",
+	"name": "pl_CopyFromApiToDefinitivSchema_Timesheets",
 	"properties": {
 		"activities": [
 			{
@@ -31,7 +31,7 @@
 				}
 			},
 			{
-				"name": "CopyToJson_CustomReportRosters_copy2",
+				"name": "ApiToJson",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -48,7 +48,7 @@
 					}
 				],
 				"policy": {
-					"timeout": "7.00:00:00",
+					"timeout": "0.01:00:00",
 					"retry": 0,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -112,7 +112,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"sourceRelativeUrl": {
-								"value": "@concat(\n'/api/custom-reports/9B394863-2B5E-4704-8AD4-82352C1111C1?organizationId=',\n'aaaaaaaa-bbbb-cccc-dddd-000000000000',\n'&startDate=', \nformatDateTime(variables('varTimesheetStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varTimesheetFinishDate'), 'yyyy-MM-dd')\n)",
+								"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Timesheets,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=', \nformatDateTime(variables('varTimesheetStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varTimesheetFinishDate'), 'yyyy-MM-dd')\n)",
 								"type": "Expression"
 							}
 						}
@@ -148,11 +148,11 @@
 				]
 			},
 			{
-				"name": "df_UpdateCustomReportRosters",
+				"name": "df_Timesheets",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "CopyToJson_CustomReportRosters_copy2",
+						"activity": "ApiToJson",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -168,7 +168,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_UpdateCusomReportTimesheets_2_1",
+						"referenceName": "df_Timesheets",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"SourceBlobDefinitiv": {
@@ -194,8 +194,14 @@
 								}
 							},
 							"SinkSqlDefintiv": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportTimesheetsD"
+								"ds_SchemaName": {
+									"value": "@pipeline().parameters.param_Schema",
+									"type": "Expression"
+								},
+								"ds_TableName": {
+									"value": "@pipeline().parameters.param_Table",
+									"type": "Expression"
+								}
 							}
 						}
 					},
@@ -207,6 +213,16 @@
 				}
 			}
 		],
+		"parameters": {
+			"param_Schema": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"param_Table": {
+				"type": "string",
+				"defaultValue": "CustomReportTimesheetsD"
+			}
+		},
 		"variables": {
 			"varTimesheetStartDate": {
 				"type": "String"
