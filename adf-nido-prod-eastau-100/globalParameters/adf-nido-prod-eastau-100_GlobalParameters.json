@@ -22,5 +22,29 @@
 	"global_logic_Monitoring_SAS": {
 		"type": "string",
 		"value": "?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE"
+	},
+	"global_adls2_SqlErrorRowDirectory": {
+		"type": "string",
+		"value": "ErrorRows"
+	},
+	"global_CustomReportId_Timesheets": {
+		"type": "string",
+		"value": "9B394863-2B5E-4704-8AD4-82352C1111C1"
+	},
+	"global_CustomReportId_Rosters": {
+		"type": "string",
+		"value": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+	},
+	"global_CustomReportId_Payslips": {
+		"type": "string",
+		"value": "global_CustomReportId_Payslips"
+	},
+	"global_CustomReportId_Wages": {
+		"type": "string",
+		"value": "16F9B79E-D95C-4759-B5BE-A8EE599E777D"
+	},
+	"global_CustomReportId_GenericOrgId": {
+		"type": "string",
+		"value": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
 	}
 }

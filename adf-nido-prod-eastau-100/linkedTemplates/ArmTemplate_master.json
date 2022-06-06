@@ -23,6 +23,78 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
 		},
+		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Schema": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Table": {
+			"type": "string",
+			"defaultValue": "Organizations"
+		},
+		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "OrganizationPayRuns"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
+			"type": "string",
+			"defaultValue": "container-adf-nido-prod-eastau-100-1"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_InputDirectory_Json_value": {
+			"type": "string",
+			"defaultValue": "ds_adls2_stnidoprodeastau100_json_input"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_OutputDirectory_Json_value": {
+			"type": "string",
+			"defaultValue": "ds_adls2_stnidoprodeastau100_json_output"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_LogDirectory_value": {
+			"type": "string",
+			"defaultValue": "ds_adls2_stnidoprodeastau100_log"
+		},
+		"dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value": {
+			"type": "string",
+			"defaultValue": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke/PipelineRunId/"
+		},
+		"dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value": {
+			"type": "string",
+			"defaultValue": "?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value": {
+			"type": "string",
+			"defaultValue": "ErrorRows"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Timesheets_value": {
+			"type": "string",
+			"defaultValue": "9B394863-2B5E-4704-8AD4-82352C1111C1"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value": {
+			"type": "string",
+			"defaultValue": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value": {
+			"type": "string",
+			"defaultValue": "global_CustomReportId_Payslips"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Wages_value": {
+			"type": "string",
+			"defaultValue": "16F9B79E-D95C-4759-B5BE-A8EE599E777D"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value": {
+			"type": "string",
+			"defaultValue": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+		},
+		"dataFactory_location": {
+			"type": "string",
+			"defaultValue": "australiaeast"
+		},
+		"dataFactory_identity_type": {
+			"type": "string",
+			"defaultValue": "SystemAssigned"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -52,6 +124,48 @@
 					},
 					"ls_sql_tnk001_connectionString": {
 						"value": "[parameters('ls_sql_tnk001_connectionString')]"
+					},
+					"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_FileSystem_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_adls2_InputDirectory_Json_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_InputDirectory_Json_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_adls2_OutputDirectory_Json_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_OutputDirectory_Json_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_adls2_LogDirectory_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_LogDirectory_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_CustomReportId_Timesheets_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Timesheets_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_CustomReportId_Wages_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Wages_value')]"
+					},
+					"dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value": {
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value')]"
+					},
+					"dataFactory_location": {
+						"value": "[parameters('dataFactory_location')]"
+					},
+					"dataFactory_identity_type": {
+						"value": "[parameters('dataFactory_identity_type')]"
 					},
 					"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
 						"value": "[parameters('ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl')]"
@@ -139,6 +253,18 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Schema": {
+						"value": "[parameters('tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Schema')]"
+					},
+					"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Table": {
+						"value": "[parameters('tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Table')]"
+					},
+					"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]"
+					},
+					"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
+						"value": "[parameters('tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName')]"
 					}
 				}
 			},

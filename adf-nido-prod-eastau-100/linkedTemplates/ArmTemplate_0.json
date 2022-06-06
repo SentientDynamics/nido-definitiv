@@ -11,6 +11,62 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sql_tnk001'"
 		},
+		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
+			"type": "string",
+			"defaultValue": "container-adf-nido-prod-eastau-100-1"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_InputDirectory_Json_value": {
+			"type": "string",
+			"defaultValue": "ds_adls2_stnidoprodeastau100_json_input"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_OutputDirectory_Json_value": {
+			"type": "string",
+			"defaultValue": "ds_adls2_stnidoprodeastau100_json_output"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_LogDirectory_value": {
+			"type": "string",
+			"defaultValue": "ds_adls2_stnidoprodeastau100_log"
+		},
+		"dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value": {
+			"type": "string",
+			"defaultValue": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke/PipelineRunId/"
+		},
+		"dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value": {
+			"type": "string",
+			"defaultValue": "?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value": {
+			"type": "string",
+			"defaultValue": "ErrorRows"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Timesheets_value": {
+			"type": "string",
+			"defaultValue": "9B394863-2B5E-4704-8AD4-82352C1111C1"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value": {
+			"type": "string",
+			"defaultValue": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value": {
+			"type": "string",
+			"defaultValue": "global_CustomReportId_Payslips"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Wages_value": {
+			"type": "string",
+			"defaultValue": "16F9B79E-D95C-4759-B5BE-A8EE599E777D"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value": {
+			"type": "string",
+			"defaultValue": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+		},
+		"dataFactory_location": {
+			"type": "string",
+			"defaultValue": "australiaeast"
+		},
+		"dataFactory_identity_type": {
+			"type": "string",
+			"defaultValue": "SystemAssigned"
+		},
 		"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://kv-nido-prod-eastau-100.vault.azure.net/"
@@ -28,6 +84,68 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[parameters('factoryName')]",
+			"type": "Microsoft.DataFactory/factories",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"globalParameters": {
+					"global_adls2_FileSystem": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_FileSystem_value')]"
+					},
+					"global_adls2_InputDirectory_Json": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_InputDirectory_Json_value')]"
+					},
+					"global_adls2_OutputDirectory_Json": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_OutputDirectory_Json_value')]"
+					},
+					"global_adls2_LogDirectory": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_LogDirectory_value')]"
+					},
+					"global_logic_Monitoring_baseUrl": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value')]"
+					},
+					"global_logic_Monitoring_SAS": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value')]"
+					},
+					"global_adls2_SqlErrorRowDirectory": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value')]"
+					},
+					"global_CustomReportId_Timesheets": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Timesheets_value')]"
+					},
+					"global_CustomReportId_Rosters": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value')]"
+					},
+					"global_CustomReportId_Payslips": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value')]"
+					},
+					"global_CustomReportId_Wages": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Wages_value')]"
+					},
+					"global_CustomReportId_GenericOrgId": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value')]"
+					}
+				}
+			},
+			"dependsOn": [],
+			"location": "[parameters('dataFactory_location')]",
+			"identity": {
+				"type": "[parameters('dataFactory_identity_type')]"
+			}
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_keyvault_kvnidoprodeastau100')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -418,7 +536,7 @@
 				},
 				"parameters": {
 					"ds_PipelineTriggerTime": {
-						"type": "object",
+						"type": "string",
 						"defaultValue": "2022-01-25T00:18:17.611502Z"
 					},
 					"ds_PipelineRunId": {
@@ -2495,448 +2613,6 @@
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-01-17T01:49:18Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_A2_Payslips_ArchiveToDraftStaging')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "Copy tnk_001.dbo.* to tnk_001.draft",
-				"activities": [
-					{
-						"name": "CopyArchiveToStaging",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"additionalColumns": [
-									{
-										"name": "RecordCreatedDate",
-										"value": {
-											"value": "@formatDateTime(pipeline().TriggerTime, 'yyyy-MM-dd')",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "RecordModifiedDate",
-										"value": {
-											"value": "@formatDateTime(pipeline().TriggerTime, 'yyyy-MM-dd')",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "PipelineTriggerTime",
-										"value": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "PipelineRunId",
-										"value": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										}
-									}
-								],
-								"queryTimeout": "05:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"enableSkipIncompatibleRow": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "RecordCreatedDate"
-										},
-										"sink": {
-											"name": "RecordCreatedDate",
-											"type": "DateTime",
-											"physicalType": "datetime2"
-										}
-									},
-									{
-										"source": {
-											"name": "RecordModifiedDate"
-										},
-										"sink": {
-											"name": "RecordModifiedDate",
-											"type": "DateTime",
-											"physicalType": "datetime2"
-										}
-									},
-									{
-										"source": {
-											"name": "PipelineRunId"
-										},
-										"sink": {
-											"name": "PipelineRunId",
-											"type": "Guid",
-											"physicalType": "uniqueidentifier"
-										}
-									},
-									{
-										"source": {
-											"name": "PipelineTriggerTime"
-										},
-										"sink": {
-											"name": "PipelineTriggerTime",
-											"type": "DateTimeOffset",
-											"physicalType": "datetimeoffset"
-										}
-									},
-									{
-										"source": {
-											"name": "Payslip Number",
-											"type": "String",
-											"physicalType": "varchar"
-										},
-										"sink": {
-											"name": "PayslipNumber",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Base Rate",
-											"type": "Double",
-											"physicalType": "float"
-										},
-										"sink": {
-											"name": "BaseRate",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "Department Code",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "DepartmentCode",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Employment Type Code",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "EmploymentTypeCode",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Employment Type Code Desc",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "EmploymentTypeCodeDesc",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "First Name",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "FirstName",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Hours or A/D Code",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "HoursOrADCode",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Hours or A/D Code Desc",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "HoursOrADCodeDesc",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "ID Number",
-											"type": "Double",
-											"physicalType": "float"
-										},
-										"sink": {
-											"name": "IdNumber",
-											"type": "Int32",
-											"physicalType": "int"
-										}
-									},
-									{
-										"source": {
-											"name": "Level 1 Code",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "Level1Code",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Level 2 Code",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "Level2Code",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Number of Units",
-											"type": "Double",
-											"physicalType": "float"
-										},
-										"sink": {
-											"name": "NumberOfUnits",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "Pay Date",
-											"type": "DateTime",
-											"physicalType": "datetime"
-										},
-										"sink": {
-											"name": "PayDate",
-											"type": "DateTime",
-											"physicalType": "date"
-										}
-									},
-									{
-										"source": {
-											"name": "Pay Method Code",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "PayMethodCode",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Pay Method Code Desc",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "PayMethodCodeDesc",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Period Ending Date",
-											"type": "DateTime",
-											"physicalType": "datetime"
-										},
-										"sink": {
-											"name": "PeriodEndingDate",
-											"type": "DateTime",
-											"physicalType": "date"
-										}
-									},
-									{
-										"source": {
-											"name": "Period Start Date",
-											"type": "DateTime",
-											"physicalType": "datetime"
-										},
-										"sink": {
-											"name": "PeriodStartDate",
-											"type": "DateTime",
-											"physicalType": "date"
-										}
-									},
-									{
-										"source": {
-											"name": "Position Title",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "PositionTitle",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "projectCode",
-											"type": "String",
-											"physicalType": "varchar"
-										},
-										"sink": {
-											"name": "ProjectCode",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Rate",
-											"type": "Double",
-											"physicalType": "float"
-										},
-										"sink": {
-											"name": "Rate",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									},
-									{
-										"source": {
-											"name": "Surname",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"name": "Surname",
-											"type": "String",
-											"physicalType": "varchar"
-										}
-									},
-									{
-										"source": {
-											"name": "Value",
-											"type": "Double",
-											"physicalType": "float"
-										},
-										"sink": {
-											"name": "Value",
-											"type": "Double",
-											"physicalType": "float"
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": false,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": {
-										"value": "@pipeline().parameters.sourceSqlSchema",
-										"type": "Expression"
-									},
-									"ds_TableName": {
-										"value": "@pipeline().parameters.sourceSqlTable",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": {
-										"value": "@pipeline().parameters.sinkSqlSchema",
-										"type": "Expression"
-									},
-									"ds_TableName": {
-										"value": "@pipeline().parameters.sinkSqlTable",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"sourceSqlSchema": {
-						"type": "string",
-						"defaultValue": "archive"
-					},
-					"sourceSqlTable": {
-						"type": "string",
-						"defaultValue": "Preceda_Payslip_2"
-					},
-					"sinkSqlSchema": {
-						"type": "string",
-						"defaultValue": "draft"
-					},
-					"sinkSqlTable": {
-						"type": "string",
-						"defaultValue": "StagingPrecedaPayslips"
-					}
-				},
-				"folder": {
-					"name": "01_Payslips"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-16T04:59:58Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"

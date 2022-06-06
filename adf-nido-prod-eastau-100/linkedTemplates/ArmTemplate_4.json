@@ -6,6 +6,22 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
+		},
+		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Schema": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Table": {
+			"type": "string",
+			"defaultValue": "Organizations"
+		},
+		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "OrganizationPayRuns"
 		}
 	},
 	"variables": {
@@ -13,7 +29,7 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_CustomReportWages_A')]",
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_CustomReportWages')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -224,6 +240,624 @@
 								},
 								"datasetParameters": {
 									"sourceApi": {},
+									"sourceSql": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportWagesA"
+									},
+									"sink1": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportWagesA"
+									}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine",
+							"runConcurrently": true,
+							"continueOnError": true
+						}
+					},
+					{
+						"name": "CopyToCsv1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "df_UpdateCusomReportWagesA",
+								"dependencyConditions": [
+									"Succeeded",
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_SchemaName": "definitiv",
+									"ds_TableName": "CustomReportWages"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_stnidoprodeastau100_csv",
+								"type": "DatasetReference",
+								"parameters": {
+									"schemaName": "definitiv",
+									"tableName": "CustomReportWages",
+									"pipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"pipelineTriggerTime": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "df_UpdateDraftWages",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "df_UpdateCusomReportWagesA",
+								"dependencyConditions": [
+									"Succeeded",
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_UpdateDraftWages",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportWagesA"
+									},
+									"sink1": {
+										"ds_SchemaName": "draft",
+										"ds_TableName": "PreceedaWages"
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 16,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "CopyToCsv2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "df_UpdateDraftWages",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_SchemaName": "draft",
+									"ds_TableName": "PreceedaWages"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_stnidoprodeastau100_csv",
+								"type": "DatasetReference",
+								"parameters": {
+									"schemaName": "draft",
+									"tableName": "PreceedaWages",
+									"pipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"pipelineTriggerTime": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "df_UpdateCusomReportWagesB",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_TruncateInsertCusomReportWages",
+								"type": "DataFlowReference",
+								"parameters": {
+									"pipelineRunId": {
+										"value": "'@{pipeline().RunId}'",
+										"type": "Expression"
+									},
+									"pipelineTriggerTime": {
+										"value": "'@{pipeline().TriggerTime}'",
+										"type": "Expression"
+									}
+								},
+								"datasetParameters": {
+									"sourceApi": {},
+									"sink1": {
+										"ds_SchemaName": "definitiv",
+										"ds_TableName": "CustomReportWagesB"
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 32,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine",
+							"runConcurrently": true,
+							"continueOnError": true
+						}
+					},
+					{
+						"name": "CopyToCsv3",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "df_UpdateCusomReportWagesB",
+								"dependencyConditions": [
+									"Succeeded",
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_SchemaName": "definitiv",
+									"ds_TableName": "CustomReportWagesB"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_stnidoprodeastau100_csv",
+								"type": "DatasetReference",
+								"parameters": {
+									"schemaName": "definitiv",
+									"tableName": "CustomReportWagesB",
+									"pipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"pipelineTriggerTime": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "SetPipelineTriggerTime",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineTriggerTime",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.MasterPipelineTriggerTime,pipeline().TriggerTime)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "SetPipelineRunId",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "PipelineRunId",
+							"value": {
+								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"MasterPipelineTriggerTime": {
+						"type": "string"
+					},
+					"MasterPipelineRunId": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"PipelineTriggerTime": {
+						"type": "String"
+					},
+					"PipelineRunId": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "02_Wages"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_CustomReportWages_A')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "SetPipelineTriggerTime",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "SetPipelineRunId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select organizationId, payrunId, periodStart, periodEnd from definitiv.OrganizationPayRuns",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_SchemaName": "definitiv",
+									"ds_TableName": "OrganizationPayRuns"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "CopyToJson",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "payRunOrganizationId",
+													"value": {
+														"value": "@item().organizationId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "payRunPayRunId",
+													"value": {
+														"value": "@item().payRunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "pipelineRunId",
+													"value": {
+														"value": "@pipeline().RunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "pipelineTriggerTime",
+													"value": {
+														"value": "@pipeline().TriggerTime",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "payRunPeriodStartDate",
+													"value": {
+														"value": "@formatDateTime(item().periodStart, 'yyyy-MM-dd')",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "payRunPeriodEndDate",
+													"value": {
+														"value": "@formatDateTime(item().periodEnd, 'yyyy-MM-dd')",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat('/api/custom-reports/16F9B79E-D95C-4759-B5BE-A8EE599E777D?organizationId=',item().organizationId,'&selectedPayRunId=',item().payRunId,'&startDate=',formatDateTime(item().periodStart, 'yyyy-MM-dd'),'&endDate=', formatDateTime(item().periodEnd, 'yyyy-MM-dd'))",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@variables('PipelineTriggerTime')",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@variables('PipelineRunId')",
+													"type": "Expression"
+												},
+												"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+												"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+												"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "df_UpdateCusomReportWagesA",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_UpdateCusomReportWages",
+								"type": "DataFlowReference",
+								"parameters": {
+									"pipelineRunId": {
+										"value": "'@{pipeline().RunId}'",
+										"type": "Expression"
+									},
+									"pipelineTriggerTime": {
+										"value": "'@{pipeline().TriggerTime}'",
+										"type": "Expression"
+									}
+								},
+								"datasetParameters": {
+									"sourceApi": {
+										"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
+										"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
+										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+										"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+									},
 									"sourceSql": {
 										"ds_SchemaName": "definitiv",
 										"ds_TableName": "CustomReportWagesD"
@@ -775,22 +1409,9 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup1",
+						"name": "Organizations",
 						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "SetPipelineTriggerTime",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "SetPipelineRunId",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -818,11 +1439,11 @@
 						}
 					},
 					{
-						"name": "ForEach1",
+						"name": "Organization",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Lookup1",
+								"activity": "Organizations",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -831,17 +1452,17 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Lookup1').output.value",
+								"value": "@activity('Organizations').output.value",
 								"type": "Expression"
 							},
 							"isSequential": false,
 							"activities": [
 								{
-									"name": "CopyToJson1",
+									"name": "ApiToJson",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
-										"timeout": "7.00:00:00",
+										"timeout": "0.01:00:00",
 										"retry": 0,
 										"retryIntervalInSeconds": 30,
 										"secureOutput": false,
@@ -853,30 +1474,44 @@
 											"type": "RestSource",
 											"additionalColumns": [
 												{
-													"name": "organizationId",
+													"name": "Org.OrganizationId",
 													"value": {
 														"value": "@item().organizationId",
 														"type": "Expression"
 													}
 												},
 												{
-													"name": "pipelineTriggerTime",
-													"value": {
-														"value": "@variables('PipelineRunId')",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "pipelineRunId",
-													"value": {
-														"value": "@variables('PipelineRunId')",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "legalName",
+													"name": "Org.LegalName",
 													"value": {
 														"value": "@item().legalName",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineName",
+													"value": {
+														"value": "@pipeline().Pipeline",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineRunId",
+													"value": {
+														"value": "@pipeline().RunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineTriggerTime",
+													"value": {
+														"value": "@pipeline().TriggerTime",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineTriggerId",
+													"value": {
+														"value": "@pipeline().TriggerId",
 														"type": "Expression"
 													}
 												}
@@ -913,20 +1548,29 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
-													"value": "@variables('PipelineTriggerTime')",
+													"value": "@pipeline().TriggerTime",
 													"type": "Expression"
 												},
 												"ds_PipelineRunId": {
-													"value": "@variables('PipelineRunId')",
+													"value": "@pipeline().RunId",
 													"type": "Expression"
 												},
-												"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-												"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
-												"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
 											}
 										}
 									]
@@ -935,11 +1579,11 @@
 						}
 					},
 					{
-						"name": "df_FlattenPayRuns",
+						"name": "df_OrgPayRuns",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "ForEach1",
+								"activity": "Organization",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -955,20 +1599,50 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "df_FlattenOrgPayRuns_UpdateOrgPayRuns",
+								"referenceName": "df_OrgPayRuns",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"param_FileSystem": {
+										"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+										"type": "Expression"
+									},
+									"param_ErrorRowDirectory": {
+										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+										"type": "Expression"
+									}
+								},
 								"datasetParameters": {
 									"SourceBlobDefinitivPayRuns": {
-										"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
-										"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
-										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
-										"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
 									},
 									"SinkSqlDefinitiv": {
-										"ds_SchemaName": "adf",
-										"ds_TableName": "Parameters"
+										"ds_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemaName",
+											"type": "Expression"
+										},
+										"ds_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -979,104 +1653,6 @@
 							},
 							"traceLevel": "Fine"
 						}
-					},
-					{
-						"name": "CopyToCsv",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "df_FlattenPayRuns",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".csv"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "OrganizationPayRuns"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_adls2_stnidoprodeastau100_csv",
-								"type": "DatasetReference",
-								"parameters": {
-									"schemaName": "definitiv",
-									"tableName": "OrganizationPayRuns",
-									"pipelineRunId": {
-										"value": "@pipeline().RunId",
-										"type": "Expression"
-									},
-									"pipelineTriggerTime": "@pipeline().TriggerTime"
-								}
-							}
-						]
-					},
-					{
-						"name": "SetPipelineTriggerTime",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "PipelineTriggerTime",
-							"value": {
-								"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "SetPipelineRunId",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "PipelineRunId",
-							"value": {
-								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
-								"type": "Expression"
-							}
-						}
 					}
 				],
 				"policy": {
@@ -1084,19 +1660,13 @@
 					"cancelAfter": {}
 				},
 				"parameters": {
-					"MasterPipelineTriggerTime": {
-						"type": "string"
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "definitiv"
 					},
-					"MasterPipelineRunId": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"PipelineTriggerTime": {
-						"type": "String"
-					},
-					"PipelineRunId": {
-						"type": "String"
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "OrganizationPayRuns"
 					}
 				},
 				"folder": {
@@ -1984,7 +2554,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "df_UpdateOrganizations",
+						"name": "df_Organizations",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -2004,9 +2574,18 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "df_UpdateOrganizations",
+								"referenceName": "df_Organizations",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"param_FileSystem": {
+										"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+										"type": "Expression"
+									},
+									"param_ErrorRowDirectory": {
+										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+										"type": "Expression"
+									}
+								},
 								"datasetParameters": {
 									"SourceBlobDefinitiv": {
 										"ds_PipelineTriggerTime": {
@@ -2031,8 +2610,14 @@
 										}
 									},
 									"SinkSqlDefinitiv": {
-										"ds_SchemaName": "definitiv",
-										"ds_TableName": "Organizations"
+										"ds_SchemaName": {
+											"value": "@pipeline().parameters.param_Schema",
+											"type": "Expression"
+										},
+										"ds_TableName": {
+											"value": "@pipeline().parameters.param_Table",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2068,7 +2653,7 @@
 									"type": "Expression"
 								},
 								"DataflowActivityOutput": {
-									"value": "@activity('df_UpdateOrganizations').output",
+									"value": "@activity('df_Organizations').output",
 									"type": "Expression"
 								},
 								"PreRowCount": {
@@ -2117,7 +2702,7 @@
 						"type": "Lookup",
 						"dependsOn": [
 							{
-								"activity": "df_UpdateOrganizations",
+								"activity": "df_Organizations",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -2254,6 +2839,16 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"parameters": {
+					"param_Schema": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_Table": {
+						"type": "string",
+						"defaultValue": "Organizations"
+					}
 				},
 				"folder": {
 					"name": "08_Organizations"
@@ -2410,7 +3005,10 @@
 												"ds_PipelineRunId": {
 													"value": "@variables('PipelineRunId')",
 													"type": "Expression"
-												}
+												},
+												"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+												"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+												"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
 											}
 										}
 									]
@@ -2974,713 +3572,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_B1_OrgPayRuns_ApiToDefinitiv')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "LookupOrganizations",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select organizationId, legalName from definitiv.Organizations",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "Organizations"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "LookupOrganizations",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "lookup_PreRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('LookupOrganizations').output.value",
-								"type": "Expression"
-							},
-							"isSequential": false,
-							"activities": [
-								{
-									"name": "CopyToJson1",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "RestSource",
-											"additionalColumns": [
-												{
-													"name": "Org.OrganizationId",
-													"value": {
-														"value": "@item().organizationId",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "OrgPayRun.PipelineTriggerTime",
-													"value": {
-														"value": "@pipeline().TriggerTime",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "OrgPayRun.PipelineRunId",
-													"value": {
-														"value": "@pipeline().RunId",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "Org.LegalName",
-													"value": {
-														"value": "@item().legalName",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "OrgPayRun.PipelineName",
-													"value": {
-														"value": "@pipeline().Pipeline",
-														"type": "Expression"
-													}
-												}
-											],
-											"httpRequestTimeout": "00:01:40",
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET"
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false,
-										"logSettings": {
-											"enableCopyActivityLog": true,
-											"copyActivityLogSettings": {
-												"logLevel": "Info",
-												"enableReliableLogging": true
-											},
-											"logLocationSettings": {
-												"linkedServiceName": {
-													"referenceName": "ls_adls2_stnidoprodeastau100",
-													"type": "LinkedServiceReference"
-												},
-												"path": {
-													"value": "@concat(\n    pipeline().globalParameters.global_adls2_FileSystem,\n    '/',\n    pipeline().globalParameters.global_adls2_LogDirectory\n)",
-													"type": "Expression"
-												}
-											}
-										},
-										"translator": {
-											"type": "TabularTranslator",
-											"mappings": [
-												{
-													"source": {
-														"path": "[['payRunId']"
-													},
-													"sink": {
-														"path": "payRunId"
-													}
-												},
-												{
-													"source": {
-														"path": "[['runNumber']"
-													},
-													"sink": {
-														"path": "runNumber"
-													}
-												},
-												{
-													"source": {
-														"path": "[['status']"
-													},
-													"sink": {
-														"path": "status"
-													}
-												},
-												{
-													"source": {
-														"path": "[['payslipGenerationStatus']"
-													},
-													"sink": {
-														"path": "payslipGenerationStatus"
-													}
-												},
-												{
-													"source": {
-														"path": "[['lodgementStatus']"
-													},
-													"sink": {
-														"path": "lodgementStatus"
-													}
-												},
-												{
-													"source": {
-														"path": "[['eofyLodgementStatus']"
-													},
-													"sink": {
-														"path": "eofyLodgementStatus"
-													}
-												},
-												{
-													"source": {
-														"path": "[['type']"
-													},
-													"sink": {
-														"path": "type"
-													}
-												},
-												{
-													"source": {
-														"path": "[['dateOpened']"
-													},
-													"sink": {
-														"path": "dateOpened"
-													}
-												},
-												{
-													"source": {
-														"path": "[['dateLastCalculated']"
-													},
-													"sink": {
-														"path": "dateLastCalculated"
-													}
-												},
-												{
-													"source": {
-														"path": "[['datePublished']"
-													},
-													"sink": {
-														"path": "datePublished"
-													}
-												},
-												{
-													"source": {
-														"path": "[['periodStart']"
-													},
-													"sink": {
-														"path": "periodStart"
-													}
-												},
-												{
-													"source": {
-														"path": "[['periodEnd']"
-													},
-													"sink": {
-														"path": "periodEnd"
-													}
-												},
-												{
-													"source": {
-														"path": "[['paymentDate']"
-													},
-													"sink": {
-														"path": "paymentDate"
-													}
-												},
-												{
-													"source": {
-														"path": "[['superannuationPaymentDate']"
-													},
-													"sink": {
-														"path": "superannuationPaymentDate"
-													}
-												},
-												{
-													"source": {
-														"path": "[['initiatingUserId']"
-													},
-													"sink": {
-														"path": "initiatingUserId"
-													}
-												},
-												{
-													"source": {
-														"path": "[['publishingUserId']"
-													},
-													"sink": {
-														"path": "publishingUserId"
-													}
-												},
-												{
-													"source": {
-														"path": "[['initiatingUserName']"
-													},
-													"sink": {
-														"path": "initiatingUserName"
-													}
-												},
-												{
-													"source": {
-														"path": "[['publishingUserName']"
-													},
-													"sink": {
-														"path": "publishingUserName"
-													}
-												},
-												{
-													"source": {
-														"path": "[['employeeCount']"
-													},
-													"sink": {
-														"path": "employeeCount"
-													}
-												},
-												{
-													"source": {
-														"path": "[['notes']"
-													},
-													"sink": {
-														"path": "notes"
-													}
-												},
-												{
-													"source": {
-														"path": "[['payCalendarId']"
-													},
-													"sink": {
-														"path": "payCalendarId"
-													}
-												},
-												{
-													"source": {
-														"path": "[['payCalendarName']"
-													},
-													"sink": {
-														"path": "payCalendarName"
-													}
-												},
-												{
-													"source": {
-														"path": "[['financialYearStartDate']"
-													},
-													"sink": {
-														"path": "financialYearStartDate"
-													}
-												},
-												{
-													"source": {
-														"path": "[['financialYearEndDate']"
-													},
-													"sink": {
-														"path": "financialYearEndDate"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['payCalendarId']"
-													},
-													"sink": {
-														"path": "PayCalendar.payCalendarId"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['description']"
-													},
-													"sink": {
-														"path": "PayCalendar.description"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['weeklyFactorEquation']"
-													},
-													"sink": {
-														"path": "PayCalendar.weeklyFactorEquation"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['weeklyFactor']"
-													},
-													"sink": {
-														"path": "PayCalendar.weeklyFactor"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['period']"
-													},
-													"sink": {
-														"path": "PayCalendar.period"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['periodStartDate']"
-													},
-													"sink": {
-														"path": "PayCalendar.periodStartDate"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['proRataMode']"
-													},
-													"sink": {
-														"path": "PayCalendar.proRataMode"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['atoLodgementsEnabled']"
-													},
-													"sink": {
-														"path": "PayCalendar.atoLodgementsEnabled"
-													}
-												},
-												{
-													"source": {
-														"path": "$['currentFinancialYearStartDate']"
-													},
-													"sink": {
-														"path": "currentFinancialYearStartDate"
-													}
-												},
-												{
-													"source": {
-														"path": "$['currentFinancialYearEndDate']"
-													},
-													"sink": {
-														"path": "currentFinancialYearEndDate"
-													}
-												},
-												{
-													"source": {
-														"path": "$['Org.OrganizationId']"
-													},
-													"sink": {
-														"path": "Org.OrganizationId"
-													}
-												},
-												{
-													"source": {
-														"path": "$['OrgPayRun.PipelineTriggerTime']"
-													},
-													"sink": {
-														"path": "OrgPayRun.PipelineTriggerTime"
-													}
-												},
-												{
-													"source": {
-														"path": "$['OrgPayRun.PipelineRunId']"
-													},
-													"sink": {
-														"path": "OrgPayRun.PipelineRunId"
-													}
-												},
-												{
-													"source": {
-														"path": "$['Org.LegalName']"
-													},
-													"sink": {
-														"path": "Org.LegalName"
-													}
-												},
-												{
-													"source": {
-														"path": "$['OrgPayRun.PipelineName']"
-													},
-													"sink": {
-														"path": "OrgPayRun.PipelineName"
-													}
-												}
-											],
-											"collectionReference": "$['payRuns']"
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_rest_definitiv",
-											"type": "DatasetReference",
-											"parameters": {
-												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId, '/pay-runs')",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-											"type": "DatasetReference",
-											"parameters": {
-												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
-													"type": "Expression"
-												},
-												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
-													"type": "Expression"
-												},
-												"ds_FileSystem": {
-													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-													"type": "Expression"
-												},
-												"ds_Directory": {
-													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-													"type": "Expression"
-												},
-												"ds_PipelineName": {
-													"value": "@pipeline().Pipeline",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					},
-					{
-						"name": "df_FlattenPayRuns",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "ForEach1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "1.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "df_FlattenOrgPayRuns_UpdateOrgPayRuns",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"SourceBlobDefinitivPayRuns": {
-										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										},
-										"ds_FileSystem": {
-											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-											"type": "Expression"
-										},
-										"ds_Directory": {
-											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-											"type": "Expression"
-										},
-										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									"SinkSqlDefinitiv": {
-										"ds_SchemaName": "definitiv",
-										"ds_TableName": "OrganizationPayRuns"
-									}
-								}
-							},
-							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
-							},
-							"traceLevel": "Fine"
-						}
-					},
-					{
-						"name": "pl_B1_Payslips_ApiToDefinitiv",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "df_FlattenPayRuns",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B1_Payslips_ApiToDefinitiv",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "pl_monitoring_logic-nido-prod-eastau-100",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "lookup_PostRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"PipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								},
-								"DataflowActivityOutput": {
-									"value": "@activity('df_FlattenPayRuns').output",
-									"type": "Expression"
-								},
-								"PreRowCount": {
-									"value": "@activity('lookup_PreRowCount').output",
-									"type": "Expression"
-								},
-								"PostRowCount": {
-									"value": "@activity('lookup_PostRowCount').output",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "lookup_PreRowCount",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) from definitiv.OrganizationRosters",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "OrganizationRosters"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "lookup_PostRowCount",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "df_FlattenPayRuns",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) from definitiv.OrganizationRosters",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "OrganizationRosters"
-								}
-							},
-							"firstRowOnly": false
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "07_PayRuns"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-21T07:04:52Z"
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/pl_Master')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -3840,9 +3731,92 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationRosters')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_CustomReportWages')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Employees')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Organizations_Scheduled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_Organizations",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_Schema": "[parameters('tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Schema')]",
+							"param_Table": "[parameters('tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Table')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-06-06T04:33:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								1
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Organizations')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Payslips_Scheduled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-04-01T01:00:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								1
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns')]"
 			]
 		},
 		{
@@ -3872,175 +3846,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_01_Payslips_Master')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "pl_B1_Payslips_ApiToDefinitiv",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B1_Payslips_ApiToDefinitiv",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_B2_Payslips_DefinitivToDraft1",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pl_B1_Payslips_ApiToDefinitiv",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B2_Payslips_DefinitivToDraft1",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_C1_Payslips_DraftReportViews",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pl_B2_Payslips_DefinitivToDraft1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_C1_Payslips_DraftReportViews",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "01_Payslips"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-20T01:50:41Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_B1_OrgPayRuns_ApiToDefinitiv')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_Payslips_Scheduled_1d')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2022-04-01T01:00:00",
-						"timeZone": "AUS Eastern Standard Time",
-						"schedule": {
-							"hours": [
-								1
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_B1_OrgPayRuns_ApiToDefinitiv')]"
-			]
 		}
 	]
 }

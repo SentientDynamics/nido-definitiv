@@ -22,6 +22,78 @@
 		"ls_rest_definitiv_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
+		},
+		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Schema": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Table": {
+			"type": "string",
+			"defaultValue": "Organizations"
+		},
+		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "OrganizationPayRuns"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
+			"type": "string",
+			"defaultValue": "container-adf-nido-prod-eastau-100-1"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_InputDirectory_Json_value": {
+			"type": "string",
+			"defaultValue": "ds_adls2_stnidoprodeastau100_json_input"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_OutputDirectory_Json_value": {
+			"type": "string",
+			"defaultValue": "ds_adls2_stnidoprodeastau100_json_output"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_LogDirectory_value": {
+			"type": "string",
+			"defaultValue": "ds_adls2_stnidoprodeastau100_log"
+		},
+		"dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value": {
+			"type": "string",
+			"defaultValue": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke/PipelineRunId/"
+		},
+		"dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value": {
+			"type": "string",
+			"defaultValue": "?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE"
+		},
+		"dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value": {
+			"type": "string",
+			"defaultValue": "ErrorRows"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Timesheets_value": {
+			"type": "string",
+			"defaultValue": "9B394863-2B5E-4704-8AD4-82352C1111C1"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value": {
+			"type": "string",
+			"defaultValue": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value": {
+			"type": "string",
+			"defaultValue": "global_CustomReportId_Payslips"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_Wages_value": {
+			"type": "string",
+			"defaultValue": "16F9B79E-D95C-4759-B5BE-A8EE599E777D"
+		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value": {
+			"type": "string",
+			"defaultValue": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+		},
+		"dataFactory_location": {
+			"type": "string",
+			"defaultValue": "australiaeast"
+		},
+		"dataFactory_identity_type": {
+			"type": "string",
+			"defaultValue": "SystemAssigned"
 		}
 	},
 	"variables": {
@@ -384,145 +456,9 @@
 				"annotations": []
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_01_Payslips_Master')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "pl_B1_Payslips_ApiToDefinitiv",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B1_Payslips_ApiToDefinitiv",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_B2_Payslips_DefinitivToDraft1",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pl_B1_Payslips_ApiToDefinitiv",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B2_Payslips_DefinitivToDraft1",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_C1_Payslips_DraftReportViews",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "pl_B2_Payslips_DefinitivToDraft1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_C1_Payslips_DraftReportViews",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B1_OrgPayRuns_ApiToDefinitiv",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"MasterPipelineTriggerTime": {
-									"value": "@pipeline().TriggerTime",
-									"type": "Expression"
-								},
-								"MasterPipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								}
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "01_Payslips"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-20T01:50:41Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_B1_Payslips_ApiToDefinitiv')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_B2_Payslips_DefinitivToDraft1')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_C1_Payslips_DraftReportViews')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_B1_OrgPayRuns_ApiToDefinitiv')]"
 			]
 		},
 		{
@@ -1049,6 +985,7 @@
 				"lastPublishTime": "2022-01-15T00:45:01Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -2032,6 +1969,7 @@
 				"lastPublishTime": "2022-01-17T01:49:18Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -2474,6 +2412,7 @@
 				"lastPublishTime": "2022-01-16T04:59:58Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -2820,6 +2759,7 @@
 				"lastPublishTime": "2022-01-17T21:51:24Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -2956,6 +2896,7 @@
 				"lastPublishTime": "2022-01-19T01:04:06Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/dataflows/df_A3_Payslips_DraftStagingToDraft')]"
 			]
 		},
@@ -3092,6 +3033,7 @@
 				"lastPublishTime": "2022-01-19T01:04:06Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/dataflows/df_A3_Payslips_DraftStagingToDraft')]"
 			]
 		},
@@ -3192,6 +3134,7 @@
 				"lastPublishTime": "2022-01-21T07:04:53Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/dataflows/df_B1_Payslips_ApiToDefinitiv')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
@@ -3334,6 +3277,7 @@
 				"lastPublishTime": "2022-01-19T03:45:11Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportTimesheets1')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
@@ -4047,725 +3991,10 @@
 				"lastPublishTime": "2022-01-21T07:04:52Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_B1_OrgPayItems_ApiToDefinitiv')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_B1_OrgPayRuns_ApiToDefinitiv')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "LookupOrganizations",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select organizationId, legalName from definitiv.Organizations",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "Organizations"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEach1",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "LookupOrganizations",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "lookup_PreRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('LookupOrganizations').output.value",
-								"type": "Expression"
-							},
-							"isSequential": false,
-							"activities": [
-								{
-									"name": "CopyToJson1",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "RestSource",
-											"additionalColumns": [
-												{
-													"name": "Org.OrganizationId",
-													"value": {
-														"value": "@item().organizationId",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "OrgPayRun.PipelineTriggerTime",
-													"value": {
-														"value": "@pipeline().TriggerTime",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "OrgPayRun.PipelineRunId",
-													"value": {
-														"value": "@pipeline().RunId",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "Org.LegalName",
-													"value": {
-														"value": "@item().legalName",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "OrgPayRun.PipelineName",
-													"value": {
-														"value": "@pipeline().Pipeline",
-														"type": "Expression"
-													}
-												}
-											],
-											"httpRequestTimeout": "00:01:40",
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET"
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false,
-										"logSettings": {
-											"enableCopyActivityLog": true,
-											"copyActivityLogSettings": {
-												"logLevel": "Info",
-												"enableReliableLogging": true
-											},
-											"logLocationSettings": {
-												"linkedServiceName": {
-													"referenceName": "ls_adls2_stnidoprodeastau100",
-													"type": "LinkedServiceReference"
-												},
-												"path": {
-													"value": "@concat(\n    pipeline().globalParameters.global_adls2_FileSystem,\n    '/',\n    pipeline().globalParameters.global_adls2_LogDirectory\n)",
-													"type": "Expression"
-												}
-											}
-										},
-										"translator": {
-											"type": "TabularTranslator",
-											"mappings": [
-												{
-													"source": {
-														"path": "[['payRunId']"
-													},
-													"sink": {
-														"path": "payRunId"
-													}
-												},
-												{
-													"source": {
-														"path": "[['runNumber']"
-													},
-													"sink": {
-														"path": "runNumber"
-													}
-												},
-												{
-													"source": {
-														"path": "[['status']"
-													},
-													"sink": {
-														"path": "status"
-													}
-												},
-												{
-													"source": {
-														"path": "[['payslipGenerationStatus']"
-													},
-													"sink": {
-														"path": "payslipGenerationStatus"
-													}
-												},
-												{
-													"source": {
-														"path": "[['lodgementStatus']"
-													},
-													"sink": {
-														"path": "lodgementStatus"
-													}
-												},
-												{
-													"source": {
-														"path": "[['eofyLodgementStatus']"
-													},
-													"sink": {
-														"path": "eofyLodgementStatus"
-													}
-												},
-												{
-													"source": {
-														"path": "[['type']"
-													},
-													"sink": {
-														"path": "type"
-													}
-												},
-												{
-													"source": {
-														"path": "[['dateOpened']"
-													},
-													"sink": {
-														"path": "dateOpened"
-													}
-												},
-												{
-													"source": {
-														"path": "[['dateLastCalculated']"
-													},
-													"sink": {
-														"path": "dateLastCalculated"
-													}
-												},
-												{
-													"source": {
-														"path": "[['datePublished']"
-													},
-													"sink": {
-														"path": "datePublished"
-													}
-												},
-												{
-													"source": {
-														"path": "[['periodStart']"
-													},
-													"sink": {
-														"path": "periodStart"
-													}
-												},
-												{
-													"source": {
-														"path": "[['periodEnd']"
-													},
-													"sink": {
-														"path": "periodEnd"
-													}
-												},
-												{
-													"source": {
-														"path": "[['paymentDate']"
-													},
-													"sink": {
-														"path": "paymentDate"
-													}
-												},
-												{
-													"source": {
-														"path": "[['superannuationPaymentDate']"
-													},
-													"sink": {
-														"path": "superannuationPaymentDate"
-													}
-												},
-												{
-													"source": {
-														"path": "[['initiatingUserId']"
-													},
-													"sink": {
-														"path": "initiatingUserId"
-													}
-												},
-												{
-													"source": {
-														"path": "[['publishingUserId']"
-													},
-													"sink": {
-														"path": "publishingUserId"
-													}
-												},
-												{
-													"source": {
-														"path": "[['initiatingUserName']"
-													},
-													"sink": {
-														"path": "initiatingUserName"
-													}
-												},
-												{
-													"source": {
-														"path": "[['publishingUserName']"
-													},
-													"sink": {
-														"path": "publishingUserName"
-													}
-												},
-												{
-													"source": {
-														"path": "[['employeeCount']"
-													},
-													"sink": {
-														"path": "employeeCount"
-													}
-												},
-												{
-													"source": {
-														"path": "[['notes']"
-													},
-													"sink": {
-														"path": "notes"
-													}
-												},
-												{
-													"source": {
-														"path": "[['payCalendarId']"
-													},
-													"sink": {
-														"path": "payCalendarId"
-													}
-												},
-												{
-													"source": {
-														"path": "[['payCalendarName']"
-													},
-													"sink": {
-														"path": "payCalendarName"
-													}
-												},
-												{
-													"source": {
-														"path": "[['financialYearStartDate']"
-													},
-													"sink": {
-														"path": "financialYearStartDate"
-													}
-												},
-												{
-													"source": {
-														"path": "[['financialYearEndDate']"
-													},
-													"sink": {
-														"path": "financialYearEndDate"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['payCalendarId']"
-													},
-													"sink": {
-														"path": "PayCalendar.payCalendarId"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['description']"
-													},
-													"sink": {
-														"path": "PayCalendar.description"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['weeklyFactorEquation']"
-													},
-													"sink": {
-														"path": "PayCalendar.weeklyFactorEquation"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['weeklyFactor']"
-													},
-													"sink": {
-														"path": "PayCalendar.weeklyFactor"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['period']"
-													},
-													"sink": {
-														"path": "PayCalendar.period"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['periodStartDate']"
-													},
-													"sink": {
-														"path": "PayCalendar.periodStartDate"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['proRataMode']"
-													},
-													"sink": {
-														"path": "PayCalendar.proRataMode"
-													}
-												},
-												{
-													"source": {
-														"path": "$['payCalendars'][0]['atoLodgementsEnabled']"
-													},
-													"sink": {
-														"path": "PayCalendar.atoLodgementsEnabled"
-													}
-												},
-												{
-													"source": {
-														"path": "$['currentFinancialYearStartDate']"
-													},
-													"sink": {
-														"path": "currentFinancialYearStartDate"
-													}
-												},
-												{
-													"source": {
-														"path": "$['currentFinancialYearEndDate']"
-													},
-													"sink": {
-														"path": "currentFinancialYearEndDate"
-													}
-												},
-												{
-													"source": {
-														"path": "$['Org.OrganizationId']"
-													},
-													"sink": {
-														"path": "Org.OrganizationId"
-													}
-												},
-												{
-													"source": {
-														"path": "$['OrgPayRun.PipelineTriggerTime']"
-													},
-													"sink": {
-														"path": "OrgPayRun.PipelineTriggerTime"
-													}
-												},
-												{
-													"source": {
-														"path": "$['OrgPayRun.PipelineRunId']"
-													},
-													"sink": {
-														"path": "OrgPayRun.PipelineRunId"
-													}
-												},
-												{
-													"source": {
-														"path": "$['Org.LegalName']"
-													},
-													"sink": {
-														"path": "Org.LegalName"
-													}
-												},
-												{
-													"source": {
-														"path": "$['OrgPayRun.PipelineName']"
-													},
-													"sink": {
-														"path": "OrgPayRun.PipelineName"
-													}
-												}
-											],
-											"collectionReference": "$['payRuns']"
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_rest_definitiv",
-											"type": "DatasetReference",
-											"parameters": {
-												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId, '/pay-runs')",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-											"type": "DatasetReference",
-											"parameters": {
-												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
-													"type": "Expression"
-												},
-												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
-													"type": "Expression"
-												},
-												"ds_FileSystem": {
-													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-													"type": "Expression"
-												},
-												"ds_Directory": {
-													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-													"type": "Expression"
-												},
-												"ds_PipelineName": {
-													"value": "@pipeline().Pipeline",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					},
-					{
-						"name": "df_FlattenPayRuns",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "ForEach1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "1.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "df_FlattenOrgPayRuns_UpdateOrgPayRuns",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"SourceBlobDefinitivPayRuns": {
-										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										},
-										"ds_FileSystem": {
-											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-											"type": "Expression"
-										},
-										"ds_Directory": {
-											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-											"type": "Expression"
-										},
-										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									"SinkSqlDefinitiv": {
-										"ds_SchemaName": "definitiv",
-										"ds_TableName": "OrganizationPayRuns"
-									}
-								}
-							},
-							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
-							},
-							"traceLevel": "Fine"
-						}
-					},
-					{
-						"name": "pl_B1_Payslips_ApiToDefinitiv",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "df_FlattenPayRuns",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_B1_Payslips_ApiToDefinitiv",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "pl_monitoring_logic-nido-prod-eastau-100",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "lookup_PostRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"PipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								},
-								"DataflowActivityOutput": {
-									"value": "@activity('df_FlattenPayRuns').output",
-									"type": "Expression"
-								},
-								"PreRowCount": {
-									"value": "@activity('lookup_PreRowCount').output",
-									"type": "Expression"
-								},
-								"PostRowCount": {
-									"value": "@activity('lookup_PostRowCount').output",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "lookup_PreRowCount",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) from definitiv.OrganizationRosters",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "OrganizationRosters"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "lookup_PostRowCount",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "df_FlattenPayRuns",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) from definitiv.OrganizationRosters",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "OrganizationRosters"
-								}
-							},
-							"firstRowOnly": false
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "07_PayRuns"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-21T07:04:52Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/df_FlattenOrgPayRuns_UpdateOrgPayRuns')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_B1_Payslips_ApiToDefinitiv')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-100')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -5032,6 +4261,7 @@
 				"lastPublishTime": "2022-01-20T04:05:09Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_FlattenOrgRosters_UpdateOrgRosters1')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -5286,8 +4516,7 @@
 										"ds_SchemaName": "definitiv",
 										"ds_TableName": "CustomReportPayslipsE"
 									}
-								},
-								"linkedServiceParameters": {}
+								}
 							},
 							"staging": {},
 							"integrationRuntime": {
@@ -5414,6 +4643,7 @@
 				"lastPublishTime": "2022-01-21T07:04:52Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_TruncateInsertCustomReportPayslips')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -5849,6 +5079,7 @@
 				"lastPublishTime": "2022-01-21T07:04:53Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_B1_Payslips_ApiToDefinitiv')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -6057,6 +5288,7 @@
 				"lastPublishTime": "2022-01-19T01:05:25Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_A1_Timesheets_DboToArchive')]"
 			]
@@ -6120,6 +5352,7 @@
 				"lastPublishTime": "2022-01-19T01:04:06Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/dataflows/df_B2_Payslips_DefinitivToDraft')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
@@ -6241,6 +5474,7 @@
 				"lastPublishTime": "2022-01-19T06:10:32Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/dataflows/df_B3_Payslips_DedupeDefinitiv')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
@@ -6347,6 +5581,7 @@
 				"lastPublishTime": "2022-01-19T01:04:06Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/dataflows/df_C1_Payslips_DraftReportViews')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
@@ -6662,6 +5897,7 @@
 				"lastPublishTime": "2022-01-14T05:41:15Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -7418,6 +6654,7 @@
 				"lastPublishTime": "2022-01-14T00:01:48Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_FlattenDefinitivReportingArrays')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
@@ -7698,6 +6935,7 @@
 				"lastPublishTime": "2022-01-20T04:04:15Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportRosters')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -7951,6 +7189,7 @@
 				"lastPublishTime": "2022-01-18T05:28:43Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
@@ -8173,6 +7412,7 @@
 				"lastPublishTime": "2022-01-18T05:28:43Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportRosters')]",
@@ -8248,6 +7488,7 @@
 				"lastPublishTime": "2022-01-18T05:28:43Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportRosters')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
@@ -8484,6 +7725,7 @@
 				"lastPublishTime": "2022-01-18T05:28:43Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportTimesheets_2_1')]",
@@ -9098,6 +8340,7 @@
 				"lastPublishTime": "2022-01-18T05:28:43Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportWages')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -9277,7 +8520,10 @@
 												"ds_PipelineRunId": {
 													"value": "@variables('PipelineRunId')",
 													"type": "Expression"
-												}
+												},
+												"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+												"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+												"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
 											}
 										}
 									]
@@ -9319,7 +8565,13 @@
 									}
 								},
 								"datasetParameters": {
-									"sourceApi": {},
+									"sourceApi": {
+										"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
+										"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
+										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+										"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+									},
 									"sourceSql": {
 										"ds_SchemaName": "definitiv",
 										"ds_TableName": "CustomReportWagesD"
@@ -9470,6 +8722,7 @@
 				"lastPublishTime": "2022-01-18T05:28:42Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateCusomReportWages')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -9870,6 +9123,7 @@
 				"lastPublishTime": "2022-01-18T05:28:43Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateEmployeesEmploymentHistory')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -9885,22 +9139,9 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup1",
+						"name": "Organizations",
 						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "SetPipelineTriggerTime",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "SetPipelineRunId",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -9928,11 +9169,11 @@
 						}
 					},
 					{
-						"name": "ForEach1",
+						"name": "Organization",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Lookup1",
+								"activity": "Organizations",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -9941,17 +9182,17 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Lookup1').output.value",
+								"value": "@activity('Organizations').output.value",
 								"type": "Expression"
 							},
 							"isSequential": false,
 							"activities": [
 								{
-									"name": "CopyToJson1",
+									"name": "ApiToJson",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
-										"timeout": "7.00:00:00",
+										"timeout": "0.01:00:00",
 										"retry": 0,
 										"retryIntervalInSeconds": 30,
 										"secureOutput": false,
@@ -9963,30 +9204,44 @@
 											"type": "RestSource",
 											"additionalColumns": [
 												{
-													"name": "organizationId",
+													"name": "Org.OrganizationId",
 													"value": {
 														"value": "@item().organizationId",
 														"type": "Expression"
 													}
 												},
 												{
-													"name": "pipelineTriggerTime",
-													"value": {
-														"value": "@variables('PipelineRunId')",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "pipelineRunId",
-													"value": {
-														"value": "@variables('PipelineRunId')",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "legalName",
+													"name": "Org.LegalName",
 													"value": {
 														"value": "@item().legalName",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineName",
+													"value": {
+														"value": "@pipeline().Pipeline",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineRunId",
+													"value": {
+														"value": "@pipeline().RunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineTriggerTime",
+													"value": {
+														"value": "@pipeline().TriggerTime",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineTriggerId",
+													"value": {
+														"value": "@pipeline().TriggerId",
 														"type": "Expression"
 													}
 												}
@@ -10023,20 +9278,29 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
-													"value": "@variables('PipelineTriggerTime')",
+													"value": "@pipeline().TriggerTime",
 													"type": "Expression"
 												},
 												"ds_PipelineRunId": {
-													"value": "@variables('PipelineRunId')",
+													"value": "@pipeline().RunId",
 													"type": "Expression"
 												},
-												"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-												"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
-												"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
 											}
 										}
 									]
@@ -10045,11 +9309,11 @@
 						}
 					},
 					{
-						"name": "df_FlattenPayRuns",
+						"name": "df_OrgPayRuns",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "ForEach1",
+								"activity": "Organization",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -10065,20 +9329,50 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "df_FlattenOrgPayRuns_UpdateOrgPayRuns",
+								"referenceName": "df_OrgPayRuns",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"param_FileSystem": {
+										"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+										"type": "Expression"
+									},
+									"param_ErrorRowDirectory": {
+										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+										"type": "Expression"
+									}
+								},
 								"datasetParameters": {
 									"SourceBlobDefinitivPayRuns": {
-										"ds_PipelineTriggerTime": "2022-01-25T00:18:17.611502Z",
-										"ds_PipelineRunId": "187d99be-a307-4534-9acc-0a17fc03d0ab",
-										"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
-										"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
-										"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
 									},
 									"SinkSqlDefinitiv": {
-										"ds_SchemaName": "adf",
-										"ds_TableName": "Parameters"
+										"ds_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemaName",
+											"type": "Expression"
+										},
+										"ds_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -10089,104 +9383,6 @@
 							},
 							"traceLevel": "Fine"
 						}
-					},
-					{
-						"name": "CopyToCsv",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "df_FlattenPayRuns",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".csv"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_SchemaName": "definitiv",
-									"ds_TableName": "OrganizationPayRuns"
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_adls2_stnidoprodeastau100_csv",
-								"type": "DatasetReference",
-								"parameters": {
-									"schemaName": "definitiv",
-									"tableName": "OrganizationPayRuns",
-									"pipelineRunId": {
-										"value": "@pipeline().RunId",
-										"type": "Expression"
-									},
-									"pipelineTriggerTime": "@pipeline().TriggerTime"
-								}
-							}
-						]
-					},
-					{
-						"name": "SetPipelineTriggerTime",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "PipelineTriggerTime",
-							"value": {
-								"value": "@convertFromUtc(\n    coalesce(\n        pipeline().parameters.MasterPipelineTriggerTime,\n        pipeline().TriggerTime\n    ),\n    'AUS Eastern Standard Time'\n)",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "SetPipelineRunId",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "PipelineRunId",
-							"value": {
-								"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
-								"type": "Expression"
-							}
-						}
 					}
 				],
 				"policy": {
@@ -10194,19 +9390,13 @@
 					"cancelAfter": {}
 				},
 				"parameters": {
-					"MasterPipelineTriggerTime": {
-						"type": "string"
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "definitiv"
 					},
-					"MasterPipelineRunId": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"PipelineTriggerTime": {
-						"type": "String"
-					},
-					"PipelineRunId": {
-						"type": "String"
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "OrganizationPayRuns"
 					}
 				},
 				"folder": {
@@ -10216,12 +9406,12 @@
 				"lastPublishTime": "2022-01-21T07:04:52Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/df_FlattenOrgPayRuns_UpdateOrgPayRuns')]",
+				"[concat(variables('factoryId'), '/dataflows/df_OrgPayRuns')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_csv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]"
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
 		},
 		{
@@ -10778,6 +9968,7 @@
 				"lastPublishTime": "2022-01-20T04:04:15Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_FlattenOrgRosters_UpdateOrgRosters1')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -11000,6 +10191,7 @@
 				"lastPublishTime": "2022-01-20T04:04:15Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_FlattenOrgRosters_UpdateOrgRosters1')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -11108,6 +10300,7 @@
 				"lastPublishTime": "2022-01-20T04:04:15Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_CustomReportRosters_1_1')]"
 			]
@@ -11119,7 +10312,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "df_UpdateOrganizations",
+						"name": "df_Organizations",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -11139,9 +10332,18 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "df_UpdateOrganizations",
+								"referenceName": "df_Organizations",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"param_FileSystem": {
+										"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+										"type": "Expression"
+									},
+									"param_ErrorRowDirectory": {
+										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+										"type": "Expression"
+									}
+								},
 								"datasetParameters": {
 									"SourceBlobDefinitiv": {
 										"ds_PipelineTriggerTime": {
@@ -11166,8 +10368,14 @@
 										}
 									},
 									"SinkSqlDefinitiv": {
-										"ds_SchemaName": "definitiv",
-										"ds_TableName": "Organizations"
+										"ds_SchemaName": {
+											"value": "@pipeline().parameters.param_Schema",
+											"type": "Expression"
+										},
+										"ds_TableName": {
+											"value": "@pipeline().parameters.param_Table",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -11203,7 +10411,7 @@
 									"type": "Expression"
 								},
 								"DataflowActivityOutput": {
-									"value": "@activity('df_UpdateOrganizations').output",
+									"value": "@activity('df_Organizations').output",
 									"type": "Expression"
 								},
 								"PreRowCount": {
@@ -11252,7 +10460,7 @@
 						"type": "Lookup",
 						"dependsOn": [
 							{
-								"activity": "df_UpdateOrganizations",
+								"activity": "df_Organizations",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -11390,6 +10598,16 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"parameters": {
+					"param_Schema": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_Table": {
+						"type": "string",
+						"defaultValue": "Organizations"
+					}
+				},
 				"folder": {
 					"name": "08_Organizations"
 				},
@@ -11397,7 +10615,8 @@
 				"lastPublishTime": "2022-01-20T04:04:15Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_UpdateOrganizations')]",
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/dataflows/df_Organizations')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-100')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
@@ -11552,7 +10771,10 @@
 												"ds_PipelineRunId": {
 													"value": "@variables('PipelineRunId')",
 													"type": "Expression"
-												}
+												},
+												"ds_FileSystem": "container-adf-nido-prod-eastau-100-1",
+												"ds_Directory": "ds_adsl2_stnidoprodeastau100_json_input",
+												"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
 											}
 										}
 									]
@@ -11729,6 +10951,7 @@
 				"lastPublishTime": "2022-01-18T05:28:43Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateReportingLeaveApplications')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
@@ -12058,6 +11281,7 @@
 				"lastPublishTime": "2022-01-18T05:28:43Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_UpdateReportingLeaveBalances')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_csv')]",
@@ -12377,6 +11601,7 @@
 				"lastPublishTime": "2022-01-14T05:41:13Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -12514,6 +11739,7 @@
 				"lastPublishTime": "2021-11-25T22:02:52Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -13497,6 +12723,7 @@
 				"lastPublishTime": "2022-01-14T05:41:14Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -14480,6 +13707,7 @@
 				"lastPublishTime": "2022-01-14T05:41:14Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -15463,6 +14691,7 @@
 				"lastPublishTime": "2022-01-14T05:41:14Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -16446,6 +15675,7 @@
 				"lastPublishTime": "2022-01-14T05:41:14Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -17429,6 +16659,7 @@
 				"lastPublishTime": "2022-01-14T05:41:14Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -18412,6 +17643,7 @@
 				"lastPublishTime": "2022-01-14T05:41:14Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -19395,6 +18627,7 @@
 				"lastPublishTime": "2022-01-14T05:41:14Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -20378,6 +19611,7 @@
 				"lastPublishTime": "2022-01-14T05:41:14Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -21361,6 +20595,7 @@
 				"lastPublishTime": "2022-01-14T05:41:14Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -21737,6 +20972,7 @@
 				"lastPublishTime": "2021-12-05T22:41:26Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_csv')]"
 			]
@@ -21803,6 +21039,7 @@
 				"lastPublishTime": "2021-12-02T04:30:07Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/dataflows/df_ReportingLeaveApplications')]"
 			]
 		},
@@ -21964,6 +21201,7 @@
 				"lastPublishTime": "2022-01-20T01:50:41Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationRosters')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_CustomReportWages')]",
@@ -22953,6 +22191,7 @@
 				"lastPublishTime": "2022-01-11T01:56:08Z"
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -23092,6 +22331,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
 		},
@@ -23137,6 +22377,7 @@
 				"schema": []
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
 		},
@@ -23189,6 +22430,7 @@
 				"schema": {}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
 		},
@@ -23203,7 +22445,7 @@
 				},
 				"parameters": {
 					"ds_PipelineTriggerTime": {
-						"type": "object",
+						"type": "string",
 						"defaultValue": "2022-01-25T00:18:17.611502Z"
 					},
 					"ds_PipelineRunId": {
@@ -23241,6 +22483,7 @@
 				"schema": {}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
 		},
@@ -23280,6 +22523,7 @@
 				"schema": {}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
 		},
@@ -23305,6 +22549,7 @@
 				"schema": {}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
 		},
@@ -23343,6 +22588,7 @@
 				"schema": {}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
 		},
@@ -23375,6 +22621,7 @@
 				"schema": []
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_rest_definitiv')]"
 			]
 		},
@@ -23412,6 +22659,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]"
 			]
 		},
@@ -23431,6 +22679,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
@@ -23445,7 +22694,9 @@
 					"baseUrl": "[parameters('ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl')]"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[variables('factoryId')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_rest_definitiv')]",
@@ -23477,6 +22728,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
@@ -23496,7 +22748,50 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Organizations_Scheduled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_Organizations",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_Schema": "[parameters('tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Schema')]",
+							"param_Table": "[parameters('tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Table')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-06-06T04:33:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								1
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Organizations')]"
 			]
 		},
 		{
@@ -23509,10 +22804,13 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "pl_B1_OrgPayRuns_ApiToDefinitiv",
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns",
 							"type": "PipelineReference"
 						},
-						"parameters": {}
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -23523,6 +22821,9 @@
 						"startTime": "2022-04-01T01:00:00",
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
+							"minutes": [
+								0
+							],
 							"hours": [
 								1
 							]
@@ -23531,7 +22832,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_B1_OrgPayRuns_ApiToDefinitiv')]"
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns')]"
 			]
 		},
 		{
@@ -23561,6 +22863,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_CustomReportRosters_2_0')]"
 			]
 		},
@@ -23587,6 +22890,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
 			]
 		},
@@ -23613,6 +22917,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
 			]
 		},
@@ -23657,6 +22962,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
@@ -23745,6 +23051,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -23791,6 +23098,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -23880,6 +23188,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -23954,6 +23263,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
@@ -24008,6 +23318,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
@@ -24120,6 +23431,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
@@ -24168,57 +23480,9 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adsl2_stnidoprodeastau100_json_1')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_FlattenOrgPayRuns_UpdateOrgPayRuns')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "07_PayRuns"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
-								"type": "DatasetReference"
-							},
-							"name": "SourceBlobDefinitivPayRuns"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "SinkSqlDefinitiv",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [
-						{
-							"name": "AlterRow1"
-						},
-						{
-							"name": "SelectSourceBlobDefinitivPayRuns"
-						}
-					],
-					"script": "source(output(\n\t\tOrg as (LegalName as string, OrganizationId as string),\n\t\tOrgPayRun as (PipelineName as string, PipelineRunId as string, PipelineTriggerTime as string),\n\t\tPayCalendar as (atoLodgementsEnabled as boolean, description as string, payCalendarId as string, period as string, periodStartDate as string, proRataMode as string, weeklyFactor as double, weeklyFactorEquation as short),\n\t\tcurrentFinancialYearEndDate as string,\n\t\tcurrentFinancialYearStartDate as string,\n\t\tdateLastCalculated as string,\n\t\tdateOpened as string,\n\t\tdatePublished as string,\n\t\temployeeCount as short,\n\t\teofyLodgementStatus as string,\n\t\tfinancialYearEndDate as string,\n\t\tfinancialYearStartDate as string,\n\t\tinitiatingUserId as string,\n\t\tinitiatingUserName as string,\n\t\tlodgementStatus as string,\n\t\tnotes as string,\n\t\tpayCalendarId as string,\n\t\tpayCalendarName as string,\n\t\tpayRunId as string,\n\t\tpaymentDate as string,\n\t\tpayslipGenerationStatus as string,\n\t\tperiodEnd as string,\n\t\tperiodStart as string,\n\t\tpublishingUserId as string,\n\t\tpublishingUserName as string,\n\t\trunNumber as short,\n\t\tstatus as string,\n\t\tsuperannuationPaymentDate as string,\n\t\ttype as string\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitivPayRuns\nSelectSourceBlobDefinitivPayRuns alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nSourceBlobDefinitivPayRuns select(mapColumn(\n\t\t{Org.LegalName} = Org.LegalName,\n\t\t{Org.OrganizationId} = Org.OrganizationId,\n\t\t{OrgPayRun.PayCalendar} = OrgPayRun.PipelineName,\n\t\t{OrgPayRun.PipelineRunId} = OrgPayRun.PipelineRunId,\n\t\t{OrgPayRun.PipelineTriggerTime} = OrgPayRun.PipelineTriggerTime,\n\t\t{PayCalendar.atoLodgementsEnabled} = PayCalendar.atoLodgementsEnabled,\n\t\t{PayCalendar.payCalendarId} = PayCalendar.payCalendarId,\n\t\t{PayCalendar.period} = PayCalendar.period,\n\t\t{PayCalendar.periodStartDate} = PayCalendar.periodStartDate,\n\t\t{PayCalendar.proRataMode} = PayCalendar.proRataMode,\n\t\t{PayCalendar.weeklyFactor} = PayCalendar.weeklyFactor,\n\t\t{PayCalendar.weeklyFactorEquation} = PayCalendar.weeklyFactorEquation,\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate,\n\t\tdateLastCalculated,\n\t\tdateOpened,\n\t\tdatePublished,\n\t\temployeeCount,\n\t\teofyLodgementStatus,\n\t\tfinancialYearEndDate,\n\t\tfinancialYearStartDate,\n\t\tinitiatingUserId,\n\t\tinitiatingUserName,\n\t\tlodgementStatus,\n\t\tnotes,\n\t\tpayCalendarId,\n\t\tpayCalendarName,\n\t\tpayRunId,\n\t\tpaymentDate,\n\t\tpayslipGenerationStatus,\n\t\tperiodEnd,\n\t\tperiodStart,\n\t\tpublishingUserId,\n\t\tpublishingUserName,\n\t\trunNumber,\n\t\tstatus,\n\t\tsuperannuationPaymentDate,\n\t\ttype,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> SelectSourceBlobDefinitivPayRuns\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['payRunId'],\n\tformat: 'table',\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: 'ds_adls2_stnidoprodeastau100_log',\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tlegalName = {Org.LegalName},\n\t\torganizationId = {Org.OrganizationId},\n\t\tpayCalendar = {OrgPayRun.PayCalendar},\n\t\tpipelineRunId = {OrgPayRun.PipelineRunId},\n\t\tpipelineTriggerTime = {OrgPayRun.PipelineTriggerTime},\n\t\tatoLodgementsEnabled = {PayCalendar.atoLodgementsEnabled},\n\t\tpayCalendarId = {PayCalendar.payCalendarId},\n\t\tperiod = {PayCalendar.period},\n\t\tperiodStartDate = {PayCalendar.periodStartDate},\n\t\tproRataMode = {PayCalendar.proRataMode},\n\t\tweeklyFactor = {PayCalendar.weeklyFactor},\n\t\tweeklyFactorEquation = {PayCalendar.weeklyFactorEquation},\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate,\n\t\tdateLastCalculated,\n\t\tdateOpened,\n\t\tdatePublished,\n\t\temployeeCount,\n\t\teofyLodgementStatus,\n\t\tfinancialYearEndDate,\n\t\tfinancialYearStartDate,\n\t\tinitiatingUserId,\n\t\tinitiatingUserName,\n\t\tlodgementStatus,\n\t\tnotes,\n\t\tpayCalendarId,\n\t\tpayCalendarName,\n\t\tpayRunId,\n\t\tpaymentDate,\n\t\tpayslipGenerationStatus,\n\t\tperiodEnd,\n\t\tperiodStart,\n\t\tpublishingUserId,\n\t\tpublishingUserName,\n\t\trunNumber,\n\t\tstatus,\n\t\tsuperannuationPaymentDate,\n\t\ttype,\n\t\tSourceFileName\n\t)) ~> SinkSqlDefinitiv"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
 		},
 		{
@@ -24388,6 +23652,97 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_OrgPayRuns')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "07_PayRuns"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference"
+							},
+							"name": "SourceBlobDefinitivPayRuns"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "SinkSqlDefinitiv",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerId as string,\n\t\tPipelineTriggerTime as string,\n\t\tcurrentFinancialYearEndDate as string,\n\t\tcurrentFinancialYearStartDate as string,\n\t\tpayCalendars as (atoLodgementsEnabled as boolean, description as string, payCalendarId as string, period as string, periodStartDate as string, proRataMode as string, weeklyFactor as double, weeklyFactorEquation as short)[],\n\t\tpayRuns as (backPayDateOverride as string, dateLastCalculated as string, dateOpened as string, datePublished as string, employeeCount as short, eofyLodgementStatus as string, financialYearEndDate as string, financialYearStartDate as string, initiatingUserId as string, initiatingUserName as string, lodgementStatus as string, notes as string, payCalendarId as string, payCalendarName as string, payRunId as string, paymentDate as string, payslipGenerationStatus as string, periodEnd as string, periodStart as string, publishingUserId as string, publishingUserName as string, runNumber as short, status as string, superannuationPaymentDate as string, type as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitivPayRuns\nSourceBlobDefinitivPayRuns foldDown(unroll(payRuns),\n\tmapColumn(\n\t\tbackPayDateOverride = payRuns.backPayDateOverride,\n\t\tdateLastCalculated = payRuns.dateLastCalculated,\n\t\tdateOpened = payRuns.dateOpened,\n\t\tdatePublished = payRuns.datePublished,\n\t\temployeeCount = payRuns.employeeCount,\n\t\teofyLodgementStatus = payRuns.eofyLodgementStatus,\n\t\tfinancialYearEndDate = payRuns.financialYearEndDate,\n\t\tfinancialYearStartDate = payRuns.financialYearStartDate,\n\t\tinitiatingUserId = payRuns.initiatingUserId,\n\t\tinitiatingUserName = payRuns.initiatingUserName,\n\t\tlodgementStatus = payRuns.lodgementStatus,\n\t\tnotes = payRuns.notes,\n\t\tpayCalendarId = payRuns.payCalendarId,\n\t\tpayCalendarName = payRuns.payCalendarName,\n\t\tpayRunId = payRuns.payRunId,\n\t\tpaymentDate = payRuns.paymentDate,\n\t\tpayslipGenerationStatus = payRuns.payslipGenerationStatus,\n\t\tperiodEnd = payRuns.periodEnd,\n\t\tperiodStart = payRuns.periodStart,\n\t\tpublishingUserId = payRuns.publishingUserId,\n\t\tpublishingUserName = payRuns.publishingUserName,\n\t\trunNumber = payRuns.runNumber,\n\t\tstatus = payRuns.status,\n\t\tsuperannuationPaymentDate = payRuns.superannuationPaymentDate,\n\t\ttype = payRuns.type,\n\t\t{Org.LegalName},\n\t\t{Org.OrganizationId},\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerId,\n\t\tPipelineTriggerTime,\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flatten1\nflatten1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> SinkSqlDefinitiv"
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Organizations')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "08_Organizations"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference"
+							},
+							"name": "SourceBlobDefinitiv"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "SinkSqlDefinitiv",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [],
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tabn as string,\n\t\tacn as string,\n\t\tbeamTermsConfirmDate as string,\n\t\tbeamTermsConfirmUserId as string,\n\t\tbeamTermsConfirmUserName as string,\n\t\tbranchCode as string,\n\t\tcontactEmail as string,\n\t\tcontactFirstName as string,\n\t\tcontactPhone as string,\n\t\tcontactSurname as string,\n\t\tcontactTitle as string,\n\t\temployeeSupportEmail as string,\n\t\tfbtExempt as boolean,\n\t\tintermediary as string,\n\t\tlegalName as string,\n\t\tnotificationUserIds as string,\n\t\tnotifyLodgementSubmitters as boolean,\n\t\torganizationCode as string,\n\t\torganizationId as string,\n\t\treference as string,\n\t\tsoftwareProviderABN as string,\n\t\tsoftwareProviderName as string,\n\t\tsoftwareSubscriptionId as string,\n\t\tstreetAddress as string,\n\t\ttradingName as string,\n\t\twpn as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitiv\nSourceBlobDefinitiv sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: 'ds_adsl2_stnidoprodeastau100_csv/definitiv.Organizations',\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> SinkSqlDefinitiv"
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -24430,6 +23785,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adsl2_stnidoprodeastau100_json_1')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_csv')]"
 			]
@@ -24481,6 +23837,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -24533,6 +23890,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -24579,6 +23937,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -24621,6 +23980,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
@@ -24666,6 +24026,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -24712,6 +24073,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -24801,6 +24163,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -24846,6 +24209,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -24912,6 +24276,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
@@ -24956,6 +24321,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -25000,6 +24366,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
@@ -25038,50 +24405,9 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_UpdateOrganizations')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "08_Organizations"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "SourceBlobDefinitiv"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "SinkSqlDefinitiv",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [],
-					"script": "source(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tabn as string,\n\t\tacn as string,\n\t\tbeamTermsConfirmDate as string,\n\t\tbeamTermsConfirmUserId as string,\n\t\tbeamTermsConfirmUserName as string,\n\t\tbranchCode as string,\n\t\tcontactEmail as string,\n\t\tcontactFirstName as string,\n\t\tcontactPhone as string,\n\t\tcontactSurname as string,\n\t\tcontactTitle as string,\n\t\temployeeSupportEmail as string,\n\t\tfbtExempt as boolean,\n\t\tintermediary as string,\n\t\tlegalName as string,\n\t\tnotificationUserIds as string,\n\t\tnotifyLodgementSubmitters as boolean,\n\t\torganizationCode as string,\n\t\torganizationId as string,\n\t\treference as string,\n\t\tsoftwareProviderABN as string,\n\t\tsoftwareProviderName as string,\n\t\tsoftwareSubscriptionId as string,\n\t\tstreetAddress as string,\n\t\ttradingName as string,\n\t\twpn as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitiv\nSourceBlobDefinitiv sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: 'ds_adsl2_stnidoprodeastau100_csv/definitiv.Organizations',\n\ttransactionCommit: 'single',\n\treportSuccessOnError: false) ~> SinkSqlDefinitiv"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
 			]
 		},
 		{
@@ -25124,6 +24450,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
@@ -25168,6 +24495,7 @@
 				}
 			},
 			"dependsOn": [
+				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_input')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
@@ -25177,7 +24505,71 @@
 			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
 			"apiVersion": "2018-06-01",
 			"properties": {},
-			"dependsOn": []
+			"dependsOn": [
+				"[variables('factoryId')]"
+			]
+		},
+		{
+			"name": "[parameters('factoryName')]",
+			"type": "Microsoft.DataFactory/factories",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"globalParameters": {
+					"global_adls2_FileSystem": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_FileSystem_value')]"
+					},
+					"global_adls2_InputDirectory_Json": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_InputDirectory_Json_value')]"
+					},
+					"global_adls2_OutputDirectory_Json": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_OutputDirectory_Json_value')]"
+					},
+					"global_adls2_LogDirectory": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_LogDirectory_value')]"
+					},
+					"global_logic_Monitoring_baseUrl": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value')]"
+					},
+					"global_logic_Monitoring_SAS": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value')]"
+					},
+					"global_adls2_SqlErrorRowDirectory": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value')]"
+					},
+					"global_CustomReportId_Timesheets": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Timesheets_value')]"
+					},
+					"global_CustomReportId_Rosters": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value')]"
+					},
+					"global_CustomReportId_Payslips": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value')]"
+					},
+					"global_CustomReportId_Wages": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Wages_value')]"
+					},
+					"global_CustomReportId_GenericOrgId": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value')]"
+					}
+				}
+			},
+			"dependsOn": [],
+			"location": "[parameters('dataFactory_location')]",
+			"identity": {
+				"type": "[parameters('dataFactory_identity_type')]"
+			}
 		}
 	]
 }
