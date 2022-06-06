@@ -74,7 +74,7 @@
 								}
 							}
 						],
-						"httpRequestTimeout": "00:10:00",
+						"httpRequestTimeout": "00:30:00",
 						"requestInterval": "00.00:00:00.010",
 						"requestMethod": "GET",
 						"paginationRules": {
