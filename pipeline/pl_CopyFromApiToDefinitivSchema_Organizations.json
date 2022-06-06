@@ -101,7 +101,7 @@
 							"type": "Expression"
 						},
 						"DataflowActivityOutput": {
-							"value": "@activity('df_UpdateOrganizations').output",
+							"value": "@activity('df_Organizations').output",
 							"type": "Expression"
 						},
 						"PreRowCount": {
