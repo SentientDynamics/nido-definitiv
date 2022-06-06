@@ -41,6 +41,10 @@
 			"global_CustomReportId_Payslips": {
 				"type": "string",
 				"value": "global_CustomReportId_Payslips"
+			},
+			"global_CustomReportId_Wages": {
+				"type": "string",
+				"value": "16F9B79E-D95C-4759-B5BE-A8EE599E777D"
 			}
 		}
 	},
