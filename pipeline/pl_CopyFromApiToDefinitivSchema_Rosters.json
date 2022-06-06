@@ -180,8 +180,8 @@
 								}
 							},
 							"SinkSqlDefintiv": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportRostersD"
+								"param_SchemaName": "definitiv",
+								"param_TableName": "CustomReportRostersD"
 							}
 						}
 					},

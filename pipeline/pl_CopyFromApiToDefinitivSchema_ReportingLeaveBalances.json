@@ -38,8 +38,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "Organizations"
+							"param_SchemaName": "definitiv",
+							"param_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
@@ -173,13 +173,7 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "df_UpdateReportingLeaveBalances",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"sink1": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "ReportingLeaveBalances"
-							}
-						}
+						"type": "DataFlowReference"
 					},
 					"compute": {
 						"coreCount": 16,
@@ -239,8 +233,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "ReportingLeaveBalances"
+							"param_SchemaName": "definitiv",
+							"param_TableName": "ReportingLeaveBalances"
 						}
 					}
 				],

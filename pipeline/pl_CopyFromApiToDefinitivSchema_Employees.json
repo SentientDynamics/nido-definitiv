@@ -32,8 +32,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "Employees"
+							"param_SchemaName": "definitiv",
+							"param_TableName": "Employees"
 						}
 					},
 					"firstRowOnly": false
@@ -209,10 +209,6 @@
 									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
-							},
-							"sink1": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "EmployeesEmploymentHistory"
 							}
 						}
 					},
@@ -358,10 +354,6 @@
 									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
-							},
-							"sink1": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "Employees"
 							}
 						}
 					},

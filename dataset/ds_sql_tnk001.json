@@ -6,13 +6,12 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"ds_SchemaName": {
+			"param_SchemaName": {
 				"type": "string",
-				"defaultValue": "adf"
+				"defaultValue": "definitiv"
 			},
-			"ds_TableName": {
-				"type": "string",
-				"defaultValue": "Parameters"
+			"param_TableName": {
+				"type": "string"
 			}
 		},
 		"annotations": [],

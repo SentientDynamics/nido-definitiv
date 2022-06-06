@@ -25,8 +25,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "Organizations"
+							"param_SchemaName": "definitiv",
+							"param_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
@@ -225,16 +225,6 @@
 								},
 								"ds_PipelineName": {
 									"value": "@pipeline().Pipeline",
-									"type": "Expression"
-								}
-							},
-							"SinkSqlDefinitiv": {
-								"ds_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemaName",
-									"type": "Expression"
-								},
-								"ds_TableName": {
-									"value": "@pipeline().parameters.param_TableName",
 									"type": "Expression"
 								}
 							}

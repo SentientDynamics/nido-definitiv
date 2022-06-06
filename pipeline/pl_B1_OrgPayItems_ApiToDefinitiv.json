@@ -25,8 +25,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "Organizations"
+							"param_SchemaName": "definitiv",
+							"param_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
@@ -675,12 +675,12 @@
 								}
 							},
 							"SourceSqlDefinitivPayslips": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "OrganizationPayItems"
+								"param_SchemaName": "definitiv",
+								"param_TableName": "OrganizationPayItems"
 							},
 							"SinkSqlDefinitivPayslips": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "OrganizationPayItems"
+								"param_SchemaName": "definitiv",
+								"param_TableName": "OrganizationPayItems"
 							}
 						}
 					},

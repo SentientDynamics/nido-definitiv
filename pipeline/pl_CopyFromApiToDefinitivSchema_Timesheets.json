@@ -192,16 +192,6 @@
 									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
-							},
-							"SinkSqlDefintiv": {
-								"ds_SchemaName": {
-									"value": "@pipeline().parameters.param_Schema",
-									"type": "Expression"
-								},
-								"ds_TableName": {
-									"value": "@pipeline().parameters.param_Table",
-									"type": "Expression"
-								}
 							}
 						}
 					},

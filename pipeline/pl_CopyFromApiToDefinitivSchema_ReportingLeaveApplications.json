@@ -38,8 +38,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "Organizations"
+							"param_SchemaName": "definitiv",
+							"param_TableName": "Organizations"
 						}
 					},
 					"firstRowOnly": false
@@ -186,8 +186,8 @@
 								"ds_PipelineName": "pl_B1_Payslips_ApiToDefinitiv"
 							},
 							"sink1": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "ReportingLeaveApplications"
+								"param_SchemaName": "definitiv",
+								"param_TableName": "ReportingLeaveApplications"
 							}
 						}
 					},
@@ -249,8 +249,8 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "ReportingLeaveApplications"
+							"param_SchemaName": "definitiv",
+							"param_TableName": "ReportingLeaveApplications"
 						}
 					}
 				],
