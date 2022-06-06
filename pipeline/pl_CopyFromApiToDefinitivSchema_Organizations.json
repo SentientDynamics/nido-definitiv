@@ -57,6 +57,9 @@
 									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
+							},
+							"SinkSqlDefinitiv": {
+								"param_SchemaName": "definitiv"
 							}
 						}
 					},

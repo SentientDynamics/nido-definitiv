@@ -157,7 +157,12 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "df_UpdateReportingLeaveBalances",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"sink1": {
+								"param_SchemaName": "definitiv"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 16,
