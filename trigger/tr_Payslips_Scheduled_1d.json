@@ -8,6 +8,10 @@
 				"pipelineReference": {
 					"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "definitiv",
+					"param_TableName": "OrganizationPayRuns"
 				}
 			}
 		],
