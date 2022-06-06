@@ -29,6 +29,10 @@
 			"global_adls2_SqlErrorRowDirectory": {
 				"type": "string",
 				"value": "ErrorRows"
+			},
+			"global_CustomReportId_Timesheets": {
+				"type": "string",
+				"value": "9B394863-2B5E-4704-8AD4-82352C1111C1"
 			}
 		}
 	},
