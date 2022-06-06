@@ -5,20 +5,7 @@
 			{
 				"name": "Lookup1",
 				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "SetPipelineTriggerTime",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "SetPipelineRunId",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -211,32 +198,6 @@
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
-				}
-			},
-			{
-				"name": "SetPipelineTriggerTime",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineTriggerTime",
-					"value": {
-						"value": "@coalesce(pipeline().parameters.MasterPipelineTriggerTime,pipeline().TriggerTime)",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "SetPipelineRunId",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineRunId",
-					"value": {
-						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
-						"type": "Expression"
-					}
 				}
 			}
 		],
