@@ -157,7 +157,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_UpdateEmployeesEmploymentHistory",
+						"referenceName": "df_EmploymentHistory",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"source1": {
@@ -274,7 +274,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_UpdateEmployees",
+						"referenceName": "df_Employees",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"source1": {
