@@ -1,5 +1,5 @@
 {
-	"name": "df_TruncateInsertCustomReportPayslips",
+	"name": "df_Payslips",
 	"properties": {
 		"folder": {
 			"name": "01_Payslips"

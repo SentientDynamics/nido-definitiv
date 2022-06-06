@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "LookupOrgPayRuns",
+				"name": "OrgPayRuns",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
@@ -33,17 +33,11 @@
 				}
 			},
 			{
-				"name": "ForEachOrgPayRun",
+				"name": "OrgPayRun",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "LookupOrgPayRuns",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "lookup_PreRowCount",
+						"activity": "OrgPayRuns",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -52,17 +46,17 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('LookupOrgPayRuns').output.value",
+						"value": "@activity('OrgPayRuns').output.value",
 						"type": "Expression"
 					},
 					"activities": [
 						{
-							"name": "CopyApiToBlob",
-							"description": "CustomReportPayslips",
+							"name": "ApiToJson",
+							"description": "",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
-								"timeout": "7.00:00:00",
+								"timeout": "0.01:00:00",
 								"retry": 0,
 								"retryIntervalInSeconds": 30,
 								"secureOutput": false,
@@ -140,7 +134,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat('/api/custom-reports/EB7BCD04-6849-4B58-A786-1168A9AF829F?organizationId=', item().organizationId, '&selectedPayRunId=', item().payRunId)",
+											"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Payslips,\n'?organizationId=', \nitem().organizationId, \n'&selectedPayRunId=', \nitem().payRunId)",
 											"type": "Expression"
 										}
 									}
@@ -179,12 +173,12 @@
 				}
 			},
 			{
-				"name": "df_B1_Payslips_ApiToDefintiv",
+				"name": "df_Payslips",
 				"description": "",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "ForEachOrgPayRun",
+						"activity": "OrgPayRun",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -200,7 +194,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_TruncateInsertCustomReportPayslips",
+						"referenceName": "df_Payslips",
 						"type": "DataFlowReference",
 						"parameters": {
 							"PipelineRunId": {
@@ -240,8 +234,14 @@
 								}
 							},
 							"sinkSql": {
-								"ds_SchemaName": "definitiv",
-								"ds_TableName": "CustomReportPayslipsE"
+								"ds_SchemaName": {
+									"value": "@pipeline().parameters.param_Schema",
+									"type": "Expression"
+								},
+								"ds_TableName": {
+									"value": "@pipeline().parameters.param_Table",
+									"type": "Expression"
+								}
 							}
 						}
 					},
@@ -253,78 +253,11 @@
 				}
 			},
 			{
-				"name": "lookup_PreRowCount",
-				"type": "Lookup",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) from definitiv.CustomReportPayslipsD",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "ds_sql_tnk001",
-						"type": "DatasetReference",
-						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "CustomReportPayslipsD"
-						}
-					},
-					"firstRowOnly": false
-				}
-			},
-			{
-				"name": "lookup_PostRowCount",
-				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "df_B1_Payslips_ApiToDefintiv",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) from definitiv.CustomReportPayslipsE",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "ds_sql_tnk001",
-						"type": "DatasetReference",
-						"parameters": {
-							"ds_SchemaName": "definitiv",
-							"ds_TableName": "CustomReportPayslipsE"
-						}
-					},
-					"firstRowOnly": false
-				}
-			},
-			{
 				"name": "pl_monitoring_logic-nido-prod-eastau-100",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "lookup_PostRowCount",
+						"activity": "df_Payslips",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -358,6 +291,16 @@
 				}
 			}
 		],
+		"parameters": {
+			"param_Schema": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"param_Table": {
+				"type": "string",
+				"defaultValue": "CustomReportPayslipsE"
+			}
+		},
 		"folder": {
 			"name": "01_Payslips"
 		},
