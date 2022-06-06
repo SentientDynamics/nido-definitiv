@@ -37,6 +37,10 @@
 			"global_CustomReportId_Rosters": {
 				"type": "string",
 				"value": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+			},
+			"global_CustomReportId_Payslips": {
+				"type": "string",
+				"value": "global_CustomReportId_Payslips"
 			}
 		}
 	},
