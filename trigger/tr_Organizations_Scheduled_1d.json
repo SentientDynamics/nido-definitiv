@@ -1,5 +1,5 @@
 {
-	"name": "tr_Organizations_1d",
+	"name": "tr_Organizations_Scheduled_1d",
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
@@ -8,6 +8,10 @@
 				"pipelineReference": {
 					"referenceName": "pl_CopyFromApiToDefinitivSchema_Organizations",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_Schema": "definitiv",
+					"param_Table": "Organizations"
 				}
 			}
 		],
