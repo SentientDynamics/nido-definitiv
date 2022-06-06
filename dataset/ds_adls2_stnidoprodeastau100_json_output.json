@@ -7,7 +7,7 @@
 		},
 		"parameters": {
 			"ds_PipelineTriggerTime": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "2022-01-25T00:18:17.611502Z"
 			},
 			"ds_PipelineRunId": {
