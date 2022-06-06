@@ -8,10 +8,6 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
-						"type": "DatasetReference"
-					},
 					"name": "source1"
 				}
 			],
@@ -29,7 +25,7 @@
 					"name": "AlterRow1"
 				}
 			],
-			"script": "source(output(\n\t\tapprovalStatus as string,\n\t\tcentreCostCode as string,\n\t\tdate as string,\n\t\temployee as string,\n\t\temployeeId as string,\n\t\t{employeeRef.No} as integer,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tleaveApplicationId as string,\n\t\torganizationId as string,\n\t\tpayRunId as string,\n\t\tperiodEndDate as date,\n\t\tperiodStartDate as date,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\troom as string,\n\t\troomCostCode as string,\n\t\troster as string,\n\t\trosterId as string,\n\t\tstart as string,\n\t\ttimesheetId as string,\n\t\ttotalCost as double,\n\t\ttotalHours as double,\n\t\tworkType as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['timesheetId','leaveApplicationId','date'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+			"script": "source(output(\n\t\tapprovalStatus as string,\n\t\tcentreCostCode as string,\n\t\tdate as string,\n\t\temployee as string,\n\t\temployeeId as string,\n\t\t{employeeRef.No} as integer,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tleaveApplicationId as string,\n\t\torganizationId as string,\n\t\tpayRunId as string,\n\t\tperiodEndDate as date,\n\t\tperiodStartDate as date,\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\troom as string,\n\t\troomCostCode as string,\n\t\troster as string,\n\t\trosterId as string,\n\t\tstart as string,\n\t\ttimesheetId as string,\n\t\ttotalCost as double,\n\t\ttotalHours as double,\n\t\tworkType as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> source1\nsource1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['timesheetId','leaveApplicationId','date'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
 		}
 	}
 }

@@ -130,22 +130,6 @@
 										}
 									}
 								}
-							],
-							"outputs": [
-								{
-									"referenceName": "ds_adls2_stnidoprodeastau100_json_input",
-									"type": "DatasetReference",
-									"parameters": {
-										"ds_PipelineTriggerTime": {
-											"value": "@variables('PipelineRunId')",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@variables('PipelineTriggerTime')",
-											"type": "Expression"
-										}
-									}
-								}
 							]
 						}
 					]
@@ -218,15 +202,7 @@
 							"fileExtension": ".csv"
 						}
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
+					"enableStaging": false
 				},
 				"inputs": [
 					{
@@ -235,21 +211,6 @@
 						"parameters": {
 							"param_SchemaName": "definitiv",
 							"param_TableName": "ReportingLeaveBalances"
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "ds_adls2_stnidoprodeastau100_csv",
-						"type": "DatasetReference",
-						"parameters": {
-							"schemaName": "definitiv",
-							"tableName": "ReportingLeaveBalances",
-							"pipelineRunId": {
-								"value": "@pipeline().RunId",
-								"type": "Expression"
-							},
-							"pipelineTriggerTime": "@pipeline().TriggerTime"
 						}
 					}
 				]
