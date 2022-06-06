@@ -17,10 +17,10 @@
 		"ls_rest_definitiv_properties_typeProperties_url": {
 			"value": "@{linkedService().sourceBaseUrl}"
 		},
-		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Schema": {
+		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName": {
 			"value": "definitiv"
 		},
-		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_Table": {
+		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName": {
 			"value": "Organizations"
 		},
 		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
