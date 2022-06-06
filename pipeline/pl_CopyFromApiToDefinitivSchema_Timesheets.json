@@ -192,6 +192,16 @@
 									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
+							},
+							"SinkSqlDefintiv": {
+								"param_SchemaName": {
+									"value": "@pipeline().parameters.param_SchemaName",
+									"type": "Expression"
+								},
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
 							}
 						}
 					},
@@ -204,11 +214,11 @@
 			}
 		],
 		"parameters": {
-			"param_Schema": {
+			"param_SchemaName": {
 				"type": "string",
 				"defaultValue": "definitiv"
 			},
-			"param_Table": {
+			"param_TableName": {
 				"type": "string",
 				"defaultValue": "CustomReportTimesheetsD"
 			}

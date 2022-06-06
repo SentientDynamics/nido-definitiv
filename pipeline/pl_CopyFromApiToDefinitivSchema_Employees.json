@@ -110,13 +110,9 @@
 									}
 								},
 								"sink": {
-									"type": "JsonSink",
-									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
-									},
-									"formatSettings": {
-										"type": "JsonWriteSettings"
-									}
+									"type": "AzureSqlSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
 								},
 								"enableStaging": false
 							},
@@ -129,6 +125,15 @@
 											"value": "@concat('/api/employees/', item().employeeId, '/employment-history')",
 											"type": "Expression"
 										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_sql_tnk001",
+									"type": "DatasetReference",
+									"parameters": {
+										"param_SchemaName": "definitiv"
 									}
 								}
 							]
@@ -227,15 +232,6 @@
 						"requestMethod": "GET",
 						"paginationRules": {
 							"supportRFC5988": "true"
-						}
-					},
-					"sink": {
-						"type": "JsonSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
-						},
-						"formatSettings": {
-							"type": "JsonWriteSettings"
 						}
 					},
 					"enableStaging": false
