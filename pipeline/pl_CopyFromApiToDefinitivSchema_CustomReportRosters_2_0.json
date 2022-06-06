@@ -31,7 +31,7 @@
 				}
 			},
 			{
-				"name": "CopyToJson_CustomReportRosters_copy2",
+				"name": "ApiToJson",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -98,7 +98,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"sourceRelativeUrl": {
-								"value": "@concat(\n'/api/custom-reports/BE1BFE92-8295-4F80-A36C-1A63608C1433?organizationId=',\n'aaaaaaaa-bbbb-cccc-dddd-000000000000',\n'&startDate=', \nformatDateTime(variables('varRosterStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varRosterFinishDate'), 'yyyy-MM-dd')\n)",
+								"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Rosters,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=', \nformatDateTime(variables('varRosterStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varRosterFinishDate'), 'yyyy-MM-dd')\n)",
 								"type": "Expression"
 							}
 						}
@@ -134,11 +134,11 @@
 				]
 			},
 			{
-				"name": "df_UpdateCustomReportRosters",
+				"name": "df_Rosters",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "CopyToJson_CustomReportRosters_copy2",
+						"activity": "ApiToJson",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -154,7 +154,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_UpdateCusomReportRosters",
+						"referenceName": "df_Rosters",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"SourceBlobDefinitiv": {

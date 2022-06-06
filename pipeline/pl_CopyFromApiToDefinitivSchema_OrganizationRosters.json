@@ -460,7 +460,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_UpdateCusomReportRosters",
+						"referenceName": "df_Rosters",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"SourceBlobDefinitiv": {
