@@ -26,13 +26,10 @@
 			],
 			"transformations": [
 				{
-					"name": "Flatten1"
-				},
-				{
 					"name": "AlterRow1"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 foldDown(unroll(reportData, reportData),\n\tmapColumn(\n\t\temployeeId = reportData.employeeId,\n\t\temployeeNumber = reportData.employeeNumber,\n\t\tfirstName = reportData.firstName,\n\t\tleaveEntitlementHours = reportData.leaveEntitlementHours,\n\t\tleaveProRataHours = reportData.leaveProRataHours,\n\t\tleaveTotalHours = reportData.leaveTotalHours,\n\t\tleaveTypeId = reportData.leaveTypeId,\n\t\tleaveTypeName = reportData.leaveTypeName,\n\t\tprimaryDepartmentCode = reportData.primaryDepartmentCode,\n\t\tprimaryDepartmentGlCode = reportData.primaryDepartmentGlCode,\n\t\tprimaryDepartmentName = reportData.primaryDepartmentName,\n\t\tprimaryLocationCode = reportData.primaryLocationCode,\n\t\tprimaryLocationGlCode = reportData.primaryLocationGlCode,\n\t\tprimaryLocationName = reportData.primaryLocationName,\n\t\tprimaryProjectCode = reportData.primaryProjectCode,\n\t\tprimaryProjectGlCode = reportData.primaryProjectGlCode,\n\t\tprimaryProjectName = reportData.primaryProjectName,\n\t\tprimaryRoleCode = reportData.primaryRoleCode,\n\t\tprimaryRoleName = reportData.primaryRoleName,\n\t\tprintName = reportData.printName,\n\t\tsurname = reportData.surname,\n\t\torganizationId,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Flatten1\nFlatten1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['employeeId','leaveTypeId'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 alterRow(upsertIf(true()),\n\tdeleteIf(true())) ~> AlterRow1\nAlterRow1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:true,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['employeeId','leaveTypeId'],\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
 		}
 	}
 }
