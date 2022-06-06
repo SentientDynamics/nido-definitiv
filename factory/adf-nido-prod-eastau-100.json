@@ -25,6 +25,10 @@
 			"global_logic_Monitoring_SAS": {
 				"type": "string",
 				"value": "?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE"
+			},
+			"global_adls2_SqlErrorRowDirectory": {
+				"type": "string",
+				"value": "ErrorRows"
 			}
 		}
 	},
