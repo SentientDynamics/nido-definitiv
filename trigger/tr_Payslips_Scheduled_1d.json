@@ -12,6 +12,9 @@
 				"startTime": "2022-04-01T01:00:00",
 				"timeZone": "AUS Eastern Standard Time",
 				"schedule": {
+					"minutes": [
+						0
+					],
 					"hours": [
 						1
 					]
