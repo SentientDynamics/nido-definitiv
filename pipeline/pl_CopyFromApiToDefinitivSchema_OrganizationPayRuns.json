@@ -246,6 +246,30 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "pl_CopyFromApiToDefinitivSchema_Payslips",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "df_OrgPayRuns",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_CopyFromApiToDefinitivSchema_Payslips",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"param_Schema": "definitiv",
+						"param_Table": "CustomReportPayslipsE"
+					}
+				}
 			}
 		],
 		"parameters": {

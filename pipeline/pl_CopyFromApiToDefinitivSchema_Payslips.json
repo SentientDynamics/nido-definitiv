@@ -1,5 +1,5 @@
 {
-	"name": "pl_B1_Payslips_ApiToDefinitiv",
+	"name": "pl_CopyFromApiToDefinitivSchema_Payslips",
 	"properties": {
 		"activities": [
 			{
