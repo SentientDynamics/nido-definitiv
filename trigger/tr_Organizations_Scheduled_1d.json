@@ -10,8 +10,8 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"param_Schema": "definitiv",
-					"param_Table": "Organizations"
+					"param_SchemaName": "definitiv",
+					"param_TableName": "Organizations"
 				}
 			}
 		],
