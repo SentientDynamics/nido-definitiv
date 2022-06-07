@@ -19,16 +19,23 @@
 						"type": "RestSource",
 						"additionalColumns": [
 							{
-								"name": "pipelineRunId",
+								"name": "PipelineRunId",
 								"value": {
 									"value": "@pipeline().RunId",
 									"type": "Expression"
 								}
 							},
 							{
-								"name": "pipelineTriggerTime",
+								"name": "PipelineTriggerTime",
 								"value": {
 									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "PipelineName",
+								"value": {
+									"value": "@pipeline().Pipeline",
 									"type": "Expression"
 								}
 							}
@@ -115,14 +122,80 @@
 					"dataflow": {
 						"referenceName": "df_Employees",
 						"type": "DataFlowReference",
+						"parameters": {
+							"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
+							"param_ErrorRowDirectory": "\"ErrorRows\""
+						},
 						"datasetParameters": {
-							"sink1": {
+							"sourceJson": {
+								"ds_PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"ds_PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"ds_FileSystem": {
+									"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+									"type": "Expression"
+								},
+								"ds_Directory": {
+									"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+									"type": "Expression"
+								},
+								"ds_PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"sinkSqlEmployee": {
 								"param_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemeName",
+									"value": "@pipeline().parameters.param_SchemeName1",
 									"type": "Expression"
 								},
 								"param_TableName": {
-									"value": "@pipeline().parameters.param_TableName",
+									"value": "@pipeline().parameters.param_TableName1",
+									"type": "Expression"
+								}
+							},
+							"sinkSqlEmployeePaymentAccounts": {
+								"param_SchemaName": {
+									"value": "@pipeline().parameters.param_SchemeName2",
+									"type": "Expression"
+								},
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName2",
+									"type": "Expression"
+								}
+							},
+							"sinkSqlEmployeePhoneNumbers": {
+								"param_SchemaName": {
+									"value": "@pipeline().parameters.param_SchemeName3",
+									"type": "Expression"
+								},
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName3",
+									"type": "Expression"
+								}
+							},
+							"sinkSqlEmployeeStreetAddresses": {
+								"param_SchemaName": {
+									"value": "@pipeline().parameters.param_SchemeName4",
+									"type": "Expression"
+								},
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName4",
+									"type": "Expression"
+								}
+							},
+							"sinkSqlEmployeeSuperAccounts": {
+								"param_SchemaName": {
+									"value": "@pipeline().parameters.param_SchemeName5",
+									"type": "Expression"
+								},
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName5",
 									"type": "Expression"
 								}
 							}
@@ -137,13 +210,53 @@
 			}
 		],
 		"parameters": {
-			"param_SchemeName": {
+			"param_SchemeName1": {
 				"type": "string",
 				"defaultValue": "definitiv"
 			},
-			"param_TableName": {
+			"param_TableName1": {
 				"type": "string",
 				"defaultValue": "Employees"
+			},
+			"param_SchemeName2": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"param_TableName2": {
+				"type": "string",
+				"defaultValue": "EmployeePaymentAccounts"
+			},
+			"param_SchemeName3": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"param_TableName3": {
+				"type": "string",
+				"defaultValue": "EmployeePhoneNumbers"
+			},
+			"param_SchemeName4": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"param_TableName4": {
+				"type": "string",
+				"defaultValue": "EmployeeStreetAddresses"
+			},
+			"param_SchemeName5": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"param_TableName5": {
+				"type": "string",
+				"defaultValue": "EmployeeSuperAccounts"
+			},
+			"param_SchemeName6": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"param_TableName6": {
+				"type": "string",
+				"defaultValue": "EmployeeSuperAccounts"
 			}
 		},
 		"folder": {
