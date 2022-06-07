@@ -198,6 +198,19 @@
 									"value": "@pipeline().parameters.param_TableName5",
 									"type": "Expression"
 								}
+							},
+							"sinkSqlEmployeeSuperContributions": {
+								"param_SchemaName": {
+									"value": "@pipeline().parameters.param_SchemeName6",
+									"type": "Expression"
+								},
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName6",
+									"type": "Expression"
+								}
+							},
+							"sinkSqlEmployeeTaxDeclaration": {
+								"param_SchemaName": "definitiv"
 							}
 						}
 					},
@@ -256,7 +269,15 @@
 			},
 			"param_TableName6": {
 				"type": "string",
-				"defaultValue": "EmployeeSuperAccounts"
+				"defaultValue": "EmployeeSuperContributions"
+			},
+			"param_SchemeName7": {
+				"type": "string",
+				"defaultValue": "definitiv"
+			},
+			"param_TableName7": {
+				"type": "string",
+				"defaultValue": "EmployeeTaxDeclarations"
 			}
 		},
 		"folder": {
