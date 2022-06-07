@@ -1,0 +1,36 @@
+{
+	"name": "tr_Timesheets_Scheduled_1d",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_Timesheets",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "definitiv",
+					"param_TableName": "CustomReportTimesheetsD"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-06-07T05:12:00",
+				"timeZone": "AUS Eastern Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						15
+					]
+				}
+			}
+		}
+	}
+}
