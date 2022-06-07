@@ -74,14 +74,21 @@
 								}
 							},
 							{
-								"name": "PipelineTimesheetStartDate",
+								"name": "PipelineName",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "QueryStartDate",
 								"value": {
 									"value": "@variables('varTimesheetStartDate')",
 									"type": "Expression"
 								}
 							},
 							{
-								"name": "PipelineTimesheetEndDate",
+								"name": "QueryFinishDate",
 								"value": {
 									"value": "@variables('varTimesheetFinishDate')",
 									"type": "Expression"
