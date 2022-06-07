@@ -12,7 +12,7 @@
 						"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 						"type": "DatasetReference"
 					},
-					"name": "SourceApi"
+					"name": "sourceJson"
 				}
 			],
 			"sinks": [
@@ -33,7 +33,7 @@
 					"name": "Select2"
 				}
 			],
-			"script": "parameters{\n\tPipelineRunId as string,\n\tPipelineTriggerTime as string,\n\tPipelineName as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceApi\nSourceApi select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSelect2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (concat(\"ds_adsl2_stnidoprodeastau100_json/\", $PipelineName, \"/\",\r\n    toString(toTimestamp(left($PipelineTriggerTime, 26), 'yyyy-MM-dd\\'T\\'HH:mm:ss')),\r\n    \"_PipelineRunId_\", $PipelineRunId, \"_ErrorOutput\")),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false) ~> sinkSql"
+			"script": "parameters{\n\tPipelineRunId as string,\n\tPipelineTriggerTime as string,\n\tPipelineName as string\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSelect2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (concat(\"ds_adsl2_stnidoprodeastau100_json/\", $PipelineName, \"/\",\r\n    toString(toTimestamp(left($PipelineTriggerTime, 26), 'yyyy-MM-dd\\'T\\'HH:mm:ss')),\r\n    \"_PipelineRunId_\", $PipelineRunId, \"_ErrorOutput\")),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false) ~> sinkSql"
 		}
 	}
 }
