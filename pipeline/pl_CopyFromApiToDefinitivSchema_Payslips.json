@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select organizationId, payrunId, periodStart, periodEnd, [payslipGenerationStatus] from definitiv.OrganizationPayRuns where [payslipGenerationStatus] = 'Complete'",
+						"sqlReaderQuery": "select [Org.OrganizationId] as orgId, [payRunId], [Org.LegalName] as orgLegalName, [payslipGenerationStatus] from definitiv.OrganizationPayRuns where [payslipGenerationStatus] = 'Complete'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -68,44 +68,51 @@
 									"type": "RestSource",
 									"additionalColumns": [
 										{
-											"name": "OrgPayRun.OrganizationId",
+											"name": "PipelineName",
 											"value": {
-												"value": "@item().organizationId",
+												"value": "@pipeline().Pipeline",
 												"type": "Expression"
 											}
 										},
 										{
-											"name": "OrgPayRun.PayRunId",
-											"value": {
-												"value": "@item().payRunId",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "OrgPayRun.PeriodStartDate",
-											"value": {
-												"value": "@formatDateTime(item().periodStart, 'yyyy-MM-dd')",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "OrgPayRun.PeriodEndDate",
-											"value": {
-												"value": "@formatDateTime(item().periodEnd, 'yyyy-MM-dd')",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "OrgPayRun.PipelineRunId",
+											"name": "PipelineRunId",
 											"value": {
 												"value": "@pipeline().RunId",
 												"type": "Expression"
 											}
 										},
 										{
-											"name": "OrgPayRun.PipelineTriggerTime",
+											"name": "PipelineTriggerTime",
 											"value": {
 												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "Org.OrganizationId",
+											"value": {
+												"value": "@item().orgId",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "Org.LegalName",
+											"value": {
+												"value": "@item().orgLegalName",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "PayRun.PayRunId",
+											"value": {
+												"value": "@item().payRunId",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "PayRun.PayslipGenerationStatus",
+											"value": {
+												"value": "@item().payslipGenerationStatus",
 												"type": "Expression"
 											}
 										}
@@ -134,7 +141,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Payslips,\n'?organizationId=', \nitem().organizationId, \n'&selectedPayRunId=', \nitem().payRunId)",
+											"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Payslips,\n'?organizationId=', \nitem().orgId, \n'&selectedPayRunId=', \nitem().payRunId)",
 											"type": "Expression"
 										}
 									}
@@ -196,20 +203,6 @@
 					"dataflow": {
 						"referenceName": "df_Payslips",
 						"type": "DataFlowReference",
-						"parameters": {
-							"PipelineRunId": {
-								"value": "'@{pipeline().RunId}'",
-								"type": "Expression"
-							},
-							"PipelineTriggerTime": {
-								"value": "'@{pipeline().TriggerTime}'",
-								"type": "Expression"
-							},
-							"PipelineName": {
-								"value": "'@{pipeline().Pipeline}'",
-								"type": "Expression"
-							}
-						},
 						"datasetParameters": {
 							"sourceJson": {
 								"ds_PipelineTriggerTime": {

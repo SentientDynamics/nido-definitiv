@@ -11,7 +11,7 @@
 				"typeProperties": {
 					"variableName": "varRosterStartDate",
 					"value": {
-						"value": "@formatDateTime(addDays(utcNow(), -7), 'yyyy-MM-dd')",
+						"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'A.U.S. Eastern Standard Time'), -28), 'yyyy-MM-dd')",
 						"type": "Expression"
 					}
 				}
@@ -25,7 +25,7 @@
 				"typeProperties": {
 					"variableName": "varRosterFinishDate",
 					"value": {
-						"value": "@formatDateTime(addDays(utcNow(),28), 'yyyy-MM-dd')",
+						"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'A.U.S. Eastern Standard Time'), 28), 'yyyy-MM-dd')",
 						"type": "Expression"
 					}
 				}
