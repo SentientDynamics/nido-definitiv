@@ -567,7 +567,7 @@
 								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 								"type": "DatasetReference"
 							},
-							"name": "source1"
+							"name": "sourceJson"
 						}
 					],
 					"sinks": [
@@ -576,7 +576,73 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
-							"name": "sink1",
+							"name": "sinkSqlEmployee",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSqlEmployeePaymentAccounts",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSqlEmployeePhoneNumbers",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSqlEmployeeStreetAddresses",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSqlEmployeeSuperAccounts",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSqlEmployeeSuperContributions",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSqlEmployeeTaxDeclaration",
 							"rejectedDataLinkedService": {
 								"referenceName": "ls_adls2_stnidoprodeastau100",
 								"type": "LinkedServiceReference"
@@ -585,10 +651,49 @@
 					],
 					"transformations": [
 						{
-							"name": "Select1"
+							"name": "castDateColumns"
+						},
+						{
+							"name": "selectPaymentAccounts"
+						},
+						{
+							"name": "flattenPaymentAccounts"
+						},
+						{
+							"name": "selectEmployee"
+						},
+						{
+							"name": "selectPhoneNumbers"
+						},
+						{
+							"name": "flattenPhoneNumbers"
+						},
+						{
+							"name": "selectStreetAddresses"
+						},
+						{
+							"name": "flattenStreetAddresses"
+						},
+						{
+							"name": "selectSuperAccounts"
+						},
+						{
+							"name": "flattenSuperAccounts"
+						},
+						{
+							"name": "selectSuperContributions"
+						},
+						{
+							"name": "flattenSuperContributions"
+						},
+						{
+							"name": "selectTaxDeclarationObject"
+						},
+						{
+							"name": "selectTaxDeclarationItems"
 						}
 					],
-					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (\"ds_adls2_stnidoprodeastau100_log/definitiv.Employees\"),\n\ttransactionCommit: 'single',\n\treportSuccessOnError: true) ~> sink1"
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(output(\n\t\tdateOfBirth as date,\n\t\temailAddress as string,\n\t\temployeeId as string,\n\t\temployeeNumber as integer,\n\t\tfirstName as string,\n\t\tgender as string,\n\t\thiredDate as date,\n\t\tlastModified as string,\n\t\tmiddleName as string,\n\t\torganization as (name as string, organizationId as string),\n\t\torganizationId as string,\n\t\tpaymentAccounts as (bankAccount as (accountName as string, accountNumber as integer, bsb as string, reference as string), employeePaymentAccountId as string, paySplit as (amount as double, type as string), sortOrder as boolean)[],\n\t\tphoneNumbers as (bankAccount as (accountName as string, accountNumber as integer, bsb as string, reference as string), employeePaymentAccountId as string, paySplit as (amount as double, type as string), sortOrder as boolean)[],\n\t\tpipelineRunId as string,\n\t\tpipelineTriggerTime as string,\n\t\tpreferredName as string,\n\t\tstreetAddresses as (components as string, coordinate as string, countryCode as string, fullAddress as string, postCode as short, state as string, street as string, suburb as string, type as string)[],\n\t\tsuperAccounts as (ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, fundABN as long, fundESA as string, fundName as string, fundType as string, fundUSI as string, membershipNumber as string, smsfBankAccount as (accountName as string, accountNumber as integer, bsb as integer, reference as string))[],\n\t\tsuperContributions as (amount as double, ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, employeeSuperannuationContributionId as string, minimumAmount as string, payItemDescription as string, payItemId as string, valueType as string)[],\n\t\tsurname as string,\n\t\ttaxDeclaration as (australianResidentForTaxPurposes as boolean, canEdit as boolean, claimDependantsOrSpecialTaxOffset as boolean, claimMedicareLevyVariation as boolean, claimSeniorsPensionersOffset as boolean, claimTaxFreeThreshold as boolean, effectiveDate as string, employeeId as string, employeeTaxDeclarationId as string, financialSupplementDebt as boolean, helpDebt as boolean, lodgementDate as string, lodgementStatus as string, signatureDate as string, signaturePresent as string, taxFileNumber as integer, taxFileNumberExemption as string, workingHolidayMaker as boolean),\n\t\ttitle as string,\n\t\tusername as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nselectEmployee derive(each(match(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%')), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tpaymentAccounts,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectPaymentAccounts\nselectPaymentAccounts foldDown(unroll(paymentAccounts),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\temployeePaymentAccountId = paymentAccounts.employeePaymentAccountId,\n\t\tsortOrder = paymentAccounts.sortOrder,\n\t\tevery(paymentAccounts.bankAccount,match(true()),\n\t\t\t$0 = $$),\n\t\tevery(paymentAccounts.paySplit,match(true()),\n\t\t\t$0 = $$)\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenPaymentAccounts\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tdateOfBirth,\n\t\temailAddress,\n\t\temployeeNumber,\n\t\tfirstName,\n\t\tgender,\n\t\thiredDate,\n\t\tlastModified,\n\t\tmiddleName,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tpreferredName,\n\t\tsurname,\n\t\ttitle,\n\t\tusername,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectEmployee\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tphoneNumbers,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectPhoneNumbers\nselectPhoneNumbers foldDown(unroll(phoneNumbers),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\ttype = phoneNumbers.type,\n\t\tvalue = phoneNumbers.value\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenPhoneNumbers\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tstreetAddresses,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectStreetAddresses\nselectStreetAddresses foldDown(unroll(streetAddresses),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tcomponents = streetAddresses.components,\n\t\tcoordinate = streetAddresses.coordinate,\n\t\tcountryCode = streetAddresses.countryCode,\n\t\tfullAddress = streetAddresses.fullAddress,\n\t\tpostCode = streetAddresses.postCode,\n\t\tstate = streetAddresses.state,\n\t\tstreet = streetAddresses.street,\n\t\tsuburb = streetAddresses.suburb,\n\t\ttype = streetAddresses.type,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenStreetAddresses\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tsuperAccounts,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectSuperAccounts\nselectSuperAccounts foldDown(unroll(superAccounts),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tceaseDate = superAccounts.ceaseDate,\n\t\tcommencementDate = superAccounts.commencementDate,\n\t\t{superAccounts.employeeId} = superAccounts.employeeId,\n\t\temployeeSuperannuationAccountId = superAccounts.employeeSuperannuationAccountId,\n\t\tfundABN = superAccounts.fundABN,\n\t\tfundESA = superAccounts.fundESA,\n\t\tfundName = superAccounts.fundName,\n\t\tfundType = superAccounts.fundType,\n\t\tfundUSI = superAccounts.fundUSI,\n\t\tmembershipNumber = superAccounts.membershipNumber,\n\t\t{smsfBankAccount.accountName} = superAccounts.smsfBankAccount.accountName,\n\t\t{smsfBankAccount.accountNumber} = superAccounts.smsfBankAccount.accountNumber,\n\t\t{smsfBankAccount.bsb} = superAccounts.smsfBankAccount.bsb,\n\t\t{smsfBankAccount.reference} = superAccounts.smsfBankAccount.reference,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenSuperAccounts\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tsuperContributions,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectSuperContributions\nselectSuperContributions foldDown(unroll(superContributions),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tamount = superContributions.amount,\n\t\tceaseDate = superContributions.ceaseDate,\n\t\tcommencementDate = superContributions.commencementDate,\n\t\t{superContributions.employeeId} = superContributions.employeeId,\n\t\temployeeSuperannuationAccountId = superContributions.employeeSuperannuationAccountId,\n\t\temployeeSuperannuationContributionId = superContributions.employeeSuperannuationContributionId,\n\t\tminimumAmount = superContributions.minimumAmount,\n\t\tpayItemDescription = superContributions.payItemDescription,\n\t\tpayItemId = superContributions.payItemId,\n\t\tvalueType = superContributions.valueType,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenSuperContributions\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\ttaxDeclaration,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectTaxDeclarationObject\nselectTaxDeclarationObject select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\ttaxDeclaration = taxDeclaration.australianResidentForTaxPurposes,\n\t\tcanEdit = taxDeclaration.canEdit,\n\t\tclaimDependantsOrSpecialTaxOffset = taxDeclaration.claimDependantsOrSpecialTaxOffset,\n\t\tclaimMedicareLevyVariation = taxDeclaration.claimMedicareLevyVariation,\n\t\tclaimSeniorsPensionersOffset = taxDeclaration.claimSeniorsPensionersOffset,\n\t\tclaimTaxFreeThreshold = taxDeclaration.claimTaxFreeThreshold,\n\t\teffectiveDate = taxDeclaration.effectiveDate,\n\t\t{taxDeclaration.employeeId} = taxDeclaration.employeeId,\n\t\temployeeTaxDeclarationId = taxDeclaration.employeeTaxDeclarationId,\n\t\tfinancialSupplementDebt = taxDeclaration.financialSupplementDebt,\n\t\thelpDebt = taxDeclaration.helpDebt,\n\t\tlodgementDate = taxDeclaration.lodgementDate,\n\t\tlodgementStatus = taxDeclaration.lodgementStatus,\n\t\tsignatureDate = taxDeclaration.signatureDate,\n\t\tsignaturePresent = taxDeclaration.signaturePresent,\n\t\ttaxFileNumber = taxDeclaration.taxFileNumber,\n\t\ttaxFileNumberExemption = taxDeclaration.taxFileNumberExemption,\n\t\tworkingHolidayMaker = taxDeclaration.workingHolidayMaker,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectTaxDeclarationItems\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployee\nflattenPaymentAccounts sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeePaymentAccounts\nflattenPhoneNumbers sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeePhoneNumbers\nflattenStreetAddresses sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeeStreetAddresses\nflattenSuperAccounts sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeeSuperAccounts\nflattenSuperContributions sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeeSuperContributions\nselectTaxDeclarationItems sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeeTaxDeclaration"
 				}
 			},
 			"dependsOn": [
@@ -674,7 +779,7 @@
 							"name": "castDateColumns"
 						}
 					],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerId as string,\n\t\tPipelineTriggerTime as string,\n\t\tcurrentFinancialYearEndDate as string,\n\t\tcurrentFinancialYearStartDate as string,\n\t\tpayCalendars as (atoLodgementsEnabled as boolean, description as string, payCalendarId as string, period as string, periodStartDate as string, proRataMode as string, weeklyFactor as double, weeklyFactorEquation as short)[],\n\t\tpayRuns as (backPayDateOverride as string, dateLastCalculated as string, dateOpened as string, datePublished as string, employeeCount as short, eofyLodgementStatus as string, financialYearEndDate as string, financialYearStartDate as string, initiatingUserId as string, initiatingUserName as string, lodgementStatus as string, notes as string, payCalendarId as string, payCalendarName as string, payRunId as string, paymentDate as string, payslipGenerationStatus as string, periodEnd as string, periodStart as string, publishingUserId as string, publishingUserName as string, runNumber as short, status as string, superannuationPaymentDate as string, type as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson foldDown(unroll(payRuns),\n\tmapColumn(\n\t\tbackPayDateOverride = payRuns.backPayDateOverride,\n\t\tdateLastCalculated = payRuns.dateLastCalculated,\n\t\tdateOpened = payRuns.dateOpened,\n\t\tdatePublished = payRuns.datePublished,\n\t\temployeeCount = payRuns.employeeCount,\n\t\teofyLodgementStatus = payRuns.eofyLodgementStatus,\n\t\tfinancialYearEndDate = payRuns.financialYearEndDate,\n\t\tfinancialYearStartDate = payRuns.financialYearStartDate,\n\t\tinitiatingUserId = payRuns.initiatingUserId,\n\t\tinitiatingUserName = payRuns.initiatingUserName,\n\t\tlodgementStatus = payRuns.lodgementStatus,\n\t\tnotes = payRuns.notes,\n\t\tpayCalendarId = payRuns.payCalendarId,\n\t\tpayCalendarName = payRuns.payCalendarName,\n\t\tpayRunId = payRuns.payRunId,\n\t\tpaymentDate = payRuns.paymentDate,\n\t\tpayslipGenerationStatus = payRuns.payslipGenerationStatus,\n\t\tperiodEnd = payRuns.periodEnd,\n\t\tperiodStart = payRuns.periodStart,\n\t\tpublishingUserId = payRuns.publishingUserId,\n\t\tpublishingUserName = payRuns.publishingUserName,\n\t\trunNumber = payRuns.runNumber,\n\t\tstatus = payRuns.status,\n\t\tsuperannuationPaymentDate = payRuns.superannuationPaymentDate,\n\t\ttype = payRuns.type,\n\t\t{Org.LegalName},\n\t\t{Org.OrganizationId},\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenPayRuns\nflattenPayRuns derive(each(match(like(name, '%date%') || like(name, '%Date%') || like(name, '%Time%') || like(name, '%time%')), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerId as string,\n\t\tPipelineTriggerTime as string,\n\t\tcurrentFinancialYearEndDate as string,\n\t\tcurrentFinancialYearStartDate as string,\n\t\tpayCalendars as (atoLodgementsEnabled as boolean, description as string, payCalendarId as string, period as string, periodStartDate as string, proRataMode as string, weeklyFactor as double, weeklyFactorEquation as short)[],\n\t\tpayRuns as (backPayDateOverride as string, dateLastCalculated as string, dateOpened as string, datePublished as string, employeeCount as short, eofyLodgementStatus as string, financialYearEndDate as string, financialYearStartDate as string, initiatingUserId as string, initiatingUserName as string, lodgementStatus as string, notes as string, payCalendarId as string, payCalendarName as string, payRunId as string, paymentDate as string, payslipGenerationStatus as string, periodEnd as string, periodStart as string, publishingUserId as string, publishingUserName as string, runNumber as short, status as string, superannuationPaymentDate as string, type as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson foldDown(unroll(payRuns),\n\tmapColumn(\n\t\tbackPayDateOverride = payRuns.backPayDateOverride,\n\t\tdateLastCalculated = payRuns.dateLastCalculated,\n\t\tdateOpened = payRuns.dateOpened,\n\t\tdatePublished = payRuns.datePublished,\n\t\temployeeCount = payRuns.employeeCount,\n\t\teofyLodgementStatus = payRuns.eofyLodgementStatus,\n\t\tfinancialYearEndDate = payRuns.financialYearEndDate,\n\t\tfinancialYearStartDate = payRuns.financialYearStartDate,\n\t\tinitiatingUserId = payRuns.initiatingUserId,\n\t\tinitiatingUserName = payRuns.initiatingUserName,\n\t\tlodgementStatus = payRuns.lodgementStatus,\n\t\tnotes = payRuns.notes,\n\t\tpayCalendarId = payRuns.payCalendarId,\n\t\tpayCalendarName = payRuns.payCalendarName,\n\t\tpayRunId = payRuns.payRunId,\n\t\tpaymentDate = payRuns.paymentDate,\n\t\tpayslipGenerationStatus = payRuns.payslipGenerationStatus,\n\t\tperiodEnd = payRuns.periodEnd,\n\t\tperiodStart = payRuns.periodStart,\n\t\tpublishingUserId = payRuns.publishingUserId,\n\t\tpublishingUserName = payRuns.publishingUserName,\n\t\trunNumber = payRuns.runNumber,\n\t\tstatus = payRuns.status,\n\t\tsuperannuationPaymentDate = payRuns.superannuationPaymentDate,\n\t\ttype = payRuns.type,\n\t\t{Org.LegalName},\n\t\t{Org.OrganizationId},\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenPayRuns\nflattenPayRuns derive(each(match(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%')), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
 				}
 			},
 			"dependsOn": [
@@ -762,7 +867,7 @@
 							"name": "castDateColumns"
 						}
 					],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\t{PayRun.PayRunId} as string,\n\t\t{PayRun.PayslipGenerationStatus} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tbaseRate as double,\n\t\tdepartmentCode as string,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tnumberOfUnits as double,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpositionTitle as string,\n\t\tprojectCode as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(each(match(like(name, '%date%') || like(name, '%Date%') || like(name, '%Time%') || like(name, '%time%')), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false) ~> sinkSql"
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\t{PayRun.PayRunId} as string,\n\t\t{PayRun.PayslipGenerationStatus} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tbaseRate as double,\n\t\tdepartmentCode as string,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tnumberOfUnits as double,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpositionTitle as string,\n\t\tprojectCode as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(each(match(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%')), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false) ~> sinkSql"
 				}
 			},
 			"dependsOn": [
@@ -824,7 +929,7 @@
 								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 								"type": "DatasetReference"
 							},
-							"name": "SourceBlobDefinitiv"
+							"name": "sourceJson"
 						}
 					],
 					"sinks": [
@@ -833,7 +938,7 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
-							"name": "SinkSqlDefintiv",
+							"name": "sinkSql",
 							"rejectedDataLinkedService": {
 								"referenceName": "ls_adls2_stnidoprodeastau100",
 								"type": "LinkedServiceReference"
@@ -842,10 +947,10 @@
 					],
 					"transformations": [
 						{
-							"name": "CastDateType"
+							"name": "castDateColumns"
 						}
 					],
-					"script": "source(output(\n\t\t{CustomReportRosters.PipelineRunId} as string,\n\t\t{CustomReportRosters.PipelineTriggerTime} as string,\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tparamOrganizationId as string,\n\t\tparamRosterId as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string,\n\t\tvarRosterDate as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitiv\nSourceBlobDefinitiv derive(date = toDate(date),\n\t\tcreatedDate = toDate(createdDate),\n\t\tmodifiedDate = toDate(modifiedDate),\n\t\tRecordCreatedDate = toDate({CustomReportRosters.PipelineTriggerTime}),\n\t\tRecordIsDeleted = false(),\n\t\tRecordModifiedDate = toDate({CustomReportRosters.PipelineTriggerTime}),\n\t\tend = toTimestamp(concat(toString(toDate(date)), ' ', end, ':00')),\n\t\tstart = toTimestamp(concat(toString(toDate(date)), ' ', start, ':00'))) ~> CastDateType\nCastDateType sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: 'ds_adsl2_stnidoprodeastau100_csv/definitiv.CustomReportRostersD',\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: false,\n\tmapColumn(\n\t\tPipelineRunId = {CustomReportRosters.PipelineRunId},\n\t\tPipelineTriggerTime = {CustomReportRosters.PipelineTriggerTime},\n\t\tAmount = amount,\n\t\tCreatedByUser = createdByUser,\n\t\tCreatedDate = createdDate,\n\t\tDate = date,\n\t\tEmployeeId = employeeId,\n\t\tEmploymentType = employmentType,\n\t\tEnd = end,\n\t\tFirstName = firstName,\n\t\tLastName = lastName,\n\t\tModifiedByUser = modifiedByUser,\n\t\tModifiedDate = modifiedDate,\n\t\tOrganizationId = paramOrganizationId,\n\t\tParamRosterId = paramRosterId,\n\t\tQuantity = quantity,\n\t\tRoom = room,\n\t\tRosterEntryId = rosterEntryId,\n\t\tRosterId = rosterId,\n\t\tServiceCode = serviceCode,\n\t\tStart = start,\n\t\tVarRosterDate = varRosterDate,\n\t\tSourceFileName,\n\t\tRecordCreatedDate,\n\t\tRecordIsDeleted,\n\t\tRecordModifiedDate\n\t)) ~> SinkSqlDefintiv"
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tQueryFinishDate as date,\n\t\tQueryStartDate as date,\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(each(match(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%')), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time')),\n\t\tend = toTimestamp(concat(toString(toDate(date)), ' ', end, ':00')),\n\t\tstart = toTimestamp(concat(toString(toDate(date)), ' ', start, ':00'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
 				}
 			},
 			"dependsOn": [

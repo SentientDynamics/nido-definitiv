@@ -15,6 +15,14 @@
 			"type": "string",
 			"defaultValue": "Organizations"
 		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "CustomReportRostersD"
+		},
 		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
@@ -119,16 +127,23 @@
 								"type": "RestSource",
 								"additionalColumns": [
 									{
-										"name": "pipelineRunId",
+										"name": "PipelineRunId",
 										"value": {
 											"value": "@pipeline().RunId",
 											"type": "Expression"
 										}
 									},
 									{
-										"name": "pipelineTriggerTime",
+										"name": "PipelineTriggerTime",
 										"value": {
 											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "PipelineName",
+										"value": {
+											"value": "@pipeline().Pipeline",
 											"type": "Expression"
 										}
 									}
@@ -215,16 +230,100 @@
 							"dataflow": {
 								"referenceName": "df_Employees",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
+									"param_ErrorRowDirectory": "\"ErrorRows\""
+								},
 								"datasetParameters": {
-									"source1": {},
-									"sink1": {
+									"sourceJson": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"sinkSqlEmployee": {
 										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemeName",
+											"value": "@pipeline().parameters.param_SchemeName1",
 											"type": "Expression"
 										},
 										"param_TableName": {
-											"value": "@pipeline().parameters.param_TableName",
+											"value": "@pipeline().parameters.param_TableName1",
+											"type": "Expression"
+										}
+									},
+									"sinkSqlEmployeePaymentAccounts": {
+										"param_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemeName2",
+											"type": "Expression"
+										},
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName2",
+											"type": "Expression"
+										}
+									},
+									"sinkSqlEmployeePhoneNumbers": {
+										"param_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemeName3",
+											"type": "Expression"
+										},
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName3",
+											"type": "Expression"
+										}
+									},
+									"sinkSqlEmployeeStreetAddresses": {
+										"param_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemeName4",
+											"type": "Expression"
+										},
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName4",
+											"type": "Expression"
+										}
+									},
+									"sinkSqlEmployeeSuperAccounts": {
+										"param_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemeName5",
+											"type": "Expression"
+										},
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName5",
+											"type": "Expression"
+										}
+									},
+									"sinkSqlEmployeeSuperContributions": {
+										"param_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemeName6",
+											"type": "Expression"
+										},
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName6",
+											"type": "Expression"
+										}
+									},
+									"sinkSqlEmployeeTaxDeclaration": {
+										"param_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemeName7",
+											"type": "Expression"
+										},
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName7",
 											"type": "Expression"
 										}
 									}
@@ -244,13 +343,61 @@
 					"cancelAfter": {}
 				},
 				"parameters": {
-					"param_SchemeName": {
+					"param_SchemeName1": {
 						"type": "string",
 						"defaultValue": "definitiv"
 					},
-					"param_TableName": {
+					"param_TableName1": {
 						"type": "string",
 						"defaultValue": "Employees"
+					},
+					"param_SchemeName2": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_TableName2": {
+						"type": "string",
+						"defaultValue": "EmployeePaymentAccounts"
+					},
+					"param_SchemeName3": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_TableName3": {
+						"type": "string",
+						"defaultValue": "EmployeePhoneNumbers"
+					},
+					"param_SchemeName4": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_TableName4": {
+						"type": "string",
+						"defaultValue": "EmployeeStreetAddresses"
+					},
+					"param_SchemeName5": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_TableName5": {
+						"type": "string",
+						"defaultValue": "EmployeeSuperAccounts"
+					},
+					"param_SchemeName6": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_TableName6": {
+						"type": "string",
+						"defaultValue": "EmployeeSuperContributions"
+					},
+					"param_SchemeName7": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_TableName7": {
+						"type": "string",
+						"defaultValue": "EmployeeTaxDeclarations"
 					}
 				},
 				"folder": {
@@ -813,8 +960,7 @@
 											"type": "Expression"
 										}
 									}
-								},
-								"linkedServiceParameters": {}
+								}
 							},
 							"staging": {},
 							"integrationRuntime": {
@@ -1378,7 +1524,7 @@
 						"typeProperties": {
 							"variableName": "varRosterStartDate",
 							"value": {
-								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'A.U.S. Eastern Standard Time'), -28), 'yyyy-MM-dd')",
+								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
@@ -1392,7 +1538,7 @@
 						"typeProperties": {
 							"variableName": "varRosterFinishDate",
 							"value": {
-								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'A.U.S. Eastern Standard Time'), 28), 'yyyy-MM-dd')",
+								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 28), 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
@@ -1427,16 +1573,37 @@
 								"type": "RestSource",
 								"additionalColumns": [
 									{
-										"name": "CustomReportRosters.PipelineTriggerTime",
+										"name": "PipelineName",
+										"value": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "PipelineRunId",
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "PipelineTriggerTime",
 										"value": {
 											"value": "@pipeline().TriggerTime",
 											"type": "Expression"
 										}
 									},
 									{
-										"name": "CustomReportRosters.PipelineRunId",
+										"name": "QueryStartDate",
 										"value": {
-											"value": "@pipeline().RunId",
+											"value": "@variables('varRosterStartDate')",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "QueryFinishDate",
+										"value": {
+											"value": "@variables('varRosterFinishDate')",
 											"type": "Expression"
 										}
 									}
@@ -1523,9 +1690,18 @@
 							"dataflow": {
 								"referenceName": "df_Rosters",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"param_FileSystem": {
+										"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+										"type": "Expression"
+									},
+									"param_ErrorRowDirectory": {
+										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+										"type": "Expression"
+									}
+								},
 								"datasetParameters": {
-									"SourceBlobDefinitiv": {
+									"sourceJson": {
 										"ds_PipelineTriggerTime": {
 											"value": "@pipeline().TriggerTime",
 											"type": "Expression"
@@ -1547,7 +1723,7 @@
 											"type": "Expression"
 										}
 									},
-									"SinkSqlDefintiv": {
+									"sinkSql": {
 										"param_SchemaName": {
 											"value": "@pipeline().parameters.param_SchemaName",
 											"type": "Expression"
@@ -2170,7 +2346,7 @@
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Day",
+						"frequency": "Week",
 						"interval": 1,
 						"startTime": "2022-06-06T04:33:00",
 						"timeZone": "AUS Eastern Standard Time",
@@ -2180,6 +2356,9 @@
 							],
 							"hours": [
 								1
+							],
+							"weekDays": [
+								"Sunday"
 							]
 						}
 					}
@@ -2202,7 +2381,10 @@
 							"referenceName": "pl_CopyFromApiToDefinitivSchema_Rosters",
 							"type": "PipelineReference"
 						},
-						"parameters": {}
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -2241,7 +2423,7 @@
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Day",
+						"frequency": "Week",
 						"interval": 1,
 						"startTime": "2022-04-01T01:00:00",
 						"timeZone": "AUS Eastern Standard Time",
@@ -2250,7 +2432,10 @@
 								0
 							],
 							"hours": [
-								1
+								2
+							],
+							"weekDays": [
+								"Thursday"
 							]
 						}
 					}

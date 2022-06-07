@@ -29,6 +29,12 @@
 		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
 			"value": "OrganizationPayRuns"
 		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
+			"value": "definitiv"
+		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
+			"value": "CustomReportRostersD"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"value": "container-adf-nido-prod-eastau-100-1"
 		},

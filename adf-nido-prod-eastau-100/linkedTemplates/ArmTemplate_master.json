@@ -39,6 +39,14 @@
 			"type": "string",
 			"defaultValue": "OrganizationPayRuns"
 		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "CustomReportRostersD"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
 			"defaultValue": "container-adf-nido-prod-eastau-100-1"
@@ -199,6 +207,12 @@
 					},
 					"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName": {
 						"value": "[parameters('tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName')]"
+					},
+					"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName')]"
+					},
+					"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
 					},
 					"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
 						"value": "[parameters('tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]"
