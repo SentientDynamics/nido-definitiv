@@ -1,0 +1,48 @@
+{
+	"name": "tr_Employees_Scheduled_1d",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_Employees",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemeName1": "definitiv",
+					"param_TableName1": "Employees",
+					"param_SchemeName2": "definitiv",
+					"param_TableName2": "Employees",
+					"param_SchemeName3": "definitiv",
+					"param_TableName3": "Employees",
+					"param_SchemeName4": "definitiv",
+					"param_TableName4": "Employees",
+					"param_SchemeName5": "definitiv",
+					"param_TableName5": "Employees",
+					"param_SchemeName6": "definitiv",
+					"param_TableName6": "Employees",
+					"param_SchemeName7": "definitiv",
+					"param_TableName7": "Employees"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-06-07T04:42:00",
+				"timeZone": "AUS Eastern Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						11
+					]
+				}
+			}
+		}
+	}
+}
