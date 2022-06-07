@@ -59,16 +59,16 @@
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7": {
 			"value": "Employees"
 		},
-		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName": {
+		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName": {
 			"value": "definitiv"
 		},
-		"tr_Organizations_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName": {
+		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName": {
 			"value": "Organizations"
 		},
-		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
+		"tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
 			"value": "definitiv"
 		},
-		"tr_Payslips_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
+		"tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
 			"value": "OrganizationPayRuns"
 		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
