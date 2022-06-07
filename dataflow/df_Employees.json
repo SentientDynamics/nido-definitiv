@@ -12,7 +12,7 @@
 						"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "sourceJson"
 				}
 			],
 			"sinks": [
@@ -21,19 +21,15 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference"
 					},
-					"name": "sink1",
+					"name": "sinkSql",
 					"rejectedDataLinkedService": {
 						"referenceName": "ls_adls2_stnidoprodeastau100",
 						"type": "LinkedServiceReference"
 					}
 				}
 			],
-			"transformations": [
-				{
-					"name": "Select1"
-				}
-			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 select(skipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nSelect1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (\"ds_adls2_stnidoprodeastau100_log/definitiv.Employees\"),\n\ttransactionCommit: 'single',\n\treportSuccessOnError: true) ~> sink1"
+			"transformations": [],
+			"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: (\"ds_adls2_stnidoprodeastau100_log/definitiv.Employees\"),\n\ttransactionCommit: 'single',\n\treportSuccessOnError: true) ~> sinkSql"
 		}
 	}
 }
