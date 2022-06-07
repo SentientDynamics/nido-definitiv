@@ -73,11 +73,11 @@
 		},
 		"dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value": {
 			"type": "string",
-			"defaultValue": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+			"defaultValue": "BE1BFE92-8295-4F80-A36C-1A63608C1433"
 		},
 		"dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value": {
 			"type": "string",
-			"defaultValue": "global_CustomReportId_Payslips"
+			"defaultValue": "EB7BCD04-6849-4B58-A786-1168A9AF829F"
 		},
 		"dataFactory_properties_globalParameters_global_CustomReportId_Wages_value": {
 			"type": "string",
