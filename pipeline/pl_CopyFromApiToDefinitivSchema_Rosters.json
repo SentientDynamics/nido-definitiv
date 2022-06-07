@@ -177,6 +177,16 @@
 					"dataflow": {
 						"referenceName": "df_Rosters",
 						"type": "DataFlowReference",
+						"parameters": {
+							"param_FileSystem": {
+								"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+								"type": "Expression"
+							},
+							"param_ErrorRowDirectory": {
+								"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+								"type": "Expression"
+							}
+						},
 						"datasetParameters": {
 							"sourceJson": {
 								"ds_PipelineTriggerTime": {
