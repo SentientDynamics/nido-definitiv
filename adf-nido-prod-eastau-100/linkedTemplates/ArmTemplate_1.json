@@ -990,7 +990,10 @@
 							"dataflow": {
 								"referenceName": "df_Payslips",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
+									"param_ErrorRowDirectory": "\"ErrorRows\""
+								},
 								"datasetParameters": {
 									"sourceJson": {
 										"ds_PipelineTriggerTime": {
