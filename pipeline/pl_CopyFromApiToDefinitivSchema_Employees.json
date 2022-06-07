@@ -210,7 +210,14 @@
 								}
 							},
 							"sinkSqlEmployeeTaxDeclaration": {
-								"param_SchemaName": "definitiv"
+								"param_SchemaName": {
+									"value": "@pipeline().parameters.param_SchemeName7",
+									"type": "Expression"
+								},
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName7",
+									"type": "Expression"
+								}
 							}
 						}
 					},
