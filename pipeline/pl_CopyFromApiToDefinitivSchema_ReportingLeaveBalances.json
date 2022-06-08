@@ -178,7 +178,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_UpdateReportingLeaveBalances",
+						"referenceName": "df_ReportingLeaveBalances",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"sourceJson": {
@@ -215,9 +215,9 @@
 							}
 						}
 					},
-					"compute": {
-						"coreCount": 16,
-						"computeType": "General"
+					"integrationRuntime": {
+						"referenceName": "AustraliaEastIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
 					},
 					"traceLevel": "Fine"
 				}

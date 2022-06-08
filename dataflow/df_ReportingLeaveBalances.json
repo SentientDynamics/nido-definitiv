@@ -12,10 +12,25 @@
 					"name": "sourceJson"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference"
+					},
+					"name": "sinkSql",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_adls2_stnidoprodeastau100",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
 			"transformations": [
 				{
 					"name": "flattenReportData"
+				},
+				{
+					"name": "castDateColumns"
 				}
 			],
 			"scriptLines": [
@@ -72,7 +87,24 @@
 				"          SourceFileName",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flattenReportData"
+				"     skipDuplicateMapOutputs: false) ~> flattenReportData",
+				"flattenReportData derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns",
+				"castDateColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     recreate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'allErrors',",
+				"     outputRejectedData: true,",
+				"     rejectedData_fileSystem: ($param_FileSystem),",
+				"     rejectedData_folderPath: ($param_ErrorRowDirectory),",
+				"     transactionCommit: 'batch',",
+				"     reportSuccessOnError: true) ~> sinkSql"
 			]
 		}
 	}
