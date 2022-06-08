@@ -210,10 +210,12 @@
 		],
 		"parameters": {
 			"param_SchemaName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "definitiv"
 			},
 			"param_TableName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "ReportingLeaveBalances"
 			}
 		},
 		"variables": {
