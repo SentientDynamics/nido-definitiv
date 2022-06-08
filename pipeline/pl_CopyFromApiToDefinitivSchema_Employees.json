@@ -227,6 +227,43 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Employees",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "df_Employees",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT [employeeId] FROM [definitiv].[Employees]",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_SchemaName": "definitiv",
+							"param_TableName": "Employees"
+						}
+					},
+					"firstRowOnly": false
+				}
 			}
 		],
 		"parameters": {
