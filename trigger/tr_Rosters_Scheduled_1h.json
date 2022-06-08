@@ -11,7 +11,7 @@
 				},
 				"parameters": {
 					"param_SchemaName": "definitiv",
-					"param_TableName": "CustomReportRostersD"
+					"param_TableName": "CustomReportRosters"
 				}
 			}
 		],
