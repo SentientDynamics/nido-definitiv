@@ -1,6 +1,7 @@
 {
-	"name": "tr_Payslips_Scheduled_1w",
+	"name": "tr_PayRuns_Scheduled_1w",
 	"properties": {
+		"description": "Parent pipeline for Payslips and Wages.",
 		"annotations": [],
 		"runtimeState": "Started",
 		"pipelines": [
