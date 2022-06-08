@@ -118,7 +118,7 @@
 			},
 			"PreRowCount": {
 				"type": "string",
-				"defaultValue": "0"
+				"defaultValue": "@activity('PreRowCount').output.value[0]"
 			},
 			"PostRowCount": {
 				"type": "string",
