@@ -5,7 +5,14 @@
 			{
 				"name": "OrgPayRuns",
 				"type": "Lookup",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "PreRowCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -254,7 +261,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "df_Payslips",
+						"activity": "PostRowCount",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -275,8 +282,95 @@
 						"DataflowActivityOutput": {
 							"value": "@activity('df_Payslips').output",
 							"type": "Expression"
+						},
+						"PreRowCount": {
+							"value": "@activity('PreRowCount').output.value",
+							"type": "Expression"
+						},
+						"PostRowCount": {
+							"value": "@activity('PostRowCount').output.value",
+							"type": "Expression"
 						}
 					}
+				}
+			},
+			{
+				"name": "PreRowCount",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT COUNT(*) FROM DEFINITIV.CUSTOMREPORTPAYSLIPS",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_SchemaName": {
+								"value": "@pipeline().parameters.param_SchemaName",
+								"type": "Expression"
+							},
+							"param_TableName": {
+								"value": "@pipeline().parameters.param_TableName",
+								"type": "Expression"
+							}
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "PostRowCount",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "df_Payslips",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT COUNT(*) FROM DEFINITIV.CUSTOMREPORTPAYSLIPS",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_SchemaName": {
+								"value": "@pipeline().parameters.param_SchemaName",
+								"type": "Expression"
+							},
+							"param_TableName": {
+								"value": "@pipeline().parameters.param_TableName",
+								"type": "Expression"
+							}
+						}
+					},
+					"firstRowOnly": false
 				}
 			}
 		],
