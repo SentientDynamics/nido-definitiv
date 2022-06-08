@@ -122,7 +122,7 @@
 			},
 			"PostRowCount": {
 				"type": "string",
-				"defaultValue": "0"
+				"defaultValue": "@activity('PostRowCount').output.value[0]"
 			}
 		},
 		"folder": {
