@@ -111,13 +111,13 @@
 			"type": "string",
 			"defaultValue": "CustomReportTimesheetsD"
 		},
-		"tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
+		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
 		},
-		"tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
+		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "OrganizationPayRuns"
+			"defaultValue": "CustomReportWages"
 		}
 	},
 	"variables": {
@@ -4392,7 +4392,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_Payslips_Scheduled_1w')]",
+			"name": "[concat(parameters('factoryName'), '/tr_Wages_Scheduled_1w')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -4401,12 +4401,12 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns",
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_Wages",
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName')]"
 						}
 					}
 				],
@@ -4415,14 +4415,14 @@
 					"recurrence": {
 						"frequency": "Week",
 						"interval": 1,
-						"startTime": "2022-04-01T01:00:00",
+						"startTime": "2022-06-08T07:51:00",
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
 								0
 							],
 							"hours": [
-								2
+								3
 							],
 							"weekDays": [
 								"Thursday"
@@ -4432,7 +4432,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Wages')]"
 			]
 		}
 	]

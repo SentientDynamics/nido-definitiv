@@ -101,6 +101,12 @@
 		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
 			"value": "CustomReportTimesheetsD"
 		},
+		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName": {
+			"value": "definitiv"
+		},
+		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName": {
+			"value": "CustomReportWages"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"value": "container-adf-nido-prod-eastau-100-1"
 		},

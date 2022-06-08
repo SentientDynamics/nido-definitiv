@@ -135,6 +135,14 @@
 			"type": "string",
 			"defaultValue": "CustomReportTimesheetsD"
 		},
+		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "CustomReportWages"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
 			"defaultValue": "container-adf-nido-prod-eastau-100-1"
@@ -382,6 +390,32 @@
 					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
 						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName')]"
 					},
+					"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName')]"
+					},
+					"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName": {
+						"value": "[parameters('tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "adf-nido-prod-eastau-100_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
 					"tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
 						"value": "[parameters('tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]"
 					},
@@ -391,7 +425,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_0')]"
+				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_1')]"
 			]
 		}
 	]

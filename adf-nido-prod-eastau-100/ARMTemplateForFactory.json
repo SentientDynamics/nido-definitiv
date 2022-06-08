@@ -135,6 +135,14 @@
 			"type": "string",
 			"defaultValue": "CustomReportTimesheetsD"
 		},
+		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "CustomReportWages"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
 			"defaultValue": "container-adf-nido-prod-eastau-100-1"
@@ -4867,6 +4875,51 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Timesheets')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Wages_Scheduled_1w')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_Wages",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2022-06-08T07:51:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								3
+							],
+							"weekDays": [
+								"Thursday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Wages')]"
 			]
 		},
 		{
