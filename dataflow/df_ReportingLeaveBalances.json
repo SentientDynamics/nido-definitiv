@@ -35,7 +35,6 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     inferDriftedColumnTypes: true,",
-				"     limit: 1000,",
 				"     ignoreNoFilesFound: false,",
 				"     rowUrlColumn: 'SourceFileName',",
 				"     documentForm: 'documentPerLine') ~> sourceJson",
