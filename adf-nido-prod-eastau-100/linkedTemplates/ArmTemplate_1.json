@@ -101,7 +101,7 @@
 		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "CustomReportRostersD"
+			"defaultValue": "CustomReportRosters"
 		},
 		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
@@ -1892,7 +1892,8 @@
 							{
 								"activity": "Organization",
 								"dependencyConditions": [
-									"Succeeded"
+									"Succeeded",
+									"Failed"
 								]
 							}
 						],
@@ -2042,6 +2043,12 @@
 								"activity": "PostRowCount",
 								"dependencyConditions": [
 									"Succeeded"
+								]
+							},
+							{
+								"activity": "df_ReportingLeaveApplications",
+								"dependencyConditions": [
+									"Failed"
 								]
 							}
 						],

@@ -93,7 +93,7 @@
 			"value": "definitiv"
 		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
-			"value": "CustomReportRostersD"
+			"value": "CustomReportRosters"
 		},
 		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
 			"value": "definitiv"
