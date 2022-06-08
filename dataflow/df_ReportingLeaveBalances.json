@@ -19,6 +19,10 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     param_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),",
+				"     param_ErrorRowDirectory as string (\"ErrorRows\")",
+				"}",
 				"source(output(",
 				"          {Org.OrganizationId} as string,",
 				"          PipelineName as string,",
