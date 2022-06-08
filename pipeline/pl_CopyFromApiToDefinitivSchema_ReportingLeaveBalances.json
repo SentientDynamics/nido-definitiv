@@ -5,7 +5,14 @@
 			{
 				"name": "Organizations",
 				"type": "Lookup",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "varLeaveBalanceDate",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -119,7 +126,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat('/api/company/', item().organizationId, '/reporting/leave-balances?asOfDate=2021-11-01')",
+											"value": "@concat(\r\n'/api/company/', \r\nitem().organizationId, \r\n'/reporting/leave-balances?asOfDate=',\r\nvariables('varLeaveBalanceDate')\r\n)",
 											"type": "Expression"
 										}
 									}
@@ -231,6 +238,19 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "varLeaveBalanceDate",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "varLeaveBalanceDate",
+					"value": {
+						"value": "@formatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -241,6 +261,12 @@
 			"param_TableName": {
 				"type": "string",
 				"defaultValue": "ReportingLeaveBalances"
+			}
+		},
+		"variables": {
+			"varLeaveBalanceDate": {
+				"type": "String",
+				"defaultValue": "2022-06-01"
 			}
 		},
 		"folder": {
