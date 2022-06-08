@@ -51,8 +51,8 @@
 				"value": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
 			},
 			"global_REST_RequestTimeoutDuration": {
-				"type": "int",
-				"value": 30
+				"type": "string",
+				"value": "00:30:00"
 			}
 		}
 	},
