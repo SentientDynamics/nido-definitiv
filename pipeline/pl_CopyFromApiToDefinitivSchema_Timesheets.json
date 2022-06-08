@@ -54,8 +54,8 @@
 					}
 				],
 				"policy": {
-					"timeout": "0.01:00:00",
-					"retry": 0,
+					"timeout": "0.03:00:00",
+					"retry": 3,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
@@ -101,7 +101,10 @@
 								}
 							}
 						],
-						"httpRequestTimeout": "00:10:00",
+						"httpRequestTimeout": {
+							"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+							"type": "Expression"
+						},
 						"requestInterval": "00.00:00:00.010",
 						"requestMethod": "GET",
 						"paginationRules": {
@@ -172,8 +175,8 @@
 					}
 				],
 				"policy": {
-					"timeout": "1.00:00:00",
-					"retry": 0,
+					"timeout": "0.03:00:00",
+					"retry": 3,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
