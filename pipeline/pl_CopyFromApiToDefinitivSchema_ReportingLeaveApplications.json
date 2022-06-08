@@ -158,7 +158,7 @@
 				}
 			},
 			{
-				"name": "df_ReportingLeaveBalances",
+				"name": "df_ReportingLeaveApplications",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -178,17 +178,11 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_ReportingLeaveBalances",
+						"referenceName": "df_ReportingLeaveApplications",
 						"type": "DataFlowReference",
 						"parameters": {
-							"param_FileSystem": {
-								"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
-								"type": "Expression"
-							},
-							"param_ErrorRowDirectory": {
-								"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
-								"type": "Expression"
-							}
+							"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
+							"param_ErrorRowDirectory": "\"ErrorRows\""
 						},
 						"datasetParameters": {
 							"sourceJson": {
