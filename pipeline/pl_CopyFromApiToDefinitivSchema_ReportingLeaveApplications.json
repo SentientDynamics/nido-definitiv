@@ -119,7 +119,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat('/api/company/', item().organizationId, '/reporting/leave-balances?asOfDate=2021-11-01')",
+											"value": "@concat('/api/company/', item().organizationId, '/reporting/leave-applications')",
 											"type": "Expression"
 										}
 									}
