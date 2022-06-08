@@ -166,7 +166,7 @@
 						"referenceName": "df_UpdateReportingLeaveBalances",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"source1": {
+							"sourceJson": {
 								"ds_PipelineTriggerTime": {
 									"value": "@pipeline().TriggerTime",
 									"type": "Expression"
@@ -188,7 +188,7 @@
 									"type": "Expression"
 								}
 							},
-							"sink1": {
+							"sinkSql": {
 								"param_SchemaName": {
 									"value": "@pipeline().parameters.param_SchemaName",
 									"type": "Expression"
