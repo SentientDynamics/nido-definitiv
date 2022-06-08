@@ -225,6 +225,19 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "pl_monitoring_logic-nido-prod-eastau-100",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"parameters": {

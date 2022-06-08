@@ -10,7 +10,7 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"param_SchemeName": "definitiv",
+					"param_SchemaName": "definitiv",
 					"param_TableName": "EmployeesEmploymentHistory"
 				}
 			}
