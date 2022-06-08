@@ -174,7 +174,8 @@
 					{
 						"activity": "Organization",
 						"dependencyConditions": [
-							"Succeeded"
+							"Succeeded",
+							"Failed"
 						]
 					}
 				],
@@ -323,6 +324,12 @@
 						"activity": "PostRowCount",
 						"dependencyConditions": [
 							"Succeeded"
+						]
+					},
+					{
+						"activity": "df_ReportingLeaveApplications",
+						"dependencyConditions": [
+							"Failed"
 						]
 					}
 				],
