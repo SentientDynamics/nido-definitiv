@@ -172,7 +172,7 @@
 									"type": "Expression"
 								},
 								"ds_PipelineRunId": {
-									"value": "@variables('PipelineRunId')",
+									"value": "@pipeline().RunId",
 									"type": "Expression"
 								},
 								"ds_FileSystem": {
