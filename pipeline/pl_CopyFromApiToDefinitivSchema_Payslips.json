@@ -284,11 +284,11 @@
 							"type": "Expression"
 						},
 						"PreRowCount": {
-							"value": "@activity('PreRowCount').output.value",
+							"value": "@activity('PreRowCount').output.value[0]",
 							"type": "Expression"
 						},
 						"PostRowCount": {
-							"value": "@activity('PostRowCount').output.value",
+							"value": "@activity('PostRowCount').output.value[0]",
 							"type": "Expression"
 						}
 					}
@@ -309,7 +309,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT COUNT(*) FROM DEFINITIV.CUSTOMREPORTPAYSLIPS",
+						"sqlReaderQuery": "select count(*) as PreRowCount from definitiv.CustomReportPayslips",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -352,7 +352,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT COUNT(*) FROM DEFINITIV.CUSTOMREPORTPAYSLIPS",
+						"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.CustomReportPayslips",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
