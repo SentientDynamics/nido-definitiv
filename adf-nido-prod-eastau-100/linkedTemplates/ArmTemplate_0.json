@@ -59,6 +59,10 @@
 			"type": "string",
 			"defaultValue": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
 		},
+		"dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_value": {
+			"type": "string",
+			"defaultValue": "00:30:00"
+		},
 		"dataFactory_location": {
 			"type": "string",
 			"defaultValue": "australiaeast"
@@ -137,6 +141,10 @@
 					"global_CustomReportId_GenericOrgId": {
 						"type": "string",
 						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value')]"
+					},
+					"global_REST_RequestTimeoutDuration": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_value')]"
 					}
 				}
 			},
@@ -344,11 +352,11 @@
 					},
 					"PreRowCount": {
 						"type": "string",
-						"defaultValue": "0"
+						"defaultValue": "@activity('PreRowCount').output.value[0]"
 					},
 					"PostRowCount": {
 						"type": "string",
-						"defaultValue": "0"
+						"defaultValue": "@activity('PostRowCount').output.value[0]"
 					}
 				},
 				"folder": {
