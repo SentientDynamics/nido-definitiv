@@ -5,10 +5,17 @@
 			{
 				"name": "ApiToJson",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "PreRowCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
+					"timeout": "0.03:00:00",
+					"retry": 3,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
@@ -40,7 +47,10 @@
 								}
 							}
 						],
-						"httpRequestTimeout": "00:01:40",
+						"httpRequestTimeout": {
+							"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+							"type": "Expression"
+						},
 						"requestInterval": "00.00:00:00.010",
 						"requestMethod": "GET",
 						"paginationRules": {
@@ -111,8 +121,8 @@
 					}
 				],
 				"policy": {
-					"timeout": "1.00:00:00",
-					"retry": 0,
+					"timeout": "0.03:00:00",
+					"retry": 3,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
@@ -221,11 +231,128 @@
 							}
 						}
 					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
+					"integrationRuntime": {
+						"referenceName": "AustraliaEastIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
 					},
 					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "pl_monitoring_logic-nido-prod-eastau-100",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PostRowCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"PipelineRunId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"DataflowActivityOutput": {
+							"value": "@activity('df_Employees').output",
+							"type": "Expression"
+						},
+						"PreRowCount": {
+							"value": "@activity('PreRowCount').output.value[0]",
+							"type": "Expression"
+						},
+						"PostRowCount": {
+							"value": "@activity('PostRowCount').output.value[0]",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PreRowCount",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select count(*) as PreRowCount from definitiv.Employees",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_SchemaName": {
+								"value": "@pipeline().parameters.param_SchemeName1",
+								"type": "Expression"
+							},
+							"param_TableName": {
+								"value": "@pipeline().parameters.param_TableName1",
+								"type": "Expression"
+							}
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "PostRowCount",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "df_Employees",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_SchemaName": {
+								"value": "@pipeline().parameters.param_SchemeName1",
+								"type": "Expression"
+							},
+							"param_TableName": {
+								"value": "@pipeline().parameters.param_TableName1",
+								"type": "Expression"
+							}
+						}
+					},
+					"firstRowOnly": false
 				}
 			}
 		],
