@@ -33,7 +33,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "Organization",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -46,12 +46,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup1').output.value",
+						"value": "@activity('Organizations').output.value",
 						"type": "Expression"
 					},
 					"activities": [
 						{
-							"name": "CopyToJson",
+							"name": "ApiToJson",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -67,23 +67,30 @@
 									"type": "RestSource",
 									"additionalColumns": [
 										{
-											"name": "organizationId",
+											"name": "PipelineName",
 											"value": {
-												"value": "@item().organizationId",
+												"value": "@pipeline().Pipeline",
 												"type": "Expression"
 											}
 										},
 										{
-											"name": "pipelineRunId",
+											"name": "PipelineRunId",
 											"value": {
 												"value": "@pipeline().RunId",
 												"type": "Expression"
 											}
 										},
 										{
-											"name": "pipelineTriggerTime",
+											"name": "PipelineTriggerTime",
 											"value": {
 												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "Org.OrganizationId",
+											"value": {
+												"value": "@item().organizationId",
 												"type": "Expression"
 											}
 										}
@@ -140,7 +147,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "ForEach1",
+						"activity": "Organization",
 						"dependencyConditions": [
 							"Succeeded"
 						]
