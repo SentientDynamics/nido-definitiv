@@ -1079,7 +1079,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "CustomReportPayslipsE"
+						"defaultValue": "CustomReportPayslips"
 					}
 				},
 				"folder": {
@@ -1822,7 +1822,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "CustomReportRostersD"
+						"defaultValue": "CustomReportRosters"
 					}
 				},
 				"variables": {
