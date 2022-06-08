@@ -218,7 +218,7 @@
 									}
 								],
 								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 									"type": "Expression"
 								},
 								"requestInterval": "00.00:00:00.010",
@@ -704,7 +704,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",
@@ -1112,7 +1112,7 @@
 									}
 								],
 								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 									"type": "Expression"
 								},
 								"requestInterval": "00.00:00:00.010",
@@ -1439,7 +1439,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",
@@ -1821,7 +1821,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",
@@ -2216,7 +2216,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",
@@ -2628,7 +2628,7 @@
 									}
 								],
 								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_90min}",
 									"type": "Expression"
 								},
 								"requestInterval": "00.00:00:00.010",
@@ -3019,7 +3019,7 @@
 									}
 								],
 								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 									"type": "Expression"
 								},
 								"requestInterval": "00.00:00:00.010",
@@ -3422,7 +3422,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",

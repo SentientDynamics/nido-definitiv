@@ -47,8 +47,12 @@
 		"type": "string",
 		"value": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
 	},
-	"global_REST_RequestTimeoutDuration": {
+	"global_REST_RequestTimeoutDuration_30min": {
 		"type": "string",
 		"value": "00:30:00"
+	},
+	"global_REST_RequestTimeoutDuration_90min": {
+		"type": "string",
+		"value": "01:30:00"
 	}
 }

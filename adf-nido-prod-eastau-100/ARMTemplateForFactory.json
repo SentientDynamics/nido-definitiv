@@ -183,9 +183,13 @@
 			"type": "string",
 			"defaultValue": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
 		},
-		"dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_value": {
+		"dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_30min_value": {
 			"type": "string",
 			"defaultValue": "00:30:00"
+		},
+		"dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_90min_value": {
+			"type": "string",
+			"defaultValue": "01:30:00"
 		},
 		"dataFactory_location": {
 			"type": "string",
@@ -252,7 +256,7 @@
 									}
 								],
 								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 									"type": "Expression"
 								},
 								"requestInterval": "00.00:00:00.010",
@@ -746,7 +750,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",
@@ -1156,7 +1160,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",
@@ -1597,7 +1601,7 @@
 									}
 								],
 								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 									"type": "Expression"
 								},
 								"requestInterval": "00.00:00:00.010",
@@ -1932,7 +1936,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",
@@ -2322,7 +2326,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",
@@ -2725,7 +2729,7 @@
 												}
 											],
 											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 												"type": "Expression"
 											},
 											"requestInterval": "00.00:00:00.010",
@@ -3145,7 +3149,7 @@
 									}
 								],
 								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_90min}",
 									"type": "Expression"
 								},
 								"requestInterval": "00.00:00:00.010",
@@ -3544,7 +3548,7 @@
 									}
 								],
 								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration}",
+									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
 									"type": "Expression"
 								},
 								"requestInterval": "00.00:00:00.010",
@@ -5334,9 +5338,13 @@
 						"type": "string",
 						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value')]"
 					},
-					"global_REST_RequestTimeoutDuration": {
+					"global_REST_RequestTimeoutDuration_30min": {
 						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_value')]"
+						"value": "[parameters('dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_30min_value')]"
+					},
+					"global_REST_RequestTimeoutDuration_90min": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_90min_value')]"
 					}
 				}
 			},
