@@ -1,0 +1,36 @@
+{
+	"name": "tr_LeaveBalances_Scheduled_1d",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "definitiv",
+					"param_TableName": "ReportingLeaveBalances"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-06-08T06:03:00",
+				"timeZone": "AUS Eastern Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						5
+					]
+				}
+			}
+		}
+	}
+}
