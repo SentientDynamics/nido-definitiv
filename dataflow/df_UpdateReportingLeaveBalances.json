@@ -12,7 +12,7 @@
 						"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "sourceJson"
 				}
 			],
 			"sinks": [
@@ -21,11 +21,15 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sinkSql",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_adls2_stnidoprodeastau100",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
 			"transformations": [],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
 		}
 	}
 }
