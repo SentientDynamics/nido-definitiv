@@ -89,6 +89,24 @@
 						"dependencyConditions": [
 							"Failed"
 						]
+					},
+					{
+						"activity": "OrgPayRun",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "OrgPayRuns",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "PreRowCount",
+						"dependencyConditions": [
+							"Failed"
+						]
 					}
 				],
 				"userProperties": [],
