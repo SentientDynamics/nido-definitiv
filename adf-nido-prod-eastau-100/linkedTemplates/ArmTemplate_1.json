@@ -345,8 +345,14 @@
 								"referenceName": "df_Employees",
 								"type": "DataFlowReference",
 								"parameters": {
-									"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
-									"param_ErrorRowDirectory": "\"ErrorRows\""
+									"param_FileSystem": {
+										"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+										"type": "Expression"
+									},
+									"param_ErrorRowDirectory": {
+										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+										"type": "Expression"
+									}
 								},
 								"datasetParameters": {
 									"sourceJson": {
@@ -3609,7 +3615,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"sourceRelativeUrl": {
-										"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Wages,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId\n)",
+										"value": "@concat('/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Wages,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId\n)",
 										"type": "Expression"
 									}
 								}
