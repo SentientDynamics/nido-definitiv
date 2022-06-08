@@ -3,22 +3,9 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Lookup1",
+				"name": "Organizations",
 				"type": "Lookup",
-				"dependsOn": [
-					{
-						"activity": "SetPipelineTriggerTime",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "SetPipelineRunId",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -46,11 +33,11 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "Organization",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "Organizations",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -59,12 +46,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup1').output.value",
+						"value": "@activity('Organizations').output.value",
 						"type": "Expression"
 					},
 					"activities": [
 						{
-							"name": "CopyToJson",
+							"name": "ApiToJson",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -80,23 +67,30 @@
 									"type": "RestSource",
 									"additionalColumns": [
 										{
-											"name": "organizationId",
+											"name": "PipelineName",
 											"value": {
-												"value": "@item().organizationId",
+												"value": "@pipeline().Pipeline",
 												"type": "Expression"
 											}
 										},
 										{
-											"name": "pipelineRunId",
+											"name": "PipelineRunId",
 											"value": {
 												"value": "@pipeline().RunId",
 												"type": "Expression"
 											}
 										},
 										{
-											"name": "pipelineTriggerTime",
+											"name": "PipelineTriggerTime",
 											"value": {
 												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											}
+										},
+										{
+											"name": "Org.OrganizationId",
+											"value": {
+												"value": "@item().organizationId",
 												"type": "Expression"
 											}
 										}
@@ -149,11 +143,11 @@
 				}
 			},
 			{
-				"name": "df_UpdateReportingLeaveApplications",
+				"name": "df_ReportingLeaveApplications",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "ForEach1",
+						"activity": "Organization",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -171,10 +165,48 @@
 					"dataflow": {
 						"referenceName": "df_UpdateReportingLeaveApplications",
 						"type": "DataFlowReference",
+						"parameters": {
+							"param_FileSystem": {
+								"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+								"type": "Expression"
+							},
+							"param_ErrorRowDirectory": {
+								"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+								"type": "Expression"
+							}
+						},
 						"datasetParameters": {
-							"sink1": {
-								"param_SchemaName": "definitiv",
-								"param_TableName": "ReportingLeaveApplications"
+							"sourceJson": {
+								"ds_PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"ds_PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"ds_FileSystem": {
+									"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+									"type": "Expression"
+								},
+								"ds_Directory": {
+									"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+									"type": "Expression"
+								},
+								"ds_PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"sinkSql": {
+								"param_SchemaName": {
+									"value": "@pipeline().parameters.param_SchemaName",
+									"type": "Expression"
+								},
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
 							}
 						}
 					},
@@ -184,48 +216,16 @@
 					},
 					"traceLevel": "Fine"
 				}
-			},
-			{
-				"name": "SetPipelineTriggerTime",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineTriggerTime",
-					"value": {
-						"value": "@coalesce(pipeline().parameters.MasterPipelineTriggerTime,pipeline().TriggerTime)",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "SetPipelineRunId",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "PipelineRunId",
-					"value": {
-						"value": "@coalesce(pipeline().parameters.MasterPipelineRunId,pipeline().RunId)",
-						"type": "Expression"
-					}
-				}
 			}
 		],
 		"parameters": {
-			"MasterPipelineTriggerTime": {
-				"type": "string"
+			"param_SchemaName": {
+				"type": "string",
+				"defaultValue": "definitiv"
 			},
-			"MasterPipelineRunId": {
-				"type": "string"
-			}
-		},
-		"variables": {
-			"PipelineTriggerTime": {
-				"type": "String"
-			},
-			"PipelineRunId": {
-				"type": "String"
+			"param_TableName": {
+				"type": "string",
+				"defaultValue": "ReportingLeaveApplications"
 			}
 		},
 		"folder": {

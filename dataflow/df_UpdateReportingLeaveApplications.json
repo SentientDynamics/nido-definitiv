@@ -12,7 +12,7 @@
 						"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "sourceJson"
 				}
 			],
 			"sinks": [
@@ -21,11 +21,19 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sinkSql",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_adls2_stnidoprodeastau100",
+						"type": "LinkedServiceReference"
+					}
 				}
 			],
-			"transformations": [],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+			"transformations": [
+				{
+					"name": "castDateColumns"
+				}
+			],
+			"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
 		}
 	}
 }
