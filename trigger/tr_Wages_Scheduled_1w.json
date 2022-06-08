@@ -3,18 +3,7 @@
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_Wages",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"param_SchemaName": "definitiv",
-					"param_TableName": "CustomReportWages"
-				}
-			}
-		],
+		"pipelines": [],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
