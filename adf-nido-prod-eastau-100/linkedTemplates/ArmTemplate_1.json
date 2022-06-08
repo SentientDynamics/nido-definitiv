@@ -1567,7 +1567,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "ReportingLeaveBalances"
+						"defaultValue": "ReportingLeaveApplications"
 					}
 				},
 				"folder": {
