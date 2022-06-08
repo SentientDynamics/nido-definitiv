@@ -3360,7 +3360,7 @@
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "ApiToJson",
+								"activity": "OrgPayRun",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -3432,7 +3432,33 @@
 							{
 								"activity": "PostRowCount",
 								"dependencyConditions": [
-									"Succeeded"
+									"Succeeded",
+									"Failed",
+									"Completed"
+								]
+							},
+							{
+								"activity": "df_Wages",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "OrgPayRun",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "OrgPayRuns",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "PreRowCount",
+								"dependencyConditions": [
+									"Failed"
 								]
 							}
 						],
@@ -3543,9 +3569,8 @@
 						}
 					},
 					{
-						"name": "ApiToJson",
-						"description": "",
-						"type": "Copy",
+						"name": "OrgPayRuns",
+						"type": "Lookup",
 						"dependsOn": [
 							{
 								"activity": "PreRowCount",
@@ -3555,8 +3580,8 @@
 							}
 						],
 						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 3,
+							"timeout": "7.00:00:00",
+							"retry": 0,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
@@ -3564,91 +3589,143 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "RestSource",
-								"additionalColumns": [
-									{
-										"name": "PipelineName",
-										"value": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "PipelineRunId",
-										"value": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "PipelineTriggerTime",
-										"value": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										}
-									}
-								],
-								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
-									"type": "Expression"
-								},
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET",
-								"paginationRules": {
-									"supportRFC5988": "true"
-								}
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select [Org.OrganizationId] as orgId, [payRunId], [Org.LegalName] as orgLegalName, [payslipGenerationStatus] from definitiv.OrganizationPayRuns where [payslipGenerationStatus] = 'Complete'",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
 							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_rest_definitiv",
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"sourceRelativeUrl": {
-										"value": "@concat('/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Wages,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId\n)",
-										"type": "Expression"
-									}
+									"param_SchemaName": "definitiv",
+									"param_TableName": "OrganizationPayRuns"
 								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "OrgPayRun",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "OrgPayRuns",
+								"dependencyConditions": [
+									"Succeeded"
+								]
 							}
 						],
-						"outputs": [
-							{
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_PipelineTriggerTime": {
-										"value": "@pipeline().TriggerTime",
-										"type": "Expression"
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('OrgPayRuns').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "ApiToJson",
+									"description": "",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.03:00:00",
+										"retry": 3,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
 									},
-									"ds_PipelineRunId": {
-										"value": "@pipeline().RunId",
-										"type": "Expression"
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "PipelineName",
+													"value": {
+														"value": "@pipeline().Pipeline",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineRunId",
+													"value": {
+														"value": "@pipeline().RunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineTriggerTime",
+													"value": {
+														"value": "@pipeline().TriggerTime",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": {
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
+												"type": "Expression"
+											},
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
 									},
-									"ds_FileSystem": {
-										"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-										"type": "Expression"
-									},
-									"ds_Directory": {
-										"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-										"type": "Expression"
-									},
-									"ds_PipelineName": {
-										"value": "@pipeline().Pipeline",
-										"type": "Expression"
-									}
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat('/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Wages,\n'?organizationId=', \nitem().orgId, \n'&selectedPayRunId=', \nitem().payRunId)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
+											}
+										}
+									]
 								}
-							}
-						]
+							]
+						}
 					}
 				],
 				"policy": {
@@ -3942,7 +4019,7 @@
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "df_OrgPayRuns",
+								"activity": "PostRowCount",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -3966,9 +4043,19 @@
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "PostRowCount",
+								"activity": "pl_CopyFromApiToDefinitivSchema_Payslips",
 								"dependencyConditions": [
-									"Succeeded"
+									"Succeeded",
+									"Failed",
+									"Completed"
+								]
+							},
+							{
+								"activity": "pl_CopyFromApiToDefinitivSchema_Wages",
+								"dependencyConditions": [
+									"Succeeded",
+									"Failed",
+									"Completed"
 								]
 							}
 						],
@@ -4040,7 +4127,7 @@
 						"type": "Lookup",
 						"dependsOn": [
 							{
-								"activity": "pl_CopyFromApiToDefinitivSchema_Payslips",
+								"activity": "df_OrgPayRuns",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -4077,6 +4164,30 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "pl_CopyFromApiToDefinitivSchema_Wages",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_CopyFromApiToDefinitivSchema_Wages",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"param_SchemaName": "definitiv",
+								"param_TableName": "CustomReportWages"
+							}
+						}
 					}
 				],
 				"policy": {
@@ -4100,7 +4211,8 @@
 				"lastPublishTime": "2022-01-21T07:04:52Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Payslips')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Payslips')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Wages')]"
 			]
 		},
 		{
