@@ -80,8 +80,7 @@
 						"activity": "PostRowCount",
 						"dependencyConditions": [
 							"Succeeded",
-							"Failed",
-							"Completed"
+							"Failed"
 						]
 					},
 					{
