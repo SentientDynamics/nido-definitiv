@@ -1632,6 +1632,18 @@
 								"dependencyConditions": [
 									"Succeeded"
 								]
+							},
+							{
+								"activity": "OrgPayRun",
+								"dependencyConditions": [
+									"Completed"
+								]
+							},
+							{
+								"activity": "df_Payslips",
+								"dependencyConditions": [
+									"Completed"
+								]
 							}
 						],
 						"userProperties": [],
@@ -3440,34 +3452,21 @@
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "PostRowCount",
+								"activity": "OrgPayRun",
 								"dependencyConditions": [
-									"Succeeded",
-									"Failed"
+									"Completed"
 								]
 							},
 							{
 								"activity": "df_Wages",
 								"dependencyConditions": [
-									"Failed"
+									"Completed"
 								]
 							},
 							{
-								"activity": "OrgPayRun",
+								"activity": "PostRowCount",
 								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "OrgPayRuns",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "PreRowCount",
-								"dependencyConditions": [
-									"Failed"
+									"Completed"
 								]
 							}
 						],
@@ -3493,6 +3492,18 @@
 								},
 								"PostRowCount": {
 									"value": "@activity('PostRowCount').output.value[0]",
+									"type": "Expression"
+								},
+								"DataflowErrorMessage": {
+									"value": "@activity('df_Wages').error.Message",
+									"type": "Expression"
+								},
+								"CopyActivityErrorMessage": {
+									"value": "@activity('ApiToJson').output.errors[0].Message",
+									"type": "Expression"
+								},
+								"CopyActivityOutput": {
+									"value": "@activity('ApiToJson').output",
 									"type": "Expression"
 								}
 							}
@@ -3584,7 +3595,7 @@
 							{
 								"activity": "PreRowCount",
 								"dependencyConditions": [
-									"Succeeded"
+									"Completed"
 								]
 							}
 						],
