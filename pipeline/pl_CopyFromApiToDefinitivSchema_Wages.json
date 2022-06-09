@@ -28,7 +28,8 @@
 						"type": "DataFlowReference",
 						"parameters": {
 							"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
-							"param_ErrorRowDirectory": "\"ErrorRows\""
+							"param_ErrorRowDirectory": "\"ErrorRows\"",
+							"param_DataflowName": "\"df_Wages\""
 						},
 						"datasetParameters": {
 							"sourceJson": {
