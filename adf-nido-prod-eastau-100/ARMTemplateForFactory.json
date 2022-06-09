@@ -3911,7 +3911,8 @@
 							{
 								"activity": "OrgPayRun",
 								"dependencyConditions": [
-									"Succeeded"
+									"Succeeded",
+									"Completed"
 								]
 							}
 						],
@@ -3980,21 +3981,10 @@
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "OrgPayRun",
-								"dependencyConditions": [
-									"Completed"
-								]
-							},
-							{
-								"activity": "df_Wages",
-								"dependencyConditions": [
-									"Completed"
-								]
-							},
-							{
 								"activity": "PostRowCount",
 								"dependencyConditions": [
-									"Completed"
+									"Completed",
+									"Succeeded"
 								]
 							}
 						],
@@ -4080,7 +4070,8 @@
 							{
 								"activity": "df_Wages",
 								"dependencyConditions": [
-									"Succeeded"
+									"Succeeded",
+									"Completed"
 								]
 							}
 						],
@@ -4123,7 +4114,7 @@
 							{
 								"activity": "PreRowCount",
 								"dependencyConditions": [
-									"Completed"
+									"Succeeded"
 								]
 							}
 						],
