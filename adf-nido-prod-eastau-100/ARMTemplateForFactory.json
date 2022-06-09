@@ -3514,7 +3514,14 @@
 						"name": "TimesheetStartDate",
 						"description": "",
 						"type": "SetVariable",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "PreRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "varTimesheetStartDate",
@@ -3528,7 +3535,14 @@
 						"name": "TimesheetFinishDate",
 						"description": "",
 						"type": "SetVariable",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "TimesheetStartDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "varTimesheetFinishDate",
@@ -3539,144 +3553,11 @@
 						}
 					},
 					{
-						"name": "ApiToJson",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "TimesheetStartDate",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "TimesheetFinishDate",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							},
-							{
-								"activity": "PreRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 3,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "RestSource",
-								"additionalColumns": [
-									{
-										"name": "PipelineTriggerTime",
-										"value": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "PipelineRunId",
-										"value": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "PipelineName",
-										"value": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "QueryStartDate",
-										"value": {
-											"value": "@variables('varTimesheetStartDate')",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "QueryFinishDate",
-										"value": {
-											"value": "@variables('varTimesheetFinishDate')",
-											"type": "Expression"
-										}
-									}
-								],
-								"httpRequestTimeout": {
-									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
-									"type": "Expression"
-								},
-								"requestInterval": "00.00:00:00.010",
-								"requestMethod": "GET",
-								"paginationRules": {
-									"supportRFC5988": "true"
-								}
-							},
-							"sink": {
-								"type": "JsonSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "JsonWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_rest_definitiv",
-								"type": "DatasetReference",
-								"parameters": {
-									"sourceRelativeUrl": {
-										"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Timesheets,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=', \nformatDateTime(variables('varTimesheetStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varTimesheetFinishDate'), 'yyyy-MM-dd')\n)",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference",
-								"parameters": {
-									"ds_PipelineTriggerTime": {
-										"value": "@pipeline().TriggerTime",
-										"type": "Expression"
-									},
-									"ds_PipelineRunId": {
-										"value": "@pipeline().RunId",
-										"type": "Expression"
-									},
-									"ds_FileSystem": {
-										"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-										"type": "Expression"
-									},
-									"ds_Directory": {
-										"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-										"type": "Expression"
-									},
-									"ds_PipelineName": {
-										"value": "@pipeline().Pipeline",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					},
-					{
 						"name": "df_Timesheets",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "ApiToJson",
+								"activity": "QueryDateIsFinishDate",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -3696,7 +3577,8 @@
 								"type": "DataFlowReference",
 								"parameters": {
 									"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
-									"param_ErrorRowDirectory": "\"ErrorRows\""
+									"param_ErrorRowDirectory": "\"ErrorRows\"",
+									"param_DataflowName": "\"df_Timesheets\""
 								},
 								"datasetParameters": {
 									"sourceJson": {
@@ -3857,6 +3739,202 @@
 								}
 							}
 						}
+					},
+					{
+						"name": "QueryDateIsFinishDate",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "TimesheetQueryDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(variables('varTimesheetQueryDate'), variables('varTimesheetFinishDate'))",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "ApiToJson",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.03:00:00",
+										"retry": 3,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "PipelineTriggerTime",
+													"value": {
+														"value": "@pipeline().TriggerTime",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineRunId",
+													"value": {
+														"value": "@pipeline().RunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineName",
+													"value": {
+														"value": "@pipeline().Pipeline",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "QueryStartDate",
+													"value": {
+														"value": "@variables('varTimesheetStartDate')",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "QueryFinishDate",
+													"value": {
+														"value": "@variables('varTimesheetFinishDate')",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": {
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
+												"type": "Expression"
+											},
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Timesheets,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=', \nformatDateTime(variables('varTimesheetQueryDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varTimesheetFinishDate'), 'yyyy-MM-dd')\n)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "TimesheetQueryDatePlusOne",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "varTimesheetQueryDatePlusOne",
+										"value": {
+											"value": "@formatDateTime(addDays(variables('varTimesheetQueryDate'), 1), 'yyyy-MM-dd')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "NextTimesheetQueryDate",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "TimesheetQueryDatePlusOne",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "varTimesheetQueryDate",
+										"value": {
+											"value": "@variables('varTimesheetQueryDatePlusOne')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"timeout": "7.00:00:00"
+						}
+					},
+					{
+						"name": "TimesheetQueryDate",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "TimesheetFinishDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varTimesheetQueryDate",
+							"value": {
+								"value": "@variables('varTimesheetStartDate')",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"policy": {
@@ -3870,7 +3948,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "CustomReportTimesheetsD"
+						"defaultValue": "CustomReportTimesheets"
 					}
 				},
 				"variables": {
@@ -3878,6 +3956,12 @@
 						"type": "String"
 					},
 					"varTimesheetFinishDate": {
+						"type": "String"
+					},
+					"varTimesheetQueryDate": {
+						"type": "String"
+					},
+					"varTimesheetQueryDatePlusOne": {
 						"type": "String"
 					}
 				},
@@ -3889,12 +3973,12 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/dataflows/df_Timesheets')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-100')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-100')]",
+				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
 		},
 		{
@@ -4330,7 +4414,7 @@
 								"Content-Type": "application/json"
 							},
 							"body": {
-								"value": "@json(\nconcat(\n'{\"Pre Row Count: \"',pipeline().parameters.PreRowCount,'},',\n'{\"Post Row Count: \"',pipeline().parameters.PostRowCount,'},',\n'{\"Copy Activity Output: \"',pipeline().parameters.CopyActivityOutput,'},',\n'{\"Copy Activity Error Message: \"',pipeline().parameters.CopyActivityErrorMessage,'},',\n'{\"Dataflow Activity Output: \"',pipeline().parameters.DataflowActivityOutput,'},',\n'{\"Dataflow Error Message: \"',pipeline().parameters.DataflowErrorMessage,'}'\n)\n)",
+								"value": "@json(\nconcat(\nstring('{\"Pre Row Count\": \"'), pipeline().parameters.PreRowCount, string('\",'),\nstring('\"Post Row Count\": \"'), pipeline().parameters.PostRowCount, string('\",'),\nstring('\"Copy Activity Output\": \"'), pipeline().parameters.CopyActivityOutput, string('\",'),\nstring('\"Copy Activity Error Message\": \"'), pipeline().parameters.CopyActivityErrorMessage, string('\",'),\nstring('\"Dataflow Activity Output\": \"'), pipeline().parameters.DataflowActivityOutput, string('\",'),\nstring('\"Dataflow Error Message\": \"'), pipeline().parameters.DataflowErrorMessage, string('\"}')\n))",
 								"type": "Expression"
 							}
 						}
@@ -4343,103 +4427,31 @@
 				"parameters": {
 					"PipelineRunId": {
 						"type": "string",
-						"defaultValue": "eba92669-8272-4930-b2be-99059548fd28"
+						"defaultValue": "PipelineRunId"
 					},
 					"DataflowActivityOutput": {
 						"type": "string",
-						"defaultValue": {
-							"dataRead": 522332,
-							"dataWritten": 525051,
-							"filesWritten": 1,
-							"sourcePeakConnections": 1,
-							"sinkPeakConnections": 1,
-							"rowsRead": 663,
-							"rowsCopied": 663,
-							"copyDuration": 62,
-							"throughput": 8.227,
-							"errors": [],
-							"effectiveIntegrationRuntime": "AutoResolveIntegrationRuntime (Australia East)",
-							"usedDataIntegrationUnits": 4,
-							"billingReference": {
-								"activityType": "DataMovement",
-								"billableDuration": [
-									{
-										"meterType": "ManagedVNetIR",
-										"duration": 0.03333333333333333,
-										"unit": "DIUHours"
-									}
-								]
-							},
-							"usedParallelCopies": 1,
-							"executionDetails": [
-								{
-									"source": {
-										"type": "RestService"
-									},
-									"sink": {
-										"type": "AzureBlobFS",
-										"region": "Australia East"
-									},
-									"status": "Succeeded",
-									"start": "2022-03-29T22:42:52.4641719Z",
-									"duration": 62,
-									"usedDataIntegrationUnits": 4,
-									"usedParallelCopies": 1,
-									"profile": {
-										"queue": {
-											"status": "Completed",
-											"duration": 57
-										},
-										"transfer": {
-											"status": "Completed",
-											"duration": 4,
-											"details": {
-												"readingFromSource": {
-													"type": "RestService",
-													"workingDuration": 1,
-													"timeToFirstByte": 1
-												},
-												"writingToSink": {
-													"type": "AzureBlobFS",
-													"workingDuration": 1
-												}
-											}
-										}
-									},
-									"detailedDurations": {
-										"queuingDuration": 57,
-										"timeToFirstByte": 1,
-										"transferDuration": 3
-									}
-								}
-							],
-							"dataConsistencyVerification": {
-								"VerificationResult": "NotVerified"
-							},
-							"durationInQueue": {
-								"integrationRuntimeQueue": 0
-							}
-						}
+						"defaultValue": "DataflowActivityOutput"
 					},
 					"PreRowCount": {
 						"type": "string",
-						"defaultValue": "@activity('PreRowCount').output.value[0]"
+						"defaultValue": "PreRowCount"
 					},
 					"PostRowCount": {
 						"type": "string",
-						"defaultValue": "@activity('PostRowCount').output.value[0]"
+						"defaultValue": "PostRowCount"
 					},
 					"DataflowErrorMessage": {
 						"type": "string",
-						"defaultValue": "@activity('df_Payslips').error.Message"
+						"defaultValue": "DataflowErrorMessage"
 					},
 					"CopyActivityErrorMessage": {
 						"type": "string",
-						"defaultValue": "@activity('ApiToJson').output.errors[0].Message"
+						"defaultValue": "CopyActivityErrorMessage"
 					},
 					"CopyActivityOutput": {
 						"type": "string",
-						"defaultValue": "@activity('ApiToJson').output"
+						"defaultValue": "CopyActivityOutput"
 					}
 				},
 				"folder": {

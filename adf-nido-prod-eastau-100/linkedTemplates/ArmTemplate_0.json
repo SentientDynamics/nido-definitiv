@@ -267,7 +267,7 @@
 								"Content-Type": "application/json"
 							},
 							"body": {
-								"value": "@json(\nconcat(\n'{\"Pre Row Count: \"',pipeline().parameters.PreRowCount,'},',\n'{\"Post Row Count: \"',pipeline().parameters.PostRowCount,'},',\n'{\"Copy Activity Output: \"',pipeline().parameters.CopyActivityOutput,'},',\n'{\"Copy Activity Error Message: \"',pipeline().parameters.CopyActivityErrorMessage,'},',\n'{\"Dataflow Activity Output: \"',pipeline().parameters.DataflowActivityOutput,'},',\n'{\"Dataflow Error Message: \"',pipeline().parameters.DataflowErrorMessage,'}'\n)\n)",
+								"value": "@json(\nconcat(\nstring('{\"Pre Row Count\": \"'), pipeline().parameters.PreRowCount, string('\",'),\nstring('\"Post Row Count\": \"'), pipeline().parameters.PostRowCount, string('\",'),\nstring('\"Copy Activity Output\": \"'), pipeline().parameters.CopyActivityOutput, string('\",'),\nstring('\"Copy Activity Error Message\": \"'), pipeline().parameters.CopyActivityErrorMessage, string('\",'),\nstring('\"Dataflow Activity Output\": \"'), pipeline().parameters.DataflowActivityOutput, string('\",'),\nstring('\"Dataflow Error Message\": \"'), pipeline().parameters.DataflowErrorMessage, string('\"}')\n))",
 								"type": "Expression"
 							}
 						}
@@ -280,103 +280,31 @@
 				"parameters": {
 					"PipelineRunId": {
 						"type": "string",
-						"defaultValue": "eba92669-8272-4930-b2be-99059548fd28"
+						"defaultValue": "PipelineRunId"
 					},
 					"DataflowActivityOutput": {
 						"type": "string",
-						"defaultValue": {
-							"dataRead": 522332,
-							"dataWritten": 525051,
-							"filesWritten": 1,
-							"sourcePeakConnections": 1,
-							"sinkPeakConnections": 1,
-							"rowsRead": 663,
-							"rowsCopied": 663,
-							"copyDuration": 62,
-							"throughput": 8.227,
-							"errors": [],
-							"effectiveIntegrationRuntime": "AutoResolveIntegrationRuntime (Australia East)",
-							"usedDataIntegrationUnits": 4,
-							"billingReference": {
-								"activityType": "DataMovement",
-								"billableDuration": [
-									{
-										"meterType": "ManagedVNetIR",
-										"duration": 0.03333333333333333,
-										"unit": "DIUHours"
-									}
-								]
-							},
-							"usedParallelCopies": 1,
-							"executionDetails": [
-								{
-									"source": {
-										"type": "RestService"
-									},
-									"sink": {
-										"type": "AzureBlobFS",
-										"region": "Australia East"
-									},
-									"status": "Succeeded",
-									"start": "2022-03-29T22:42:52.4641719Z",
-									"duration": 62,
-									"usedDataIntegrationUnits": 4,
-									"usedParallelCopies": 1,
-									"profile": {
-										"queue": {
-											"status": "Completed",
-											"duration": 57
-										},
-										"transfer": {
-											"status": "Completed",
-											"duration": 4,
-											"details": {
-												"readingFromSource": {
-													"type": "RestService",
-													"workingDuration": 1,
-													"timeToFirstByte": 1
-												},
-												"writingToSink": {
-													"type": "AzureBlobFS",
-													"workingDuration": 1
-												}
-											}
-										}
-									},
-									"detailedDurations": {
-										"queuingDuration": 57,
-										"timeToFirstByte": 1,
-										"transferDuration": 3
-									}
-								}
-							],
-							"dataConsistencyVerification": {
-								"VerificationResult": "NotVerified"
-							},
-							"durationInQueue": {
-								"integrationRuntimeQueue": 0
-							}
-						}
+						"defaultValue": "DataflowActivityOutput"
 					},
 					"PreRowCount": {
 						"type": "string",
-						"defaultValue": "@activity('PreRowCount').output.value[0]"
+						"defaultValue": "PreRowCount"
 					},
 					"PostRowCount": {
 						"type": "string",
-						"defaultValue": "@activity('PostRowCount').output.value[0]"
+						"defaultValue": "PostRowCount"
 					},
 					"DataflowErrorMessage": {
 						"type": "string",
-						"defaultValue": "@activity('df_Payslips').error.Message"
+						"defaultValue": "DataflowErrorMessage"
 					},
 					"CopyActivityErrorMessage": {
 						"type": "string",
-						"defaultValue": "@activity('ApiToJson').output.errors[0].Message"
+						"defaultValue": "CopyActivityErrorMessage"
 					},
 					"CopyActivityOutput": {
 						"type": "string",
-						"defaultValue": "@activity('ApiToJson').output"
+						"defaultValue": "CopyActivityOutput"
 					}
 				},
 				"folder": {
