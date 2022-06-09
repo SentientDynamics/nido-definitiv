@@ -111,11 +111,11 @@
 			"type": "string",
 			"defaultValue": "Organizations"
 		},
-		"tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
+		"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
 		},
-		"tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
+		"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "OrganizationPayRuns"
 		},
@@ -134,14 +134,6 @@
 		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "CustomReportTimesheetsD"
-		},
-		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "CustomReportWages"
 		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
@@ -3969,8 +3961,7 @@
 								"activity": "PostRowCount",
 								"dependencyConditions": [
 									"Succeeded",
-									"Failed",
-									"Completed"
+									"Failed"
 								]
 							},
 							{
@@ -4875,10 +4866,11 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_Payslips_Scheduled_1w')]",
+			"name": "[concat(parameters('factoryName'), '/tr_PayRuns_Scheduled_1w')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"description": "Parent pipeline for Payslips and Wages.",
 				"annotations": [],
 				"runtimeState": "Started",
 				"pipelines": [
@@ -4888,8 +4880,8 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Payslips_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName')]"
 						}
 					}
 				],
@@ -4993,51 +4985,6 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Timesheets')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_Wages_Scheduled_1w')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_Wages",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemaName": "[parameters('tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Wages_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Wages_parameters_param_TableName')]"
-						}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Week",
-						"interval": 1,
-						"startTime": "2022-06-08T07:51:00",
-						"timeZone": "AUS Eastern Standard Time",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								3
-							],
-							"weekDays": [
-								"Thursday"
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Wages')]"
 			]
 		},
 		{
@@ -5816,7 +5763,7 @@
 							"name": "castDateColumns"
 						}
 					],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\t{PayRun.PayRunId} as string,\n\t\t{PayRun.PayslipGenerationStatus} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tbaseRate as double,\n\t\tdepartmentCode as string,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tnumberOfUnits as double,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpositionTitle as string,\n\t\tprojectCode as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Wages\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tamount as double,\n\t\tdepartment as string,\n\t\temployeeId as string,\n\t\tfirstName as string,\n\t\tfullName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tpayItemId as string,\n\t\tpayRunId as string,\n\t\tpayrunGroup as string,\n\t\tpayslipId as string,\n\t\tpositionID as string,\n\t\tpositionTitle as string,\n\t\troom as string,\n\t\tsurname as string,\n\t\tweekEndingDate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory + '/' + $param_DataflowName),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
 				}
 			},
 			"dependsOn": [
