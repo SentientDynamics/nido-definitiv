@@ -115,10 +115,6 @@
 						"CopyActivityErrorMessage": {
 							"value": "@variables('varCopyActivityErrorMessage')",
 							"type": "Expression"
-						},
-						"CopyActivityOutput": {
-							"value": "@activity('ApiToJson').output",
-							"type": "Expression"
 						}
 					}
 				}
