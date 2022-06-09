@@ -118,23 +118,23 @@
 			},
 			"PreRowCount": {
 				"type": "string",
-				"defaultValue": "@activity('PreRowCount').output.value[0]"
+				"defaultValue": "activity('PreRowCount').output.value[0]"
 			},
 			"PostRowCount": {
 				"type": "string",
-				"defaultValue": "@activity('PostRowCount').output.value[0]"
+				"defaultValue": "activity('PostRowCount').output.value[0]"
 			},
 			"DataflowErrorMessage": {
 				"type": "string",
-				"defaultValue": "@activity('df_Payslips').error.Message"
+				"defaultValue": "activity('df_Payslips').error.Message"
 			},
 			"CopyActivityErrorMessage": {
 				"type": "string",
-				"defaultValue": "@activity('ApiToJson').output.errors[0].Message"
+				"defaultValue": "activity('ApiToJson').output.errors[0].Message"
 			},
 			"CopyActivityOutput": {
 				"type": "string",
-				"defaultValue": "@activity('ApiToJson').output"
+				"defaultValue": "activity('ApiToJson').output"
 			}
 		},
 		"folder": {
