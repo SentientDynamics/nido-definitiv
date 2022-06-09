@@ -129,7 +129,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) as PreRowCount from definitiv.CustomReportTimesheetsD",
+						"sqlReaderQuery": "select count(*) as PreRowCount from definitiv.CustomReportTimesheets",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -172,7 +172,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.CustomReportTimesheetsD",
+						"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.CustomReportTimesheets",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -435,7 +435,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "CustomReportTimesheetsD"
+				"defaultValue": "CustomReportTimesheets"
 			}
 		},
 		"variables": {
