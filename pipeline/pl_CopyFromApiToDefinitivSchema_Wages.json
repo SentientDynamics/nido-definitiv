@@ -78,34 +78,21 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "PostRowCount",
+						"activity": "OrgPayRun",
 						"dependencyConditions": [
-							"Succeeded",
-							"Failed"
+							"Completed"
 						]
 					},
 					{
 						"activity": "df_Wages",
 						"dependencyConditions": [
-							"Failed"
+							"Completed"
 						]
 					},
 					{
-						"activity": "OrgPayRun",
+						"activity": "PostRowCount",
 						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "OrgPayRuns",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "PreRowCount",
-						"dependencyConditions": [
-							"Failed"
+							"Completed"
 						]
 					}
 				],
@@ -234,7 +221,7 @@
 					{
 						"activity": "PreRowCount",
 						"dependencyConditions": [
-							"Succeeded"
+							"Completed"
 						]
 					}
 				],
