@@ -215,7 +215,8 @@
 						"type": "DataFlowReference",
 						"parameters": {
 							"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
-							"param_ErrorRowDirectory": "\"ErrorRows\""
+							"param_ErrorRowDirectory": "\"ErrorRows\"",
+							"param_DataflowName": "\"df_Payslips\""
 						},
 						"datasetParameters": {
 							"sourceJson": {
@@ -292,6 +293,14 @@
 						},
 						"PostRowCount": {
 							"value": "@activity('PostRowCount').output.value[0]",
+							"type": "Expression"
+						},
+						"DataflowErrorMessage": {
+							"value": "@activity('df_Payslips').error.Message",
+							"type": "Expression"
+						},
+						"CopyActivityErrorMessage": {
+							"value": "@activity('ApiToJson').output.errors[0].Message",
 							"type": "Expression"
 						}
 					}
