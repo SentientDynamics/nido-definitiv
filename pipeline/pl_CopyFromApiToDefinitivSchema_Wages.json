@@ -80,19 +80,7 @@
 					{
 						"activity": "PostRowCount",
 						"dependencyConditions": [
-							"Completed"
-						]
-					},
-					{
-						"activity": "df_Wages",
-						"dependencyConditions": [
-							"Completed"
-						]
-					},
-					{
-						"activity": "OrgPayRun",
-						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
