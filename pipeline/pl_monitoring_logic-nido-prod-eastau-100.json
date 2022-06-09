@@ -38,31 +38,31 @@
 		"parameters": {
 			"PipelineRunId": {
 				"type": "string",
-				"defaultValue": "eba92669-8272-4930-b2be-99059548fd28"
+				"defaultValue": "PipelineRunId"
 			},
 			"DataflowActivityOutput": {
 				"type": "string",
-				"defaultValue": "activity('df_Payslips').output"
+				"defaultValue": "DataflowActivityOutput"
 			},
 			"PreRowCount": {
 				"type": "string",
-				"defaultValue": "activity('PreRowCount').output.value[0]"
+				"defaultValue": "PreRowCount"
 			},
 			"PostRowCount": {
 				"type": "string",
-				"defaultValue": "activity('PostRowCount').output.value[0]"
+				"defaultValue": "PostRowCount"
 			},
 			"DataflowErrorMessage": {
 				"type": "string",
-				"defaultValue": "activity('df_Payslips').error.Message"
+				"defaultValue": "DataflowErrorMessage"
 			},
 			"CopyActivityErrorMessage": {
 				"type": "string",
-				"defaultValue": "activity('ApiToJson').output.errors[0].Message"
+				"defaultValue": "CopyActivityErrorMessage"
 			},
 			"CopyActivityOutput": {
 				"type": "string",
-				"defaultValue": "activity('ApiToJson').output"
+				"defaultValue": "CopyActivityOutput"
 			}
 		},
 		"folder": {
