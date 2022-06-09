@@ -132,6 +132,18 @@
 						"PostRowCount": {
 							"value": "@activity('PostRowCount').output.value[0]",
 							"type": "Expression"
+						},
+						"DataflowErrorMessage": {
+							"value": "@activity('df_Wages').error.Message",
+							"type": "Expression"
+						},
+						"CopyActivityErrorMessage": {
+							"value": "@activity('ApiToJson').output.errors[0].Message",
+							"type": "Expression"
+						},
+						"CopyActivityOutput": {
+							"value": "@activity('ApiToJson').output",
+							"type": "Expression"
 						}
 					}
 				}
