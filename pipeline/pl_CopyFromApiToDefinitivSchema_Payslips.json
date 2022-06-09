@@ -269,6 +269,18 @@
 						"dependencyConditions": [
 							"Succeeded"
 						]
+					},
+					{
+						"activity": "OrgPayRun",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "df_Payslips",
+						"dependencyConditions": [
+							"Completed"
+						]
 					}
 				],
 				"userProperties": [],
