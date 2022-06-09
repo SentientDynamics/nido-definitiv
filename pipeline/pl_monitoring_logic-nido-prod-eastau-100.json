@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@{pipeline().parameters.DataflowActivityOutput}\n@{pipeline().parameters.PreRowCount}\n@{pipeline().parameters.PostRowCount}\n",
+						"value": "@json(\nconcat(\n'{\"Pre Row Count: \"',pipeline().parameters.PreRowCount,'},',\n'{\"Post Row Count: \"',pipeline().parameters.PostRowCount,'},',\n'{\"Copy Activity Error Message: \"',pipeline().parameters.CopyActivityErrorMessage,'},',\n'{\"Dataflow Activity Output: \"',pipeline().parameters.DataflowActivityOutput,'},',\n'{\"Dataflow Error Message: \"',pipeline().parameters.DataflowErrorMessage,'}'\n)\n)",
 						"type": "Expression"
 					}
 				}
@@ -123,6 +123,14 @@
 			"PostRowCount": {
 				"type": "string",
 				"defaultValue": "@activity('PostRowCount').output.value[0]"
+			},
+			"DataflowErrorMessage": {
+				"type": "string",
+				"defaultValue": "@activity('df_Payslips').error.Message"
+			},
+			"CopyActivityErrorMessage": {
+				"type": "string",
+				"defaultValue": "@activity('ApiToJson').output.errors[0].Message"
 			}
 		},
 		"folder": {
