@@ -18,7 +18,7 @@
 				"typeProperties": {
 					"variableName": "varTimesheetStartDate",
 					"value": {
-						"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd')",
+						"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -161), 'yyyy-MM-dd')",
 						"type": "Expression"
 					}
 				}
