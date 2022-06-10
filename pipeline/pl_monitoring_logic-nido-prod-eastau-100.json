@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@json(\nconcat(\nstring('\"Pipeline Monitoring Details\": {'),\nstring('\"Pre Row Count\": '), pipeline().parameters.PreRowCount,\nstring('\"Post Row Count\": '), pipeline().parameters.PostRowCount,\nstring('\"Copy Activity Output\": '), pipeline().parameters.CopyActivityOutput,\nstring('\"Copy Activity Error Message\": '), pipeline().parameters.CopyActivityErrorMessage,\nstring('\"Dataflow Activity Output\": '), pipeline().parameters.DataflowActivityOutput,\nstring('\"Dataflow Error Message\": '), pipeline().parameters.DataflowActivityErrorMessage,\nstring('}')\n)\n)",
+						"value": "@{pipeline().parameters.PreRowCount}\n{\"Copy Activity Output\": @{pipeline().parameters.CopyActivityOutput}}\n",
 						"type": "Expression"
 					}
 				}
@@ -41,27 +41,27 @@
 				"defaultValue": "PipelineRunId"
 			},
 			"PreRowCount": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PreRowCount"
 			},
 			"PostRowCount": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PostRowCount"
 			},
 			"CopyActivityOutput": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "CopyActivityOutput"
 			},
 			"DataflowActivityOutput": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "DataflowActivityOutput"
 			},
 			"CopyActivityErrorMessage": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "CopyActivityErrorMessage"
 			},
 			"DataflowActivityErrorMessage": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "DataflowActivityErrorMessage"
 			}
 		},
