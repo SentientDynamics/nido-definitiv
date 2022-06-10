@@ -56,6 +56,7 @@
 						"value": "@activity('OrgPayRuns').output.value",
 						"type": "Expression"
 					},
+					"isSequential": false,
 					"activities": [
 						{
 							"name": "ApiToJson",
@@ -374,19 +375,27 @@
 							"type": "Expression"
 						},
 						"PreRowCount": {
-							"value": "@activity('PreRowCount').output.value[0]",
+							"value": "@variables('var_PreRowCount')",
 							"type": "Expression"
 						},
 						"PostRowCount": {
-							"value": "@activity('PostRowCount').output.value[0]",
+							"value": "@variables('var_PostRowCount')",
+							"type": "Expression"
+						},
+						"CopyActivityOutput": {
+							"value": "@variables('var_CopyActivityOutput')",
 							"type": "Expression"
 						},
 						"DataflowActivityOutput": {
-							"value": "@activity('df_Payslips').output",
+							"value": "@variables('var_DataflowActivityOutput')",
 							"type": "Expression"
 						},
 						"CopyActivityErrorMessage": {
-							"value": "@activity('ApiToJson').output.errors[0].Message",
+							"value": "@variables('var_CopyActivityErrorMessage')",
+							"type": "Expression"
+						},
+						"DataflowActivityErrorMessage": {
+							"value": "@variables('var_DataflowActivityErrorMessage')",
 							"type": "Expression"
 						}
 					}
@@ -576,7 +585,7 @@
 				"typeProperties": {
 					"variableName": "var_PreRowCount",
 					"value": {
-						"value": "@coalesce(activity('PreRowCount').output.value[0])",
+						"value": "@coalesce(activity('PreRowCount').output.value[0].PreRowCount)",
 						"type": "Expression"
 					}
 				}
@@ -596,7 +605,7 @@
 				"typeProperties": {
 					"variableName": "var_PostRowCount",
 					"value": {
-						"value": "@coalesce(activity('PostRowCount').output.value[0])",
+						"value": "@coalesce(activity('PostRowCount').output.value[0].PostRowCount)",
 						"type": "Expression"
 					}
 				}
