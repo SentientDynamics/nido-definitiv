@@ -40,10 +40,6 @@
 				"type": "string",
 				"defaultValue": "PipelineRunId"
 			},
-			"DataflowActivityOutput": {
-				"type": "string",
-				"defaultValue": "DataflowActivityOutput"
-			},
 			"PreRowCount": {
 				"type": "string",
 				"defaultValue": "PreRowCount"
@@ -52,17 +48,21 @@
 				"type": "string",
 				"defaultValue": "PostRowCount"
 			},
-			"DataflowErrorMessage": {
+			"CopyActivityOutput": {
 				"type": "string",
-				"defaultValue": "DataflowErrorMessage"
+				"defaultValue": "CopyActivityOutput"
+			},
+			"DataflowActivityOutput": {
+				"type": "string",
+				"defaultValue": "DataflowActivityOutput"
 			},
 			"CopyActivityErrorMessage": {
 				"type": "string",
 				"defaultValue": "CopyActivityErrorMessage"
 			},
-			"CopyActivityOutput": {
+			"DataflowActivityErrorMessage": {
 				"type": "string",
-				"defaultValue": "CopyActivityOutput"
+				"defaultValue": "DataflowActivityErrorMessage"
 			}
 		},
 		"folder": {
