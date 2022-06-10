@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@json(\nconcat(\nstring('{\"Pre Row Count\": \"'), pipeline().parameters.PreRowCount, string('\",'),\nstring('\"Post Row Count\": \"'), pipeline().parameters.PostRowCount, string('\",'),\nstring('\"Copy Activity Output\": \"'), pipeline().parameters.CopyActivityOutput, string('\",'),\nstring('\"Copy Activity Error Message\": \"'), pipeline().parameters.CopyActivityErrorMessage, string('\",'),\nstring('\"Dataflow Activity Output\": \"'), pipeline().parameters.DataflowActivityOutput, string('\",'),\nstring('\"Dataflow Error Message\": \"'), pipeline().parameters.DataflowActivityErrorMessage, string('\"}')\n))",
+						"value": "@json(\nconcat(\nstring('\"Pipeline Monitoring Details\": {'),\nstring('\"Pre Row Count\": '), pipeline().parameters.PreRowCount,\nstring('\"Post Row Count\": '), pipeline().parameters.PostRowCount,\nstring('\"Copy Activity Output\": '), pipeline().parameters.CopyActivityOutput,\nstring('\"Copy Activity Error Message\": '), pipeline().parameters.CopyActivityErrorMessage,\nstring('\"Dataflow Activity Output\": '), pipeline().parameters.DataflowActivityOutput,\nstring('\"Dataflow Error Message\": '), pipeline().parameters.DataflowActivityErrorMessage,\nstring('}')\n)\n)",
 						"type": "Expression"
 					}
 				}
