@@ -7,7 +7,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "PreRowCount",
+						"activity": "var_PreRowCount",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -187,7 +187,7 @@
 							]
 						},
 						{
-							"name": "CopyActivityOutput",
+							"name": "var_CopyActivityOutput",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -199,15 +199,15 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "varCopyActivityOutput",
+								"variableName": "var_CopyActivityOutput",
 								"value": {
-									"value": "@activity('ApiToJson').output",
+									"value": "@coalesce(activity('ApiToJson').output)",
 									"type": "Expression"
 								}
 							}
 						},
 						{
-							"name": "CopyActivityErrorMessage",
+							"name": "var_CopyActivityErrorMessage",
 							"type": "SetVariable",
 							"dependsOn": [
 								{
@@ -219,10 +219,60 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "varCopyActivityErrorMessage",
+								"variableName": "var_CopyActivityErrorMessage",
 								"value": {
-									"value": "@activity('ApiToJson').output.errors[0].Message",
+									"value": "@coalesce(activity('ApiToJson').output.errors[0].Message)",
 									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "pl_monitoring_logic-nido-prod-eastau-100_1",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "var_CopyActivityErrorMessage",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"PipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"PreRowCount": {
+										"value": "@variables('var_PreRowCount')",
+										"type": "Expression"
+									},
+									"PostRowCount": {
+										"value": "@variables('var_PostRowCount')",
+										"type": "Expression"
+									},
+									"CopyActivityOutput": {
+										"value": "@variables('var_CopyActivityOutput')",
+										"type": "Expression"
+									},
+									"DataflowActivityOutput": {
+										"value": "@variables('var_DataflowActivityOutput')",
+										"type": "Expression"
+									},
+									"CopyActivityErrorMessage": {
+										"value": "@variables('var_CopyActivityErrorMessage')",
+										"type": "Expression"
+									},
+									"DataflowActivityErrorMessage": {
+										"value": "@variables('var_DataflowActivityErrorMessage')",
+										"type": "Expression"
+									}
 								}
 							}
 						}
@@ -301,11 +351,11 @@
 				}
 			},
 			{
-				"name": "pl_monitoring_logic-nido-prod-eastau-100",
+				"name": "pl_monitoring_logic-nido-prod-eastau-100_3",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "PostRowCount",
+						"activity": "var_PostRowCount",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -323,10 +373,6 @@
 							"value": "@pipeline().RunId",
 							"type": "Expression"
 						},
-						"DataflowActivityOutput": {
-							"value": "@activity('df_Payslips').output",
-							"type": "Expression"
-						},
 						"PreRowCount": {
 							"value": "@activity('PreRowCount').output.value[0]",
 							"type": "Expression"
@@ -335,8 +381,8 @@
 							"value": "@activity('PostRowCount').output.value[0]",
 							"type": "Expression"
 						},
-						"DataflowErrorMessage": {
-							"value": "@activity('df_Payslips').error.Message",
+						"DataflowActivityOutput": {
+							"value": "@activity('df_Payslips').output",
 							"type": "Expression"
 						},
 						"CopyActivityErrorMessage": {
@@ -426,7 +472,7 @@
 				}
 			},
 			{
-				"name": "DataflowErrorMessage",
+				"name": "var_DataflowActivityErrorMessage",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -438,15 +484,15 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "varDataflowErrorMessage",
+					"variableName": "var_DataflowActivityErrorMessage",
 					"value": {
-						"value": "@activity('df_Payslips').error.Message",
+						"value": "@coalesce(activity('df_Payslips').error.Message)",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "DataflowOutput",
+				"name": "var_DataflowActivityOutput",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -458,21 +504,21 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "varDataflowOutput",
+					"variableName": "var_DataflowActivityOutput",
 					"value": {
-						"value": "@activity('df_Payslips').output",
+						"value": "@coalesce(activity('df_Payslips').output)",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "pl_monitoring_logic-nido-prod-eastau-100_copy1",
+				"name": "pl_monitoring_logic-nido-prod-eastau-100_copy2_2",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "OrgPayRun",
+						"activity": "var_DataflowActivityErrorMessage",
 						"dependencyConditions": [
-							"Failed"
+							"Succeeded"
 						]
 					}
 				],
@@ -488,41 +534,39 @@
 							"value": "@pipeline().RunId",
 							"type": "Expression"
 						},
-						"DataflowActivityOutput": {
-							"value": "@activity('df_Payslips').output",
-							"type": "Expression"
-						},
 						"PreRowCount": {
-							"value": "@activity('PreRowCount').output.value[0]",
+							"value": "@variables('var_PreRowCount')",
 							"type": "Expression"
 						},
 						"PostRowCount": {
-							"value": "@activity('PostRowCount').output.value[0]",
+							"value": "@variables('var_PostRowCount')",
 							"type": "Expression"
 						},
-						"DataflowErrorMessage": {
-							"value": "@activity('df_Payslips').error.Message",
+						"CopyActivityOutput": {
+							"value": "@variables('var_CopyActivityOutput')",
+							"type": "Expression"
+						},
+						"DataflowActivityOutput": {
+							"value": "@variables('var_DataflowActivityOutput')",
 							"type": "Expression"
 						},
 						"CopyActivityErrorMessage": {
-							"value": "@activity('ApiToJson').output.errors[0].Message",
+							"value": "@variables('var_CopyActivityErrorMessage')",
+							"type": "Expression"
+						},
+						"DataflowActivityErrorMessage": {
+							"value": "@variables('var_DataflowActivityErrorMessage')",
 							"type": "Expression"
 						}
 					}
 				}
 			},
 			{
-				"name": "pl_monitoring_logic-nido-prod-eastau-100_copy2",
-				"type": "ExecutePipeline",
+				"name": "var_PreRowCount",
+				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "DataflowErrorMessage",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					},
-					{
-						"activity": "DataflowOutput",
+						"activity": "PreRowCount",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -530,36 +574,30 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"PipelineRunId": {
-							"value": "@pipeline().RunId",
-							"type": "Expression"
-						},
-						"DataflowActivityOutput": {
-							"value": "@activity('df_Payslips').output",
-							"type": "Expression"
-						},
-						"PreRowCount": {
-							"value": "@activity('PreRowCount').output.value[0]",
-							"type": "Expression"
-						},
-						"PostRowCount": {
-							"value": "@activity('PostRowCount').output.value[0]",
-							"type": "Expression"
-						},
-						"DataflowErrorMessage": {
-							"value": "@activity('df_Payslips').error.Message",
-							"type": "Expression"
-						},
-						"CopyActivityErrorMessage": {
-							"value": "@activity('ApiToJson').output.errors[0].Message",
-							"type": "Expression"
-						}
+					"variableName": "var_PreRowCount",
+					"value": {
+						"value": "@coalesce(activity('PreRowCount').output.value[0])",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "var_PostRowCount",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "PostRowCount",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var_PostRowCount",
+					"value": {
+						"value": "@coalesce(activity('PostRowCount').output.value[0])",
+						"type": "Expression"
 					}
 				}
 			}
@@ -575,21 +613,29 @@
 			}
 		},
 		"variables": {
-			"varCopyActivityOutput": {
+			"var_PreRowCount": {
 				"type": "String",
-				"defaultValue": "varCopyActivityOutput"
+				"defaultValue": "var_PreRowCount"
 			},
-			"varCopyActivityErrorMessage": {
+			"var_PostRowCount": {
 				"type": "String",
-				"defaultValue": "varCopyActivityErrorMessage"
+				"defaultValue": " var_PostRowCount"
 			},
-			"varDataflowOutput": {
+			"var_CopyActivityOutput": {
 				"type": "String",
-				"defaultValue": "varDataflowOutput"
+				"defaultValue": "var_CopyActivityOutput"
 			},
-			"varDataflowErrorMessage": {
+			"var_DataflowActivityOutput": {
 				"type": "String",
-				"defaultValue": "varDataflowErrorMessage"
+				"defaultValue": "var_DataflowActivityOutput"
+			},
+			"var_CopyActivityErrorMessage": {
+				"type": "String",
+				"defaultValue": "var_CopyActivityErrorMessage"
+			},
+			"var_DataflowActivityErrorMessage": {
+				"type": "String",
+				"defaultValue": "var_DataflowActivityErrorMessage"
 			}
 		},
 		"folder": {
