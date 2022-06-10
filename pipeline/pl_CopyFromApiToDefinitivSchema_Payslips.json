@@ -495,7 +495,7 @@
 				"typeProperties": {
 					"variableName": "var_DataflowActivityErrorMessage",
 					"value": {
-						"value": "@coalesce(activity('df_Payslips').error.Message)",
+						"value": "@coalesce(string(activity('df_Payslips').error.Message))",
 						"type": "Expression"
 					}
 				}
@@ -515,7 +515,7 @@
 				"typeProperties": {
 					"variableName": "var_DataflowActivityOutput",
 					"value": {
-						"value": "@coalesce(activity('df_Payslips').output)",
+						"value": "@coalesce(string(activity('df_Payslips').output))",
 						"type": "Expression"
 					}
 				}
@@ -585,7 +585,7 @@
 				"typeProperties": {
 					"variableName": "var_PreRowCount",
 					"value": {
-						"value": "@coalesce(string(activity('PreRowCount').output.value[0].PreRowCount))",
+						"value": "@coalesce(string(activity('PreRowCount').output.value[0]))",
 						"type": "Expression"
 					}
 				}
@@ -605,7 +605,7 @@
 				"typeProperties": {
 					"variableName": "var_PostRowCount",
 					"value": {
-						"value": "@coalesce(activity('PostRowCount').output.value[0].PostRowCount)",
+						"value": "@coalesce(string(activity('PostRowCount').output.value[0]))",
 						"type": "Expression"
 					}
 				}
