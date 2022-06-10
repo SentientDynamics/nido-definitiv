@@ -202,7 +202,7 @@
 							"typeProperties": {
 								"variableName": "var_CopyActivityOutput",
 								"value": {
-									"value": "@coalesce(activity('ApiToJson').output)",
+									"value": "@coalesce(string(activity('ApiToJson').output))",
 									"type": "Expression"
 								}
 							}
@@ -222,7 +222,7 @@
 							"typeProperties": {
 								"variableName": "var_CopyActivityErrorMessage",
 								"value": {
-									"value": "@coalesce(activity('ApiToJson').output.errors[0].Message)",
+									"value": "@coalesce(string(activity('ApiToJson').output.errors[0].Message))",
 									"type": "Expression"
 								}
 							}
@@ -585,7 +585,7 @@
 				"typeProperties": {
 					"variableName": "var_PreRowCount",
 					"value": {
-						"value": "@coalesce(activity('PreRowCount').output.value[0].PreRowCount)",
+						"value": "@coalesce(string(activity('PreRowCount').output.value[0].PreRowCount))",
 						"type": "Expression"
 					}
 				}
