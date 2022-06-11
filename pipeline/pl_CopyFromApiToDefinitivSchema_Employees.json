@@ -488,7 +488,7 @@
 							"type": "Expression"
 						},
 						"PreRowCount": {
-							"value": "@json(variables('var_PreRowCount'))",
+							"value": "@variables('var_PreRowCount')",
 							"type": "Expression"
 						},
 						"PostRowCount": {
