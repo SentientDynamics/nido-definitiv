@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@union(\ncoalesce(pipeline().parameters.PreRowCount, '{\"No Output\"}'),\ncoalesce(pipeline().parameters.PostRowCount, '{\"No Output\"}'),\ncoalesce(pipeline().parameters.CopyActivityOutput, '{\"No Output\"}'),\ncoalesce(pipeline().parameters.DataflowActivityOutput, '{\"No Output\"}'),\ncoalesce(pipeline().parameters.CopyActivityErrorMessage, '{\"No Output\"}'),\ncoalesce(pipeline().parameters.DataflowActivityErrorMessage,  '{\"No Output\"}')\n)",
+						"value": "@union(\ncoalesce(pipeline().parameters.PreRowCount, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.PostRowCount, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityOutput, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityOutput, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityErrorMessage, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityErrorMessage,  json('{\"No Output\"}'))\n)",
 						"type": "Expression"
 					}
 				}
