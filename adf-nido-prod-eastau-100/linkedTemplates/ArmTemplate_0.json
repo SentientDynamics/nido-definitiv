@@ -267,7 +267,7 @@
 								"Content-Type": "application/json"
 							},
 							"body": {
-								"value": "@{pipeline().parameters.PreRowCount}\n@{pipeline().parameters.PostRowCount}\n@{pipeline().parameters.CopyActivityOutput}\n@{pipeline().parameters.DataflowActivityOutput}\n@{pipeline().parameters.CopyActivityErrorMessage}\n@{pipeline().parameters.DataflowActivityErrorMessage}",
+								"value": "@string(\nunion(\npipeline().parameters.PreRowCount,\npipeline().parameters.PostRowCount,\npipeline().parameters.CopyActivityOutput,\npipeline().parameters.DataflowActivityOutput,\npipeline().parameters.CopyActivityErrorMessage,\npipeline().parameters.DataflowActivityErrorMessage\n)\n)",
 								"type": "Expression"
 							}
 						}
