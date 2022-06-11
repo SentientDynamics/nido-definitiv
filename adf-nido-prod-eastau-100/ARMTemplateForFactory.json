@@ -2203,27 +2203,27 @@
 									"type": "Expression"
 								},
 								"PreRowCount": {
-									"value": "@variables('var_PreRowCount')",
+									"value": "@json(variables('var_PreRowCount'))",
 									"type": "Expression"
 								},
 								"PostRowCount": {
-									"value": "@variables('var_PostRowCount')",
+									"value": "@json(variables('var_PostRowCount'))",
 									"type": "Expression"
 								},
 								"CopyActivityOutput": {
-									"value": "@variables('var_CopyActivityOutput')",
+									"value": "@json(variables('var_CopyActivityOutput'))",
 									"type": "Expression"
 								},
 								"DataflowActivityOutput": {
-									"value": "@variables('var_DataflowActivityOutput')",
+									"value": "@json(variables('var_DataflowActivityOutput'))",
 									"type": "Expression"
 								},
 								"CopyActivityErrorMessage": {
-									"value": "@variables('var_CopyActivityErrorMessage')",
+									"value": "@json(variables('var_CopyActivityErrorMessage'))",
 									"type": "Expression"
 								},
 								"DataflowActivityErrorMessage": {
-									"value": "@variables('var_DataflowActivityErrorMessage')",
+									"value": "@json(variables('var_DataflowActivityErrorMessage'))",
 									"type": "Expression"
 								}
 							}
