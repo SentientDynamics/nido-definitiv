@@ -1672,7 +1672,7 @@
 						"typeProperties": {
 							"variableName": "var_DataflowActivityErrorMessage",
 							"value": {
-								"value": "@string(coalesce(activity('df_Organizations').error.Message, '{}'))",
+								"value": "@string(coalesce(activity('df_Organizations').error.Message, '{\"No Output\"}'))",
 								"type": "Expression"
 							}
 						}
@@ -1692,7 +1692,7 @@
 						"typeProperties": {
 							"variableName": "var_DataflowActivityOutput",
 							"value": {
-								"value": "@string(coalesce(activity('df_Organizations').output, '{}'))",
+								"value": "@string(coalesce(activity('df_Organizations').output, '{\"No Output\"}'))",
 								"type": "Expression"
 							}
 						}
@@ -1782,7 +1782,7 @@
 						"typeProperties": {
 							"variableName": "var_PostRowCount",
 							"value": {
-								"value": "@string(coalesce(activity('PostRowCount').output.value[0], '{}'))",
+								"value": "@string(coalesce(activity('PostRowCount').output.value[0], '{\"No Output\"}'))",
 								"type": "Expression"
 							}
 						}
@@ -1802,7 +1802,7 @@
 						"typeProperties": {
 							"variableName": "var_CopyActivityOutput",
 							"value": {
-								"value": "@string(coalesce(activity('ApiToJson').output, '{}'))",
+								"value": "@string(coalesce(activity('ApiToJson').output, '{\"No Output\"}'))",
 								"type": "Expression"
 							}
 						}
@@ -1822,7 +1822,7 @@
 						"typeProperties": {
 							"variableName": "var_CopyActivityErrorMessage",
 							"value": {
-								"value": "@string(coalesce(activity('ApiToJson').output.errors[0].Message,'{}'))",
+								"value": "@string(coalesce(activity('ApiToJson').output.errors[0].Message,'{\"No Output\"}'))",
 								"type": "Expression"
 							}
 						}
