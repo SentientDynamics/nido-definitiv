@@ -42,27 +42,31 @@
 			},
 			"PreRowCount": {
 				"type": "object",
-				"defaultValue": "PreRowCount"
+				"defaultValue": {
+					"PreRowCount": 0
+				}
 			},
 			"PostRowCount": {
 				"type": "object",
-				"defaultValue": "PostRowCount"
+				"defaultValue": {
+					"PostRowCount": 0
+				}
 			},
 			"CopyActivityOutput": {
 				"type": "object",
-				"defaultValue": "CopyActivityOutput"
+				"defaultValue": "{CopyActivityOutput\": 0}"
 			},
 			"DataflowActivityOutput": {
 				"type": "object",
-				"defaultValue": "DataflowActivityOutput"
+				"defaultValue": "{DataflowActivityOutput\": 0}"
 			},
 			"CopyActivityErrorMessage": {
 				"type": "object",
-				"defaultValue": "CopyActivityErrorMessage"
+				"defaultValue": "{CopyActivityErrorMessage\": 0}"
 			},
 			"DataflowActivityErrorMessage": {
 				"type": "object",
-				"defaultValue": "DataflowActivityErrorMessage"
+				"defaultValue": "{DataflowActivityErrorMessage\": 0}"
 			}
 		},
 		"folder": {
