@@ -1302,7 +1302,7 @@
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
-								"activity": "Organizations",
+								"activity": "ApiToJson",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1328,7 +1328,8 @@
 									"param_ErrorRowDirectory": {
 										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
 										"type": "Expression"
-									}
+									},
+									"param_DataflowName": "\"df_Organizations\""
 								},
 								"datasetParameters": {
 									"SourceBlobDefinitiv": {
@@ -1374,11 +1375,11 @@
 						}
 					},
 					{
-						"name": "Organizations",
+						"name": "ApiToJson",
 						"type": "Copy",
 						"dependsOn": [
 							{
-								"activity": "PreRowCount",
+								"activity": "var_PreRowCount",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1478,44 +1479,6 @@
 						]
 					},
 					{
-						"name": "pl_monitoring_logic-nido-prod-eastau-100",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "PostRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"PipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								},
-								"DataflowActivityOutput": {
-									"value": "@activity('df_Organizations').output",
-									"type": "Expression"
-								},
-								"PreRowCount": {
-									"value": "@activity('PreRowCount').output.value[0]",
-									"type": "Expression"
-								},
-								"PostRowCount": {
-									"value": "@activity('PostRowCount').output.value[0]",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
 						"name": "PreRowCount",
 						"type": "Lookup",
 						"dependsOn": [],
@@ -1593,6 +1556,276 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "pl_monitoring_logic-nido-prod-eastau-100_1",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "var_CopyActivityErrorMessage",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PreRowCount": {
+									"value": "@variables('var_PreRowCount')",
+									"type": "Expression"
+								},
+								"PostRowCount": {
+									"value": "@variables('var_PostRowCount')",
+									"type": "Expression"
+								},
+								"CopyActivityOutput": {
+									"value": "@variables('var_CopyActivityOutput')",
+									"type": "Expression"
+								},
+								"DataflowActivityOutput": {
+									"value": "@variables('var_DataflowActivityOutput')",
+									"type": "Expression"
+								},
+								"CopyActivityErrorMessage": {
+									"value": "@variables('var_CopyActivityErrorMessage')",
+									"type": "Expression"
+								},
+								"DataflowActivityErrorMessage": {
+									"value": "@variables('var_DataflowActivityErrorMessage')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "pl_monitoring_logic-nido-prod-eastau-100_3",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "var_PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PreRowCount": {
+									"value": "@variables('var_PreRowCount')",
+									"type": "Expression"
+								},
+								"PostRowCount": {
+									"value": "@variables('var_PostRowCount')",
+									"type": "Expression"
+								},
+								"CopyActivityOutput": {
+									"value": "@variables('var_CopyActivityOutput')",
+									"type": "Expression"
+								},
+								"DataflowActivityOutput": {
+									"value": "@variables('var_DataflowActivityOutput')",
+									"type": "Expression"
+								},
+								"CopyActivityErrorMessage": {
+									"value": "@variables('var_CopyActivityErrorMessage')",
+									"type": "Expression"
+								},
+								"DataflowActivityErrorMessage": {
+									"value": "@variables('var_DataflowActivityErrorMessage')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "var_DataflowActivityErrorMessage",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "df_Organizations",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var_DataflowActivityErrorMessage",
+							"value": {
+								"value": "@coalesce(string(activity('df_Organizations').error.Message))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "var_DataflowActivityOutput",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "df_Organizations",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var_DataflowActivityOutput",
+							"value": {
+								"value": "@coalesce(string(activity('df_Organizations').output))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "pl_monitoring_logic-nido-prod-eastau-100_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "var_DataflowActivityErrorMessage",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PreRowCount": {
+									"value": "@variables('var_PreRowCount')",
+									"type": "Expression"
+								},
+								"PostRowCount": {
+									"value": "@variables('var_PostRowCount')",
+									"type": "Expression"
+								},
+								"CopyActivityOutput": {
+									"value": "@variables('var_CopyActivityOutput')",
+									"type": "Expression"
+								},
+								"DataflowActivityOutput": {
+									"value": "@variables('var_DataflowActivityOutput')",
+									"type": "Expression"
+								},
+								"CopyActivityErrorMessage": {
+									"value": "@variables('var_CopyActivityErrorMessage')",
+									"type": "Expression"
+								},
+								"DataflowActivityErrorMessage": {
+									"value": "@variables('var_DataflowActivityErrorMessage')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "var_PreRowCount",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "PreRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var_PreRowCount",
+							"value": {
+								"value": "@coalesce(string(activity('PreRowCount').output.value[0]))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "var_PostRowCount",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var_PostRowCount",
+							"value": {
+								"value": "@coalesce(string(activity('PostRowCount').output.value[0]))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "var_CopyActivityOutput",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "ApiToJson",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var_CopyActivityOutput",
+							"value": {
+								"value": "@coalesce(string(activity('ApiToJson').output))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "var_CopyActivityErrorMessage",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "ApiToJson",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var_CopyActivityErrorMessage",
+							"value": {
+								"value": "@coalesce(string(activity('ApiToJson').output.errors[0].Message))",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"policy": {
@@ -1607,6 +1840,26 @@
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Organizations"
+					}
+				},
+				"variables": {
+					"var_PreRowCount": {
+						"type": "String"
+					},
+					"var_PostRowCount": {
+						"type": "String"
+					},
+					"var_CopyActivityOutput": {
+						"type": "String"
+					},
+					"var_DataflowActivityOutput": {
+						"type": "String"
+					},
+					"var_CopyActivityErrorMessage": {
+						"type": "String"
+					},
+					"var_DataflowActivityErrorMessage": {
+						"type": "String"
 					}
 				},
 				"folder": {
