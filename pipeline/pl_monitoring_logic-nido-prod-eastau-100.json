@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@{pipeline().parameters.PreRowCount}\n{\"Copy Activity Output\": @{pipeline().parameters.CopyActivityOutput}}\n",
+						"value": "{\n\"Pipeline Monitoring Details\": \n{\n@{pipeline().parameters.PreRowCount},\n{\"Copy Activity Output\": @{pipeline().parameters.CopyActivityOutput}}\n}\n}",
 						"type": "Expression"
 					}
 				}
