@@ -267,7 +267,7 @@
 								"Content-Type": "application/json"
 							},
 							"body": {
-								"value": "@json(\nconcat(\nstring('{\"Pre Row Count\": \"'), pipeline().parameters.PreRowCount, string('\",'),\nstring('\"Post Row Count\": \"'), pipeline().parameters.PostRowCount, string('\",'),\nstring('\"Copy Activity Output\": \"'), pipeline().parameters.CopyActivityOutput, string('\",'),\nstring('\"Copy Activity Error Message\": \"'), pipeline().parameters.CopyActivityErrorMessage, string('\",'),\nstring('\"Dataflow Activity Output\": \"'), pipeline().parameters.DataflowActivityOutput, string('\",'),\nstring('\"Dataflow Error Message\": \"'), pipeline().parameters.DataflowErrorMessage, string('\"}')\n))",
+								"value": "{\n\"Pipeline Monitoring Details\": \n{\n@{pipeline().parameters.PreRowCount},\n{\"Copy Activity Output\": @{pipeline().parameters.CopyActivityOutput}}\n}\n}",
 								"type": "Expression"
 							}
 						}
@@ -282,29 +282,29 @@
 						"type": "string",
 						"defaultValue": "PipelineRunId"
 					},
-					"DataflowActivityOutput": {
-						"type": "string",
-						"defaultValue": "DataflowActivityOutput"
-					},
 					"PreRowCount": {
-						"type": "string",
+						"type": "object",
 						"defaultValue": "PreRowCount"
 					},
 					"PostRowCount": {
-						"type": "string",
+						"type": "object",
 						"defaultValue": "PostRowCount"
 					},
-					"DataflowErrorMessage": {
-						"type": "string",
-						"defaultValue": "DataflowErrorMessage"
+					"CopyActivityOutput": {
+						"type": "object",
+						"defaultValue": "CopyActivityOutput"
+					},
+					"DataflowActivityOutput": {
+						"type": "object",
+						"defaultValue": "DataflowActivityOutput"
 					},
 					"CopyActivityErrorMessage": {
-						"type": "string",
+						"type": "object",
 						"defaultValue": "CopyActivityErrorMessage"
 					},
-					"CopyActivityOutput": {
-						"type": "string",
-						"defaultValue": "CopyActivityOutput"
+					"DataflowActivityErrorMessage": {
+						"type": "object",
+						"defaultValue": "DataflowActivityErrorMessage"
 					}
 				},
 				"folder": {
