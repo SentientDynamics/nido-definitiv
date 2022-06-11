@@ -54,19 +54,27 @@
 			},
 			"CopyActivityOutput": {
 				"type": "object",
-				"defaultValue": "{CopyActivityOutput\": 0}"
+				"defaultValue": {
+					"CopyActivityOutput": 0
+				}
 			},
 			"DataflowActivityOutput": {
 				"type": "object",
-				"defaultValue": "{DataflowActivityOutput\": 0}"
+				"defaultValue": {
+					"DataflowActivityOutput": 0
+				}
 			},
 			"CopyActivityErrorMessage": {
 				"type": "object",
-				"defaultValue": "{CopyActivityErrorMessage\": 0}"
+				"defaultValue": {
+					"CopyActivityErrorMessage": 0
+				}
 			},
 			"DataflowActivityErrorMessage": {
 				"type": "object",
-				"defaultValue": "{DataflowActivityErrorMessage\": 0}"
+				"defaultValue": {
+					"DataflowActivityErrorMessage": 0
+				}
 			}
 		},
 		"folder": {
