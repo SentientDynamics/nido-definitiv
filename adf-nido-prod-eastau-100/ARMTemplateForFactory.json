@@ -5183,7 +5183,7 @@
 								"Content-Type": "application/json"
 							},
 							"body": {
-								"value": "@union(\ncoalesce(pipeline().parameters.PreRowCount, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.PostRowCount, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityOutput, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityOutput, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityErrorMessage, json('{\"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityErrorMessage,  json('{\"No Output\"}'))\n)",
+								"value": "@union(\ncoalesce(pipeline().parameters.PreRowCount, json('{\"PreRowCount\": \"No Output\"}')),\ncoalesce(pipeline().parameters.PostRowCount, json('{\"PostRowCount\": \"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityOutput, json('{\"CopyActivityOutput\": \"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityOutput, json('{\"DataflowActivityOutput\": \"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityErrorMessage, json('{\"CopyActivityErrorMessage\": \"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityErrorMessage,  json('{\"DataflowActivityErrorMessage\": \"No Output\"}'))\n)",
 								"type": "Expression"
 							}
 						}
