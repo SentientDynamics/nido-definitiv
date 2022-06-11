@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@string(\nunion(\npipeline().parameters.PreRowCount,\npipeline().parameters.PostRowCount,\npipeline().parameters.CopyActivityOutput,\npipeline().parameters.DataflowActivityOutput,\npipeline().parameters.CopyActivityErrorMessage,\npipeline().parameters.DataflowActivityErrorMessage\n)\n)",
+						"value": "@union(\npipeline().parameters.PreRowCount,\npipeline().parameters.PostRowCount,\npipeline().parameters.CopyActivityOutput,\npipeline().parameters.DataflowActivityOutput,\npipeline().parameters.CopyActivityErrorMessage,\npipeline().parameters.DataflowActivityErrorMessage\n)",
 						"type": "Expression"
 					}
 				}
