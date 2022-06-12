@@ -16,6 +16,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"url": {
+						"value": "@concat(\npipeline().globalParameters.global_logic_Monitoring_baseUrl,\npipeline().globalParameters.global_logic_Monitoring_SAS\n)",
+						"type": "Expression"
+					},
 					"connectVia": {
 						"referenceName": "AustraliaEastIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
@@ -23,7 +27,8 @@
 					"method": "POST",
 					"headers": {
 						"Content-Type": "application/json"
-					}
+					},
+					"body": ""
 				}
 			}
 		],
