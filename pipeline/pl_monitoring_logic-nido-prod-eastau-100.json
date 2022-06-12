@@ -16,10 +16,6 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": {
-						"value": "@concat(\npipeline().globalParameters.global_logic_Monitoring_baseUrl,\npipeline().parameters.PipelineRunId, \npipeline().globalParameters.global_logic_Monitoring_SAS)",
-						"type": "Expression"
-					},
 					"connectVia": {
 						"referenceName": "AustraliaEastIntegrationRuntime",
 						"type": "IntegrationRuntimeReference"
@@ -27,56 +23,10 @@
 					"method": "POST",
 					"headers": {
 						"Content-Type": "application/json"
-					},
-					"body": {
-						"value": "@union(\ncoalesce(pipeline().parameters.PreRowCount, json('{\"PreRowCount\": \"No Output\"}')),\ncoalesce(pipeline().parameters.PostRowCount, json('{\"PostRowCount\": \"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityOutput, json('{\"CopyActivityOutput\": \"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityOutput, json('{\"DataflowActivityOutput\": \"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityErrorMessage, json('{\"CopyActivityErrorMessage\": \"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityErrorMessage,  json('{\"DataflowActivityErrorMessage\": \"No Output\"}'))\n)",
-						"type": "Expression"
 					}
 				}
 			}
 		],
-		"parameters": {
-			"PipelineRunId": {
-				"type": "string",
-				"defaultValue": "PipelineRunId"
-			},
-			"PreRowCount": {
-				"type": "object",
-				"defaultValue": {
-					"PreRowCount": "No Output"
-				}
-			},
-			"PostRowCount": {
-				"type": "object",
-				"defaultValue": {
-					"PostRowCount": "No Output"
-				}
-			},
-			"CopyActivityOutput": {
-				"type": "object",
-				"defaultValue": {
-					"CopyActivityOutput": "No Output"
-				}
-			},
-			"DataflowActivityOutput": {
-				"type": "object",
-				"defaultValue": {
-					"DataflowActivityOutput": "No Output"
-				}
-			},
-			"CopyActivityErrorMessage": {
-				"type": "object",
-				"defaultValue": {
-					"CopyActivityErrorMessage": "No Output"
-				}
-			},
-			"DataflowActivityErrorMessage": {
-				"type": "object",
-				"defaultValue": {
-					"DataflowActivityErrorMessage": "No Output"
-				}
-			}
-		},
 		"folder": {
 			"name": "00_Monitoring"
 		},
