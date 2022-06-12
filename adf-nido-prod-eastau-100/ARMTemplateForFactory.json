@@ -2040,106 +2040,6 @@
 						}
 					},
 					{
-						"name": "pl_monitoring_logic-nido-prod-eastau-100_1",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "var_CopyActivityErrorMessage",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"PipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								},
-								"PreRowCount": {
-									"value": "@json(variables('var_PreRowCount'))",
-									"type": "Expression"
-								},
-								"PostRowCount": {
-									"value": "@json(variables('var_PostRowCount'))",
-									"type": "Expression"
-								},
-								"CopyActivityOutput": {
-									"value": "@json(variables('var_CopyActivityOutput'))",
-									"type": "Expression"
-								},
-								"DataflowActivityOutput": {
-									"value": "@json(variables('var_DataflowActivityOutput'))",
-									"type": "Expression"
-								},
-								"CopyActivityErrorMessage": {
-									"value": "@json(variables('var_CopyActivityErrorMessage'))",
-									"type": "Expression"
-								},
-								"DataflowActivityErrorMessage": {
-									"value": "@json(variables('var_DataflowActivityErrorMessage'))",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "pl_monitoring_logic-nido-prod-eastau-100_3",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "var_PostRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"PipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								},
-								"PreRowCount": {
-									"value": "@json(variables('var_PreRowCount'))",
-									"type": "Expression"
-								},
-								"PostRowCount": {
-									"value": "@json(variables('var_PostRowCount'))",
-									"type": "Expression"
-								},
-								"CopyActivityOutput": {
-									"value": "@json(variables('var_CopyActivityOutput'))",
-									"type": "Expression"
-								},
-								"DataflowActivityOutput": {
-									"value": "@json(variables('var_DataflowActivityOutput'))",
-									"type": "Expression"
-								},
-								"CopyActivityErrorMessage": {
-									"value": "@json(variables('var_CopyActivityErrorMessage'))",
-									"type": "Expression"
-								},
-								"DataflowActivityErrorMessage": {
-									"value": "@json(variables('var_DataflowActivityErrorMessage'))",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
 						"name": "var_DataflowActivityErrorMessage",
 						"type": "SetVariable",
 						"dependsOn": [
@@ -2176,56 +2076,6 @@
 							"value": {
 								"value": "@string(coalesce(activity('df_Organizations').output, '{\"No Output\"}'))",
 								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "pl_monitoring_logic-nido-prod-eastau-100_2",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "var_DataflowActivityErrorMessage",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"PipelineRunId": {
-									"value": "@pipeline().RunId",
-									"type": "Expression"
-								},
-								"PreRowCount": {
-									"value": "@json(variables('var_PreRowCount'))",
-									"type": "Expression"
-								},
-								"PostRowCount": {
-									"value": "@json(variables('var_PostRowCount'))",
-									"type": "Expression"
-								},
-								"CopyActivityOutput": {
-									"value": "@json(variables('var_CopyActivityOutput'))",
-									"type": "Expression"
-								},
-								"DataflowActivityOutput": {
-									"value": "@json(variables('var_DataflowActivityOutput'))",
-									"type": "Expression"
-								},
-								"CopyActivityErrorMessage": {
-									"value": "@json(variables('var_CopyActivityErrorMessage'))",
-									"type": "Expression"
-								},
-								"DataflowActivityErrorMessage": {
-									"value": "@json(variables('var_DataflowActivityErrorMessage'))",
-									"type": "Expression"
-								}
 							}
 						}
 					},
@@ -2356,8 +2206,7 @@
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-100')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
 		{
