@@ -2063,27 +2063,27 @@
 									"type": "Expression"
 								},
 								"PreRowCount": {
-									"value": "@variables('var_PreRowCount')",
+									"value": "@json(variables('var_PreRowCount'))",
 									"type": "Expression"
 								},
 								"PostRowCount": {
-									"value": "@variables('var_PostRowCount')",
+									"value": "@json(variables('var_PostRowCount'))",
 									"type": "Expression"
 								},
 								"CopyActivityOutput": {
-									"value": "@variables('var_CopyActivityOutput')",
+									"value": "@json(variables('var_CopyActivityOutput'))",
 									"type": "Expression"
 								},
 								"DataflowActivityOutput": {
-									"value": "@variables('var_DataflowActivityOutput')",
+									"value": "@json(variables('var_DataflowActivityOutput'))",
 									"type": "Expression"
 								},
 								"CopyActivityErrorMessage": {
-									"value": "@variables('var_CopyActivityErrorMessage')",
+									"value": "@json(variables('var_CopyActivityErrorMessage'))",
 									"type": "Expression"
 								},
 								"DataflowActivityErrorMessage": {
-									"value": "@variables('var_DataflowActivityErrorMessage')",
+									"value": "@json(variables('var_DataflowActivityErrorMessage'))",
 									"type": "Expression"
 								}
 							}
@@ -2244,7 +2244,7 @@
 						"typeProperties": {
 							"variableName": "var_PreRowCount",
 							"value": {
-								"value": "@string(coalesce(activity('PreRowCount').output.value[0],'{}'))",
+								"value": "@string(coalesce(activity('PreRowCount').output.value[0],'{\"No Output\"}'))",
 								"type": "Expression"
 							}
 						}
@@ -5201,37 +5201,37 @@
 					"PreRowCount": {
 						"type": "object",
 						"defaultValue": {
-							"PreRowCount": 0
+							"PreRowCount": "No Output"
 						}
 					},
 					"PostRowCount": {
 						"type": "object",
 						"defaultValue": {
-							"PostRowCount": 0
+							"PostRowCount": "No Output"
 						}
 					},
 					"CopyActivityOutput": {
 						"type": "object",
 						"defaultValue": {
-							"CopyActivityOutput": 0
+							"CopyActivityOutput": "No Output"
 						}
 					},
 					"DataflowActivityOutput": {
 						"type": "object",
 						"defaultValue": {
-							"DataflowActivityOutput": 0
+							"DataflowActivityOutput": "No Output"
 						}
 					},
 					"CopyActivityErrorMessage": {
 						"type": "object",
 						"defaultValue": {
-							"CopyActivityErrorMessage": 0
+							"CopyActivityErrorMessage": "No Output"
 						}
 					},
 					"DataflowActivityErrorMessage": {
 						"type": "object",
 						"defaultValue": {
-							"DataflowActivityErrorMessage": 0
+							"DataflowActivityErrorMessage": "No Output"
 						}
 					}
 				},
