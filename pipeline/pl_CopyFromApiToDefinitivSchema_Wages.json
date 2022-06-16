@@ -307,26 +307,6 @@
 									}
 								}
 							]
-						},
-						{
-							"name": "CopyActivityErrorMessage",
-							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "ApiToJson",
-									"dependencyConditions": [
-										"Failed"
-									]
-								}
-							],
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "varCopyActivityErrorMessage",
-								"value": {
-									"value": "@activity('ApiToJson').output.errors[0].Message",
-									"type": "Expression"
-								}
-							}
 						}
 					]
 				}
