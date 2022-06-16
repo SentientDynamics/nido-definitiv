@@ -17,7 +17,7 @@
 	},
 	"global_logic_Monitoring_baseUrl": {
 		"type": "string",
-		"value": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke/PipelineRunId/"
+		"value": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke"
 	},
 	"global_logic_Monitoring_SAS": {
 		"type": "string",

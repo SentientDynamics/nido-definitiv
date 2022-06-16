@@ -29,7 +29,7 @@
 		},
 		"dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value": {
 			"type": "string",
-			"defaultValue": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke/PipelineRunId/"
+			"defaultValue": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke"
 		},
 		"dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value": {
 			"type": "string",
@@ -255,7 +255,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"url": {
-								"value": "@concat(\npipeline().globalParameters.global_logic_Monitoring_baseUrl,\npipeline().parameters.PipelineRunId, \npipeline().globalParameters.global_logic_Monitoring_SAS)",
+								"value": "@concat(\npipeline().globalParameters.global_logic_Monitoring_baseUrl,\npipeline().globalParameters.global_logic_Monitoring_SAS\n)",
 								"type": "Expression"
 							},
 							"connectVia": {
@@ -267,8 +267,7 @@
 								"Content-Type": "application/json"
 							},
 							"body": {
-								"value": "@union(\ncoalesce(pipeline().parameters.PreRowCount, json('{\"PreRowCount\": \"No Output\"}')),\ncoalesce(pipeline().parameters.PostRowCount, json('{\"PostRowCount\": \"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityOutput, json('{\"CopyActivityOutput\": \"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityOutput, json('{\"DataflowActivityOutput\": \"No Output\"}')),\ncoalesce(pipeline().parameters.CopyActivityErrorMessage, json('{\"CopyActivityErrorMessage\": \"No Output\"}')),\ncoalesce(pipeline().parameters.DataflowActivityErrorMessage,  json('{\"DataflowActivityErrorMessage\": \"No Output\"}'))\n)",
-								"type": "Expression"
+								"Body": "Empty"
 							}
 						}
 					}
@@ -276,48 +275,6 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
-				},
-				"parameters": {
-					"PipelineRunId": {
-						"type": "string",
-						"defaultValue": "PipelineRunId"
-					},
-					"PreRowCount": {
-						"type": "object",
-						"defaultValue": {
-							"PreRowCount": "No Output"
-						}
-					},
-					"PostRowCount": {
-						"type": "object",
-						"defaultValue": {
-							"PostRowCount": "No Output"
-						}
-					},
-					"CopyActivityOutput": {
-						"type": "object",
-						"defaultValue": {
-							"CopyActivityOutput": "No Output"
-						}
-					},
-					"DataflowActivityOutput": {
-						"type": "object",
-						"defaultValue": {
-							"DataflowActivityOutput": "No Output"
-						}
-					},
-					"CopyActivityErrorMessage": {
-						"type": "object",
-						"defaultValue": {
-							"CopyActivityErrorMessage": "No Output"
-						}
-					},
-					"DataflowActivityErrorMessage": {
-						"type": "object",
-						"defaultValue": {
-							"DataflowActivityErrorMessage": "No Output"
-						}
-					}
 				},
 				"folder": {
 					"name": "00_Monitoring"
@@ -517,6 +474,44 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Monitoring_Scheduled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-06-12T01:17:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								8
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-100')]"
 			]
 		},
 		{
@@ -1097,52 +1092,6 @@
 						"     transactionCommit: 'batch',",
 						"     reportSuccessOnError: true) ~> sinkSql"
 					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_Rosters')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "04_Rosters"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "sourceJson"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSql",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [
-						{
-							"name": "castDateColumns"
-						}
-					],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Rosters\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tQueryFinishDate as date,\n\t\tQueryStartDate as date,\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time')),\n\t\tend = toTimestamp(concat(toString(toDate(date)), ' ', end, ':00')),\n\t\tstart = toTimestamp(concat(toString(toDate(date)), ' ', start, ':00'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
 				}
 			},
 			"dependsOn": [
