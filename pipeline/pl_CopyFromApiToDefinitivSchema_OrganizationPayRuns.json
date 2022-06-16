@@ -288,16 +288,12 @@
 					{
 						"activity": "pl_CopyFromApiToDefinitivSchema_Payslips",
 						"dependencyConditions": [
-							"Succeeded",
-							"Failed",
 							"Completed"
 						]
 					},
 					{
 						"activity": "pl_CopyFromApiToDefinitivSchema_Wages",
 						"dependencyConditions": [
-							"Succeeded",
-							"Failed",
 							"Completed"
 						]
 					}
