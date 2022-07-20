@@ -8,7 +8,9 @@
 				"defaultValue": "https://nido.definitiv.com.au"
 			}
 		},
-		"annotations": [],
+		"annotations": [
+			"Basic Authentication; Credentials Format {API Key}:{Password (Leave empty)}"
+		],
 		"type": "RestService",
 		"typeProperties": {
 			"url": "@{linkedService().sourceBaseUrl}",
