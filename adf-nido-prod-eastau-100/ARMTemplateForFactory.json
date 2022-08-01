@@ -4242,7 +4242,9 @@
 						"defaultValue": "https://nido.definitiv.com.au"
 					}
 				},
-				"annotations": [],
+				"annotations": [
+					"Basic Authentication; Credentials Format {API Key}:{Password (Leave empty)}"
+				],
 				"type": "RestService",
 				"typeProperties": {
 					"url": "[parameters('ls_rest_definitiv_properties_typeProperties_url')]",
@@ -4712,6 +4714,9 @@
 							"coreCount": 8,
 							"timeToLive": 0,
 							"cleanup": true
+						},
+						"pipelineExternalComputeScaleProperties": {
+							"timeToLive": 60
 						}
 					}
 				},
