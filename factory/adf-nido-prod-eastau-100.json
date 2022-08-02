@@ -48,7 +48,7 @@
 			},
 			"global_CustomReportId_GenericOrgId": {
 				"type": "string",
-				"value": "aaaaaaaa-bbbb-cccc-dddd-000000000000"
+				"value": "AA0000AA-000A-00AA-0000-AA0000000000"
 			},
 			"global_REST_RequestTimeoutDuration_30min": {
 				"type": "string",
