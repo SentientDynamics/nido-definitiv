@@ -489,7 +489,9 @@
 								"referenceName": "AustraliaEastIntegrationRuntime",
 								"type": "IntegrationRuntimeReference"
 							},
-							"traceLevel": "Fine"
+							"traceLevel": "Fine",
+							"runConcurrently": true,
+							"continueOnError": true
 						}
 					},
 					{
