@@ -198,7 +198,8 @@
 							"param_ErrorRowDirectory": {
 								"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
 								"type": "Expression"
-							}
+							},
+							"param_DataflowName": "\"df_EmploymentHistory\""
 						},
 						"datasetParameters": {
 							"sourceJson": {
