@@ -334,7 +334,7 @@
 			},
 			"param_TableName1": {
 				"type": "string",
-				"defaultValue": "Employees"
+				"defaultValue": "Employees_copy"
 			},
 			"param_SchemeName2": {
 				"type": "string",
