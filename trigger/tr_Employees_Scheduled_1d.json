@@ -2,7 +2,7 @@
 	"name": "tr_Employees_Scheduled_1d",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
