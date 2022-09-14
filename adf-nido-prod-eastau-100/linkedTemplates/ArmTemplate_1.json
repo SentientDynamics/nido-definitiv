@@ -21,7 +21,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName2": {
 			"type": "string",
-			"defaultValue": "Employees"
+			"defaultValue": "EmployeePaymentAccounts"
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName3": {
 			"type": "string",
@@ -29,7 +29,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName3": {
 			"type": "string",
-			"defaultValue": "Employees"
+			"defaultValue": "EmployeePhoneNumbers"
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName4": {
 			"type": "string",
@@ -37,7 +37,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName4": {
 			"type": "string",
-			"defaultValue": "Employees"
+			"defaultValue": "EmployeeStreetAddresses"
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName5": {
 			"type": "string",
@@ -45,7 +45,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName5": {
 			"type": "string",
-			"defaultValue": "Employees"
+			"defaultValue": "EmployeeSuperAccounts"
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName6": {
 			"type": "string",
@@ -53,7 +53,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName6": {
 			"type": "string",
-			"defaultValue": "Employees"
+			"defaultValue": "EmployeeSuperContribution"
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName7": {
 			"type": "string",
@@ -61,7 +61,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7": {
 			"type": "string",
-			"defaultValue": "Employees"
+			"defaultValue": "EmployeeTaxDeclarations"
 		},
 		"tr_EmploymentHistory_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
 			"type": "string",
