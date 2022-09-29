@@ -143,6 +143,9 @@
 		"dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_90min_value": {
 			"value": "01:30:00"
 		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_ReportingLeaveApplications_value": {
+			"value": "A1D9B4D7-3A79-413F-B13D-4BA5BC567BDC"
+		},
 		"dataFactory_location": {
 			"value": "australiaeast"
 		},

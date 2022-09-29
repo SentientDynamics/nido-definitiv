@@ -191,6 +191,10 @@
 			"type": "string",
 			"defaultValue": "01:30:00"
 		},
+		"dataFactory_properties_globalParameters_global_CustomReportId_ReportingLeaveApplications_value": {
+			"type": "string",
+			"defaultValue": "A1D9B4D7-3A79-413F-B13D-4BA5BC567BDC"
+		},
 		"dataFactory_location": {
 			"type": "string",
 			"defaultValue": "australiaeast"
@@ -2267,7 +2271,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId, '/reporting/leave-applications')",
+													"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_ReportingLeaveApplications,\n'?organizationId=', \nitem().organizationId, \n'&startDate=',\n'2022-09-01',\n'&endDate=',\n'2022-09-29')",
 													"type": "Expression"
 												}
 											}
@@ -5537,6 +5541,10 @@
 					"global_REST_RequestTimeoutDuration_90min": {
 						"type": "string",
 						"value": "[parameters('dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_90min_value')]"
+					},
+					"global_CustomReportId_ReportingLeaveApplications": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_ReportingLeaveApplications_value')]"
 					}
 				}
 			},

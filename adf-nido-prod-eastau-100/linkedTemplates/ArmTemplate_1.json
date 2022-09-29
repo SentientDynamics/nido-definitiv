@@ -1856,7 +1856,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId, '/reporting/leave-applications')",
+													"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_ReportingLeaveApplications,\n'?organizationId=', \nitem().organizationId, \n'&startDate=',\n'2022-09-01',\n'&endDate=',\n'2022-09-29')",
 													"type": "Expression"
 												}
 											}
