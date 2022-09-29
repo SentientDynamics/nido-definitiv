@@ -168,7 +168,7 @@
 				}
 			},
 			{
-				"name": "df_ReportingLeaveApplications",
+				"name": "df_LeaveApplications",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -189,12 +189,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_ReportingLeaveApplications",
+						"referenceName": "df_LeaveApplications",
 						"type": "DataFlowReference",
 						"parameters": {
 							"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
 							"param_ErrorRowDirectory": "\"ErrorRows\"",
-							"param_DataflowName": "\"df_ReportingLeaveApplications\""
+							"param_DataflowName": "\"df_LeaveApplications\""
 						},
 						"datasetParameters": {
 							"sourceJson": {
@@ -279,7 +279,7 @@
 				"type": "Lookup",
 				"dependsOn": [
 					{
-						"activity": "df_ReportingLeaveApplications",
+						"activity": "df_LeaveApplications",
 						"dependencyConditions": [
 							"Succeeded"
 						]
