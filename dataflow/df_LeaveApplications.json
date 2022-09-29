@@ -1,0 +1,114 @@
+{
+	"name": "df_LeaveApplications",
+	"properties": {
+		"folder": {
+			"name": "06_Leave"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+						"type": "DatasetReference"
+					},
+					"name": "sourceJson"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference"
+					},
+					"name": "sinkSql",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_adls2_stnidoprodeastau100",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "flattenReportData"
+				},
+				{
+					"name": "castDateColumns"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     param_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),",
+				"     param_ErrorRowDirectory as string (\"ErrorRows\"),",
+				"     param_DataflowName as string (\"df_ReportingLeaveApplications\")",
+				"}",
+				"source(output(",
+				"          {Org.OrganizationId} as string,",
+				"          PipelineName as string,",
+				"          PipelineRunId as string,",
+				"          PipelineTriggerTime as string,",
+				"          addFooterRow as boolean,",
+				"          addStatusBar as boolean,",
+				"          extraReportData as string[],",
+				"          headers as (createDayOfWeekColumn as boolean, customFieldsKeyName as string, dataType as string, defaultPivotAggregation as string, defaultPivotColumnOrder as boolean, defaultPivotRowOrder as short, defaultPivotValueOrder as boolean, defaultSortDirection as string, defaultSortOrder as boolean, disableDefaultAggregation as boolean, falseText as string, fieldName as string, filterDisabled as boolean, hiddenByDefault as boolean, isCustomFields as boolean, isDynamicColumns as boolean, nullDisplayText as string, numericPrecision as string, prependBaseColumnNameToDayOfWeekColumn as boolean, searchDisabled as boolean, sortDisabled as boolean, title as string, trueText as string)[],",
+				"          reportData as (approvers as string, dateSubmitted as string, employeeId as string, employeeNumber as integer, firstName as string, gender as string, leaveAppNumDays as short, leaveApplicationId as string, leaveDateEnd as date, leaveDateStart as date, leaveNotes as string, leavePaymentStatus as string, leaveReasonName as string, leaveTypeId as string, leaveTypeName as string, leaveUnitOfMeasure as string, leaveUnits as double, printName as string, status as string, surname as string)[],",
+				"          reportVariantTag as string,",
+				"          serverTime as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
+				"     ignoreNoFilesFound: false,",
+				"     rowUrlColumn: 'SourceFileName',",
+				"     documentForm: 'documentPerLine') ~> sourceJson",
+				"sourceJson foldDown(unroll(reportData),",
+				"     mapColumn(",
+				"          approvers = reportData.approvers,",
+				"          dateSubmitted = reportData.dateSubmitted,",
+				"          employeeId = reportData.employeeId,",
+				"          employeeNumber = reportData.employeeNumber,",
+				"          firstName = reportData.firstName,",
+				"          gender = reportData.gender,",
+				"          leaveAppNumDays = reportData.leaveAppNumDays,",
+				"          leaveApplicationId = reportData.leaveApplicationId,",
+				"          leaveDateEnd = reportData.leaveDateEnd,",
+				"          leaveDateStart = reportData.leaveDateStart,",
+				"          leaveNotes = reportData.leaveNotes,",
+				"          leavePaymentStatus = reportData.leavePaymentStatus,",
+				"          leaveReasonName = reportData.leaveReasonName,",
+				"          leaveTypeId = reportData.leaveTypeId,",
+				"          leaveTypeName = reportData.leaveTypeName,",
+				"          leaveUnitOfMeasure = reportData.leaveUnitOfMeasure,",
+				"          leaveUnits = reportData.leaveUnits,",
+				"          printName = reportData.printName,",
+				"          status = reportData.status,",
+				"          surname = reportData.surname,",
+				"          {Org.OrganizationId},",
+				"          PipelineName,",
+				"          PipelineRunId,",
+				"          PipelineTriggerTime,",
+				"          SourceFileName",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flattenReportData",
+				"flattenReportData derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns",
+				"castDateColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'allErrors',",
+				"     outputRejectedData: true,",
+				"     rejectedData_fileSystem: ($param_FileSystem),",
+				"     rejectedData_folderPath: ($param_ErrorRowDirectory),",
+				"     transactionCommit: 'batch',",
+				"     reportSuccessOnError: true) ~> sinkSql"
+			]
+		}
+	}
+}
