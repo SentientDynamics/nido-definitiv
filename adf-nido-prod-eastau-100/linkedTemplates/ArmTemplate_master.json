@@ -382,12 +382,6 @@
 					},
 					"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
 						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
-					},
-					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
-						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName')]"
-					},
-					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
-						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName')]"
 					}
 				}
 			},
@@ -408,6 +402,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName')]"
+					},
+					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
+						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName')]"
 					},
 					"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
 						"value": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]"

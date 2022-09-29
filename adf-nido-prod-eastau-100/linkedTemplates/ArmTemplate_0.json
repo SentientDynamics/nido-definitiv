@@ -734,6 +734,108 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/df_LeaveApplications')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "06_Leave"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference"
+							},
+							"name": "sourceJson"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSql",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "castDateColumns"
+						}
+					],
+					"scriptLines": [
+						"parameters{",
+						"     param_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),",
+						"     param_ErrorRowDirectory as string (\"ErrorRows\"),",
+						"     param_DataflowName as string (\"df_LeaveApplications\")",
+						"}",
+						"source(output(",
+						"          {Org.OrganizationId} as string,",
+						"          PipelineName as string,",
+						"          PipelineRunId as string,",
+						"          PipelineTriggerTime as string,",
+						"          approvers as string,",
+						"          dateSubmitted as string,",
+						"          employeeId as string,",
+						"          employeeNumber as integer,",
+						"          firstName as string,",
+						"          gender as string,",
+						"          leaveApplicationId as string,",
+						"          leaveDateEnd as string,",
+						"          leaveDateStart as string,",
+						"          leaveNotes as string,",
+						"          leavePaymentStatus as string,",
+						"          leaveReasonName as string,",
+						"          leaveTypeId as string,",
+						"          leaveTypeName as string,",
+						"          leaveUnitOfMeasure as string,",
+						"          leaveUnits as double,",
+						"          numberOfDays as short,",
+						"          organizationId as string,",
+						"          printName as string,",
+						"          status as string,",
+						"          surname as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     inferDriftedColumnTypes: true,",
+						"     ignoreNoFilesFound: false,",
+						"     rowUrlColumn: 'SourceFileName',",
+						"     documentForm: 'documentPerLine') ~> sourceJson",
+						"sourceJson derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns",
+						"castDateColumns sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     recreate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'allErrors',",
+						"     outputRejectedData: true,",
+						"     rejectedData_fileSystem: ($param_FileSystem),",
+						"     rejectedData_folderPath: ($param_ErrorRowDirectory),",
+						"     transactionCommit: 'batch',",
+						"     reportSuccessOnError: true) ~> sinkSql"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/df_OrgPayRuns')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -956,128 +1058,6 @@
 						"          leaveUnits = reportData.leaveUnits,",
 						"          printName = reportData.printName,",
 						"          status = reportData.status,",
-						"          surname = reportData.surname,",
-						"          {Org.OrganizationId},",
-						"          PipelineName,",
-						"          PipelineRunId,",
-						"          PipelineTriggerTime,",
-						"          SourceFileName",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flattenReportData",
-						"flattenReportData derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns",
-						"castDateColumns sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     truncate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'allErrors',",
-						"     outputRejectedData: true,",
-						"     rejectedData_fileSystem: ($param_FileSystem),",
-						"     rejectedData_folderPath: ($param_ErrorRowDirectory),",
-						"     transactionCommit: 'batch',",
-						"     reportSuccessOnError: true) ~> sinkSql"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_ReportingLeaveBalances')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "06_Leave"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "sourceJson"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSql",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [
-						{
-							"name": "flattenReportData"
-						},
-						{
-							"name": "castDateColumns"
-						}
-					],
-					"scriptLines": [
-						"parameters{",
-						"     param_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),",
-						"     param_ErrorRowDirectory as string (\"ErrorRows\"),",
-						"     param_DataflowName as string (\"df_ReportingLeaveBalances\")",
-						"}",
-						"source(output(",
-						"          {Org.OrganizationId} as string,",
-						"          PipelineName as string,",
-						"          PipelineRunId as string,",
-						"          PipelineTriggerTime as string,",
-						"          addFooterRow as boolean,",
-						"          addStatusBar as boolean,",
-						"          extraReportData as string[],",
-						"          headers as (createDayOfWeekColumn as boolean, customFieldsKeyName as string, dataType as string, defaultPivotAggregation as string, defaultPivotColumnOrder as boolean, defaultPivotRowOrder as short, defaultPivotValueOrder as boolean, defaultSortDirection as string, defaultSortOrder as boolean, disableDefaultAggregation as boolean, falseText as string, fieldName as string, filterDisabled as boolean, hiddenByDefault as boolean, isCustomFields as boolean, isDynamicColumns as boolean, nullDisplayText as string, numericPrecision as string, prependBaseColumnNameToDayOfWeekColumn as boolean, searchDisabled as boolean, sortDisabled as boolean, title as string, trueText as string)[],",
-						"          reportData as (employeeId as string, employeeNumber as integer, firstName as string, leaveEntitlementHours as double, leaveProRataHours as double, leaveTotalHours as double, leaveTypeId as string, leaveTypeName as string, primaryDepartmentCode as short, primaryDepartmentGlCode as string, primaryDepartmentName as string, primaryLocationCode as string, primaryLocationGlCode as string, primaryLocationName as string, primaryProjectCode as string, primaryProjectGlCode as string, primaryProjectName as string, primaryRoleCode as string, primaryRoleName as string, printName as string, surname as string)[],",
-						"          reportVariantTag as string,",
-						"          serverTime as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     inferDriftedColumnTypes: true,",
-						"     ignoreNoFilesFound: false,",
-						"     rowUrlColumn: 'SourceFileName',",
-						"     documentForm: 'documentPerLine') ~> sourceJson",
-						"sourceJson foldDown(unroll(reportData),",
-						"     mapColumn(",
-						"          employeeId = reportData.employeeId,",
-						"          employeeNumber = reportData.employeeNumber,",
-						"          firstName = reportData.firstName,",
-						"          leaveEntitlementHours = reportData.leaveEntitlementHours,",
-						"          leaveProRataHours = reportData.leaveProRataHours,",
-						"          leaveTotalHours = reportData.leaveTotalHours,",
-						"          leaveTypeId = reportData.leaveTypeId,",
-						"          leaveTypeName = reportData.leaveTypeName,",
-						"          primaryDepartmentCode = reportData.primaryDepartmentCode,",
-						"          primaryDepartmentGlCode = reportData.primaryDepartmentGlCode,",
-						"          primaryDepartmentName = reportData.primaryDepartmentName,",
-						"          primaryLocationCode = reportData.primaryLocationCode,",
-						"          primaryLocationGlCode = reportData.primaryLocationGlCode,",
-						"          primaryLocationName = reportData.primaryLocationName,",
-						"          primaryProjectCode = reportData.primaryProjectCode,",
-						"          primaryProjectGlCode = reportData.primaryProjectGlCode,",
-						"          primaryProjectName = reportData.primaryProjectName,",
-						"          primaryRoleCode = reportData.primaryRoleCode,",
-						"          primaryRoleName = reportData.primaryRoleName,",
-						"          printName = reportData.printName,",
 						"          surname = reportData.surname,",
 						"          {Org.OrganizationId},",
 						"          PipelineName,",
