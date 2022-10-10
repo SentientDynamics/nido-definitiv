@@ -290,7 +290,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Timesheets,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=', \nformatDateTime(variables('varTimesheetQueryDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varTimesheetFinishDate'), 'yyyy-MM-dd')\n)",
+											"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Timesheets,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=', \nformatDateTime(variables('varTimesheetQueryDate'), 'yyyy-MM-dd')\n)",
 											"type": "Expression"
 										}
 									}
