@@ -3251,7 +3251,7 @@
 				"activities": [
 					{
 						"name": "TimesheetStartDate",
-						"description": "",
+						"description": "Dynamic definition: \"@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd')\"",
 						"type": "SetVariable",
 						"dependsOn": [
 							{
@@ -3265,7 +3265,7 @@
 						"typeProperties": {
 							"variableName": "varTimesheetStartDate",
 							"value": {
-								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd')",
+								"value": "@formatDateTime('2022-09-01', 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
