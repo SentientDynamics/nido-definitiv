@@ -8,6 +8,9 @@
 		"ls_sql_tnk001_connectionString": {
 			"value": ""
 		},
+		"RestService1_properties_typeProperties_url": {
+			"value": "https://stnidoprodeastau100.dfs.core.windows.net/"
+		},
 		"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
 			"value": "https://stnidoprodeastau100.dfs.core.windows.net/"
 		},
@@ -99,7 +102,7 @@
 			"value": "definitiv"
 		},
 		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
-			"value": "CustomReportTimesheetsD"
+			"value": "CustomReportTimesheets"
 		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"value": "container-adf-nido-prod-eastau-100-1"
