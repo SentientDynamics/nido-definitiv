@@ -260,6 +260,40 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "df_Organizations",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"PipelineName": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						},
+						"ExecutionTime": {
+							"value": "@pipeline().TriggerTime",
+							"type": "Expression"
+						},
+						"ErrorMessage": {
+							"value": "@activity('df_Organizations').output",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
