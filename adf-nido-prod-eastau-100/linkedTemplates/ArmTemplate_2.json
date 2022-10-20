@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
 		},
+		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Organizations"
+		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
@@ -36,6 +44,48 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Organizations_Scheduled_1w')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_Organizations",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2022-06-06T04:33:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								1
+							],
+							"weekDays": [
+								"Sunday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/tr_Rosters_Scheduled_1h')]",
 			"type": "Microsoft.DataFactory/factories/triggers",

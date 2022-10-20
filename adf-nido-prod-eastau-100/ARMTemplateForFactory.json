@@ -479,7 +479,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees_copy",
+								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -522,7 +522,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees_copy",
+								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -1690,6 +1690,40 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "Execute Pipeline1",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_Organizations",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"ExecutionTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"ErrorMessage": {
+									"value": "@activity('df_Organizations').output",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -1738,7 +1772,8 @@
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]"
 			]
 		},
 		{
@@ -4073,6 +4108,72 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "00_Monitoring"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_monitoring_logic-nido-prod-eastau-101')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "logic-nido-prod-eastau-101",
+						"description": "Pipeline monitoring and notification",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-06.australiaeast.logic.azure.com:443/workflows/b4b99c6f86254ebb80fd01886e8f11bd/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ggTEHvXmPxS7QWfXkwe7YkeaKjsAImgeJSAF7a43AlU",
+							"connectVia": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"Status": "Failure",
+								"PipelineName": "PipelineName",
+								"ExecutionTime": "ExecutionTime",
+								"ErrorMessage": "ErrorMessage"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "PipelineName"
+					},
+					"ExecutionTime": {
+						"type": "string",
+						"defaultValue": "ExecutionTime"
+					},
+					"ErrorMessage": {
+						"type": "string",
+						"defaultValue": "ErrorMessage"
+					}
 				},
 				"folder": {
 					"name": "00_Monitoring"

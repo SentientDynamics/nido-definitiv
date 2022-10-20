@@ -86,20 +86,54 @@
 		"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "ReportingLeaveBalances"
-		},
-		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "Organizations"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Payslips')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "01_Payslips"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference"
+							},
+							"name": "sourceJson"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSql",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "castDateColumns"
+						}
+					],
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Payslips\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\t{PayRun.PayRunId} as string,\n\t\t{PayRun.PayslipGenerationStatus} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tbaseRate as double,\n\t\tdepartmentCode as string,\n\t\temployeeId as string,\n\t\temploymentTypeCode as string,\n\t\temploymentTypeCodeDesc as string,\n\t\tfirstName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tnumberOfUnits as double,\n\t\tpayDate as string,\n\t\tpayMethodCode as string,\n\t\tpayMethodCodeDesc as string,\n\t\tpayslipId as string,\n\t\tpayslipNumber as string,\n\t\tperiodEndingDate as string,\n\t\tperiodStartDate as string,\n\t\tpositionTitle as string,\n\t\tprojectCode as string,\n\t\trate as double,\n\t\tsurname as string,\n\t\tvalue as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/df_ReportingLeaveApplications')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
@@ -728,7 +762,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees_copy",
+								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -771,7 +805,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees_copy",
+								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -1504,6 +1538,40 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "Execute Pipeline1",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_Organizations",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"ExecutionTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"ErrorMessage": {
+									"value": "@activity('df_Organizations').output",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -1940,7 +2008,9 @@
 				"annotations": [],
 				"lastPublishTime": "2022-01-21T07:04:52Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Payslips')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications')]",
@@ -4394,50 +4464,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_Organizations_Scheduled_1w')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_Organizations",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemaName": "[parameters('tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName')]"
-						}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Week",
-						"interval": 1,
-						"startTime": "2022-06-06T04:33:00",
-						"timeZone": "AUS Eastern Standard Time",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								1
-							],
-							"weekDays": [
-								"Sunday"
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Organizations')]"
 			]
 		}
 	]
