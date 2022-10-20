@@ -262,7 +262,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees_copy",
+						"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -305,7 +305,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees_copy",
+						"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.Employees",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
