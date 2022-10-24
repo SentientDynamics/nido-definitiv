@@ -374,7 +374,7 @@
 			},
 			"param_TableName6": {
 				"type": "string",
-				"defaultValue": "EmployeeSuperContributions"
+				"defaultValue": "EmployeeSuperContributionss"
 			},
 			"param_SchemeName7": {
 				"type": "string",
