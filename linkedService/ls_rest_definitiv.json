@@ -9,7 +9,7 @@
 			}
 		},
 		"annotations": [
-			"Basic Authentication i.e. Base 64 encoded; Credentials Format {API Key}:{Password (Leave empty)}"
+			"Basic Authentication i.e. Base 64 encoded; Credentials Format {API Key}:{Password (Leave empty)} e.g. \"Basic {base64 string}\""
 		],
 		"type": "RestService",
 		"typeProperties": {
