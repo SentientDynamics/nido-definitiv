@@ -54,7 +54,7 @@
 			"value": "definitiv"
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName6": {
-			"value": "EmployeeSuperContribution"
+			"value": "EmployeeSuperContributions"
 		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName7": {
 			"value": "definitiv"
