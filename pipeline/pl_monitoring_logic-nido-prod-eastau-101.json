@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@{pipeline().parameters.PipelineName}",
+						"value": "@pipeline().parameters.PipelineName",
 						"type": "Expression"
 					}
 				}
@@ -37,43 +37,43 @@
 		],
 		"parameters": {
 			"PipelineName": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "PipelineName"
 			},
 			"PipelineRunId": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "PipelineRunId"
 			},
 			"PipelineTriggerId": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "PipelineTriggerId"
 			},
 			"PipelineTriggerName": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "PipelineTriggerName"
 			},
 			"PipelineTriggerTime": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "PipelineTriggerTime"
 			},
 			"PipelineTriggerType": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "PipelineTriggerType"
 			},
 			"PipelineTriggeredByPipelineName": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "PipelineTriggeredByPipelineName"
 			},
 			"PipelineTriggeredByPipelineRunId": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "PipelineTriggeredByPipelineRunId"
 			},
 			"ActivityOutputMessage": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "ActivityOutputMessage"
 			},
 			"AzureSqlTargetTable": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "AzureSqlTargetTable"
 			}
 		},
