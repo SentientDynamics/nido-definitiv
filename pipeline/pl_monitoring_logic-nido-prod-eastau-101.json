@@ -59,7 +59,7 @@
 			"PipelineTriggeredByPipelineRunId": {
 				"type": "string"
 			},
-			"ActivityOutputErrorMessage": {
+			"ActivityOutputMessage": {
 				"type": "string"
 			},
 			"AzureSqlTargetTable": {
