@@ -36,40 +36,52 @@
 		],
 		"parameters": {
 			"PipelineName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "PipelineName"
 			},
 			"PipelineRunId": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "PipelineRunId"
 			},
 			"PipelineTriggerId": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "PipelineTriggerId"
 			},
 			"PipelineTriggerName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "PipelineTriggerName"
 			},
 			"PipelineTriggerTime": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "PipelineTriggerTime"
 			},
 			"PipelineTriggerType": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "PipelineTriggerType"
 			},
 			"PipelineTriggeredByPipelineName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "PipelineTriggeredByPipelineName"
 			},
 			"PipelineTriggeredByPipelineRunId": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "PipelineTriggeredByPipelineRunId"
 			},
 			"ActivityOutputMessage": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "ActivityOutputMessage"
 			},
 			"AzureSqlTargetTable": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "AzureSqlTargetTable"
 			},
 			"AzureSqlTargetTablePreRowCount": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "AzureSqlTargetTablePreRowCount"
 			},
 			"AzureSqlTargetTablePostRowCount": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "AzureSqlTargetTablePostRowCount"
 			}
 		},
 		"folder": {
