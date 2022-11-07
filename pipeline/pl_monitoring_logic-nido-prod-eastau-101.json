@@ -17,7 +17,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"url": {
-						"value": "@concat(pipeline().globalParameters.global_logic_Monitoring_baseUrl,pipeline().globalParameters.global_logic_Monitoring_SAS)",
+						"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'failed',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
 						"type": "Expression"
 					},
 					"connectVia": {
@@ -30,7 +30,7 @@
 					},
 					"body": "",
 					"authentication": {
-						"resource": "id-nido-prod-001",
+						"resource": "/subscriptions/7a7b564c-588c-4825-a61b-90fec283b855/resourceGroups/NidoSQLGroup/providers/Microsoft.Logic/workflows/logic-nido-prod-eastau-101",
 						"credential": {
 							"referenceName": "id-nido-prod-001",
 							"type": "CredentialReference"
