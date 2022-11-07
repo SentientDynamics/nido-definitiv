@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@pipeline().parameters.PipelineName",
+						"value": "@{pipeline().parameters.PipelineName}",
 						"type": "Expression"
 					}
 				}
