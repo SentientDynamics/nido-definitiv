@@ -43,6 +43,12 @@
 			},
 			"ActivityError": {
 				"type": "string"
+			},
+			"PipelineTriggerType": {
+				"type": "string"
+			},
+			"PipelineTriggeredBy": {
+				"type": "string"
 			}
 		},
 		"folder": {
