@@ -71,11 +71,10 @@
 			"AzureSqlTargetTable": {
 				"type": "string",
 				"defaultValue": "AzureSqlTargetTable"
-			}
-		},
-		"variables": {
+			},
 			"LogicAppBody": {
-				"type": "String"
+				"type": "object",
+				"defaultValue": "LogicAppBody"
 			}
 		},
 		"folder": {
