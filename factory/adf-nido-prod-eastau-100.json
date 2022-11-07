@@ -22,7 +22,7 @@
 				"type": "string",
 				"value": "https://prod-06.australiaeast.logic.azure.com/workflows/b4b99c6f86254ebb80fd01886e8f11bd/triggers/manual/paths/invoke/"
 			},
-			"global_logic_Monitoring_SAS": {
+			"global_logic_Monitoring_apiVersion": {
 				"type": "string",
 				"value": "?api-version=2016-10-01"
 			},
