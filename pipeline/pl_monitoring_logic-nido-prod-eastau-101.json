@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"authentication": {
-						"resource": "/subscriptions/7a7b564c-588c-4825-a61b-90fec283b855/resourceGroups/NidoSQLGroup/providers/Microsoft.Logic/workflows/logic-nido-prod-eastau-101",
+						"resource": "e0ec05e1-a1d5-40d8-868c-7bb95fa091ea",
 						"credential": {
 							"referenceName": "id-nido-prod-001",
 							"type": "CredentialReference"
