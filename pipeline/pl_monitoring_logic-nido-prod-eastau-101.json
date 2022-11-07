@@ -73,6 +73,11 @@
 				"defaultValue": "AzureSqlTargetTable"
 			}
 		},
+		"variables": {
+			"LogicAppBody": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "00_Monitoring"
 		},
