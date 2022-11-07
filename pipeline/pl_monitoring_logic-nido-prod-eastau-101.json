@@ -41,9 +41,6 @@
 			"ExecutionTime": {
 				"type": "string"
 			},
-			"ActivityStep": {
-				"type": "string"
-			},
 			"ActivityError": {
 				"type": "string"
 			}
