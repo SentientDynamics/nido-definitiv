@@ -28,7 +28,6 @@
 					"headers": {
 						"Content-Type": "application/json"
 					},
-					"body": "",
 					"authentication": {
 						"resource": "/subscriptions/7a7b564c-588c-4825-a61b-90fec283b855/resourceGroups/NidoSQLGroup/providers/Microsoft.Logic/workflows/logic-nido-prod-eastau-101",
 						"credential": {
