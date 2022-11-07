@@ -17,7 +17,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"url": {
-						"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'failed',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
+						"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'failed'\n    )",
 						"type": "Expression"
 					},
 					"connectVia": {
