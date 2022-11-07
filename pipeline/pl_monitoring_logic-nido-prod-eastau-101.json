@@ -17,7 +17,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"url": {
-						"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'failed',\n    pipeline().globalParameters.global_logic_Monitoring_apiVersion\n    )",
+						"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'failed',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
 						"type": "Expression"
 					},
 					"connectVia": {
@@ -27,13 +27,6 @@
 					"method": "POST",
 					"headers": {
 						"Content-Type": "application/json"
-					},
-					"authentication": {
-						"resource": "e0ec05e1-a1d5-40d8-868c-7bb95fa091ea",
-						"credential": {
-							"referenceName": "id-nido-prod-001",
-							"type": "CredentialReference"
-						}
 					}
 				}
 			}
