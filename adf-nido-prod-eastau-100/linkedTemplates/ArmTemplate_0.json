@@ -29,11 +29,11 @@
 		},
 		"dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value": {
 			"type": "string",
-			"defaultValue": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke"
+			"defaultValue": "https://prod-06.australiaeast.logic.azure.com/workflows/b4b99c6f86254ebb80fd01886e8f11bd/triggers/manual/paths/invoke/"
 		},
 		"dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value": {
 			"type": "string",
-			"defaultValue": "?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WA8la72C7an4d-1GNrDTlgBRMj_Ahr27unoZb4ydSQE"
+			"defaultValue": "?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=YTtqyRkDA7A1_pfSdRdJ1PpzB0qgYRvQZmIf1f-N_P4"
 		},
 		"dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value": {
 			"type": "string",
@@ -188,37 +188,32 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/default')]",
-			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
-			"apiVersion": "2018-06-01",
-			"properties": {},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AustraliaEastIntegrationRuntime')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"name": "[concat(parameters('factoryName'), '/tr_Monitoring_Scheduled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"type": "Managed",
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
 				"typeProperties": {
-					"computeProperties": {
-						"location": "Australia East",
-						"dataFlowProperties": {
-							"computeType": "General",
-							"coreCount": 8,
-							"timeToLive": 240,
-							"cleanup": false
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-06-12T01:17:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								8
+							]
 						}
 					}
-				},
-				"managedVirtualNetwork": {
-					"type": "ManagedVirtualNetworkReference",
-					"referenceName": "default"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
@@ -250,120 +245,23 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_monitoring_logic-nido-prod-eastau-100')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
 			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "logic-nido-prod-eastau-100",
-						"description": "Pipeline monitoring and notification",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": {
-								"value": "@concat(\npipeline().globalParameters.global_logic_Monitoring_baseUrl,\npipeline().globalParameters.global_logic_Monitoring_SAS\n)",
-								"type": "Expression"
-							},
-							"connectVia": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
-							},
-							"method": "POST",
-							"headers": {
-								"Content-Type": "application/json"
-							},
-							"body": {
-								"Body": "Empty"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"folder": {
-					"name": "00_Monitoring"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
-			]
+			"properties": {},
+			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_monitoring_logic-nido-prod-eastau-101')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/id-nido-prod-001')]",
+			"type": "Microsoft.DataFactory/factories/credentials",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"activities": [
-					{
-						"name": "logic-nido-prod-eastau-101",
-						"description": "Pipeline monitoring and notification",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-06.australiaeast.logic.azure.com:443/workflows/b4b99c6f86254ebb80fd01886e8f11bd/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ggTEHvXmPxS7QWfXkwe7YkeaKjsAImgeJSAF7a43AlU",
-							"connectVia": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
-							},
-							"method": "POST",
-							"headers": {
-								"Content-Type": "application/json"
-							},
-							"body": {
-								"Status": "Failure",
-								"PipelineName": "PipelineName",
-								"ExecutionTime": "ExecutionTime",
-								"ErrorMessage": "ErrorMessage"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"PipelineName": {
-						"type": "string",
-						"defaultValue": "PipelineName"
-					},
-					"ExecutionTime": {
-						"type": "string",
-						"defaultValue": "ExecutionTime"
-					},
-					"ErrorMessage": {
-						"type": "string",
-						"defaultValue": "ErrorMessage"
-					}
-				},
-				"folder": {
-					"name": "00_Monitoring"
-				},
-				"annotations": []
+				"type": "ManagedIdentity",
+				"typeProperties": {
+					"resourceId": "/subscriptions/7a7b564c-588c-4825-a61b-90fec283b855/resourceGroups/NidoSQLGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-nido-prod-001"
+				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/RestService1')]",
@@ -457,6 +355,131 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AustraliaEastIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "Australia East",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 240,
+							"cleanup": false
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_monitoring_logic-nido-prod-eastau-101')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "logic-nido-prod-eastau-101",
+						"description": "Pipeline monitoring and notification",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'failed',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
+								"type": "Expression"
+							},
+							"connectVia": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {},
+							"authentication": {
+								"resource": "/subscriptions/7a7b564c-588c-4825-a61b-90fec283b855/resourceGroups/NidoSQLGroup/providers/Microsoft.Logic/workflows/logic-nido-prod-eastau-101",
+								"credential": {
+									"referenceName": "id-nido-prod-001",
+									"type": "CredentialReference"
+								}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "PipelineName"
+					},
+					"PipelineRunId": {
+						"type": "string",
+						"defaultValue": "PipelineRunId"
+					},
+					"PipelineTriggerId": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerId"
+					},
+					"PipelineTriggerName": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerName"
+					},
+					"PipelineTriggerTime": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerTime"
+					},
+					"PipelineTriggerType": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerType"
+					},
+					"PipelineTriggeredByPipelineName": {
+						"type": "string",
+						"defaultValue": "PipelineTriggeredByPipelineName"
+					},
+					"PipelineTriggeredByPipelineRunId": {
+						"type": "string",
+						"defaultValue": "PipelineTriggeredByPipelineRunId"
+					},
+					"ActivityOutputMessage": {
+						"type": "string",
+						"defaultValue": "ActivityOutputMessage"
+					},
+					"AzureSqlTargetTable": {
+						"type": "string",
+						"defaultValue": "AzureSqlTargetTable"
+					}
+				},
+				"folder": {
+					"name": "00_Monitoring"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/credentials/id-nido-prod-001')]"
 			]
 		},
 		{
@@ -580,41 +603,100 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_Monitoring_Scheduled_1d')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
+			"name": "[concat(parameters('factoryName'), '/pl_monitoring_logic-nido-prod-eastau-102')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
+				"activities": [
 					{
-						"pipelineReference": {
-							"referenceName": "pl_monitoring_logic-nido-prod-eastau-100",
-							"type": "PipelineReference"
+						"name": "logic-nido-prod-eastau-101",
+						"description": "Pipeline monitoring and notification",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
 						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2022-06-12T01:17:00",
-						"timeZone": "AUS Eastern Standard Time",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								8
-							]
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-06.australiaeast.logic.azure.com:443/workflows/b4b99c6f86254ebb80fd01886e8f11bd/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ggTEHvXmPxS7QWfXkwe7YkeaKjsAImgeJSAF7a43AlU",
+							"connectVia": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"Status": "Failure",
+								"PipelineName": "PipelineName",
+								"ExecutionTime": "ExecutionTime",
+								"ErrorMessage": "ErrorMessage"
+							}
 						}
 					}
-				}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "PipelineName"
+					},
+					"PipelineRunId": {
+						"type": "string",
+						"defaultValue": "PipelineRunId"
+					},
+					"PipelineTriggerId": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerId"
+					},
+					"PipelineTriggerName": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerName"
+					},
+					"PipelineTriggerTime": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerTime"
+					},
+					"PipelineTriggerType": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerType"
+					},
+					"PipelineTriggeredByPipelineName": {
+						"type": "string",
+						"defaultValue": "PipelineTriggeredByPipelineName"
+					},
+					"PipelineTriggeredByPipelineRunId": {
+						"type": "string",
+						"defaultValue": "PipelineTriggeredByPipelineRunId"
+					},
+					"AzureSqlTargetTable": {
+						"type": "string",
+						"defaultValue": "AzureSqlTargetTable"
+					},
+					"AzureSqlTargetTablePreRowCount": {
+						"type": "string",
+						"defaultValue": "AzureSqlTargetTablePreRowCount"
+					},
+					"AzureSqlTargetTablePostRowCount": {
+						"type": "string",
+						"defaultValue": "AzureSqlTargetTablePostRowCount"
+					}
+				},
+				"folder": {
+					"name": "00_Monitoring"
+				},
+				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-100')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
 			]
 		},
 		{
@@ -966,48 +1048,6 @@
 						}
 					],
 					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_OrgPayRuns\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerId as string,\n\t\tPipelineTriggerTime as string,\n\t\tcurrentFinancialYearEndDate as string,\n\t\tcurrentFinancialYearStartDate as string,\n\t\tpayCalendars as (atoLodgementsEnabled as boolean, description as string, payCalendarId as string, period as string, periodStartDate as string, proRataMode as string, weeklyFactor as double, weeklyFactorEquation as short)[],\n\t\tpayRuns as (backPayDateOverride as string, dateLastCalculated as string, dateOpened as string, datePublished as string, employeeCount as short, eofyLodgementStatus as string, financialYearEndDate as string, financialYearStartDate as string, initiatingUserId as string, initiatingUserName as string, lodgementStatus as string, notes as string, payCalendarId as string, payCalendarName as string, payRunId as string, paymentDate as string, payslipGenerationStatus as string, periodEnd as string, periodStart as string, publishingUserId as string, publishingUserName as string, runNumber as short, status as string, superannuationPaymentDate as string, type as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson foldDown(unroll(payRuns),\n\tmapColumn(\n\t\tbackPayDateOverride = payRuns.backPayDateOverride,\n\t\tdateLastCalculated = payRuns.dateLastCalculated,\n\t\tdateOpened = payRuns.dateOpened,\n\t\tdatePublished = payRuns.datePublished,\n\t\temployeeCount = payRuns.employeeCount,\n\t\teofyLodgementStatus = payRuns.eofyLodgementStatus,\n\t\tfinancialYearEndDate = payRuns.financialYearEndDate,\n\t\tfinancialYearStartDate = payRuns.financialYearStartDate,\n\t\tinitiatingUserId = payRuns.initiatingUserId,\n\t\tinitiatingUserName = payRuns.initiatingUserName,\n\t\tlodgementStatus = payRuns.lodgementStatus,\n\t\tnotes = payRuns.notes,\n\t\tpayCalendarId = payRuns.payCalendarId,\n\t\tpayCalendarName = payRuns.payCalendarName,\n\t\tpayRunId = payRuns.payRunId,\n\t\tpaymentDate = payRuns.paymentDate,\n\t\tpayslipGenerationStatus = payRuns.payslipGenerationStatus,\n\t\tperiodEnd = payRuns.periodEnd,\n\t\tperiodStart = payRuns.periodStart,\n\t\tpublishingUserId = payRuns.publishingUserId,\n\t\tpublishingUserName = payRuns.publishingUserName,\n\t\trunNumber = payRuns.runNumber,\n\t\tstatus = payRuns.status,\n\t\tsuperannuationPaymentDate = payRuns.superannuationPaymentDate,\n\t\ttype = payRuns.type,\n\t\t{Org.LegalName},\n\t\t{Org.OrganizationId},\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenPayRuns\nflattenPayRuns derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_Organizations')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "08_Organizations"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "SourceBlobDefinitiv"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "SinkSqlDefinitiv",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Organizations\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tabn as string,\n\t\tacn as string,\n\t\tbeamTermsConfirmDate as string,\n\t\tbeamTermsConfirmUserId as string,\n\t\tbeamTermsConfirmUserName as string,\n\t\tbranchCode as string,\n\t\tcontactEmail as string,\n\t\tcontactFirstName as string,\n\t\tcontactPhone as string,\n\t\tcontactSurname as string,\n\t\tcontactTitle as string,\n\t\temployeeSupportEmail as string,\n\t\tfbtExempt as boolean,\n\t\tintermediary as string,\n\t\tlegalName as string,\n\t\tnotificationUserIds as string,\n\t\tnotifyLodgementSubmitters as boolean,\n\t\torganizationCode as string,\n\t\torganizationId as string,\n\t\treference as string,\n\t\tsoftwareProviderABN as string,\n\t\tsoftwareProviderName as string,\n\t\tsoftwareSubscriptionId as string,\n\t\tstreetAddress as string,\n\t\ttradingName as string,\n\t\twpn as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitiv\nSourceBlobDefinitiv sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: 'ds_adsl2_stnidoprodeastau100_csv/definitiv.Organizations',\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> SinkSqlDefinitiv"
 				}
 			},
 			"dependsOn": [
