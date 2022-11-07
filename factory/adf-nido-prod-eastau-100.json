@@ -20,7 +20,7 @@
 			},
 			"global_logic_Monitoring_baseUrl": {
 				"type": "string",
-				"value": "https://prod-30.australiaeast.logic.azure.com/workflows/9856f21077af4643b79d63317c8e0f6f/triggers/manual/paths/invoke"
+				"value": "https://prod-06.australiaeast.logic.azure.com/workflows/b4b99c6f86254ebb80fd01886e8f11bd/triggers/manual/paths/invoke/{status}?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig="
 			},
 			"global_logic_Monitoring_SAS": {
 				"type": "string",
