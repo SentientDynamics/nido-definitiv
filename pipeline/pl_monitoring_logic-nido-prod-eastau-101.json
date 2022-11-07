@@ -37,43 +37,43 @@
 		],
 		"parameters": {
 			"PipelineName": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PipelineName"
 			},
 			"PipelineRunId": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PipelineRunId"
 			},
 			"PipelineTriggerId": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PipelineTriggerId"
 			},
 			"PipelineTriggerName": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PipelineTriggerName"
 			},
 			"PipelineTriggerTime": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PipelineTriggerTime"
 			},
 			"PipelineTriggerType": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PipelineTriggerType"
 			},
 			"PipelineTriggeredByPipelineName": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PipelineTriggeredByPipelineName"
 			},
 			"PipelineTriggeredByPipelineRunId": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PipelineTriggeredByPipelineRunId"
 			},
 			"ActivityOutputMessage": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "ActivityOutputMessage"
 			},
 			"AzureSqlTargetTable": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "AzureSqlTargetTable"
 			}
 		},
