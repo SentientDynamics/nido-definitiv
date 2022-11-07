@@ -37,7 +37,7 @@
 		"parameters": {
 			"PipelineName": {
 				"type": "string",
-				"defaultValue": "PipelineName"
+				"defaultValue": "@pipeline().Pipeline"
 			},
 			"ExecutionTime": {
 				"type": "string",
