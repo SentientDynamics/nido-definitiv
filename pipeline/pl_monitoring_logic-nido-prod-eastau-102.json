@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "logic-nido-prod-eastau-101",
+				"name": "logic-nido-prod-eastau-102",
 				"description": "Pipeline monitoring and notification",
 				"type": "WebActivity",
 				"dependsOn": [],
