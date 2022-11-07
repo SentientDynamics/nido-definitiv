@@ -38,16 +38,37 @@
 			"PipelineName": {
 				"type": "string"
 			},
-			"ExecutionTime": {
+			"PipelineRunId": {
 				"type": "string"
 			},
-			"ActivityError": {
+			"PipelineTriggerId": {
+				"type": "string"
+			},
+			"PipelineTriggerName": {
+				"type": "string"
+			},
+			"PipelineTriggerTime": {
 				"type": "string"
 			},
 			"PipelineTriggerType": {
 				"type": "string"
 			},
-			"PipelineTriggeredBy": {
+			"PipelineTriggeredByPipelineName": {
+				"type": "string"
+			},
+			"PipelineTriggeredByPipelineRunId": {
+				"type": "string"
+			},
+			"ActivityOutputErrorMessage": {
+				"type": "string"
+			},
+			"AzureSqlTargetTable": {
+				"type": "string"
+			},
+			"AzureSqlTargetTablePreRowCount": {
+				"type": "string"
+			},
+			"AzureSqlTargetTablePostRowCount": {
 				"type": "string"
 			}
 		},
