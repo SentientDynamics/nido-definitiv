@@ -1,5 +1,5 @@
 {
-	"name": "pl_monitoring_logic-nido-prod-eastau-101",
+	"name": "pl_monitoring_logic-nido-prod-eastau-102",
 	"properties": {
 		"activities": [
 			{
@@ -67,13 +67,17 @@
 				"type": "string",
 				"defaultValue": "PipelineTriggeredByPipelineRunId"
 			},
-			"ActivityOutputMessage": {
-				"type": "string",
-				"defaultValue": "ActivityOutputMessage"
-			},
 			"AzureSqlTargetTable": {
 				"type": "string",
 				"defaultValue": "AzureSqlTargetTable"
+			},
+			"AzureSqlTargetTablePreRowCount": {
+				"type": "string",
+				"defaultValue": "AzureSqlTargetTablePreRowCount"
+			},
+			"AzureSqlTargetTablePostRowCount": {
+				"type": "string",
+				"defaultValue": "AzureSqlTargetTablePostRowCount"
 			}
 		},
 		"folder": {

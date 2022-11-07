@@ -339,6 +339,25 @@
 					},
 					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "pl_monitoring_logic-nido-prod-eastau-1011_copy1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"PipelineName": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
