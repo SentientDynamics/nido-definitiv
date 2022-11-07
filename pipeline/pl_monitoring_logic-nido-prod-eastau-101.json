@@ -36,16 +36,13 @@
 		],
 		"parameters": {
 			"PipelineName": {
-				"type": "string",
-				"defaultValue": "@pipeline().Pipeline"
+				"type": "string"
 			},
 			"ExecutionTime": {
-				"type": "string",
-				"defaultValue": "ExecutionTime"
+				"type": "string"
 			},
-			"ErrorMessage": {
-				"type": "string",
-				"defaultValue": "ErrorMessage"
+			"Activity": {
+				"type": "string"
 			}
 		},
 		"folder": {
