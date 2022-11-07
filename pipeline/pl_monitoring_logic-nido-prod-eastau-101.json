@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@{pipeline().parameters.PipelineName}\n@{pipeline().parameters.PipelineRunId}\n@{pipeline().parameters.PipelineTriggerId}",
+						"value": "@concat(\n    pipeline().parameters.PipelineName,\n    pipeline().parameters.PipelineRunId,\n    pipeline().parameters.PipelineTriggerId,\n    pipeline().parameters.PipelineTriggerName,\n    pipeline().parameters.PipelineTriggerTime,\n    pipeline().parameters.PipelineTriggerType,\n    pipeline().parameters.PipelineTriggeredByPipelineName,\n    pipeline().parameters.PipelineTriggeredByPipelineRunId,\n    pipeline().parameters.ActivityOutputMessage,\n    pipeline().parameters.AzureSqlTargetTable\n)",
 						"type": "Expression"
 					}
 				}
