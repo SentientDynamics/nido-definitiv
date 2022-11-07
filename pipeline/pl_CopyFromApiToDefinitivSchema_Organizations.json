@@ -321,6 +321,10 @@
 						"ExecutionTime": {
 							"value": "@pipeline().TriggerTime",
 							"type": "Expression"
+						},
+						"ActivityError": {
+							"value": "@activity('ApiToJson').output.errors[0].Message",
+							"type": "Expression"
 						}
 					}
 				}
