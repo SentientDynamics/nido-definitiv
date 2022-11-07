@@ -27,6 +27,10 @@
 					"method": "POST",
 					"headers": {
 						"Content-Type": "application/json"
+					},
+					"body": {
+						"value": "@{pipeline().parameters.PipelineName}\n@{pipeline().parameters.PipelineRunId}\n@{pipeline().parameters.PipelineTriggerId}",
+						"type": "Expression"
 					}
 				}
 			}
@@ -71,10 +75,6 @@
 			"AzureSqlTargetTable": {
 				"type": "string",
 				"defaultValue": "AzureSqlTargetTable"
-			},
-			"LogicAppBody": {
-				"type": "object",
-				"defaultValue": "LogicAppBody"
 			}
 		},
 		"folder": {
