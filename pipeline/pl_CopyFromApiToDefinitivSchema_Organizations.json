@@ -441,7 +441,7 @@
 							"type": "Expression"
 						},
 						"ActivityOutputMessage": {
-							"value": "@activity('df_Organizations').error.Message",
+							"value": "@activity('ApiToJson').output.errors[0].Message",
 							"type": "Expression"
 						},
 						"AzureSqlTargetTable": {
