@@ -33,6 +33,19 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "LogicAppBody",
+					"value": {
+						"value": "@array(\n    pipeline().parameters.PipelineName\n)",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
