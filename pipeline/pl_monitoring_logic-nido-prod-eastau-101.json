@@ -33,6 +33,19 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "LogicAppBody",
+					"value": {
+						"value": "@concat(\n    '\"PipelineName\": \"', pipeline().parameters.PipelineName, '\",',\n    '\"PipelineRunId\": \"', pipeline().parameters.PipelineRunId,'\",',\n    '\"PipelineTriggerName\": \"', pipeline().parameters.PipelineTriggerName, '\",',\n    '\"PipelineTriggerTime\": \"', pipeline().parameters.PipelineTriggerTime, '\",',\n    '\"PipelineTriggerType\": \"', pipeline().parameters.PipelineTriggerType, '\",',\n    '\"PipelineTriggeredByPipelineName\": \"', pipeline().parameters.PipelineTriggeredByPipelineName, '\",',\n    '\"PipelineTriggeredByPipelineRunId\": \"', pipeline().parameters.PipelineTriggeredByPipelineRunId, '\",',\n    '\"AzureSqlTargetTable\": \"', pipeline().parameters.AzureSqlTargetTable, '\",',\n    '\"ActivityOutputMessage\": \"', pipeline().parameters.ActivityOutputMessage, '\"'\n)",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -75,6 +88,11 @@
 			"AzureSqlTargetTable": {
 				"type": "string",
 				"defaultValue": "AzureSqlTargetTable"
+			}
+		},
+		"variables": {
+			"LogicAppBody": {
+				"type": "String"
 			}
 		},
 		"folder": {
