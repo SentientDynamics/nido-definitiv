@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@concat(\n    '\"PipelineName\": ',\n    pipeline().parameters.PipelineName,\n    '\"PipelineRunId\": ',\n    pipeline().parameters.PipelineRunId,\n    '\"PipelineTriggerName\": ',\n    pipeline().parameters.PipelineTriggerName,\n    '\"PipelineTriggerTime\": ',\n    pipeline().parameters.PipelineTriggerTime,\n    '\"PipelineTriggerType\": ',\n    pipeline().parameters.PipelineTriggerType,\n    '\"PipelineTriggeredByPipelineName\": ',\n    pipeline().parameters.PipelineTriggeredByPipelineName,\n    '\"PipelineTriggeredByPipelineRunId\": ',\n    pipeline().parameters.PipelineTriggeredByPipelineRunId,\n    '\"AzureSqlTargetTable\": ',\n    pipeline().parameters.AzureSqlTargetTable,\n    '\"ActivityOutputMessage\": ',\n    pipeline().parameters.ActivityOutputMessage\n)",
+						"value": "@concat(\n    '\"PipelineName\": ',\n    pipeline().parameters.PipelineName, ',',\n    '\"PipelineRunId\": ',\n    pipeline().parameters.PipelineRunId,\n    '\"PipelineTriggerName\": ',\n    pipeline().parameters.PipelineTriggerName,\n    '\"PipelineTriggerTime\": ',\n    pipeline().parameters.PipelineTriggerTime,\n    '\"PipelineTriggerType\": ',\n    pipeline().parameters.PipelineTriggerType,\n    '\"PipelineTriggeredByPipelineName\": ',\n    pipeline().parameters.PipelineTriggeredByPipelineName,\n    '\"PipelineTriggeredByPipelineRunId\": ',\n    pipeline().parameters.PipelineTriggeredByPipelineRunId,\n    '\"AzureSqlTargetTable\": ',\n    pipeline().parameters.AzureSqlTargetTable,\n    '\"ActivityOutputMessage\": ',\n    pipeline().parameters.ActivityOutputMessage\n)",
 						"type": "Expression"
 					}
 				}
