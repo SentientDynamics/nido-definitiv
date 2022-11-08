@@ -36,7 +36,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@{pipeline().parameters.PipelineName}\n@{pipeline().parameters.PipelineRunId}",
+						"value": "@variables('LogicAppBody')",
 						"type": "Expression"
 					}
 				}
