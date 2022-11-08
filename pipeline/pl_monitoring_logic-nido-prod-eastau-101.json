@@ -49,7 +49,7 @@
 				"typeProperties": {
 					"variableName": "LogicAppBody",
 					"value": {
-						"value": "@concat(\n    string('\"PipelineName\": '), pipeline().parameters.PipelineName\n)",
+						"value": "@pipeline().parameters.PipelineName",
 						"type": "Expression"
 					}
 				}
