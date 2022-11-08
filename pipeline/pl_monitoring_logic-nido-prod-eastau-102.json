@@ -29,10 +29,8 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"Status": "Failure",
-						"PipelineName": "PipelineName",
-						"ExecutionTime": "ExecutionTime",
-						"ErrorMessage": "ErrorMessage"
+						"value": "@concat(\n    '\"PipelineName\": ',\n    pipeline().parameters.PipelineName, ',',\n    '\"PipelineRunId\": ',\n    pipeline().parameters.PipelineRunId,\n    '\"PipelineTriggerName\": ',\n    pipeline().parameters.PipelineTriggerName,\n    '\"PipelineTriggerTime\": ',\n    pipeline().parameters.PipelineTriggerTime,\n    '\"PipelineTriggerType\": ',\n    pipeline().parameters.PipelineTriggerType,\n    '\"PipelineTriggeredByPipelineName\": ',\n    pipeline().parameters.PipelineTriggeredByPipelineName,\n    '\"PipelineTriggeredByPipelineRunId\": ',\n    pipeline().parameters.PipelineTriggeredByPipelineRunId,\n    '\"AzureSqlTargetTable\": ',\n    pipeline().parameters.AzureSqlTargetTable,\n    '\"AzureSqlTargetTablePreRowCount\": ',\n    pipeline().parameters.AzureSqlTargetTablePreRowCount,\n    '\"AzureSqlTargetTablePostRowCount\": ',\n    pipeline().parameters.AzureSqlTargetTablePostRowCount\n)",
+						"type": "Expression"
 					}
 				}
 			}
