@@ -58,43 +58,43 @@
 		"parameters": {
 			"PipelineName": {
 				"type": "string",
-				"defaultValue": "PipelineName"
+				"defaultValue": "\"PipelineNameDefault\""
 			},
 			"PipelineRunId": {
 				"type": "string",
-				"defaultValue": "PipelineRunId"
+				"defaultValue": "\"PipelineRunId\""
 			},
 			"PipelineTriggerId": {
 				"type": "string",
-				"defaultValue": "PipelineTriggerId"
+				"defaultValue": "\"PipelineTriggerId\""
 			},
 			"PipelineTriggerName": {
 				"type": "string",
-				"defaultValue": "PipelineTriggerName"
+				"defaultValue": "\"PipelineTriggerName\""
 			},
 			"PipelineTriggerTime": {
 				"type": "string",
-				"defaultValue": "PipelineTriggerTime"
+				"defaultValue": "\"PipelineTriggerTime\""
 			},
 			"PipelineTriggerType": {
 				"type": "string",
-				"defaultValue": "PipelineTriggerType"
+				"defaultValue": "\"PipelineTriggerType\""
 			},
 			"PipelineTriggeredByPipelineName": {
 				"type": "string",
-				"defaultValue": "PipelineTriggeredByPipelineName"
+				"defaultValue": "\"PipelineTriggeredByPipelineName"
 			},
 			"PipelineTriggeredByPipelineRunId": {
 				"type": "string",
-				"defaultValue": "PipelineTriggeredByPipelineRunId"
+				"defaultValue": "\"PipelineTriggeredByPipelineRunId\""
 			},
 			"ActivityOutputMessage": {
 				"type": "string",
-				"defaultValue": "ActivityOutputMessage"
+				"defaultValue": "\"ActivityOutputMessage\""
 			},
 			"AzureSqlTargetTable": {
 				"type": "string",
-				"defaultValue": "AzureSqlTargetTable"
+				"defaultValue": "\"AzureSqlTargetTable\""
 			}
 		},
 		"variables": {
