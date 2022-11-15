@@ -260,44 +260,6 @@
 					},
 					"firstRowOnly": false
 				}
-			},
-			{
-				"name": "Web1",
-				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "PostRowCount",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"url": {
-						"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'succeeded',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
-						"type": "Expression"
-					},
-					"connectVia": {
-						"referenceName": "AutoResolveIntegrationRuntime",
-						"type": "IntegrationRuntimeReference"
-					},
-					"method": "POST",
-					"headers": {
-						"Content-Type": "application/json"
-					},
-					"body": {
-						"value": "@pipeline().Pipeline",
-						"type": "Expression"
-					}
-				}
 			}
 		],
 		"parameters": {
