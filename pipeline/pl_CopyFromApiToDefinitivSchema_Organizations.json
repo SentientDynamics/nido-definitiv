@@ -468,7 +468,11 @@
 						]
 					}
 				],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"message": "FAIL",
+					"errorCode": "123"
+				}
 			}
 		],
 		"parameters": {
