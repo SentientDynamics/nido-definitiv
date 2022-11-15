@@ -49,7 +49,7 @@
 				"typeProperties": {
 					"variableName": "varLogicAppBody",
 					"value": {
-						"value": "@union(\n    pipeline().parameters.PipelineName,\n    pipeline().parameters.PipelineRunId\n)",
+						"value": "[\r\n    pipeline().parameters.PipelineName,\r\n    pipeline().parameters.PipelineRunId\r\n]",
 						"type": "Expression"
 					}
 				}
