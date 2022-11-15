@@ -33,6 +33,19 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "varLogicAppBody",
+					"value": {
+						"value": "@json(\n    concat('\"pipelineName\" :', pipeline().parameters.PipelineName)\n)",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -75,6 +88,11 @@
 			"AzureSqlTargetTable": {
 				"type": "string",
 				"defaultValue": "\"AzureSqlTargetTable\""
+			}
+		},
+		"variables": {
+			"varLogicAppBody": {
+				"type": "String"
 			}
 		},
 		"folder": {
