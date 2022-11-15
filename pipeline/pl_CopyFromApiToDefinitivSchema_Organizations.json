@@ -262,70 +262,8 @@
 				}
 			},
 			{
-				"name": "pl_monitoring_logic-nido-prod-eastau-101",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "df_Organizations",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"PipelineName": {
-							"value": "@pipeline().Pipeline",
-							"type": "Expression"
-						},
-						"PipelineRunId": {
-							"value": "@pipeline().RunId",
-							"type": "Expression"
-						},
-						"PipelineTriggerId": {
-							"value": "@pipeline().TriggerId",
-							"type": "Expression"
-						},
-						"PipelineTriggerName": {
-							"value": "@pipeline().TriggerName",
-							"type": "Expression"
-						},
-						"PipelineTriggerTime": {
-							"value": "@pipeline().TriggerTime",
-							"type": "Expression"
-						},
-						"PipelineTriggerType": {
-							"value": "@pipeline().TriggerType",
-							"type": "Expression"
-						},
-						"PipelineTriggeredByPipelineName": {
-							"value": "@pipeline()?.TriggeredByPipelineName",
-							"type": "Expression"
-						},
-						"PipelineTriggeredByPipelineRunId": {
-							"value": "@pipeline()?.TriggeredByPipelineRunId",
-							"type": "Expression"
-						},
-						"ActivityOutputMessage": {
-							"value": "@activity('df_Organizations').error.Message",
-							"type": "Expression"
-						},
-						"AzureSqlTargetTable": {
-							"value": "@pipeline().parameters.param_TableName",
-							"type": "Expression"
-						}
-					}
-				}
-			},
-			{
-				"name": "pl_monitoring_logic-nido-prod-eastau-102",
-				"type": "ExecutePipeline",
+				"name": "Web1",
+				"type": "WebActivity",
 				"dependsOn": [
 					{
 						"activity": "PostRowCount",
@@ -334,120 +272,27 @@
 						]
 					}
 				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"pipeline": {
-						"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
-						"type": "PipelineReference"
+					"url": {
+						"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'succeeded',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
+						"type": "Expression"
 					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"PipelineName": {
-							"value": "@pipeline().Pipeline",
-							"type": "Expression"
-						},
-						"PipelineRunId": {
-							"value": "@pipeline().RunId",
-							"type": "Expression"
-						},
-						"PipelineTriggerId": {
-							"value": "@pipeline().TriggerId",
-							"type": "Expression"
-						},
-						"PipelineTriggerName": {
-							"value": "@pipeline().TriggerName",
-							"type": "Expression"
-						},
-						"PipelineTriggerTime": {
-							"value": "@pipeline().TriggerTime",
-							"type": "Expression"
-						},
-						"PipelineTriggerType": {
-							"value": "@pipeline().TriggerType",
-							"type": "Expression"
-						},
-						"PipelineTriggeredByPipelineName": {
-							"value": "@pipeline()?.TriggeredByPipelineName",
-							"type": "Expression"
-						},
-						"PipelineTriggeredByPipelineRunId": {
-							"value": "@pipeline()?.TriggeredByPipelineRunId",
-							"type": "Expression"
-						},
-						"AzureSqlTargetTable": {
-							"value": "@pipeline().parameters.param_TableName",
-							"type": "Expression"
-						},
-						"AzureSqlTargetTablePreRowCount": {
-							"value": "@activity('PreRowCount').output.value",
-							"type": "Expression"
-						},
-						"AzureSqlTargetTablePostRowCount": {
-							"value": "@activity('PostRowCount').output.value",
-							"type": "Expression"
-						}
-					}
-				}
-			},
-			{
-				"name": "pl_monitoring_logic-nido-prod-eastau-101_copy1",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "ApiToJson",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
-						"type": "PipelineReference"
+					"connectVia": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
 					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"PipelineName": {
-							"value": "@pipeline().Pipeline",
-							"type": "Expression"
-						},
-						"PipelineRunId": {
-							"value": "@pipeline().RunId",
-							"type": "Expression"
-						},
-						"PipelineTriggerId": {
-							"value": "@pipeline().TriggerId",
-							"type": "Expression"
-						},
-						"PipelineTriggerName": {
-							"value": "@pipeline().TriggerName",
-							"type": "Expression"
-						},
-						"PipelineTriggerTime": {
-							"value": "@pipeline().TriggerTime",
-							"type": "Expression"
-						},
-						"PipelineTriggerType": {
-							"value": "@pipeline().TriggerType",
-							"type": "Expression"
-						},
-						"PipelineTriggeredByPipelineName": {
-							"value": "@pipeline()?.TriggeredByPipelineName",
-							"type": "Expression"
-						},
-						"PipelineTriggeredByPipelineRunId": {
-							"value": "@pipeline()?.TriggeredByPipelineRunId",
-							"type": "Expression"
-						},
-						"ActivityOutputMessage": {
-							"value": "@activity('ApiToJson').output.errors[0].Message",
-							"type": "Expression"
-						},
-						"AzureSqlTargetTable": {
-							"value": "@pipeline().parameters.param_TableName",
-							"type": "Expression"
-						}
+					"method": "POST",
+					"body": {
+						"value": "@pipeline().Pipeline",
+						"type": "Expression"
 					}
 				}
 			}
@@ -460,6 +305,11 @@
 			"param_TableName": {
 				"type": "string",
 				"defaultValue": "Organizations"
+			}
+		},
+		"variables": {
+			"varLogicAppBody": {
+				"type": "String"
 			}
 		},
 		"folder": {
