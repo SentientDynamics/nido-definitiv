@@ -37,7 +37,7 @@
 		],
 		"parameters": {
 			"PipelineName": {
-				"type": "object",
+				"type": "string",
 				"defaultValue": "PipelineName"
 			},
 			"PipelineRunId": {
