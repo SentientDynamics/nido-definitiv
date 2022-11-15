@@ -29,7 +29,16 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"Pipeline Name": "@{parameters.pipeline}"
+						"PipelineName": "@{pipeline().parameters.PipelineName}",
+						"PipelineRunId": "@{pipeline().parameters.PipelineRunId}",
+						"PipelineTriggerId": "@{pipeline().parameters.PipelineTriggerId}",
+						"PipelineTriggerName": "@{pipeline().parameters.PipelineTriggerName}",
+						"PipelineTriggerTime": "@{pipeline().parameters.PipelineTriggerTime}",
+						"PipelineTriggerType": "@{pipeline().parameters.PipelineTriggerType}",
+						"PipelineTriggeredByPipelineName": "@{pipeline().parameters.PipelineTriggeredByPipelineName}",
+						"PipelineTriggeredByPipelineRunId": "@{pipeline().parameters.PipelineTriggeredByPipelineRunId}",
+						"ActivityOutputMessage": "@{pipeline().parameters.ActivityOutputMessage}",
+						"AzureSqlTargetTable": "@{pipeline().parameters.AzureSqlTargetTable}"
 					}
 				}
 			}
