@@ -174,8 +174,7 @@
 					{
 						"activity": "Organization",
 						"dependencyConditions": [
-							"Succeeded",
-							"Failed"
+							"Succeeded"
 						]
 					}
 				],
