@@ -49,7 +49,7 @@
 				"typeProperties": {
 					"variableName": "varLogicAppBody",
 					"value": {
-						"value": "@string(\n    createArray(\n    pipeline().parameters.PipelineName,\n    pipeline().parameters.PipelineRunId\n)\n)",
+						"value": "@string(\n    union(\n        pipeline().parameters.PipelineName,\n        pipeline().parameters.PipelineRunId\n    )\n)",
 						"type": "Expression"
 					}
 				}
@@ -103,7 +103,7 @@
 		},
 		"variables": {
 			"varLogicAppBody": {
-				"type": "Array"
+				"type": "String"
 			}
 		},
 		"folder": {
