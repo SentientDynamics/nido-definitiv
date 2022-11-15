@@ -129,7 +129,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_ReportingLeaveApplications,\n'?organizationId=', \nitem().organizationId, \n'&startDate=',\n'2022-09-01',\n'&endDate=',\n'2022-09-29')",
+											"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_ReportingLeaveApplications,\n'?organizationId=', \nitem().organizationId, \n'&startDate=',\n'2021-10-22',\n'&endDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'))",
 											"type": "Expression"
 										}
 									}
