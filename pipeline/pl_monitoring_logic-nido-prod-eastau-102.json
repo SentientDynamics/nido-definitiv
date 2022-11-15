@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@concat(\n    pipeline().parameters.PipelineName,\n    pipeline().parameters.PipelineRunId,\n    pipeline().parameters.PipelineTriggerId,\n    pipeline().parameters.PipelineTriggerName,\n    pipeline().parameters.PipelineTriggerTime,\n    pipeline().parameters.PipelineTriggerType,\n    pipeline().parameters.PipelineTriggeredByPipelineName,\n    pipeline().parameters.PipelineTriggeredByPipelineRunId\n)",
+						"value": "@concat(\n    pipeline().parameters.PipelineName,\n    pipeline().parameters.PipelineRunId,\n    pipeline().parameters.PipelineTriggerId,\n    pipeline().parameters.PipelineTriggerName,\n    pipeline().parameters.PipelineTriggerTime,\n    pipeline().parameters.PipelineTriggerType,\n    pipeline().parameters.PipelineTriggeredByPipelineName,\n    pipeline().parameters.PipelineTriggeredByPipelineRunId,\n    pipeline().parameters.AzureSqlTargetTable,\n    pipeline().parameters.AzureSqlTargetTablePostRowCount,\n    pipeline().parameters.AzureSqlTargetTablePreRowCount\n)",
 						"type": "Expression"
 					}
 				}
