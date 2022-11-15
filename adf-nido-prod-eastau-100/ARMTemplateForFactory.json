@@ -542,6 +542,196 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_1",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ApiToJson",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('ApiToJson').output.errors[0].Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName1",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName1",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePreRowCount": {
+									"value": "@activity('PreRowCount').output.value",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePostRowCount": {
+									"value": "@activity('PostRowCount').output.value",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_Employees",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('df_Employees').error.Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName1",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -644,7 +834,9 @@
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/dataflows/df_Employees')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-102')]"
 			]
 		},
 		{
@@ -814,6 +1006,68 @@
 											}
 										}
 									]
+								},
+								{
+									"name": "logic-nido-prod-eastau-101_1",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"PipelineName": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											},
+											"PipelineRunId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"PipelineTriggerId": {
+												"value": "@pipeline().TriggerId",
+												"type": "Expression"
+											},
+											"PipelineTriggerName": {
+												"value": "@pipeline().TriggerName",
+												"type": "Expression"
+											},
+											"PipelineTriggerTime": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											},
+											"PipelineTriggerType": {
+												"value": "@pipeline().TriggerType",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineName": {
+												"value": "@pipeline()?.TriggeredByPipelineName",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineRunId": {
+												"value": "@pipeline()?.TriggeredByPipelineRunId",
+												"type": "Expression"
+											},
+											"ActivityOutputMessage": {
+												"value": "@activity('ApiToJson').output.errors[0].Message",
+												"type": "Expression"
+											},
+											"AzureSqlTargetTable": {
+												"value": "@pipeline().parameters.param_TableName",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
@@ -973,6 +1227,134 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePreRowCount": {
+									"value": "@activity('PreRowCount').output.value",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePostRowCount": {
+									"value": "@activity('PostRowCount').output.value",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_EmploymentHistory",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('df_EmploymentHistory').error.Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -1000,6 +1382,8 @@
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_EmploymentHistory')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-102')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
@@ -1186,6 +1570,68 @@
 											}
 										}
 									]
+								},
+								{
+									"name": "logic-nido-prod-eastau-101_1",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"PipelineName": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											},
+											"PipelineRunId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"PipelineTriggerId": {
+												"value": "@pipeline().TriggerId",
+												"type": "Expression"
+											},
+											"PipelineTriggerName": {
+												"value": "@pipeline().TriggerName",
+												"type": "Expression"
+											},
+											"PipelineTriggerTime": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											},
+											"PipelineTriggerType": {
+												"value": "@pipeline().TriggerType",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineName": {
+												"value": "@pipeline()?.TriggeredByPipelineName",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineRunId": {
+												"value": "@pipeline()?.TriggeredByPipelineRunId",
+												"type": "Expression"
+											},
+											"ActivityOutputMessage": {
+												"value": "@activity('ApiToJson').output.errors[0].Message",
+												"type": "Expression"
+											},
+											"AzureSqlTargetTable": {
+												"value": "@pipeline().parameters.param_TableName",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
@@ -1221,7 +1667,8 @@
 									"param_ErrorRowDirectory": {
 										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
 										"type": "Expression"
-									}
+									},
+									"param_DataflowName": "\"df_OrgPayRuns\""
 								},
 								"datasetParameters": {
 									"sourceJson": {
@@ -1392,6 +1839,134 @@
 								"param_TableName": "CustomReportWages"
 							}
 						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePreRowCount": {
+									"value": "@activity('PreRowCount').output.value",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePostRowCount": {
+									"value": "@activity('PostRowCount').output.value",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_OrgPayRuns",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('df_OrgPayRuns').error.Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -1421,6 +1996,8 @@
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Payslips')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Wages')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-102')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
@@ -2108,6 +2685,68 @@
 											}
 										}
 									]
+								},
+								{
+									"name": "logic-nido-prod-eastau-101_1",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"PipelineName": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											},
+											"PipelineRunId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"PipelineTriggerId": {
+												"value": "@pipeline().TriggerId",
+												"type": "Expression"
+											},
+											"PipelineTriggerName": {
+												"value": "@pipeline().TriggerName",
+												"type": "Expression"
+											},
+											"PipelineTriggerTime": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											},
+											"PipelineTriggerType": {
+												"value": "@pipeline().TriggerType",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineName": {
+												"value": "@pipeline()?.TriggeredByPipelineName",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineRunId": {
+												"value": "@pipeline()?.TriggeredByPipelineRunId",
+												"type": "Expression"
+											},
+											"ActivityOutputMessage": {
+												"value": "@activity('ApiToJson').output.errors[0].Message",
+												"type": "Expression"
+											},
+											"AzureSqlTargetTable": {
+												"value": "@pipeline().parameters.param_TableName",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
@@ -2262,6 +2901,134 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_Payslips",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('df_Payslips').error.Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePreRowCount": {
+									"value": "@activity('PreRowCount').output.value",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePostRowCount": {
+									"value": "@activity('PostRowCount').output.value",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -2315,6 +3082,8 @@
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_Payslips')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-102')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
@@ -2486,6 +3255,68 @@
 											}
 										}
 									]
+								},
+								{
+									"name": "logic-nido-prod-eastau-101_1",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"PipelineName": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											},
+											"PipelineRunId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"PipelineTriggerId": {
+												"value": "@pipeline().TriggerId",
+												"type": "Expression"
+											},
+											"PipelineTriggerName": {
+												"value": "@pipeline().TriggerName",
+												"type": "Expression"
+											},
+											"PipelineTriggerTime": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											},
+											"PipelineTriggerType": {
+												"value": "@pipeline().TriggerType",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineName": {
+												"value": "@pipeline()?.TriggeredByPipelineName",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineRunId": {
+												"value": "@pipeline()?.TriggeredByPipelineRunId",
+												"type": "Expression"
+											},
+											"ActivityOutputMessage": {
+												"value": "@activity('ApiToJson').output.errors[0].Message",
+												"type": "Expression"
+											},
+											"AzureSqlTargetTable": {
+												"value": "@pipeline().parameters.param_TableName",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
@@ -2639,6 +3470,134 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePreRowCount": {
+									"value": "@activity('PreRowCount').output.value",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePostRowCount": {
+									"value": "@activity('PostRowCount').output.value",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_LeaveApplications",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('df_LeaveApplications').error.Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -2655,11 +3614,6 @@
 						"defaultValue": "ReportingLeaveApplications"
 					}
 				},
-				"variables": {
-					"varLogicAppBody": {
-						"type": "String"
-					}
-				},
 				"folder": {
 					"name": "06_Leave"
 				},
@@ -2671,6 +3625,8 @@
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_LeaveApplications')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-102')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
@@ -2849,6 +3805,68 @@
 											}
 										}
 									]
+								},
+								{
+									"name": "logic-nido-prod-eastau-101_1",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"PipelineName": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											},
+											"PipelineRunId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"PipelineTriggerId": {
+												"value": "@pipeline().TriggerId",
+												"type": "Expression"
+											},
+											"PipelineTriggerName": {
+												"value": "@pipeline().TriggerName",
+												"type": "Expression"
+											},
+											"PipelineTriggerTime": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											},
+											"PipelineTriggerType": {
+												"value": "@pipeline().TriggerType",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineName": {
+												"value": "@pipeline()?.TriggeredByPipelineName",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineRunId": {
+												"value": "@pipeline()?.TriggeredByPipelineRunId",
+												"type": "Expression"
+											},
+											"ActivityOutputMessage": {
+												"value": "@activity('ApiToJson').output.errors[0].Message",
+												"type": "Expression"
+											},
+											"AzureSqlTargetTable": {
+												"value": "@pipeline().parameters.param_TableName",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
@@ -2884,7 +3902,8 @@
 									"param_ErrorRowDirectory": {
 										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
 										"type": "Expression"
-									}
+									},
+									"param_DataflowName": "\"df_ReportingLeaveBalances\""
 								},
 								"datasetParameters": {
 									"sourceJson": {
@@ -3027,6 +4046,134 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePreRowCount": {
+									"value": "@activity('PreRowCount').output.value",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePostRowCount": {
+									"value": "@activity('PostRowCount').output.value",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_ReportingLeaveBalances",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('df_ReportingLeaveBalances').error.Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -3047,9 +4194,6 @@
 					"varLeaveBalanceDate": {
 						"type": "String",
 						"defaultValue": "2022-06-01"
-					},
-					"varLogicAppBody": {
-						"type": "String"
 					}
 				},
 				"folder": {
@@ -3063,6 +4207,8 @@
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/df_ReportingLeaveBalances')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-102')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
@@ -3265,7 +4411,8 @@
 									"param_ErrorRowDirectory": {
 										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
 										"type": "Expression"
-									}
+									},
+									"param_DataflowName": "\"df_Rosters\""
 								},
 								"datasetParameters": {
 									"sourceJson": {
@@ -3388,6 +4535,196 @@
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_1",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ApiToJson",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('ApiToJson').output.errors[0].Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_Rosters",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('df_Rosters').error.Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePreRowCount": {
+									"value": "@activity('PreRowCount').output.value",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePostRowCount": {
+									"value": "@activity('PostRowCount').output.value",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -3424,7 +4761,9 @@
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
 				"[concat(variables('factoryId'), '/dataflows/df_Rosters')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-102')]"
 			]
 		},
 		{
@@ -3796,6 +5135,68 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "logic-nido-prod-eastau-101_1",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"PipelineName": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											},
+											"PipelineRunId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"PipelineTriggerId": {
+												"value": "@pipeline().TriggerId",
+												"type": "Expression"
+											},
+											"PipelineTriggerName": {
+												"value": "@pipeline().TriggerName",
+												"type": "Expression"
+											},
+											"PipelineTriggerTime": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											},
+											"PipelineTriggerType": {
+												"value": "@pipeline().TriggerType",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineName": {
+												"value": "@pipeline()?.TriggeredByPipelineName",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineRunId": {
+												"value": "@pipeline()?.TriggeredByPipelineRunId",
+												"type": "Expression"
+											},
+											"ActivityOutputMessage": {
+												"value": "@activity('ApiToJson').output.errors[0].Message",
+												"type": "Expression"
+											},
+											"AzureSqlTargetTable": {
+												"value": "@pipeline().parameters.param_TableName",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							],
 							"timeout": "7.00:00:00"
@@ -3818,6 +5219,134 @@
 							"value": {
 								"value": "@variables('varTimesheetStartDate')",
 								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_Timesheets",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('df_Timesheets').error.Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePreRowCount": {
+									"value": "@activity('PreRowCount').output.value",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePostRowCount": {
+									"value": "@activity('PostRowCount').output.value",
+									"type": "Expression"
+								}
 							}
 						}
 					}
@@ -3861,6 +5390,8 @@
 				"[concat(variables('factoryId'), '/dataflows/df_Timesheets')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-102')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
@@ -4076,6 +5607,7 @@
 								"value": "@activity('OrgPayRuns').output.value",
 								"type": "Expression"
 							},
+							"isSequential": false,
 							"activities": [
 								{
 									"name": "ApiToJson",
@@ -4177,8 +5709,198 @@
 											}
 										}
 									]
+								},
+								{
+									"name": "logic-nido-prod-eastau-101_1",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"PipelineName": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											},
+											"PipelineRunId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"PipelineTriggerId": {
+												"value": "@pipeline().TriggerId",
+												"type": "Expression"
+											},
+											"PipelineTriggerName": {
+												"value": "@pipeline().TriggerName",
+												"type": "Expression"
+											},
+											"PipelineTriggerTime": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											},
+											"PipelineTriggerType": {
+												"value": "@pipeline().TriggerType",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineName": {
+												"value": "@pipeline()?.TriggeredByPipelineName",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineRunId": {
+												"value": "@pipeline()?.TriggeredByPipelineRunId",
+												"type": "Expression"
+											},
+											"ActivityOutputMessage": {
+												"value": "@activity('ApiToJson').output.errors[0].Message",
+												"type": "Expression"
+											},
+											"AzureSqlTargetTable": {
+												"value": "@pipeline().parameters.param_TableName",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-101_2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "df_Wages",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"ActivityOutputMessage": {
+									"value": "@activity('df_Wages').error.Message",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PostRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "pl_monitoring_logic-nido-prod-eastau-102",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"PipelineTriggerId": {
+									"value": "@pipeline().TriggerId",
+									"type": "Expression"
+								},
+								"PipelineTriggerName": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								},
+								"PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"PipelineTriggerType": {
+									"value": "@pipeline().TriggerType",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineName": {
+									"value": "@pipeline()?.TriggeredByPipelineName",
+									"type": "Expression"
+								},
+								"PipelineTriggeredByPipelineRunId": {
+									"value": "@pipeline()?.TriggeredByPipelineRunId",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTable": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePreRowCount": {
+									"value": "@activity('PreRowCount').output.value",
+									"type": "Expression"
+								},
+								"AzureSqlTargetTablePostRowCount": {
+									"value": "@activity('PostRowCount').output.value",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -4212,6 +5934,8 @@
 				"[concat(variables('factoryId'), '/dataflows/df_Wages')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-102')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
 			]
@@ -5291,7 +7015,7 @@
 						}
 					],
 					"transformations": [],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_EmploymentHistory\")\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSql"
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_EmploymentHistory\")\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSql"
 				}
 			},
 			"dependsOn": [
