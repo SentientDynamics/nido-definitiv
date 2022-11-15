@@ -290,6 +290,9 @@
 						"type": "IntegrationRuntimeReference"
 					},
 					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json"
+					},
 					"body": {
 						"value": "@pipeline().Pipeline",
 						"type": "Expression"
