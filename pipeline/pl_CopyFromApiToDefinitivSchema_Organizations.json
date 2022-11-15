@@ -398,12 +398,6 @@
 						"dependencyConditions": [
 							"Failed"
 						]
-					},
-					{
-						"activity": "Fail1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
 					}
 				],
 				"userProperties": [],
@@ -455,23 +449,6 @@
 							"type": "Expression"
 						}
 					}
-				}
-			},
-			{
-				"name": "Fail1",
-				"type": "Fail",
-				"dependsOn": [
-					{
-						"activity": "ApiToJson",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"message": "FAIL",
-					"errorCode": "123"
 				}
 			}
 		],
