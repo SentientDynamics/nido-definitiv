@@ -6,14 +6,7 @@
 				"name": "logic-nido-prod-eastau-101",
 				"description": "Pipeline monitoring and notification",
 				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "Set variable1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -36,21 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@variables('varLogicAppBody')",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Set variable1",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "varLogicAppBody",
-					"value": {
-						"value": "@json(\n    concat('\"pipelineName\" :', pipeline().parameters.PipelineName)\n)",
-						"type": "Expression"
+						"Pipeline Name": "@{parameters.pipeline}"
 					}
 				}
 			}
