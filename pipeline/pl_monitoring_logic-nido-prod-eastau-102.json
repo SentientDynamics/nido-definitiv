@@ -6,14 +6,7 @@
 				"name": "logic-nido-prod-eastau-102",
 				"description": "Pipeline monitoring and notification",
 				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "Set variable1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -36,20 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@variables('varLogicAppBody')",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Set variable1",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "varLogicAppBody",
-					"value": {
-						"value": "@string(\n    pipeline().parameters.PipelineName\n)",
+						"value": "@string(\r\n    pipeline().parameters.PipelineName\r\n)",
 						"type": "Expression"
 					}
 				}
@@ -99,11 +79,6 @@
 			"AzureSqlTargetTablePostRowCount": {
 				"type": "string",
 				"defaultValue": "AzureSqlTargetTablePostRowCount"
-			}
-		},
-		"variables": {
-			"varLogicAppBody": {
-				"type": "String"
 			}
 		},
 		"folder": {
