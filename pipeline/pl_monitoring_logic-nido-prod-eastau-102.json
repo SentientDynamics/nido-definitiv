@@ -29,7 +29,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@{pipeline().parameters.PipelineName},\n{pipeline().parameters.PipelineRunId},\n{pipeline().parameters.PipelineTriggerId}",
+						"value": "@union(\n    json(pipeline().parameters.PipelineName),\n    json(pipeline().parameters.PipelineTriggerId)\n)",
 						"type": "Expression"
 					}
 				}
