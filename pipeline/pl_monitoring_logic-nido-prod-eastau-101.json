@@ -27,23 +27,6 @@
 					"method": "POST",
 					"headers": {
 						"Content-Type": "application/json"
-					},
-					"body": {
-						"value": "@variables('LogicAppBody')",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Set variable1",
-				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "LogicAppBody",
-					"value": {
-						"value": "@array(\n    pipeline().parameters.PipelineName\n)",
-						"type": "Expression"
 					}
 				}
 			}
@@ -88,11 +71,6 @@
 			"AzureSqlTargetTable": {
 				"type": "string",
 				"defaultValue": "\"AzureSqlTargetTable\""
-			}
-		},
-		"variables": {
-			"LogicAppBody": {
-				"type": "Array"
 			}
 		},
 		"folder": {
