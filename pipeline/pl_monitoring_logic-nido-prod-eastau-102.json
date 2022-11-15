@@ -6,7 +6,14 @@
 				"name": "logic-nido-prod-eastau-102",
 				"description": "Pipeline monitoring and notification",
 				"type": "WebActivity",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -30,6 +37,19 @@
 					},
 					"body": {
 						"value": "@json(\n        concat(\n            pipeline().parameters.PipelineName,\n            pipeline().parameters.PipelineRunId,\n            pipeline().parameters.PipelineTriggerId,\n            pipeline().parameters.PipelineTriggerName,\n            pipeline().parameters.PipelineTriggerTime,\n            pipeline().parameters.PipelineTriggerType,\n            pipeline().parameters.PipelineTriggeredByPipelineName,\n            pipeline().parameters.PipelineTriggeredByPipelineRunId,\n            pipeline().parameters.AzureSqlTargetTable,\n            pipeline().parameters.AzureSqlTargetTablePostRowCount,\n            pipeline().parameters.AzureSqlTargetTablePreRowCount\n    )\n)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "varLogicAppBody",
+					"value": {
+						"value": "@json(\n    concat('\"pipelineName\" :', pipeline().parameters.PipelineName)\n)",
 						"type": "Expression"
 					}
 				}
@@ -79,6 +99,11 @@
 			"AzureSqlTargetTablePostRowCount": {
 				"type": "string",
 				"defaultValue": "AzureSqlTargetTablePostRowCount"
+			}
+		},
+		"variables": {
+			"varLogicAppBody": {
+				"type": "String"
 			}
 		},
 		"folder": {
