@@ -49,7 +49,7 @@
 				"typeProperties": {
 					"variableName": "varLogicAppBody",
 					"value": {
-						"value": "@pipeline().parameters.PipelineTriggerName",
+						"value": "@json(pipeline().parameters.PipelineTriggerName)",
 						"type": "Expression"
 					}
 				}
