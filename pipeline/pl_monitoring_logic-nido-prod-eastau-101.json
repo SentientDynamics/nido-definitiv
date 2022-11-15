@@ -82,7 +82,7 @@
 				"defaultValue": "\"PipelineTriggeredByPipelineRunId\""
 			},
 			"ActivityOutputMessage": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "\"ActivityOutputMessage\""
 			},
 			"AzureSqlTargetTable": {
