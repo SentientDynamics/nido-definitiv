@@ -37,7 +37,8 @@
 						"PipelineTriggerType": "@{pipeline().parameters.PipelineTriggerType}",
 						"PipelineTriggeredByPipelineName": "@{pipeline().parameters.PipelineTriggeredByPipelineName}",
 						"PipelineTriggeredByPipelineRunId": "@{pipeline().parameters.PipelineTriggeredByPipelineRunId}",
-						"ActivityOutputMessage": "@{pipeline().parameters.ActivityOutputMessage}",
+						"AzureSqlTargetTablePreRowCount": "@{pipeline().parameters.AzureSqlTargetTablePreRowCount}",
+						"AzureSqlTargetTablePostRowCount": "@{pipeline().parameters.AzureSqlTargetTablePostRowCount}",
 						"AzureSqlTargetTable": "@{pipeline().parameters.AzureSqlTargetTable}"
 					}
 				}
