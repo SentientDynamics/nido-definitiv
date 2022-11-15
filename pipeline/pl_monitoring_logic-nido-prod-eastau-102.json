@@ -49,7 +49,7 @@
 				"typeProperties": {
 					"variableName": "varLogicAppBody",
 					"value": {
-						"value": "@json(pipeline().parameters.PipelineTriggerName)",
+						"value": "@join(\n    pipeline().parameters.PipelineName,\n    pipeline().parameters.PipelineRunId\n    )",
 						"type": "Expression"
 					}
 				}
@@ -61,7 +61,7 @@
 				"defaultValue": "PipelineName"
 			},
 			"PipelineRunId": {
-				"type": "string",
+				"type": "object",
 				"defaultValue": "PipelineRunId"
 			},
 			"PipelineTriggerId": {
