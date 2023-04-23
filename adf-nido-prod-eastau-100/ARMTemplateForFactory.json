@@ -4788,7 +4788,7 @@
 						"typeProperties": {
 							"variableName": "varTimesheetStartDate",
 							"value": {
-								"value": "@formatDateTime('2022-09-01', 'yyyy-MM-dd')",
+								"value": "@formatDateTime('2023-04-17', 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
