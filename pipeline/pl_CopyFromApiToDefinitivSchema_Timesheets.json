@@ -4,7 +4,7 @@
 		"activities": [
 			{
 				"name": "TimesheetStartDate",
-				"description": "Dynamic definition: \"@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd')\"",
+				"description": "",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
