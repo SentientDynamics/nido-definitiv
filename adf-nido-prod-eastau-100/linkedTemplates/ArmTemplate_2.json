@@ -186,22 +186,10 @@
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2023-04-24T15:00:00",
-						"timeZone": "AUS Eastern Standard Time",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								9,
-								12,
-								15,
-								18,
-								21
-							]
-						}
+						"frequency": "Hour",
+						"interval": 3,
+						"startTime": "2023-04-24T18:00:00",
+						"timeZone": "AUS Eastern Standard Time"
 					}
 				}
 			},
