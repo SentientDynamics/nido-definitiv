@@ -131,11 +131,11 @@
 			"type": "string",
 			"defaultValue": "CustomReportRosters"
 		},
-		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
+		"tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
 		},
-		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
+		"tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "CustomReportTimesheets"
 		},
@@ -6732,7 +6732,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_Timesheets_Scheduled_1d')]",
+			"name": "[concat(parameters('factoryName'), '/tr_Timesheets_Scheduled_3h')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -6745,8 +6745,8 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName')]"
 						}
 					}
 				],

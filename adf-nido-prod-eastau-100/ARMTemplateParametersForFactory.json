@@ -98,10 +98,10 @@
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
 			"value": "CustomReportRosters"
 		},
-		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
+		"tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
 			"value": "definitiv"
 		},
-		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
+		"tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
 			"value": "CustomReportTimesheets"
 		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
