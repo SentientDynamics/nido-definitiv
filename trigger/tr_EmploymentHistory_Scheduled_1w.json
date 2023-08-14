@@ -1,5 +1,5 @@
 {
-	"name": "tr_EmploymentHistory_Scheduled_1d",
+	"name": "tr_EmploymentHistory_Scheduled_1w",
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
@@ -18,7 +18,7 @@
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
-				"frequency": "Day",
+				"frequency": "Week",
 				"interval": 1,
 				"startTime": "2022-06-08T05:19:00",
 				"timeZone": "AUS Eastern Standard Time",
@@ -28,6 +28,9 @@
 					],
 					"hours": [
 						3
+					],
+					"weekDays": [
+						"Sunday"
 					]
 				}
 			}
