@@ -62,10 +62,10 @@
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7": {
 			"value": "EmployeeTaxDeclarations"
 		},
-		"tr_EmploymentHistory_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
+		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
 			"value": "definitiv"
 		},
-		"tr_EmploymentHistory_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName": {
+		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName": {
 			"value": "EmployeesEmploymentHistory"
 		},
 		"tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_SchemaName": {

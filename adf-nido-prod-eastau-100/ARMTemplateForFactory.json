@@ -83,11 +83,11 @@
 			"type": "string",
 			"defaultValue": "EmployeeTaxDeclarations"
 		},
-		"tr_EmploymentHistory_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
+		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
 		},
-		"tr_EmploymentHistory_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName": {
+		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "EmployeesEmploymentHistory"
 		},
@@ -6468,7 +6468,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_EmploymentHistory_Scheduled_1d')]",
+			"name": "[concat(parameters('factoryName'), '/tr_EmploymentHistory_Scheduled_1w')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -6481,15 +6481,15 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_EmploymentHistory_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_EmploymentHistory_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName')]"
 						}
 					}
 				],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Day",
+						"frequency": "Week",
 						"interval": 1,
 						"startTime": "2022-06-08T05:19:00",
 						"timeZone": "AUS Eastern Standard Time",
@@ -6499,6 +6499,9 @@
 							],
 							"hours": [
 								3
+							],
+							"weekDays": [
+								"Sunday"
 							]
 						}
 					}
