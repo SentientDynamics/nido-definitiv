@@ -131,11 +131,11 @@
 			"type": "string",
 			"defaultValue": "CustomReportRosters"
 		},
-		"tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
+		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
 		},
-		"tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
+		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "CustomReportTimesheets"
 		},
@@ -3959,6 +3959,10 @@
 								]
 							}
 						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "varLeaveBalanceDate",
@@ -4224,6 +4228,10 @@
 						"description": "",
 						"type": "SetVariable",
 						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "varRosterStartDate",
@@ -4238,6 +4246,10 @@
 						"description": "",
 						"type": "SetVariable",
 						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "varRosterFinishDate",
@@ -4784,6 +4796,10 @@
 								]
 							}
 						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "varTimesheetStartDate",
@@ -4805,6 +4821,10 @@
 								]
 							}
 						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "varTimesheetFinishDate",
@@ -5107,6 +5127,10 @@
 											]
 										}
 									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "varTimesheetQueryDatePlusOne",
@@ -5127,6 +5151,10 @@
 											]
 										}
 									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
 									"userProperties": [],
 									"typeProperties": {
 										"variableName": "varTimesheetQueryDate",
@@ -5213,6 +5241,10 @@
 								]
 							}
 						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "varTimesheetQueryDate",
@@ -6732,7 +6764,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_Timesheets_Scheduled_3h')]",
+			"name": "[concat(parameters('factoryName'), '/tr_Timesheets_Scheduled_1d')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -6745,8 +6777,8 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Timesheets_Scheduled_3h_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName')]"
 						}
 					}
 				],
@@ -6762,10 +6794,7 @@
 								0
 							],
 							"hours": [
-								9,
-								12,
-								15,
-								18
+								9
 							]
 						}
 					}
