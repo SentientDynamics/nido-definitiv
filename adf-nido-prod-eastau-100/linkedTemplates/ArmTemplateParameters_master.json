@@ -149,6 +149,9 @@
 		"dataFactory_properties_globalParameters_global_CustomReportId_ReportingLeaveApplications_value": {
 			"value": "A1D9B4D7-3A79-413F-B13D-4BA5BC567BDC"
 		},
+		"dataFactory_properties_globalConfigurations_PipelineBillingEnabled": {
+			"value": "true"
+		},
 		"dataFactory_location": {
 			"value": "australiaeast"
 		},

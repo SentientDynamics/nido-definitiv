@@ -199,6 +199,10 @@
 			"type": "string",
 			"defaultValue": "A1D9B4D7-3A79-413F-B13D-4BA5BC567BDC"
 		},
+		"dataFactory_properties_globalConfigurations_PipelineBillingEnabled": {
+			"type": "string",
+			"defaultValue": "true"
+		},
 		"dataFactory_location": {
 			"type": "string",
 			"defaultValue": "australiaeast"
@@ -281,6 +285,9 @@
 					},
 					"dataFactory_properties_globalParameters_global_CustomReportId_ReportingLeaveApplications_value": {
 						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_ReportingLeaveApplications_value')]"
+					},
+					"dataFactory_properties_globalConfigurations_PipelineBillingEnabled": {
+						"value": "[parameters('dataFactory_properties_globalConfigurations_PipelineBillingEnabled')]"
 					},
 					"dataFactory_location": {
 						"value": "[parameters('dataFactory_location')]"
