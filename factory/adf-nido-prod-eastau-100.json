@@ -62,6 +62,9 @@
 				"type": "string",
 				"value": "A1D9B4D7-3A79-413F-B13D-4BA5BC567BDC"
 			}
+		},
+		"globalConfigurations": {
+			"PipelineBillingEnabled": "true"
 		}
 	},
 	"location": "australiaeast",
