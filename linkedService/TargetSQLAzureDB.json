@@ -1,0 +1,16 @@
+{
+	"name": "TargetSQLAzureDB",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=tnk001.database.windows.net;initial catalog=TNK_001;user id=MIKEM",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDM5N0IyRTVGLUMzNTctNEEzMC1CRjYxLTZCRjhGNkM0NEUzRF9kZjZmOTkwYy1jNzM2LTQ2OWUtOTQ5Ny01MzBjMGVhMGUyYWIiDQp9"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
