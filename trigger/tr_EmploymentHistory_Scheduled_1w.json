@@ -21,6 +21,7 @@
 				"frequency": "Week",
 				"interval": 1,
 				"startTime": "2022-06-08T05:19:00",
+				"endTime": "2023-09-01T09:04:42",
 				"timeZone": "AUS Eastern Standard Time",
 				"schedule": {
 					"minutes": [
