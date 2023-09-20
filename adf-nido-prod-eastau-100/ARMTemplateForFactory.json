@@ -4808,7 +4808,7 @@
 						"typeProperties": {
 							"variableName": "varTimesheetStartDate",
 							"value": {
-								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -42), 'yyyy-MM-dd')",
+								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -35), 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
@@ -4833,7 +4833,7 @@
 						"typeProperties": {
 							"variableName": "varTimesheetFinishDate",
 							"value": {
-								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 14), 'yyyy-MM-dd')",
+								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 7), 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
