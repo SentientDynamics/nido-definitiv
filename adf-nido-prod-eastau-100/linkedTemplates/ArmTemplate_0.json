@@ -616,7 +616,43 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/TimesheetJson')]",
+			"name": "[concat(parameters('factoryName'), '/SQLSink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_tnk001",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"param_TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().param_SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().param_TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Timesheet_dataset')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -664,221 +700,232 @@
 				"schema": {
 					"type": "object",
 					"properties": {
-						"timesheetId": {
-							"type": "string"
-						},
-						"employeeId": {
-							"type": "string"
-						},
-						"employeeName": {
-							"type": "string"
-						},
-						"projectId": {
-							"type": "string"
-						},
-						"positionId": {
-							"type": "null"
-						},
-						"positionName": {
-							"type": "null"
-						},
-						"projectApprovalWorkflow": {
-							"type": "array"
-						},
-						"projectName": {
-							"type": "string"
-						},
-						"projectWorkOrderId": {
-							"type": "null"
-						},
-						"workOrderName": {
-							"type": "null"
-						},
-						"roleId": {
-							"type": "string"
-						},
-						"roleName": {
-							"type": "string"
-						},
-						"departmentId": {
-							"type": "string"
-						},
-						"departmentName": {
-							"type": "string"
-						},
-						"locationId": {
-							"type": "string"
-						},
-						"locationName": {
-							"type": "string"
-						},
-						"shiftTypeId": {
-							"type": "null"
-						},
-						"shiftTypeName": {
-							"type": "string"
-						},
-						"date": {
-							"type": "string"
-						},
-						"useTime": {
-							"type": "boolean"
-						},
-						"durationHours": {
-							"type": "null"
-						},
-						"employeeSpecifiedDurationHours": {
-							"type": "null"
-						},
-						"startTimeOfDay": {
-							"type": "string"
-						},
-						"employeeSpecifiedStartTimeOfDay": {
-							"type": "null"
-						},
-						"endTimeOfDay": {
-							"type": "string"
-						},
-						"employeeSpecifiedEndTimeOfDay": {
-							"type": "null"
-						},
-						"timePeriodAlerts": {
-							"type": "array"
-						},
-						"breaks": {
+						"headers": {
 							"type": "array",
 							"items": {
 								"type": "object",
 								"properties": {
-									"description": {
+									"title": {
 										"type": "string"
 									},
-									"startTimeOfDay": {
-										"type": "string"
+									"filterDisabled": {
+										"type": "boolean"
 									},
-									"employeeSpecifiedStartTimeOfDay": {
-										"type": "null"
+									"sortDisabled": {
+										"type": "boolean"
 									},
-									"endTimeOfDay": {
-										"type": "string"
+									"hiddenByDefault": {
+										"type": "boolean"
 									},
-									"employeeSpecifiedEndTimeOfDay": {
-										"type": "null"
-									},
-									"durationHours": {
-										"type": "null"
-									},
-									"employeeSpecifiedDurationHours": {
-										"type": "null"
-									}
-								}
-							}
-						},
-						"tasks": {
-							"type": "array"
-						},
-						"workOrderTasks": {
-							"type": "array"
-						},
-						"assets": {
-							"type": "array"
-						},
-						"notes": {
-							"type": "null"
-						},
-						"timePeriodMode": {
-							"type": "string"
-						},
-						"status": {
-							"type": "string"
-						},
-						"approvals": {
-							"type": "array"
-						},
-						"publicHolidayWorked": {
-							"type": "null"
-						},
-						"timeClockEvents": {
-							"type": "array"
-						},
-						"customFields": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"customFieldId": {
-										"type": "string"
-									},
-									"targetEntity": {
-										"type": "integer"
+									"searchDisabled": {
+										"type": "boolean"
 									},
 									"dataType": {
 										"type": "string"
 									},
-									"value": {
-										"type": "null"
-									},
-									"name": {
+									"fieldName": {
 										"type": "string"
 									},
-									"displayName": {
-										"type": "string"
-									},
-									"description": {
-										"type": "string"
-									},
-									"enabled": {
-										"type": "boolean"
-									},
-									"global": {
-										"type": "boolean"
-									},
-									"options": {
-										"type": "array"
-									},
-									"isMandatory": {
-										"type": "boolean"
-									},
-									"order": {
+									"defaultPivotColumnOrder": {
 										"type": "integer"
 									},
-									"dateDriven": {
-										"type": "boolean"
+									"defaultPivotRowOrder": {
+										"type": "integer"
 									},
-									"timeBased": {
-										"type": "boolean"
+									"defaultPivotValueOrder": {
+										"type": "integer"
 									},
-									"displayOnTimesheetSummary": {
-										"type": "boolean"
+									"defaultSortOrder": {
+										"type": "integer"
 									},
-									"preventMultipleEntries": {
-										"type": "boolean"
+									"defaultSortDirection": {
+										"type": "string"
 									},
-									"timePeriodMode": {
+									"defaultPivotAggregation": {
 										"type": "null"
 									},
-									"inheritTimesheetPeriod": {
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
 										"type": "null"
 									},
-									"customFieldDisplayStatus": {
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
 										"type": "null"
 									}
 								}
 							}
 						},
-						"totalBreakHours": {
-							"type": "number"
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"organisationName": {
+										"type": "string"
+									},
+									"glCode": {
+										"type": "string"
+									},
+									"exportCode": {
+										"type": "null"
+									},
+									"employeeNumber": {
+										"type": "string"
+									},
+									"printName": {
+										"type": "string"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"surname": {
+										"type": "string"
+									},
+									"employmentStatus": {
+										"type": "string"
+									},
+									"payCalendar": {
+										"type": "string"
+									},
+									"date": {
+										"type": "string"
+									},
+									"approvalStatus": {
+										"type": "string"
+									},
+									"type": {
+										"type": "string"
+									},
+									"leaveType": {
+										"type": "null"
+									},
+									"leaveReason": {
+										"type": "null"
+									},
+									"project": {
+										"type": "string"
+									},
+									"projectCode": {
+										"type": "string"
+									},
+									"role": {
+										"type": "string"
+									},
+									"roleCode": {
+										"type": "null"
+									},
+									"location": {
+										"type": "string"
+									},
+									"locationCode": {
+										"type": "string"
+									},
+									"department": {
+										"type": "string"
+									},
+									"departmentCode": {
+										"type": "null"
+									},
+									"shiftType": {
+										"type": "null"
+									},
+									"shiftTypeCode": {
+										"type": "null"
+									},
+									"workOrder": {
+										"type": "null"
+									},
+									"workOrderCode": {
+										"type": "null"
+									},
+									"durationHours": {
+										"type": "number"
+									},
+									"breakDurationHours": {
+										"type": "number"
+									},
+									"startTime": {
+										"type": "string"
+									},
+									"finishTime": {
+										"type": "string"
+									},
+									"submittedBy": {
+										"type": "null"
+									},
+									"submittedDateTime": {
+										"type": "string"
+									},
+									"approvers": {
+										"type": "string"
+									},
+									"approvedBy": {
+										"type": "null"
+									},
+									"approvalTime": {
+										"type": "null"
+									},
+									"notes": {
+										"type": "null"
+									},
+									"leaveTypeCode": {
+										"type": "null"
+									},
+									"leaveReasonCode": {
+										"type": "null"
+									},
+									"customFields": {
+										"type": "object",
+										"properties": {
+											"kmAllowance": {
+												"type": "null"
+											},
+											"staffMeeting": {
+												"type": "array"
+											}
+										}
+									},
+									"publicHolidayWorked": {
+										"type": "null"
+									}
+								}
+							}
 						},
-						"totalWorkedHours": {
-							"type": "number"
+						"extraReportData": {
+							"type": "array"
 						},
-						"allowEditing": {
-							"type": "boolean"
-						},
-						"submittedDateTime": {
+						"serverTime": {
 							"type": "string"
 						},
-						"lastUpdated": {
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
 							"type": "string"
 						}
 					}
@@ -886,43 +933,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Timesheet_sql')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sql_tnk001",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"param_TableName": {
-						"type": "string",
-						"defaultValue": "TimesheetReport"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().param_SchemaName",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().param_TableName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]"
 			]
 		},
 		{
@@ -1046,7 +1056,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/TimesheetDataFlow')]",
+			"name": "[concat(parameters('factoryName'), '/DefinitivTimesheet')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1055,73 +1065,83 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "TimesheetJson",
+								"referenceName": "Timesheet_dataset",
 								"type": "DatasetReference"
 							},
-							"name": "TimesheetReport"
+							"name": "jsoninput"
 						}
 					],
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "Timesheet_sql",
+								"referenceName": "SQLSink",
 								"type": "DatasetReference"
 							},
-							"name": "WritetoSQLDB"
+							"name": "WriteToSQLDB",
+							"description": "Export data to AzureSQLDatabaseTable"
 						}
 					],
-					"transformations": [],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
 					"scriptLines": [
 						"source(output(",
-						"          timesheetId as string,",
-						"          employeeId as string,",
-						"          employeeName as string,",
-						"          projectId as string,",
-						"          positionId as string,",
-						"          positionName as string,",
-						"          projectApprovalWorkflow as string[],",
-						"          projectName as string,",
-						"          projectWorkOrderId as string,",
-						"          workOrderName as string,",
-						"          roleId as string,",
-						"          roleName as string,",
-						"          departmentId as string,",
-						"          departmentName as string,",
-						"          locationId as string,",
-						"          locationName as string,",
-						"          shiftTypeId as string,",
-						"          shiftTypeName as string,",
-						"          date as string,",
-						"          useTime as boolean,",
-						"          durationHours as string,",
-						"          employeeSpecifiedDurationHours as string,",
-						"          startTimeOfDay as string,",
-						"          employeeSpecifiedStartTimeOfDay as string,",
-						"          endTimeOfDay as string,",
-						"          employeeSpecifiedEndTimeOfDay as string,",
-						"          timePeriodAlerts as string[],",
-						"          breaks as (description as string, startTimeOfDay as string, employeeSpecifiedStartTimeOfDay as string, endTimeOfDay as string, employeeSpecifiedEndTimeOfDay as string, durationHours as string, employeeSpecifiedDurationHours as string)[],",
-						"          tasks as string[],",
-						"          workOrderTasks as string[],",
-						"          assets as string[],",
-						"          notes as string,",
-						"          timePeriodMode as string,",
-						"          status as string,",
-						"          approvals as string[],",
-						"          publicHolidayWorked as string,",
-						"          timeClockEvents as string[],",
-						"          customFields as (customFieldId as string, targetEntity as integer, dataType as string, value as string, name as string, displayName as string, description as string, enabled as boolean, global as boolean, options as string[], isMandatory as boolean, order as integer, dateDriven as boolean, timeBased as boolean, displayOnTimesheetSummary as boolean, preventMultipleEntries as boolean, timePeriodMode as string, inheritTimesheetPeriod as string, customFieldDisplayStatus as string)[],",
-						"          totalBreakHours as double,",
-						"          totalWorkedHours as double,",
-						"          allowEditing as boolean,",
-						"          submittedDateTime as string,",
-						"          lastUpdated as string",
+						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+						"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, employmentStatus as string, payCalendar as string, date as string, approvalStatus as string, type as string, leaveType as string, leaveReason as string, project as string, projectCode as string, role as string, roleCode as string, location as string, locationCode as string, department as string, departmentCode as string, shiftType as string, shiftTypeCode as string, workOrder as string, workOrderCode as string, durationHours as double, breakDurationHours as double, startTime as string, finishTime as string, submittedBy as string, submittedDateTime as string, approvers as string, approvedBy as string, approvalTime as string, notes as string, leaveTypeCode as string, leaveReasonCode as string, customFields as (kmAllowance as string, staffMeeting as string[]), publicHolidayWorked as string)[],",
+						"          extraReportData as string[],",
+						"          serverTime as string,",
+						"          addFooterRow as boolean,",
+						"          addStatusBar as boolean,",
+						"          reportVariantTag as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
-						"     documentForm: 'documentPerLine') ~> TimesheetReport",
-						"TimesheetReport sink(allowSchemaDrift: true,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput foldDown(unroll(reportData),",
+						"     mapColumn(",
+						"          Organisation = reportData.organisationName,",
+						"          {Organisation GL Code} = reportData.glCode,",
+						"          {Emp No} = reportData.employeeNumber,",
+						"          {Print Name} = reportData.printName,",
+						"          {Employment Status} = reportData.employmentStatus,",
+						"          {Pay Calendar} = reportData.payCalendar,",
+						"          Date = reportData.date,",
+						"          {Approval Status} = reportData.approvalStatus,",
+						"          Type = reportData.type,",
+						"          {Leave Type} = reportData.leaveType,",
+						"          {Leave Reason} = reportData.leaveReason,",
+						"          Project = reportData.project,",
+						"          {Project Code} = reportData.projectCode,",
+						"          Role = reportData.role,",
+						"          {Role Code} = reportData.roleCode,",
+						"          Location = reportData.location,",
+						"          {Location Code} = reportData.locationCode,",
+						"          Department = reportData.department,",
+						"          {Department Code} = reportData.departmentCode,",
+						"          {Shift Type} = reportData.shiftType,",
+						"          {Shift Type Code} = reportData.shiftTypeCode,",
+						"          {Work Order} = reportData.workOrder,",
+						"          {Work Order Code} = reportData.workOrderCode,",
+						"          Duration = reportData.durationHours,",
+						"          {Break Duration} = reportData.breakDurationHours,",
+						"          {Start Time} = reportData.startTime,",
+						"          {Finish Time} = reportData.finishTime,",
+						"          {Submitted By} = reportData.submittedBy,",
+						"          {Submitted Time} = reportData.submittedDateTime,",
+						"          Approvers = reportData.approvers,",
+						"          {Approved By} = reportData.approvedBy,",
+						"          {Approval Time} = reportData.approvalTime,",
+						"          Notes = reportData.notes,",
+						"          {Leave Type Code} = reportData.leaveTypeCode,",
+						"          {Leave Reason Code} = reportData.leaveReasonCode,",
+						"          {Public Holiday Worked} = reportData.publicHolidayWorked",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",
@@ -1131,49 +1151,13 @@
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError',",
-						"     mapColumn(",
-						"          timesheetId,",
-						"          employeeId,",
-						"          employeeName,",
-						"          projectId,",
-						"          positionId,",
-						"          positionName,",
-						"          projectName,",
-						"          projectWorkOrderId,",
-						"          workOrderName,",
-						"          roleId,",
-						"          roleName,",
-						"          departmentId,",
-						"          departmentName,",
-						"          locationId,",
-						"          locationName,",
-						"          shiftTypeId,",
-						"          shiftTypeName,",
-						"          date,",
-						"          useTime,",
-						"          durationHours,",
-						"          employeeSpecifiedDurationHours,",
-						"          startTimeOfDay,",
-						"          employeeSpecifiedStartTimeOfDay,",
-						"          endTimeOfDay,",
-						"          employeeSpecifiedEndTimeOfDay,",
-						"          notes,",
-						"          timePeriodMode,",
-						"          status,",
-						"          publicHolidayWorked,",
-						"          totalBreakHours,",
-						"          totalWorkedHours,",
-						"          allowEditing,",
-						"          submittedDateTime,",
-						"          lastUpdated",
-						"     )) ~> WritetoSQLDB"
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/TimesheetJson')]",
-				"[concat(variables('factoryId'), '/datasets/Timesheet_sql')]"
+				"[concat(variables('factoryId'), '/datasets/Timesheet_dataset')]",
+				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
 			]
 		}
 	]
