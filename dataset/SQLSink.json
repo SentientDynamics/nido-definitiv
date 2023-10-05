@@ -1,5 +1,5 @@
 {
-	"name": "Timesheet_sql",
+	"name": "SQLSink",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sql_tnk001",
@@ -11,8 +11,7 @@
 				"defaultValue": "dbo"
 			},
 			"param_TableName": {
-				"type": "string",
-				"defaultValue": "TimesheetReport"
+				"type": "string"
 			}
 		},
 		"annotations": [],
