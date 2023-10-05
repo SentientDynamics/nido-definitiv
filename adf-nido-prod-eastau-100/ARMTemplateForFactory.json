@@ -4891,7 +4891,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "Timesheet_dataset",
+											"referenceName": "Timesheet_ds",
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
@@ -5055,7 +5055,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "TimesheetReport"
+						"defaultValue": "Definitiv_Timesheet"
 					}
 				},
 				"folder": {
@@ -5070,7 +5070,7 @@
 				"[concat(variables('factoryId'), '/dataflows/DefinitivTimesheet')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
-				"[concat(variables('factoryId'), '/datasets/Timesheet_dataset')]",
+				"[concat(variables('factoryId'), '/datasets/Timesheet_ds')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]"
 			]
 		},
@@ -6507,7 +6507,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Timesheet_dataset')]",
+			"name": "[concat(parameters('factoryName'), '/Timesheet_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -7510,7 +7510,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Timesheet_dataset",
+								"referenceName": "Timesheet_ds",
 								"type": "DatasetReference"
 							},
 							"name": "jsoninput"
@@ -7602,7 +7602,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/Timesheet_dataset')]",
+				"[concat(variables('factoryId'), '/datasets/Timesheet_ds')]",
 				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
 			]
 		},

@@ -4805,7 +4805,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "Timesheet_dataset",
+											"referenceName": "Timesheet_ds",
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
@@ -4969,7 +4969,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "TimesheetReport"
+						"defaultValue": "Definitiv_Timesheet"
 					}
 				},
 				"folder": {
