@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_Timesheets",
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_Timesheets_original",
 					"type": "PipelineReference"
 				},
 				"parameters": {
