@@ -1,5 +1,5 @@
 {
-	"name": "Timesheet_dataset",
+	"name": "Timesheet_ds",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls2_stnidoprodeastau100",

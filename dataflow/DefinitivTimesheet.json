@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Timesheet_dataset",
+						"referenceName": "Timesheet_ds",
 						"type": "DatasetReference"
 					},
 					"name": "jsoninput"
