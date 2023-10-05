@@ -1,15 +1,16 @@
 {
-	"name": "DefinitivTimesheet",
+	"name": "DefinitivTimesheets",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Timesheet_ds",
+						"referenceName": "Timesheets_ds",
 						"type": "DatasetReference"
 					},
-					"name": "jsoninput"
+					"name": "jsoninput",
+					"description": "Import data from Timesheets_ds"
 				}
 			],
 			"sinks": [
