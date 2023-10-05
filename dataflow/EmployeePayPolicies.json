@@ -1,5 +1,5 @@
 {
-	"name": "DefinitivPayPolicy",
+	"name": "EmployeePayPolicies",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {

@@ -1,5 +1,5 @@
 {
-	"name": "pl_CopyFromApiToDefinitivSchema_EmploymeePayPolicies",
+	"name": "pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies",
 	"properties": {
 		"activities": [
 			{
@@ -202,7 +202,7 @@
 				}
 			},
 			{
-				"name": "DefinitivPayPolicies",
+				"name": "EmployeePayPolicies",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -222,7 +222,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "DefinitivPayPolicy",
+						"referenceName": "EmployeePayPolicies",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"jsoninput": {
