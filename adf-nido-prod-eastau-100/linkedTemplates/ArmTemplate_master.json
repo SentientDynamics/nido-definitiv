@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
 		"ls_sql_tnk001_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sql_tnk001'"
@@ -131,11 +135,11 @@
 			"type": "string",
 			"defaultValue": "CustomReportRosters"
 		},
-		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
+		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_original_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
 		},
-		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
+		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_original_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "CustomReportTimesheets"
 		},
@@ -238,6 +242,9 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
 					"ls_sql_tnk001_connectionString": {
 						"value": "[parameters('ls_sql_tnk001_connectionString')]"
 					},
@@ -324,6 +331,26 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "adf-nido-prod-eastau-100_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1": {
 						"value": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1')]"
@@ -378,26 +405,6 @@
 					},
 					"tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_TableName": {
 						"value": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_TableName')]"
-					}
-				}
-			},
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_0')]"
-			]
-		},
-		{
-			"name": "adf-nido-prod-eastau-100_ArmTemplate_2",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-02-01",
-			"properties": {
-				"mode": "incremental",
-				"templateLink": {
-					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"factoryName": {
-						"value": "[parameters('factoryName')]"
 					},
 					"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_SchemaName": {
 						"value": "[parameters('tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_SchemaName')]"
@@ -417,11 +424,11 @@
 					"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
 						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
 					},
-					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
-						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName')]"
+					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_original_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_original_parameters_param_SchemaName')]"
 					},
-					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
-						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName')]"
+					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_original_parameters_param_TableName": {
+						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_original_parameters_param_TableName')]"
 					},
 					"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
 						"value": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]"

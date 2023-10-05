@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
 		"ls_sql_tnk001_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sql_tnk001'"
@@ -344,8 +348,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"parameters": {
 					"PipelineName": {
@@ -442,8 +445,7 @@
 					}
 				],
 				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
+					"elapsedTimeMetric": {}
 				},
 				"parameters": {
 					"PipelineName": {
@@ -498,6 +500,25 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -592,6 +613,286 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TimesheetJson')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"timesheetId": {
+							"type": "string"
+						},
+						"employeeId": {
+							"type": "string"
+						},
+						"employeeName": {
+							"type": "string"
+						},
+						"projectId": {
+							"type": "string"
+						},
+						"positionId": {
+							"type": "null"
+						},
+						"positionName": {
+							"type": "null"
+						},
+						"projectApprovalWorkflow": {
+							"type": "array"
+						},
+						"projectName": {
+							"type": "string"
+						},
+						"projectWorkOrderId": {
+							"type": "null"
+						},
+						"workOrderName": {
+							"type": "null"
+						},
+						"roleId": {
+							"type": "string"
+						},
+						"roleName": {
+							"type": "string"
+						},
+						"departmentId": {
+							"type": "string"
+						},
+						"departmentName": {
+							"type": "string"
+						},
+						"locationId": {
+							"type": "string"
+						},
+						"locationName": {
+							"type": "string"
+						},
+						"shiftTypeId": {
+							"type": "null"
+						},
+						"shiftTypeName": {
+							"type": "string"
+						},
+						"date": {
+							"type": "string"
+						},
+						"useTime": {
+							"type": "boolean"
+						},
+						"durationHours": {
+							"type": "null"
+						},
+						"employeeSpecifiedDurationHours": {
+							"type": "null"
+						},
+						"startTimeOfDay": {
+							"type": "string"
+						},
+						"employeeSpecifiedStartTimeOfDay": {
+							"type": "null"
+						},
+						"endTimeOfDay": {
+							"type": "string"
+						},
+						"employeeSpecifiedEndTimeOfDay": {
+							"type": "null"
+						},
+						"timePeriodAlerts": {
+							"type": "array"
+						},
+						"breaks": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"description": {
+										"type": "string"
+									},
+									"startTimeOfDay": {
+										"type": "string"
+									},
+									"employeeSpecifiedStartTimeOfDay": {
+										"type": "null"
+									},
+									"endTimeOfDay": {
+										"type": "string"
+									},
+									"employeeSpecifiedEndTimeOfDay": {
+										"type": "null"
+									},
+									"durationHours": {
+										"type": "null"
+									},
+									"employeeSpecifiedDurationHours": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"tasks": {
+							"type": "array"
+						},
+						"workOrderTasks": {
+							"type": "array"
+						},
+						"assets": {
+							"type": "array"
+						},
+						"notes": {
+							"type": "null"
+						},
+						"timePeriodMode": {
+							"type": "string"
+						},
+						"status": {
+							"type": "string"
+						},
+						"approvals": {
+							"type": "array"
+						},
+						"publicHolidayWorked": {
+							"type": "null"
+						},
+						"timeClockEvents": {
+							"type": "array"
+						},
+						"customFields": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"customFieldId": {
+										"type": "string"
+									},
+									"targetEntity": {
+										"type": "integer"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"value": {
+										"type": "null"
+									},
+									"name": {
+										"type": "string"
+									},
+									"displayName": {
+										"type": "string"
+									},
+									"description": {
+										"type": "string"
+									},
+									"enabled": {
+										"type": "boolean"
+									},
+									"global": {
+										"type": "boolean"
+									},
+									"options": {
+										"type": "array"
+									},
+									"isMandatory": {
+										"type": "boolean"
+									},
+									"order": {
+										"type": "integer"
+									},
+									"dateDriven": {
+										"type": "boolean"
+									},
+									"timeBased": {
+										"type": "boolean"
+									},
+									"displayOnTimesheetSummary": {
+										"type": "boolean"
+									},
+									"preventMultipleEntries": {
+										"type": "boolean"
+									},
+									"timePeriodMode": {
+										"type": "null"
+									},
+									"inheritTimesheetPeriod": {
+										"type": "null"
+									},
+									"customFieldDisplayStatus": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"totalBreakHours": {
+							"type": "number"
+						},
+						"totalWorkedHours": {
+							"type": "number"
+						},
+						"allowEditing": {
+							"type": "boolean"
+						},
+						"submittedDateTime": {
+							"type": "string"
+						},
+						"lastUpdated": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Timesheet_sql')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_tnk001",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "TimesheetReport"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().param_SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().param_TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]"
 			]
 		},
 		{
@@ -715,360 +1016,143 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/df_Employees')]",
+			"name": "[concat(parameters('factoryName'), '/TimesheetDataFlow')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"folder": {
-					"name": "05_Employees"
-				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"referenceName": "TimesheetJson",
 								"type": "DatasetReference"
 							},
-							"name": "sourceJson"
+							"name": "TimesheetReport"
 						}
 					],
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sql_tnk001",
+								"referenceName": "Timesheet_sql",
 								"type": "DatasetReference"
 							},
-							"name": "sinkSqlEmployee",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSqlEmployeePaymentAccounts",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSqlEmployeePhoneNumbers",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSqlEmployeeStreetAddresses",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSqlEmployeeSuperAccounts",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSqlEmployeeSuperContributions",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSqlEmployeeTaxDeclaration",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [
-						{
-							"name": "castDateColumns1"
-						},
-						{
-							"name": "selectPaymentAccounts"
-						},
-						{
-							"name": "flattenPaymentAccounts"
-						},
-						{
-							"name": "selectEmployee"
-						},
-						{
-							"name": "selectPhoneNumbers"
-						},
-						{
-							"name": "flattenPhoneNumbers"
-						},
-						{
-							"name": "selectStreetAddresses"
-						},
-						{
-							"name": "flattenStreetAddresses"
-						},
-						{
-							"name": "selectSuperAccounts"
-						},
-						{
-							"name": "flattenSuperAccounts"
-						},
-						{
-							"name": "selectSuperContributions"
-						},
-						{
-							"name": "flattenSuperContributions"
-						},
-						{
-							"name": "selectTaxDeclarationObject"
-						},
-						{
-							"name": "selectTaxDeclarationItems"
-						},
-						{
-							"name": "castDateColumns7"
-						},
-						{
-							"name": "castDateColumns6"
-						},
-						{
-							"name": "castDateColumns5"
-						},
-						{
-							"name": "castDateColumns4"
-						},
-						{
-							"name": "castDateColumns3"
-						},
-						{
-							"name": "castDateColumns2"
-						}
-					],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Employees\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tdateOfBirth as date,\n\t\temailAddress as string,\n\t\temployeeId as string,\n\t\temployeeNumber as integer,\n\t\tfirstName as string,\n\t\tgender as string,\n\t\thiredDate as date,\n\t\tlastModified as string,\n\t\tmiddleName as string,\n\t\torganization as (name as string, organizationId as string),\n\t\torganizationId as string,\n\t\tpaymentAccounts as (bankAccount as (accountName as string, accountNumber as integer, bsb as string, reference as string), employeePaymentAccountId as string, paySplit as (amount as double, type as string), sortOrder as boolean)[],\n\t\tphoneNumbers as (type as string, value as string)[],\n\t\tpreferredName as string,\n\t\tstreetAddresses as (components as string, coordinate as string, countryCode as string, fullAddress as string, postCode as short, state as string, street as string, suburb as string, type as string)[],\n\t\tsuperAccounts as (ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, fundABN as long, fundESA as string, fundName as string, fundType as string, fundUSI as string, membershipNumber as string, smsfBankAccount as (accountName as string, accountNumber as integer, bsb as integer, reference as string))[],\n\t\tsuperContributions as (amount as double, ceaseDate as string, commencementDate as string, employeeId as string, employeeSuperannuationAccountId as string, employeeSuperannuationContributionId as string, minimumAmount as string, payItemDescription as string, payItemId as string, valueType as string)[],\n\t\tsurname as string,\n\t\ttaxDeclaration as (australianResidentForTaxPurposes as boolean, canEdit as boolean, claimDependantsOrSpecialTaxOffset as boolean, claimMedicareLevyVariation as boolean, claimSeniorsPensionersOffset as boolean, claimTaxFreeThreshold as boolean, effectiveDate as string, employeeId as string, employeeTaxDeclarationId as string, financialSupplementDebt as boolean, helpDebt as boolean, lodgementDate as string, lodgementStatus as string, signatureDate as string, signaturePresent as string, taxFileNumber as integer, taxFileNumberExemption as string, workingHolidayMaker as boolean),\n\t\ttitle as string,\n\t\tusername as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nselectEmployee derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%')||like(name,'%lastModified%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns1\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tpaymentAccounts,\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectPaymentAccounts\nselectPaymentAccounts foldDown(unroll(paymentAccounts),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\temployeePaymentAccountId = paymentAccounts.employeePaymentAccountId,\n\t\tsortOrder = paymentAccounts.sortOrder,\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tSourceFileName,\n\t\tevery(paymentAccounts.bankAccount,match(true()),\n\t\t\t$0 = $$),\n\t\tevery(paymentAccounts.paySplit,match(true()),\n\t\t\t$0 = $$)\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenPaymentAccounts\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tdateOfBirth,\n\t\temailAddress,\n\t\temployeeNumber,\n\t\tfirstName,\n\t\tgender,\n\t\thiredDate,\n\t\tlastModified,\n\t\tmiddleName,\n\t\tpreferredName,\n\t\tsurname,\n\t\ttitle,\n\t\tusername,\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectEmployee\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tphoneNumbers,\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectPhoneNumbers\nselectPhoneNumbers foldDown(unroll(phoneNumbers),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\ttype = phoneNumbers.type,\n\t\tvalue = phoneNumbers.value,\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenPhoneNumbers\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tstreetAddresses,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectStreetAddresses\nselectStreetAddresses foldDown(unroll(streetAddresses),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tcomponents = streetAddresses.components,\n\t\tcoordinate = streetAddresses.coordinate,\n\t\tcountryCode = streetAddresses.countryCode,\n\t\tfullAddress = streetAddresses.fullAddress,\n\t\tpostCode = streetAddresses.postCode,\n\t\tstate = streetAddresses.state,\n\t\tstreet = streetAddresses.street,\n\t\tsuburb = streetAddresses.suburb,\n\t\ttype = streetAddresses.type,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenStreetAddresses\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tsuperAccounts,\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectSuperAccounts\nselectSuperAccounts foldDown(unroll(superAccounts),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tceaseDate = superAccounts.ceaseDate,\n\t\tcommencementDate = superAccounts.commencementDate,\n\t\t{superAccounts.employeeId} = superAccounts.employeeId,\n\t\temployeeSuperannuationAccountId = superAccounts.employeeSuperannuationAccountId,\n\t\tfundABN = superAccounts.fundABN,\n\t\tfundESA = superAccounts.fundESA,\n\t\tfundName = superAccounts.fundName,\n\t\tfundType = superAccounts.fundType,\n\t\tfundUSI = superAccounts.fundUSI,\n\t\tmembershipNumber = superAccounts.membershipNumber,\n\t\t{smsfBankAccount.accountName} = superAccounts.smsfBankAccount.accountName,\n\t\t{smsfBankAccount.accountNumber} = superAccounts.smsfBankAccount.accountNumber,\n\t\t{smsfBankAccount.bsb} = superAccounts.smsfBankAccount.bsb,\n\t\t{smsfBankAccount.reference} = superAccounts.smsfBankAccount.reference,\n\t\tpipelineRunId = PipelineRunId,\n\t\tpipelineTriggerTime = PipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenSuperAccounts\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tsuperContributions,\n\t\tPipelineName,\n\t\tpipelineRunId = PipelineRunId,\n\t\tpipelineTriggerTime = PipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectSuperContributions\nselectSuperContributions foldDown(unroll(superContributions),\n\tmapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\tamount = superContributions.amount,\n\t\tceaseDate = superContributions.ceaseDate,\n\t\tcommencementDate = superContributions.commencementDate,\n\t\t{superContributions.employeeId} = superContributions.employeeId,\n\t\temployeeSuperannuationAccountId = superContributions.employeeSuperannuationAccountId,\n\t\temployeeSuperannuationContributionId = superContributions.employeeSuperannuationContributionId,\n\t\tminimumAmount = superContributions.minimumAmount,\n\t\tpayItemDescription = superContributions.payItemDescription,\n\t\tpayItemId = superContributions.payItemId,\n\t\tvalueType = superContributions.valueType,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenSuperContributions\nsourceJson select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\ttaxDeclaration,\n\t\tPipelineName,\n\t\tpipelineRunId = PipelineRunId,\n\t\tpipelineTriggerTime = PipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectTaxDeclarationObject\nselectTaxDeclarationObject select(mapColumn(\n\t\temployeeId,\n\t\torganizationId,\n\t\ttaxDeclaration = taxDeclaration.australianResidentForTaxPurposes,\n\t\tcanEdit = taxDeclaration.canEdit,\n\t\tclaimDependantsOrSpecialTaxOffset = taxDeclaration.claimDependantsOrSpecialTaxOffset,\n\t\tclaimMedicareLevyVariation = taxDeclaration.claimMedicareLevyVariation,\n\t\tclaimSeniorsPensionersOffset = taxDeclaration.claimSeniorsPensionersOffset,\n\t\tclaimTaxFreeThreshold = taxDeclaration.claimTaxFreeThreshold,\n\t\teffectiveDate = taxDeclaration.effectiveDate,\n\t\t{taxDeclaration.employeeId} = taxDeclaration.employeeId,\n\t\temployeeTaxDeclarationId = taxDeclaration.employeeTaxDeclarationId,\n\t\tfinancialSupplementDebt = taxDeclaration.financialSupplementDebt,\n\t\thelpDebt = taxDeclaration.helpDebt,\n\t\tlodgementDate = taxDeclaration.lodgementDate,\n\t\tlodgementStatus = taxDeclaration.lodgementStatus,\n\t\tsignatureDate = taxDeclaration.signatureDate,\n\t\tsignaturePresent = taxDeclaration.signaturePresent,\n\t\ttaxFileNumber = taxDeclaration.taxFileNumber,\n\t\ttaxFileNumberExemption = taxDeclaration.taxFileNumberExemption,\n\t\tworkingHolidayMaker = taxDeclaration.workingHolidayMaker,\n\t\tPipelineName,\n\t\tpipelineRunId,\n\t\tpipelineTriggerTime,\n\t\tSourceFileName\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> selectTaxDeclarationItems\nselectTaxDeclarationItems derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns7\nflattenSuperContributions derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns6\nflattenSuperAccounts derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns5\nflattenStreetAddresses derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns4\nflattenPhoneNumbers derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns3\nflattenPaymentAccounts derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns2\ncastDateColumns1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployee\ncastDateColumns2 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 7,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeePaymentAccounts\ncastDateColumns3 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 6,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeePhoneNumbers\ncastDateColumns4 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 5,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeeStreetAddresses\ncastDateColumns5 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 4,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeeSuperAccounts\ncastDateColumns6 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 3,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeeSuperContributions\ncastDateColumns7 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 2,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSqlEmployeeTaxDeclaration"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_EmploymentHistory')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "05_Employees"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "sourceJson"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSql"
+							"name": "WritetoSQLDB"
 						}
 					],
 					"transformations": [],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_EmploymentHistory\")\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sinkSql"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_LeaveApplications')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "06_Leave"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "sourceJson"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSql",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [
-						{
-							"name": "castDateColumns"
-						}
-					],
 					"scriptLines": [
-						"parameters{",
-						"     param_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),",
-						"     param_ErrorRowDirectory as string (\"ErrorRows\"),",
-						"     param_DataflowName as string (\"df_LeaveApplications\")",
-						"}",
 						"source(output(",
-						"          {Org.OrganizationId} as string,",
-						"          PipelineName as string,",
-						"          PipelineRunId as string,",
-						"          PipelineTriggerTime as string,",
-						"          approvers as string,",
-						"          dateSubmitted as date,",
+						"          timesheetId as string,",
 						"          employeeId as string,",
-						"          employeeNumber as integer,",
-						"          firstName as string,",
-						"          gender as string,",
-						"          leaveApplicationId as string,",
-						"          leaveDateEnd as date,",
-						"          leaveDateStart as date,",
-						"          leaveNotes as string,",
-						"          leavePaymentStatus as string,",
-						"          leaveReasonName as string,",
-						"          leaveTypeId as string,",
-						"          leaveTypeName as string,",
-						"          leaveUnitOfMeasure as string,",
-						"          leaveUnits as double,",
-						"          numberOfDays as short,",
-						"          organizationId as string,",
-						"          printName as string,",
+						"          employeeName as string,",
+						"          projectId as string,",
+						"          positionId as string,",
+						"          positionName as string,",
+						"          projectApprovalWorkflow as string[],",
+						"          projectName as string,",
+						"          projectWorkOrderId as string,",
+						"          workOrderName as string,",
+						"          roleId as string,",
+						"          roleName as string,",
+						"          departmentId as string,",
+						"          departmentName as string,",
+						"          locationId as string,",
+						"          locationName as string,",
+						"          shiftTypeId as string,",
+						"          shiftTypeName as string,",
+						"          date as string,",
+						"          useTime as boolean,",
+						"          durationHours as string,",
+						"          employeeSpecifiedDurationHours as string,",
+						"          startTimeOfDay as string,",
+						"          employeeSpecifiedStartTimeOfDay as string,",
+						"          endTimeOfDay as string,",
+						"          employeeSpecifiedEndTimeOfDay as string,",
+						"          timePeriodAlerts as string[],",
+						"          breaks as (description as string, startTimeOfDay as string, employeeSpecifiedStartTimeOfDay as string, endTimeOfDay as string, employeeSpecifiedEndTimeOfDay as string, durationHours as string, employeeSpecifiedDurationHours as string)[],",
+						"          tasks as string[],",
+						"          workOrderTasks as string[],",
+						"          assets as string[],",
+						"          notes as string,",
+						"          timePeriodMode as string,",
 						"          status as string,",
-						"          surname as string",
+						"          approvals as string[],",
+						"          publicHolidayWorked as string,",
+						"          timeClockEvents as string[],",
+						"          customFields as (customFieldId as string, targetEntity as integer, dataType as string, value as string, name as string, displayName as string, description as string, enabled as boolean, global as boolean, options as string[], isMandatory as boolean, order as integer, dateDriven as boolean, timeBased as boolean, displayOnTimesheetSummary as boolean, preventMultipleEntries as boolean, timePeriodMode as string, inheritTimesheetPeriod as string, customFieldDisplayStatus as string)[],",
+						"          totalBreakHours as double,",
+						"          totalWorkedHours as double,",
+						"          allowEditing as boolean,",
+						"          submittedDateTime as string,",
+						"          lastUpdated as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     inferDriftedColumnTypes: true,",
 						"     ignoreNoFilesFound: false,",
-						"     rowUrlColumn: 'SourceFileName',",
-						"     documentForm: 'documentPerLine') ~> sourceJson",
-						"sourceJson derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns",
-						"castDateColumns sink(allowSchemaDrift: true,",
+						"     documentForm: 'documentPerLine') ~> TimesheetReport",
+						"TimesheetReport sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
-						"     recreate:true,",
+						"     truncate:true,",
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'allErrors',",
-						"     outputRejectedData: true,",
-						"     rejectedData_fileSystem: ($param_FileSystem),",
-						"     rejectedData_folderPath: ($param_ErrorRowDirectory),",
-						"     transactionCommit: 'batch',",
-						"     reportSuccessOnError: true) ~> sinkSql"
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          timesheetId,",
+						"          employeeId,",
+						"          employeeName,",
+						"          projectId,",
+						"          positionId,",
+						"          positionName,",
+						"          projectApprovalWorkflow,",
+						"          projectName,",
+						"          projectWorkOrderId,",
+						"          workOrderName,",
+						"          roleId,",
+						"          roleName,",
+						"          departmentId,",
+						"          departmentName,",
+						"          locationId,",
+						"          locationName,",
+						"          shiftTypeId,",
+						"          shiftTypeName,",
+						"          date,",
+						"          useTime,",
+						"          durationHours,",
+						"          employeeSpecifiedDurationHours,",
+						"          startTimeOfDay,",
+						"          employeeSpecifiedStartTimeOfDay,",
+						"          endTimeOfDay,",
+						"          employeeSpecifiedEndTimeOfDay,",
+						"          timePeriodAlerts,",
+						"          breaks,",
+						"          tasks,",
+						"          workOrderTasks,",
+						"          assets,",
+						"          notes,",
+						"          timePeriodMode,",
+						"          status,",
+						"          approvals,",
+						"          publicHolidayWorked,",
+						"          timeClockEvents,",
+						"          customFields,",
+						"          totalBreakHours,",
+						"          totalWorkedHours,",
+						"          allowEditing,",
+						"          submittedDateTime,",
+						"          lastUpdated",
+						"     )) ~> WritetoSQLDB"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_OrgPayRuns')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "07_PayRuns"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "sourceJson"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSql",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [
-						{
-							"name": "flattenPayRuns"
-						},
-						{
-							"name": "castDateColumns"
-						}
-					],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_OrgPayRuns\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerId as string,\n\t\tPipelineTriggerTime as string,\n\t\tcurrentFinancialYearEndDate as string,\n\t\tcurrentFinancialYearStartDate as string,\n\t\tpayCalendars as (atoLodgementsEnabled as boolean, description as string, payCalendarId as string, period as string, periodStartDate as string, proRataMode as string, weeklyFactor as double, weeklyFactorEquation as short)[],\n\t\tpayRuns as (backPayDateOverride as string, dateLastCalculated as string, dateOpened as string, datePublished as string, employeeCount as short, eofyLodgementStatus as string, financialYearEndDate as string, financialYearStartDate as string, initiatingUserId as string, initiatingUserName as string, lodgementStatus as string, notes as string, payCalendarId as string, payCalendarName as string, payRunId as string, paymentDate as string, payslipGenerationStatus as string, periodEnd as string, periodStart as string, publishingUserId as string, publishingUserName as string, runNumber as short, status as string, superannuationPaymentDate as string, type as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson foldDown(unroll(payRuns),\n\tmapColumn(\n\t\tbackPayDateOverride = payRuns.backPayDateOverride,\n\t\tdateLastCalculated = payRuns.dateLastCalculated,\n\t\tdateOpened = payRuns.dateOpened,\n\t\tdatePublished = payRuns.datePublished,\n\t\temployeeCount = payRuns.employeeCount,\n\t\teofyLodgementStatus = payRuns.eofyLodgementStatus,\n\t\tfinancialYearEndDate = payRuns.financialYearEndDate,\n\t\tfinancialYearStartDate = payRuns.financialYearStartDate,\n\t\tinitiatingUserId = payRuns.initiatingUserId,\n\t\tinitiatingUserName = payRuns.initiatingUserName,\n\t\tlodgementStatus = payRuns.lodgementStatus,\n\t\tnotes = payRuns.notes,\n\t\tpayCalendarId = payRuns.payCalendarId,\n\t\tpayCalendarName = payRuns.payCalendarName,\n\t\tpayRunId = payRuns.payRunId,\n\t\tpaymentDate = payRuns.paymentDate,\n\t\tpayslipGenerationStatus = payRuns.payslipGenerationStatus,\n\t\tperiodEnd = payRuns.periodEnd,\n\t\tperiodStart = payRuns.periodStart,\n\t\tpublishingUserId = payRuns.publishingUserId,\n\t\tpublishingUserName = payRuns.publishingUserName,\n\t\trunNumber = payRuns.runNumber,\n\t\tstatus = payRuns.status,\n\t\tsuperannuationPaymentDate = payRuns.superannuationPaymentDate,\n\t\ttype = payRuns.type,\n\t\t{Org.LegalName},\n\t\t{Org.OrganizationId},\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenPayRuns\nflattenPayRuns derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+				"[concat(variables('factoryId'), '/datasets/TimesheetJson')]",
+				"[concat(variables('factoryId'), '/datasets/Timesheet_sql')]"
 			]
 		}
 	]
