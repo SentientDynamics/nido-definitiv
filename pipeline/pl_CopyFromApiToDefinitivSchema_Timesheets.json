@@ -85,13 +85,9 @@
 									}
 								},
 								"sink": {
-									"type": "JsonSink",
-									"storeSettings": {
-										"type": "AzureBlobStorageWriteSettings"
-									},
-									"formatSettings": {
-										"type": "JsonWriteSettings"
-									}
+									"type": "AzureSqlSink",
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false
 								},
 								"enableStaging": false
 							},
@@ -109,8 +105,12 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "TimesheetJson",
-									"type": "DatasetReference"
+									"referenceName": "Timesheet_sql",
+									"type": "DatasetReference",
+									"parameters": {
+										"param_SchemaName": "dbo",
+										"param_TableName": "TimesheetReport"
+									}
 								}
 							]
 						},
@@ -203,6 +203,28 @@
 						"referenceName": "TimesheetDataFlow",
 						"type": "DataFlowReference",
 						"datasetParameters": {
+							"TimesheetReport": {
+								"ds_PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"ds_PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"ds_FileSystem": {
+									"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+									"type": "Expression"
+								},
+								"ds_Directory": {
+									"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+									"type": "Expression"
+								},
+								"ds_PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
 							"WritetoSQLDB": {
 								"param_SchemaName": "dbo",
 								"param_TableName": "TimesheetReport"
