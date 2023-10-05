@@ -75,7 +75,6 @@
 				"          Approvers = reportData.approvers,",
 				"          {Approved By} = reportData.approvedBy,",
 				"          {Approval Time} = reportData.approvalTime,",
-				"          Notes = reportData.notes,",
 				"          {Leave Type Code} = reportData.leaveTypeCode,",
 				"          {Leave Reason Code} = reportData.leaveReasonCode,",
 				"          {Public Holiday Worked} = reportData.publicHolidayWorked",
