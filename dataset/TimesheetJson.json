@@ -2,16 +2,14 @@
 	"name": "TimesheetJson",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureBlobStorage1",
+			"referenceName": "ls_adls2_stnidoprodeastau100",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
-				"fileName": "@dataset().Input_file_dataSet",
-				"container": "@dataset().Input_container"
+				"type": "AzureBlobFSLocation"
 			}
 		},
 		"schema": {
