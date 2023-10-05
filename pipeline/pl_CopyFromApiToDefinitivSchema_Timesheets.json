@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/timesheets?orgId=', \nitem().organizationId, \n'&start=',addDays(utcNow(),-35),\n'&end=',addDays(utcNow(),7),\n'&statusFilter=Approved'\n)",
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?fromDate=',addDays(utcNow(),-1),\n'&toDate',addDays(utcNow(),0),\n'&includeTerminated=true'\n)",
 											"type": "Expression"
 										}
 									}
@@ -109,8 +109,30 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "TimesheetJson",
-									"type": "DatasetReference"
+									"referenceName": "Timesheet_dataset",
+									"type": "DatasetReference",
+									"parameters": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						},
@@ -200,12 +222,34 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "TimesheetDataFlow",
+						"referenceName": "DefinitivTimesheet",
 						"type": "DataFlowReference",
 						"datasetParameters": {
-							"WritetoSQLDB": {
+							"jsoninput": {
+								"ds_PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"ds_PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"ds_FileSystem": {
+									"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+									"type": "Expression"
+								},
+								"ds_Directory": {
+									"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+									"type": "Expression"
+								},
+								"ds_PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "TimesheetReport"
+								"param_TableName": "Definitiv_Timesheet"
 							}
 						}
 					},
