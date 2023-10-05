@@ -4891,7 +4891,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "Timesheet_ds",
+											"referenceName": "Timesheets_ds",
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
@@ -5004,7 +5004,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "DefinitivTimesheet",
+								"referenceName": "DefinitivTimesheets",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -5032,7 +5032,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Timesheet"
+										"param_TableName": "Definitiv_Timesheets"
 									}
 								}
 							},
@@ -5055,7 +5055,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Timesheet"
+						"defaultValue": "Definitiv_Timesheets"
 					}
 				},
 				"folder": {
@@ -5067,10 +5067,10 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/DefinitivTimesheet')]",
+				"[concat(variables('factoryId'), '/dataflows/DefinitivTimesheets')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
-				"[concat(variables('factoryId'), '/datasets/Timesheet_ds')]",
+				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_monitoring_logic-nido-prod-eastau-101')]"
 			]
 		},
@@ -6507,7 +6507,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Timesheet_ds')]",
+			"name": "[concat(parameters('factoryName'), '/Timesheets_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -7501,7 +7501,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DefinitivTimesheet')]",
+			"name": "[concat(parameters('factoryName'), '/DefinitivTimesheets')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -7510,10 +7510,11 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Timesheet_ds",
+								"referenceName": "Timesheets_ds",
 								"type": "DatasetReference"
 							},
-							"name": "jsoninput"
+							"name": "jsoninput",
+							"description": "Import data from Timesheets_ds"
 						}
 					],
 					"sinks": [
@@ -7601,7 +7602,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/Timesheet_ds')]",
+				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]",
 				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
 			]
 		},

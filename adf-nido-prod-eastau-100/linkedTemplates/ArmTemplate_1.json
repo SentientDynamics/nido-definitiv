@@ -4805,7 +4805,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "Timesheet_ds",
+											"referenceName": "Timesheets_ds",
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
@@ -4918,7 +4918,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "DefinitivTimesheet",
+								"referenceName": "DefinitivTimesheets",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -4946,7 +4946,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Timesheet"
+										"param_TableName": "Definitiv_Timesheets"
 									}
 								}
 							},
@@ -4969,7 +4969,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Timesheet"
+						"defaultValue": "Definitiv_Timesheets"
 					}
 				},
 				"folder": {
