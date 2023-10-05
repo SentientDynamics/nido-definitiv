@@ -1,0 +1,307 @@
+{
+	"name": "EmployeePayPolicies_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls2_stnidoprodeastau100",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ds_PipelineTriggerTime": {
+				"type": "string",
+				"defaultValue": "2022-01-25T00:18:17.611502Z"
+			},
+			"ds_PipelineRunId": {
+				"type": "string",
+				"defaultValue": "187d99be-a307-4534-9acc-0a17fc03d0ab"
+			},
+			"ds_FileSystem": {
+				"type": "string",
+				"defaultValue": "container-adf-nido-prod-eastau-100-1"
+			},
+			"ds_Directory": {
+				"type": "string",
+				"defaultValue": "ds_adls2_stnidoprodeastau100_json_output"
+			},
+			"ds_PipelineName": {
+				"type": "string",
+				"defaultValue": "pl_B1_Payslips_ApiToDefinitiv"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().ds_FileSystem",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"headers": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"title": {
+								"type": "string"
+							},
+							"filterDisabled": {
+								"type": "boolean"
+							},
+							"sortDisabled": {
+								"type": "boolean"
+							},
+							"hiddenByDefault": {
+								"type": "boolean"
+							},
+							"searchDisabled": {
+								"type": "boolean"
+							},
+							"dataType": {
+								"type": "string"
+							},
+							"fieldName": {
+								"type": "string"
+							},
+							"defaultPivotColumnOrder": {
+								"type": "integer"
+							},
+							"defaultPivotRowOrder": {
+								"type": "integer"
+							},
+							"defaultPivotValueOrder": {
+								"type": "integer"
+							},
+							"defaultSortOrder": {
+								"type": "integer"
+							},
+							"defaultSortDirection": {
+								"type": "string"
+							},
+							"defaultPivotAggregation": {
+								"type": "null"
+							},
+							"isDynamicColumns": {
+								"type": "boolean"
+							},
+							"isCustomFields": {
+								"type": "boolean"
+							},
+							"customFieldsKeyName": {
+								"type": "null"
+							},
+							"createDayOfWeekColumn": {
+								"type": "boolean"
+							},
+							"prependBaseColumnNameToDayOfWeekColumn": {
+								"type": "boolean"
+							},
+							"trueText": {
+								"type": "null"
+							},
+							"falseText": {
+								"type": "null"
+							},
+							"nullDisplayText": {
+								"type": "null"
+							},
+							"disableDefaultAggregation": {
+								"type": "boolean"
+							},
+							"numericPrecision": {
+								"type": "null"
+							}
+						}
+					}
+				},
+				"reportData": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"employeeNumber": {
+								"type": "string"
+							},
+							"printName": {
+								"type": "string"
+							},
+							"title": {
+								"type": "string"
+							},
+							"firstName": {
+								"type": "string"
+							},
+							"surname": {
+								"type": "string"
+							},
+							"middleName": {
+								"type": "null"
+							},
+							"preferredName": {
+								"type": "string"
+							},
+							"gender": {
+								"type": "string"
+							},
+							"dateOfBirth": {
+								"type": "string"
+							},
+							"hireDate": {
+								"type": "string"
+							},
+							"hireReason": {
+								"type": "string"
+							},
+							"terminationDate": {
+								"type": "null"
+							},
+							"terminationReason": {
+								"type": "null"
+							},
+							"employmentStatus": {
+								"type": "string"
+							},
+							"payCalendar": {
+								"type": "string"
+							},
+							"policyCode": {
+								"type": "string"
+							},
+							"policyType": {
+								"type": "string"
+							},
+							"policyName": {
+								"type": "string"
+							},
+							"commencementDate": {
+								"type": "string"
+							},
+							"ceaseDate": {
+								"type": "null"
+							},
+							"payRateType": {
+								"type": "string"
+							},
+							"salary": {
+								"type": "null"
+							},
+							"salaryFte": {
+								"type": "null"
+							},
+							"totalPackage": {
+								"type": "null"
+							},
+							"totalPackageFte": {
+								"type": "null"
+							},
+							"weeklyHours": {
+								"type": "null"
+							},
+							"fullTimeEquivalentWeeklyHours": {
+								"type": "null"
+							},
+							"fullTimeEquivalentRatio": {
+								"type": "null"
+							},
+							"dailyRate": {
+								"type": "null"
+							},
+							"dailyHours": {
+								"type": "null"
+							},
+							"hourlyRate": {
+								"type": "number"
+							},
+							"allPurposeRate": {
+								"type": "number"
+							},
+							"payRates": {
+								"type": "array"
+							},
+							"primaryProject": {
+								"type": "string"
+							},
+							"primaryProjectCode": {
+								"type": "string"
+							},
+							"canOnlyWorkAssignedProjects": {
+								"type": "string"
+							},
+							"primaryRole": {
+								"type": "string"
+							},
+							"primaryRoleCode": {
+								"type": "null"
+							},
+							"primaryLocation": {
+								"type": "string"
+							},
+							"primaryLocationCode": {
+								"type": "string"
+							},
+							"primaryDepartment": {
+								"type": "string"
+							},
+							"primaryDepartmentCode": {
+								"type": "null"
+							},
+							"workSchedule": {
+								"type": "null"
+							},
+							"workScheduleDescription": {
+								"type": "null"
+							},
+							"shiftType": {
+								"type": "null"
+							},
+							"shiftTypeCode": {
+								"type": "null"
+							},
+							"usualPlaceOfResidence": {
+								"type": "null"
+							},
+							"employeeId": {
+								"type": "string"
+							},
+							"primaryProjectId": {
+								"type": "null"
+							},
+							"primaryRoleId": {
+								"type": "string"
+							},
+							"primaryLocationId": {
+								"type": "string"
+							},
+							"primaryDepartmentId": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"extraReportData": {
+					"type": "array"
+				},
+				"serverTime": {
+					"type": "string"
+				},
+				"addFooterRow": {
+					"type": "boolean"
+				},
+				"addStatusBar": {
+					"type": "boolean"
+				},
+				"reportVariantTag": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
