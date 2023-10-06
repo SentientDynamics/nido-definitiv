@@ -1,6 +1,9 @@
 {
 	"name": "EmployeePayPolicies",
 	"properties": {
+		"folder": {
+			"name": "00_Definitv"
+		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
