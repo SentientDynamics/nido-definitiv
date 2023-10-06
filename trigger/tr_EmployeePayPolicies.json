@@ -20,7 +20,7 @@
 			"recurrence": {
 				"frequency": "Day",
 				"interval": 1,
-				"startTime": "2023-10-05T06:12:00",
+				"startTime": "2023-10-07T03:00:00",
 				"timeZone": "AUS Eastern Standard Time",
 				"schedule": {
 					"minutes": [
