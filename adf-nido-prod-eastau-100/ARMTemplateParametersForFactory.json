@@ -23,6 +23,18 @@
 		"ls_rest_definitiv_properties_typeProperties_url": {
 			"value": "@{linkedService().sourceBaseUrl}"
 		},
+		"tr_Definitiv_Timesheets_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Definitiv_Timesheets_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
+			"value": "Definitiv_Timesheets"
+		},
+		"tr_EmployeePayPolicies_properties_pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_EmployeePayPolicies_properties_pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies_parameters_param_TableName": {
+			"value": "Employee_Pay_Policies"
+		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1": {
 			"value": "definitiv"
 		},
