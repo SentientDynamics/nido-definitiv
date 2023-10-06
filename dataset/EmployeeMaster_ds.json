@@ -1,5 +1,5 @@
 {
-	"name": "EmployeePayPolicies_ds",
+	"name": "EmployeeMaster_ds",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls2_stnidoprodeastau100",
@@ -82,7 +82,7 @@
 								"type": "string"
 							},
 							"defaultPivotAggregation": {
-								"type": "null"
+								"type": "string"
 							},
 							"isDynamicColumns": {
 								"type": "boolean"
@@ -122,6 +122,15 @@
 					"items": {
 						"type": "object",
 						"properties": {
+							"organisationName": {
+								"type": "string"
+							},
+							"glCode": {
+								"type": "string"
+							},
+							"exportCode": {
+								"type": "null"
+							},
 							"employeeNumber": {
 								"type": "string"
 							},
@@ -149,79 +158,127 @@
 							"dateOfBirth": {
 								"type": "string"
 							},
+							"phoneNumbers": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"headerName": {
+											"type": "string"
+										},
+										"value": {
+											"type": "string"
+										},
+										"dataType": {
+											"type": "null"
+										},
+										"defaultPivotAggregation": {
+											"type": "null"
+										},
+										"defaultPivotValueOrder": {
+											"type": "null"
+										},
+										"defaultDynamicHidden": {
+											"type": "null"
+										},
+										"columnTooltip": {
+											"type": "null"
+										}
+									}
+								}
+							},
+							"addresses": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"headerName": {
+											"type": "string"
+										},
+										"value": {
+											"type": "string"
+										},
+										"dataType": {
+											"type": "null"
+										},
+										"defaultPivotAggregation": {
+											"type": "null"
+										},
+										"defaultPivotValueOrder": {
+											"type": "null"
+										},
+										"defaultDynamicHidden": {
+											"type": "null"
+										},
+										"columnTooltip": {
+											"type": "null"
+										}
+									}
+								}
+							},
+							"emailAddresses": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"headerName": {
+											"type": "string"
+										},
+										"value": {
+											"type": "string"
+										},
+										"dataType": {
+											"type": "null"
+										},
+										"defaultPivotAggregation": {
+											"type": "null"
+										},
+										"defaultPivotValueOrder": {
+											"type": "null"
+										},
+										"defaultDynamicHidden": {
+											"type": "null"
+										},
+										"columnTooltip": {
+											"type": "null"
+										}
+									}
+								}
+							},
 							"hireDate": {
+								"type": "string"
+							},
+							"yearsOfServiceStartDate": {
 								"type": "string"
 							},
 							"hireReason": {
 								"type": "string"
 							},
-							"terminationDate": {
+							"terminateDate": {
 								"type": "null"
 							},
 							"terminationReason": {
 								"type": "null"
 							},
+							"lastPaidDate": {
+								"type": "string"
+							},
+							"positionOrgChart": {
+								"type": "string"
+							},
+							"divisionOrgChart": {
+								"type": "string"
+							},
 							"employmentStatus": {
+								"type": "string"
+							},
+							"managerIds": {
 								"type": "string"
 							},
 							"payCalendar": {
 								"type": "string"
 							},
-							"policyCode": {
-								"type": "string"
-							},
-							"policyType": {
-								"type": "string"
-							},
-							"policyName": {
-								"type": "string"
-							},
-							"commencementDate": {
-								"type": "string"
-							},
-							"ceaseDate": {
-								"type": "null"
-							},
-							"payRateType": {
-								"type": "string"
-							},
-							"salary": {
-								"type": "null"
-							},
-							"salaryFte": {
-								"type": "null"
-							},
-							"totalPackage": {
-								"type": "null"
-							},
-							"totalPackageFte": {
-								"type": "null"
-							},
-							"weeklyHours": {
-								"type": "null"
-							},
-							"fullTimeEquivalentWeeklyHours": {
-								"type": "null"
-							},
-							"fullTimeEquivalentRatio": {
-								"type": "null"
-							},
-							"dailyRate": {
-								"type": "null"
-							},
-							"dailyHours": {
-								"type": "null"
-							},
-							"hourlyRate": {
-								"type": "number"
-							},
-							"allPurposeRate": {
-								"type": "number"
-							},
-							"payRates": {
-								"type": "array"
-							},
-							"primaryProject": {
+							"primaryProjectName": {
 								"type": "string"
 							},
 							"primaryProjectCode": {
@@ -230,29 +287,26 @@
 							"canOnlyWorkAssignedProjects": {
 								"type": "string"
 							},
-							"primaryRole": {
+							"primaryRoleName": {
 								"type": "string"
 							},
 							"primaryRoleCode": {
 								"type": "null"
 							},
-							"primaryLocation": {
+							"primaryLocationName": {
 								"type": "string"
 							},
 							"primaryLocationCode": {
 								"type": "string"
 							},
-							"primaryDepartment": {
+							"primaryDepartmentName": {
 								"type": "string"
 							},
 							"primaryDepartmentCode": {
 								"type": "null"
 							},
 							"workSchedule": {
-								"type": "null"
-							},
-							"workScheduleDescription": {
-								"type": "null"
+								"type": "string"
 							},
 							"shiftType": {
 								"type": "null"
@@ -267,7 +321,7 @@
 								"type": "string"
 							},
 							"primaryProjectId": {
-								"type": "null"
+								"type": "string"
 							},
 							"primaryRoleId": {
 								"type": "string"
@@ -277,6 +331,41 @@
 							},
 							"primaryDepartmentId": {
 								"type": "string"
+							},
+							"username": {
+								"type": "string"
+							},
+							"customFields": {
+								"type": "object",
+								"properties": {
+									"asOfDate": {
+										"type": "string"
+									},
+									"contractedHours": {
+										"type": "number"
+									},
+									"jobAdderCandidateId": {
+										"type": "null"
+									},
+									"aboriginalTorresStIslanderStatus": {
+										"type": "boolean"
+									},
+									"bonus2": {
+										"type": "null"
+									},
+									"notes": {
+										"type": "null"
+									},
+									"legalRightToWorkInAustralia": {
+										"type": "boolean"
+									},
+									"probationEndDate": {
+										"type": "string"
+									},
+									"ineligibleForPerformanceReview": {
+										"type": "boolean"
+									}
+								}
 							}
 						}
 					}

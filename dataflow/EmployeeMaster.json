@@ -1,0 +1,106 @@
+{
+	"name": "EmployeeMaster",
+	"properties": {
+		"folder": {
+			"name": "00_Definitv"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "EmployeeMaster_ds",
+						"type": "DatasetReference"
+					},
+					"name": "jsoninput"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SQLSink",
+						"type": "DatasetReference"
+					},
+					"name": "WriteToSQLDB"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+				"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, title as string, firstName as string, surname as string, middleName as string, preferredName as string, gender as string, dateOfBirth as string, phoneNumbers as (headerName as string, value as string, dataType as string, defaultPivotAggregation as string, defaultPivotValueOrder as string, defaultDynamicHidden as string, columnTooltip as string)[], addresses as (headerName as string, value as string, dataType as string, defaultPivotAggregation as string, defaultPivotValueOrder as string, defaultDynamicHidden as string, columnTooltip as string)[], emailAddresses as (headerName as string, value as string, dataType as string, defaultPivotAggregation as string, defaultPivotValueOrder as string, defaultDynamicHidden as string, columnTooltip as string)[], hireDate as string, yearsOfServiceStartDate as string, hireReason as string, terminateDate as string, terminationReason as string, lastPaidDate as string, positionOrgChart as string, divisionOrgChart as string, employmentStatus as string, managerIds as string, payCalendar as string, primaryProjectName as string, primaryProjectCode as string, canOnlyWorkAssignedProjects as string, primaryRoleName as string, primaryRoleCode as string, primaryLocationName as string, primaryLocationCode as string, primaryDepartmentName as string, primaryDepartmentCode as string, workSchedule as string, shiftType as string, shiftTypeCode as string, usualPlaceOfResidence as string, employeeId as string, primaryProjectId as string, primaryRoleId as string, primaryLocationId as string, primaryDepartmentId as string, username as string, customFields as (asOfDate as string, contractedHours as double, jobAdderCandidateId as string, aboriginalTorresStIslanderStatus as boolean, bonus2 as string, notes as string, legalRightToWorkInAustralia as boolean, probationEndDate as string, ineligibleForPerformanceReview as boolean))[],",
+				"          extraReportData as string[],",
+				"          serverTime as string,",
+				"          addFooterRow as boolean,",
+				"          addStatusBar as boolean,",
+				"          reportVariantTag as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> jsoninput",
+				"jsoninput foldDown(unroll(reportData),",
+				"     mapColumn(",
+				"          Organisation = reportData.organisationName,",
+				"          {Organisation GL Code} = reportData.glCode,",
+				"          {Organisation Export Code} = reportData.exportCode,",
+				"          {Emp No} = reportData.employeeNumber,",
+				"          {Print Name} = reportData.printName,",
+				"          Gender = reportData.gender,",
+				"          {Date of Birth} = reportData.dateOfBirth,",
+				"          {Hire Date} = reportData.hireDate,",
+				"          {Years of Service Start Date} = reportData.yearsOfServiceStartDate,",
+				"          {Hire Reason} = reportData.hireReason,",
+				"          {Termination Date} = reportData.terminateDate,",
+				"          {Termination Reason} = reportData.terminationReason,",
+				"          {Last Paid Date} = reportData.lastPaidDate,",
+				"          {Position - Org Chart} = reportData.positionOrgChart,",
+				"          {Division - Org Chart} = reportData.divisionOrgChart,",
+				"          {Employment Status} = reportData.employmentStatus,",
+				"          {Line Manager(s) Emp No} = reportData.managerIds,",
+				"          {Pay Calendar} = reportData.payCalendar,",
+				"          {Primary Project} = reportData.primaryProjectName,",
+				"          {Primary Project Code} = reportData.primaryProjectCode,",
+				"          {Can Only Work Assigned Projects} = reportData.canOnlyWorkAssignedProjects,",
+				"          {Primary Role} = reportData.primaryRoleName,",
+				"          {Primary Role Code} = reportData.primaryRoleCode,",
+				"          {Primary Location} = reportData.primaryLocationName,",
+				"          {Primary Location Code} = reportData.primaryLocationCode,",
+				"          {Primary Department} = reportData.primaryDepartmentName,",
+				"          {Primary Department Code} = reportData.primaryDepartmentCode,",
+				"          {Work Schedule} = reportData.workSchedule,",
+				"          {Shift Type} = reportData.shiftType,",
+				"          {Shift Type Code} = reportData.shiftTypeCode,",
+				"          {Usual Place of Residence} = reportData.usualPlaceOfResidence,",
+				"          {Employee ID} = reportData.employeeId,",
+				"          {User Account Created} = reportData.username,",
+				"          {Aboriginal Torres St Islander Status} = reportData.customFields.aboriginalTorresStIslanderStatus,",
+				"          Bonus = reportData.customFields.bonus2,",
+				"          {Contracted Hours} = reportData.customFields.contractedHours,",
+				"          {Ineligible for Performance Review} = reportData.customFields.ineligibleForPerformanceReview,",
+				"          {Job Adder Candidate Id} = reportData.customFields.jobAdderCandidateId,",
+				"          {Legal Right to Work in Australia} = reportData.customFields.legalRightToWorkInAustralia,",
+				"          Notes = reportData.customFields.notes,",
+				"          {Probation End Date} = reportData.customFields.probationEndDate",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+			]
+		}
+	}
+}

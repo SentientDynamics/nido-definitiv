@@ -7,24 +7,19 @@
 		},
 		"parameters": {
 			"ds_PipelineTriggerTime": {
-				"type": "string",
-				"defaultValue": "2022-01-25T00:18:17.611502Z"
+				"type": "string"
 			},
 			"ds_PipelineRunId": {
-				"type": "string",
-				"defaultValue": "187d99be-a307-4534-9acc-0a17fc03d0ab"
+				"type": "string"
 			},
 			"ds_FileSystem": {
-				"type": "string",
-				"defaultValue": "container-adf-nido-prod-eastau-100-1"
+				"type": "string"
 			},
 			"ds_Directory": {
-				"type": "string",
-				"defaultValue": "ds_adls2_stnidoprodeastau100_json_output"
+				"type": "string"
 			},
 			"ds_PipelineName": {
-				"type": "string",
-				"defaultValue": "pl_B1_Payslips_ApiToDefinitiv"
+				"type": "string"
 			}
 		},
 		"annotations": [],
