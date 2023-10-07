@@ -47,6 +47,14 @@
 			"type": "string",
 			"defaultValue": "Employee_Pay_Policies"
 		},
+		"tr_EmployeeTableMaster_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_EmployeeTableMaster_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Employee_Table_Master"
+		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1": {
 			"type": "string",
 			"defaultValue": "definitiv"
@@ -8379,14 +8387,14 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2023-10-07T03:00:00",
+						"startTime": "2023-10-08T06:00:00",
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
 								0
 							],
 							"hours": [
-								3
+								5
 							]
 						}
 					}
@@ -8421,14 +8429,14 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2023-10-07T03:00:00",
+						"startTime": "2023-10-08T06:00:00",
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
 								0
 							],
 							"hours": [
-								3
+								6
 							]
 						}
 					}
@@ -8437,6 +8445,48 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_EmployeeTableMaster')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_EmployeeTableMaster_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_EmployeeTableMaster_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2023-10-07T06:00:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								6
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster')]"
 			]
 		},
 		{

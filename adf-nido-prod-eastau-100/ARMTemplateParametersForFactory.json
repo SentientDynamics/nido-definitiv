@@ -35,6 +35,12 @@
 		"tr_EmployeePayPolicies_properties_pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies_parameters_param_TableName": {
 			"value": "Employee_Pay_Policies"
 		},
+		"tr_EmployeeTableMaster_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_EmployeeTableMaster_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_TableName": {
+			"value": "Employee_Table_Master"
+		},
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1": {
 			"value": "definitiv"
 		},
