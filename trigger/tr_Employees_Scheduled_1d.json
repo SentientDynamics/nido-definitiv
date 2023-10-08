@@ -35,6 +35,16 @@
 					"param_SchemaName": "dbo",
 					"param_TableName": "Employee_Pay_Policies"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Employee_Table_Master"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
