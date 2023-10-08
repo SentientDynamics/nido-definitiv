@@ -25,6 +25,16 @@
 					"param_SchemeName7": "definitiv",
 					"param_TableName7": "EmployeeTaxDeclarations"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Employee_Table_Master"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
