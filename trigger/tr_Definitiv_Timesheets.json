@@ -3,18 +3,7 @@
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_Timesheets",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"param_SchemaName": "dbo",
-					"param_TableName": "Definitiv_Timesheets"
-				}
-			}
-		],
+		"pipelines": [],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
