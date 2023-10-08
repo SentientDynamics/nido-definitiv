@@ -4481,14 +4481,14 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2023-10-07T05:00:00",
-						"timeZone": "AUS Eastern Standard Time",
+						"startTime": "2023-10-09T16:00:00",
+						"timeZone": "UTC-11",
 						"schedule": {
 							"minutes": [
 								0
 							],
 							"hours": [
-								5
+								16
 							]
 						}
 					}
@@ -4522,14 +4522,14 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2023-10-08T06:00:00",
-						"timeZone": "AUS Eastern Standard Time",
+						"startTime": "2023-10-08T13:00:00",
+						"timeZone": "UTC-11",
 						"schedule": {
 							"minutes": [
 								0
 							],
 							"hours": [
-								6
+								13
 							]
 						}
 					}
@@ -4561,14 +4561,14 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2023-10-08T06:00:00",
-						"timeZone": "AUS Eastern Standard Time",
+						"startTime": "2023-10-08T13:00:00",
+						"timeZone": "UTC-11",
 						"schedule": {
 							"minutes": [
 								0
 							],
 							"hours": [
-								6
+								13
 							]
 						}
 					}
