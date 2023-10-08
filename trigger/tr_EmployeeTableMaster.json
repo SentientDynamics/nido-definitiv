@@ -3,20 +3,31 @@
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [],
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Employee_Table_Master"
+				}
+			}
+		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
 				"frequency": "Day",
 				"interval": 1,
-				"startTime": "2023-10-08T06:00:00",
-				"timeZone": "AUS Eastern Standard Time",
+				"startTime": "2023-10-08T13:00:00",
+				"timeZone": "UTC-11",
 				"schedule": {
 					"minutes": [
 						0
 					],
 					"hours": [
-						6
+						13
 					]
 				}
 			}
