@@ -3,18 +3,7 @@
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"param_SchemaName": "dbo",
-					"param_TableName": "Employee_Table_Master"
-				}
-			}
-		],
+		"pipelines": [],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
