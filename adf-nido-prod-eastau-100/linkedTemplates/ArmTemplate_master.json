@@ -83,19 +83,19 @@
 			"type": "string",
 			"defaultValue": "EmployeeTaxDeclarations"
 		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies_parameters_param_SchemaName": {
+		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies_parameters_param_TableName": {
+		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Employee_Pay_Policies"
 		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_SchemaName": {
+		"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_TableName": {
+		"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Employee_Table_Master"
 		},
@@ -147,11 +147,11 @@
 			"type": "string",
 			"defaultValue": "CustomReportRosters"
 		},
-		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
+		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
+		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Timesheets"
 		},
@@ -403,17 +403,17 @@
 					"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7": {
 						"value": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7')]"
 					},
-					"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies_parameters_param_SchemaName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies_parameters_param_SchemaName')]"
+					"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName')]"
 					},
-					"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies_parameters_param_TableName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies_parameters_param_TableName')]"
+					"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName')]"
 					},
-					"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_SchemaName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_SchemaName')]"
+					"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_SchemaName')]"
 					},
-					"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_TableName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster_parameters_param_TableName')]"
+					"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_TableName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_TableName')]"
 					},
 					"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
 						"value": "[parameters('tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName')]"
@@ -445,11 +445,11 @@
 					"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
 						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
 					},
-					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName": {
-						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_SchemaName')]"
+					"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName')]"
 					},
-					"tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName": {
-						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Timesheets_parameters_param_TableName')]"
+					"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
+						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName')]"
 					},
 					"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
 						"value": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]"
