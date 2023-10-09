@@ -28,7 +28,7 @@
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_EmployeePayPolicies",
+					"referenceName": "EmployeePayPolicies",
 					"type": "PipelineReference"
 				},
 				"parameters": {
@@ -38,7 +38,7 @@
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_EmployeeTableMaster",
+					"referenceName": "EmployeeTableMaster",
 					"type": "PipelineReference"
 				},
 				"parameters": {
