@@ -33,7 +33,7 @@
 				},
 				"parameters": {
 					"param_SchemaName": "dbo",
-					"param_TableName": "Employee_Table_Master"
+					"param_TableName": "Employee_Pay_Policies"
 				}
 			}
 		],
