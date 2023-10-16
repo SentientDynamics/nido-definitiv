@@ -1,0 +1,92 @@
+{
+	"name": "LeaveApplications",
+	"properties": {
+		"folder": {
+			"name": "00_Definitv"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "LeaveApplications_ds",
+						"type": "DatasetReference"
+					},
+					"name": "jsoninput"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SQLSink",
+						"type": "DatasetReference"
+					},
+					"name": "WriteToSQLDB",
+					"description": "Export data to SQLSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+				"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, gender as string, leaveDateStart as string, leaveDateEnd as string, leaveAppNumDays as integer, leaveUnits as double, leaveUnitOfMeasure as string, leavePaymentStatus as string, leaveTypeName as string, leaveReasonName as string, leaveNotes as string, status as string, dateSubmitted as string, approvers as string, leaveApplicationId as string, employeeId as string, leaveTypeId as string, primaryProject as string, primaryProjectGlCode as string, primaryProjectCode as string, primaryRole as string, primaryRoleCode as string, primaryLocation as string, primaryLocationGlCode as string, primaryLocationCode as string, primaryDepartment as string, primaryDepartmentGlCode as string, primaryDepartmentCode as string)[],",
+				"          extraReportData as string[],",
+				"          serverTime as string,",
+				"          addFooterRow as boolean,",
+				"          addStatusBar as boolean,",
+				"          reportVariantTag as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> jsoninput",
+				"jsoninput foldDown(unroll(reportData),",
+				"     mapColumn(",
+				"          Organisation = reportData.organisationName,",
+				"          {Organisation GL Code} = reportData.glCode,",
+				"          {Emp No} = reportData.employeeNumber,",
+				"          {Print Name} = reportData.printName,",
+				"          LeaveDateStart = reportData.leaveDateStart,",
+				"          LeaveDateEnd = reportData.leaveDateEnd,",
+				"          LeaveAppNumDays = reportData.leaveAppNumDays,",
+				"          LeaveUnits = reportData.leaveUnits,",
+				"          LeaveUnitOfMeasure = reportData.leaveUnitOfMeasure,",
+				"          LeavePaymentStatus = reportData.leavePaymentStatus,",
+				"          LeaveTypeName = reportData.leaveTypeName,",
+				"          LeaveReasonName = reportData.leaveReasonName,",
+				"          Status = reportData.status,",
+				"          {Date Submitted} = reportData.dateSubmitted,",
+				"          Approvers = reportData.approvers,",
+				"          LeaveApplicationId = reportData.leaveApplicationId,",
+				"          {Employee ID} = reportData.employeeId,",
+				"          LeaveTypeId = reportData.leaveTypeId,",
+				"          Project = reportData.primaryProject,",
+				"          {Project Code} = reportData.primaryProjectCode,",
+				"          Role = reportData.primaryRole,",
+				"          {Role Code} = reportData.primaryRoleCode,",
+				"          Location = reportData.primaryLocation,",
+				"          {Location Code} = reportData.primaryLocationCode,",
+				"          Department = reportData.primaryDepartment,",
+				"          {Department Code} = reportData.primaryDepartmentCode",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+			]
+		}
+	}
+}

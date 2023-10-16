@@ -13,6 +13,16 @@
 					"param_SchemaName": "definitiv",
 					"param_TableName": "ReportingLeaveApplications"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "LeaveApplications",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitv_LeaveApplications"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
