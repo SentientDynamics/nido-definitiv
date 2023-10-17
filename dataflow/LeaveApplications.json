@@ -61,7 +61,7 @@
 				"          Status = reportData.status,",
 				"          {Date Submitted} = reportData.dateSubmitted,",
 				"          Approvers = reportData.approvers,",
-				"          LeaveApplicationId = reportData.leaveApplicationId,",
+				"          LeaveApplicationID = reportData.leaveApplicationId,",
 				"          {Employee ID} = reportData.employeeId,",
 				"          LeaveTypeId = reportData.leaveTypeId,",
 				"          Project = reportData.primaryProject,",
