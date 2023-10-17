@@ -1232,7 +1232,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3',\n'?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-2), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&ToDate',\nformatDateTime(convertFromUtc(addDays(utcNow(),1), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3',\n'?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-2), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),1), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
 													"type": "Expression"
 												}
 											}
