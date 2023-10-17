@@ -63,7 +63,7 @@
 				"          Approvers = reportData.approvers,",
 				"          LeaveApplicationID = reportData.leaveApplicationId,",
 				"          {Employee ID} = reportData.employeeId,",
-				"          LeaveTypeId = reportData.leaveTypeId,",
+				"          LeaveTypeID = reportData.leaveTypeId,",
 				"          Project = reportData.primaryProject,",
 				"          {Project Code} = reportData.primaryProjectCode,",
 				"          Role = reportData.primaryRole,",
