@@ -1957,7 +1957,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=','2023-01-01',\n'&toDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=','2023-10-01',\n'&toDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
 													"type": "Expression"
 												}
 											}
