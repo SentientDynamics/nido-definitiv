@@ -9784,7 +9784,7 @@
 						"          Location = reportData.primaryLocation,",
 						"          {Location Code} = reportData.primaryLocationCode,",
 						"          Department = reportData.primaryDepartment,",
-						"          {Department Code} = reportData.primaryDepartmentCode",
+						"          {Department Code} = reportData.primaryDepartmentGlCode",
 						"     ),",
 						"     skipDuplicateMapInputs: false,",
 						"     skipDuplicateMapOutputs: false) ~> flatten1",
