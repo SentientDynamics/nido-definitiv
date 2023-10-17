@@ -21,7 +21,7 @@
 				},
 				"parameters": {
 					"param_SchemaName": "dbo",
-					"param_TableName": "Definitv_LeaveApplications"
+					"param_TableName": "Definitiv_LeaveApplications"
 				}
 			}
 		],
