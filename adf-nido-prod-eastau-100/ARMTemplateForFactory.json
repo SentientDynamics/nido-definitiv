@@ -937,7 +937,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=','2023-10-01',\n'&toDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',addDays(utcNow(),-60),\n'&toDate=',addDays(utcNow(),7))\n)",
 													"type": "Expression"
 												}
 											}
@@ -9774,7 +9774,7 @@
 						"          Status = reportData.status,",
 						"          {Date Submitted} = reportData.dateSubmitted,",
 						"          Approvers = reportData.approvers,",
-						"          LeaveApplicationId = reportData.leaveApplicationId,",
+						"          LeaveApplicationID = reportData.leaveApplicationId,",
 						"          {Employee ID} = reportData.employeeId,",
 						"          LeaveTypeId = reportData.leaveTypeId,",
 						"          Project = reportData.primaryProject,",
