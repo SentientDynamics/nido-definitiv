@@ -937,7 +937,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',addDays(utcNow(),-60),\n'&toDate=',addDays(utcNow(),7))\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=','2023-07-01',\n'&toDate=',addDays(utcNow(),7))\n)",
 													"type": "Expression"
 												}
 											}
