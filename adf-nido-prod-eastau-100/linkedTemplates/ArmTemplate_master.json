@@ -464,6 +464,26 @@
 					},
 					"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "adf-nido-prod-eastau-100_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
 						"value": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]"
@@ -474,7 +494,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_1')]"
+				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_2')]"
 			]
 		}
 	]

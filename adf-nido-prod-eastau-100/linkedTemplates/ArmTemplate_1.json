@@ -13,6 +13,36 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_rest_definitiv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_rest_definitiv",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"sourceBaseUrl": "https://nido.definitiv.com.au"
+					}
+				},
+				"parameters": {
+					"sourceRelativeUrl": {
+						"type": "String",
+						"defaultValue": "/api/v2/organizations"
+					}
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {
+					"relativeUrl": {
+						"value": "@dataset().sourceRelativeUrl",
+						"type": "Expression"
+					}
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_sql_tnk001')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -42,6 +72,103 @@
 						"value": "@dataset().param_TableName",
 						"type": "Expression"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DefinitivRosters')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Rosters_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "SQLSink",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB",
+							"description": "Export data to SQLSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+						"          reportData as (organisationName as string, organisationExportCode as string, organisationGLCode as string, teamHierarchy as string, rosterName as string, rosterDescription as string, rosterPeriod as string, shiftPublishedState as string, sourceType as string, status as string, employee as string, date as string, dayIndex as string, role as string, timePeriodMode as string, startTimeOfDay as string, endTimeOfDay as string, durationHours as double, publicHolidayWorked as string, position as string, shiftType as string, project as string, projectWorkOrder as string, department as string, location as string, notes as string, breakTimes as string, breakDurationHours as double, responseDateTime as string, responseReason as string, deleted as string, customFields as (kmAllowance as string, staffMeeting as (StartTimeOfDay as string, EndTimeOfDay as string, DurationHours as string, Value as boolean)[]))[],",
+						"          extraReportData as string[],",
+						"          serverTime as string,",
+						"          addFooterRow as boolean,",
+						"          addStatusBar as boolean,",
+						"          reportVariantTag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput foldDown(unroll(reportData),",
+						"     mapColumn(",
+						"          Organisation = reportData.organisationName,",
+						"          {Organisation GL Code} = reportData.organisationGLCode,",
+						"          {Roster Name} = reportData.rosterName,",
+						"          {Roster Period} = reportData.rosterPeriod,",
+						"          {Shift Published State} = reportData.shiftPublishedState,",
+						"          {Source Type} = reportData.sourceType,",
+						"          Status = reportData.status,",
+						"          Employee = reportData.employee,",
+						"          Date = reportData.date,",
+						"          DayofWeek = reportData.dayIndex,",
+						"          Role = reportData.role,",
+						"          Position = reportData.position,",
+						"          {Shift Type} = reportData.shiftType,",
+						"          Project = reportData.project,",
+						"          {Project WorkOrder} = reportData.projectWorkOrder,",
+						"          Department = reportData.department,",
+						"          Location = reportData.location,",
+						"          {Time Period Mode} = reportData.timePeriodMode,",
+						"          {Start Time} = reportData.startTimeOfDay,",
+						"          {End Time} = reportData.endTimeOfDay,",
+						"          {Duration Hours} = reportData.durationHours,",
+						"          {Break Duration Hours} = reportData.breakDurationHours,",
+						"          {Public Holiday Worked} = reportData.publicHolidayWorked,",
+						"          Notes = reportData.notes,",
+						"          {Break Times} = reportData.breakTimes,",
+						"          {Response DateTime} = reportData.responseDateTime,",
+						"          {Response Reason} = reportData.responseReason,",
+						"          Deleted = reportData.deleted",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
 				}
 			},
 			"dependsOn": []
@@ -1558,7 +1685,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/EmployeePayPolicies')]"
+				"[concat(variables('factoryId'), '/dataflows/EmployeePayPolicies')]",
+				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]"
 			]
 		},
 		{
@@ -1849,588 +1977,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/EmployeeMaster')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LeaveApplications')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Organizations",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select organizationId from definitiv.Organizations",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_SchemaName": "definitiv",
-									"param_TableName": "Organizations"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Organization",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Organizations",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Organizations').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "ApiToJson",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.03:00:00",
-										"retry": 3,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "RestSource",
-											"additionalColumns": [
-												{
-													"name": "Org.OrganizationId",
-													"value": {
-														"value": "@item().organizationId",
-														"type": "Expression"
-													}
-												}
-											],
-											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
-												"type": "Expression"
-											},
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"supportRFC5988": "true"
-											}
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_rest_definitiv",
-											"type": "DatasetReference",
-											"parameters": {
-												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-184), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&toDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'))",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "LeaveApplications_ds",
-											"type": "DatasetReference",
-											"parameters": {
-												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
-													"type": "Expression"
-												},
-												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
-													"type": "Expression"
-												},
-												"ds_FileSystem": {
-													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-													"type": "Expression"
-												},
-												"ds_Directory": {
-													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-													"type": "Expression"
-												},
-												"ds_PipelineName": {
-													"value": "@pipeline().Pipeline",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								},
-								{
-									"name": "logic-nido-prod-eastau-101_1",
-									"type": "ExecutePipeline",
-									"dependsOn": [
-										{
-											"activity": "ApiToJson",
-											"dependencyConditions": [
-												"Failed"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"pipeline": {
-											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
-											"type": "PipelineReference"
-										},
-										"waitOnCompletion": true,
-										"parameters": {
-											"PipelineName": {
-												"value": "@pipeline().Pipeline",
-												"type": "Expression"
-											},
-											"PipelineRunId": {
-												"value": "@pipeline().RunId",
-												"type": "Expression"
-											},
-											"PipelineTriggerId": {
-												"value": "@pipeline().TriggerId",
-												"type": "Expression"
-											},
-											"PipelineTriggerName": {
-												"value": "@pipeline().TriggerName",
-												"type": "Expression"
-											},
-											"PipelineTriggerTime": {
-												"value": "@pipeline().TriggerTime",
-												"type": "Expression"
-											},
-											"PipelineTriggerType": {
-												"value": "@pipeline().TriggerType",
-												"type": "Expression"
-											},
-											"PipelineTriggeredByPipelineName": {
-												"value": "@pipeline()?.TriggeredByPipelineName",
-												"type": "Expression"
-											},
-											"PipelineTriggeredByPipelineRunId": {
-												"value": "@pipeline()?.TriggeredByPipelineRunId",
-												"type": "Expression"
-											},
-											"ActivityOutputMessage": {
-												"value": "@activity('ApiToJson').output.errors[0].Message",
-												"type": "Expression"
-											},
-											"AzureSqlTargetTable": {
-												"value": "@pipeline().parameters.param_TableName",
-												"type": "Expression"
-											}
-										}
-									}
-								}
-							]
-						}
-					},
-					{
-						"name": "LeaveApplications",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "Organization",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 3,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "LeaveApplications",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"jsoninput": {
-										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										},
-										"ds_FileSystem": {
-											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-											"type": "Expression"
-										},
-										"ds_Directory": {
-											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-											"type": "Expression"
-										},
-										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_LeaveApplications"
-									}
-								}
-							},
-							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"param_TableName": {
-						"type": "string",
-						"defaultValue": "Definitiv_LeaveApplications"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Pipelines"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/LeaveApplications')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Timesheets')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Organizations",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select organizationId from definitiv.Organizations",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_SchemaName": "definitiv",
-									"param_TableName": "Organizations"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Organization",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Organizations",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Organizations').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "ApiToJson",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.03:00:00",
-										"retry": 3,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "RestSource",
-											"additionalColumns": [
-												{
-													"name": "Org.OrganizationId",
-													"value": {
-														"value": "@item().organizationId",
-														"type": "Expression"
-													}
-												}
-											],
-											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
-												"type": "Expression"
-											},
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"supportRFC5988": "true"
-											}
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_rest_definitiv",
-											"type": "DatasetReference",
-											"parameters": {
-												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?fromDate=',addDays(utcNow(),-35),\n'&toDate',addDays(utcNow(),7),\n'&includeTerminated=true'\n)",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "Timesheets_ds",
-											"type": "DatasetReference",
-											"parameters": {
-												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
-													"type": "Expression"
-												},
-												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
-													"type": "Expression"
-												},
-												"ds_FileSystem": {
-													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-													"type": "Expression"
-												},
-												"ds_Directory": {
-													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-													"type": "Expression"
-												},
-												"ds_PipelineName": {
-													"value": "@pipeline().Pipeline",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								},
-								{
-									"name": "logic-nido-prod-eastau-101_1",
-									"type": "ExecutePipeline",
-									"dependsOn": [
-										{
-											"activity": "ApiToJson",
-											"dependencyConditions": [
-												"Failed"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"pipeline": {
-											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
-											"type": "PipelineReference"
-										},
-										"waitOnCompletion": true,
-										"parameters": {
-											"PipelineName": {
-												"value": "@pipeline().Pipeline",
-												"type": "Expression"
-											},
-											"PipelineRunId": {
-												"value": "@pipeline().RunId",
-												"type": "Expression"
-											},
-											"PipelineTriggerId": {
-												"value": "@pipeline().TriggerId",
-												"type": "Expression"
-											},
-											"PipelineTriggerName": {
-												"value": "@pipeline().TriggerName",
-												"type": "Expression"
-											},
-											"PipelineTriggerTime": {
-												"value": "@pipeline().TriggerTime",
-												"type": "Expression"
-											},
-											"PipelineTriggerType": {
-												"value": "@pipeline().TriggerType",
-												"type": "Expression"
-											},
-											"PipelineTriggeredByPipelineName": {
-												"value": "@pipeline()?.TriggeredByPipelineName",
-												"type": "Expression"
-											},
-											"PipelineTriggeredByPipelineRunId": {
-												"value": "@pipeline()?.TriggeredByPipelineRunId",
-												"type": "Expression"
-											},
-											"ActivityOutputMessage": {
-												"value": "@activity('ApiToJson').output.errors[0].Message",
-												"type": "Expression"
-											},
-											"AzureSqlTargetTable": {
-												"value": "@pipeline().parameters.param_TableName",
-												"type": "Expression"
-											}
-										}
-									}
-								}
-							]
-						}
-					},
-					{
-						"name": "DefinitivTimesheets",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "Organization",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 3,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DefinitivTimesheets",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"jsoninput": {
-										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										},
-										"ds_FileSystem": {
-											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-											"type": "Expression"
-										},
-										"ds_Directory": {
-											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-											"type": "Expression"
-										},
-										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Timesheets"
-									}
-								}
-							},
-							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"param_TableName": {
-						"type": "string",
-						"defaultValue": "Definitiv_Timesheets"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Pipelines"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-18T05:28:43Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/DefinitivTimesheets')]"
+				"[concat(variables('factoryId'), '/dataflows/EmployeeMaster')]",
+				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]"
 			]
 		}
 	]
