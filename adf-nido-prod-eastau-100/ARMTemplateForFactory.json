@@ -1232,7 +1232,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3',\n'?FromDate=',addDays(utcNow(),-2),\n'&ToDate',addDays(utcNow(),1)\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3',\n'?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),2), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&ToDate',\nformatDateTime(convertFromUtc(addDays(utcNow(),1), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
 													"type": "Expression"
 												}
 											}
@@ -10019,7 +10019,7 @@
 						"          {Break Times} = reportData.breakTimes,",
 						"          {Response DateTime} = reportData.responseDateTime,",
 						"          {Response Reason} = reportData.responseReason,",
-						"          Deleted = reportData.deleted",
+						"          {Deleted?} = reportData.deleted",
 						"     ),",
 						"     skipDuplicateMapInputs: false,",
 						"     skipDuplicateMapOutputs: false) ~> flatten1",
