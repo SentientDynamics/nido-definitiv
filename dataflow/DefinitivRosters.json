@@ -73,7 +73,7 @@
 				"          {Break Times} = reportData.breakTimes,",
 				"          {Response DateTime} = reportData.responseDateTime,",
 				"          {Response Reason} = reportData.responseReason,",
-				"          Deleted = reportData.deleted",
+				"          {Deleted?} = reportData.deleted",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
