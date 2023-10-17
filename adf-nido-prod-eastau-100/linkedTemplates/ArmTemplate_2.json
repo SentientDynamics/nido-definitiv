@@ -101,7 +101,7 @@
 		},
 		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitv_LeaveApplications"
+			"defaultValue": "Definitiv_LeaveApplications"
 		},
 		"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_SchemaName": {
 			"type": "string",
