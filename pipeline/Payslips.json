@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/pay-runs',\n'?fromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-20), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&toDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),2), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&reportType=AggregatePerPayRun')\n)",
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/pay-runs',\n'?fromDate=2023-10-01',\n'&toDate=2023-10-18',\n'&reportType=AggregatePerPayRun')\n)",
 											"type": "Expression"
 										}
 									}
