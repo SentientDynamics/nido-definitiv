@@ -937,7 +937,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-184), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&toDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'))",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-184), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&toDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),28), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'))",
 													"type": "Expression"
 												}
 											}
