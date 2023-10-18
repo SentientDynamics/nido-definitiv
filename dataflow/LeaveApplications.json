@@ -71,7 +71,7 @@
 				"          Location = reportData.primaryLocation,",
 				"          {Location Code} = reportData.primaryLocationCode,",
 				"          Department = reportData.primaryDepartment,",
-				"          {Department Code} = reportData.primaryDepartmentGlCode",
+				"          {Department Code} = reportData.primaryDepartmentCode",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
