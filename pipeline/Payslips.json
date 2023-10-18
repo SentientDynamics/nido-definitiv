@@ -55,8 +55,8 @@
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
-								"timeout": "0.03:00:00",
-								"retry": 3,
+								"timeout": "0.06:00:00",
+								"retry": 0,
 								"retryIntervalInSeconds": 30,
 								"secureOutput": false,
 								"secureInput": false
@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat('/api/company/', item().organizationId, '/reporting/pay-runs?reportType=AggregatePerPayRun')\n",
+											"value": "@concat('/api/company/', item().organizationId, '/reporting/pay-runs?FromDate=2022-10-21reportType=AggregatePerPayRun')\n",
 											"type": "Expression"
 										}
 									}
