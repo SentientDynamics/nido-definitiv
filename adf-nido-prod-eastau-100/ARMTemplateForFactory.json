@@ -959,7 +959,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select organizationId from definitiv.Organizations\nwhere organizationId in ('DCA2633E-578E-4358-A5BF-0C38A96BB4CB','06A54B6B-65AB-40BE-B3D7-A99999967B35')",
+								"sqlReaderQuery": "select organizationId from definitiv.Organizations",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
