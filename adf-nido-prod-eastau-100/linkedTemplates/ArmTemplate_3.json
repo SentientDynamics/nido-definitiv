@@ -7,6 +7,38 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
 		},
+		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "EmployeesEmploymentHistory"
+		},
+		"tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "ReportingLeaveApplications"
+		},
+		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_LeaveApplications"
+		},
+		"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "ReportingLeaveBalances"
+		},
 		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
@@ -44,6 +76,137 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_EmploymentHistory_Scheduled_1w')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_EmploymentHistory",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2022-06-08T05:19:00",
+						"endTime": "2023-09-01T09:04:42",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								3
+							],
+							"weekDays": [
+								"Saturday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_LeaveApplications_Scheduled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_TableName')]"
+						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "LeaveApplications",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-06-08T05:45:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								4
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_LeaveBalances_Scheduled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-06-08T06:03:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								5
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/tr_Organizations_Scheduled_1w')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
