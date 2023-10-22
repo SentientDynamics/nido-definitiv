@@ -1,0 +1,292 @@
+{
+	"name": "Payslips_ds_trial",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls2_stnidoprodeastau100",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ds_PipelineTriggerTime": {
+				"type": "string"
+			},
+			"ds_PipelineRunId": {
+				"type": "string"
+			},
+			"ds_FileSystem": {
+				"type": "string"
+			},
+			"ds_Directory": {
+				"type": "string"
+			},
+			"ds_PipelineName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().ds_FileSystem",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"headers": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"title": {
+								"type": "string"
+							},
+							"filterDisabled": {
+								"type": "boolean"
+							},
+							"sortDisabled": {
+								"type": "boolean"
+							},
+							"hiddenByDefault": {
+								"type": "boolean"
+							},
+							"searchDisabled": {
+								"type": "boolean"
+							},
+							"dataType": {
+								"type": "string"
+							},
+							"fieldName": {
+								"type": "string"
+							},
+							"defaultPivotColumnOrder": {
+								"type": "integer"
+							},
+							"defaultPivotRowOrder": {
+								"type": "integer"
+							},
+							"defaultPivotValueOrder": {
+								"type": "integer"
+							},
+							"defaultSortOrder": {
+								"type": "integer"
+							},
+							"defaultSortDirection": {
+								"type": "string"
+							},
+							"defaultPivotAggregation": {
+								"type": "null"
+							},
+							"isDynamicColumns": {
+								"type": "boolean"
+							},
+							"isCustomFields": {
+								"type": "boolean"
+							},
+							"customFieldsKeyName": {
+								"type": "null"
+							},
+							"createDayOfWeekColumn": {
+								"type": "boolean"
+							},
+							"prependBaseColumnNameToDayOfWeekColumn": {
+								"type": "boolean"
+							},
+							"trueText": {
+								"type": "null"
+							},
+							"falseText": {
+								"type": "null"
+							},
+							"nullDisplayText": {
+								"type": "null"
+							},
+							"disableDefaultAggregation": {
+								"type": "boolean"
+							},
+							"numericPrecision": {
+								"type": "null"
+							}
+						}
+					}
+				},
+				"reportData": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"organisationName": {
+								"type": "string"
+							},
+							"glCode": {
+								"type": "string"
+							},
+							"exportCode": {
+								"type": "string"
+							},
+							"employeeNumber": {
+								"type": "string"
+							},
+							"printName": {
+								"type": "string"
+							},
+							"firstName": {
+								"type": "string"
+							},
+							"surname": {
+								"type": "string"
+							},
+							"employmentStatus": {
+								"type": "string"
+							},
+							"payRunNumber": {
+								"type": "integer"
+							},
+							"paymentDate": {
+								"type": "string"
+							},
+							"payCalendar": {
+								"type": "string"
+							},
+							"payRunType": {
+								"type": "string"
+							},
+							"payRunStatus": {
+								"type": "string"
+							},
+							"isBackpay": {
+								"type": "boolean"
+							},
+							"date": {
+								"type": "string"
+							},
+							"payItemType": {
+								"type": "string"
+							},
+							"payItemCode": {
+								"type": "string"
+							},
+							"payItem": {
+								"type": "string"
+							},
+							"unitOfMeasure": {
+								"type": "string"
+							},
+							"units": {
+								"type": "number"
+							},
+							"rate": {
+								"type": "number"
+							},
+							"total": {
+								"type": "number"
+							},
+							"awardPolicyName": {
+								"type": "string"
+							},
+							"awardSource": {
+								"type": "null"
+							},
+							"payItemGlDebitCode": {
+								"type": "string"
+							},
+							"payItemGlCreditCode": {
+								"type": "null"
+							},
+							"role": {
+								"type": "string"
+							},
+							"roleCode": {
+								"type": "null"
+							},
+							"project": {
+								"type": "string"
+							},
+							"projectGlCode": {
+								"type": "string"
+							},
+							"projectCode": {
+								"type": "string"
+							},
+							"location": {
+								"type": "string"
+							},
+							"locationGlCode": {
+								"type": "null"
+							},
+							"locationCode": {
+								"type": "string"
+							},
+							"department": {
+								"type": "string"
+							},
+							"departmentGlCode": {
+								"type": "string"
+							},
+							"departmentCode": {
+								"type": "null"
+							},
+							"workOrder": {
+								"type": "null"
+							},
+							"workOrderGLCode": {
+								"type": "null"
+							},
+							"workOrderCode": {
+								"type": "null"
+							},
+							"superFundName": {
+								"type": "string"
+							},
+							"leaveType": {
+								"type": "null"
+							},
+							"leaveReason": {
+								"type": "null"
+							},
+							"periodStartDate": {
+								"type": "string"
+							},
+							"periodEndDate": {
+								"type": "string"
+							},
+							"notes": {
+								"type": "null"
+							},
+							"payItemCustomFields": {
+								"type": "object",
+								"properties": {
+									"alternateGLCode": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"extraReportData": {
+					"type": "array"
+				},
+				"serverTime": {
+					"type": "string"
+				},
+				"addFooterRow": {
+					"type": "boolean"
+				},
+				"addStatusBar": {
+					"type": "boolean"
+				},
+				"reportVariantTag": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

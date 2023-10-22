@@ -1,0 +1,96 @@
+{
+	"name": "EmployeePayslips_trial",
+	"properties": {
+		"folder": {
+			"name": "00_Definitv"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Payslips_ds_trial",
+						"type": "DatasetReference"
+					},
+					"name": "jsoninput"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SQLSink",
+						"type": "DatasetReference"
+					},
+					"name": "WriteToSQLDB",
+					"description": "Export data to SQLSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+				"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, employmentStatus as string, payRunNumber as integer, paymentDate as string, payCalendar as string, payRunType as string, payRunStatus as string, isBackpay as boolean, date as string, payItemType as string, payItemCode as string, payItem as string, unitOfMeasure as string, units as double, rate as double, total as double, awardPolicyName as string, awardSource as string, payItemGlDebitCode as string, payItemGlCreditCode as string, role as string, roleCode as string, project as string, projectGlCode as string, projectCode as string, location as string, locationGlCode as string, locationCode as string, department as string, departmentGlCode as string, departmentCode as string, workOrder as string, workOrderGLCode as string, workOrderCode as string, superFundName as string, leaveType as string, leaveReason as string, periodStartDate as string, periodEndDate as string, notes as string, payItemCustomFields as (alternateGLCode as string))[],",
+				"          extraReportData as string[],",
+				"          serverTime as string,",
+				"          addFooterRow as boolean,",
+				"          addStatusBar as boolean,",
+				"          reportVariantTag as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> jsoninput",
+				"jsoninput foldDown(unroll(reportData),",
+				"     mapColumn(",
+				"          organisationName = reportData.organisationName,",
+				"          glCode = reportData.glCode,",
+				"          employeeNumber = reportData.employeeNumber,",
+				"          printName = reportData.printName,",
+				"          employmentStatus = reportData.employmentStatus,",
+				"          payRunNumber = reportData.payRunNumber,",
+				"          paymentDate = reportData.paymentDate,",
+				"          payCalendar = reportData.payCalendar,",
+				"          payRunType = reportData.payRunType,",
+				"          payRunStatus = reportData.payRunStatus,",
+				"          payItemType = reportData.payItemType,",
+				"          payItemCode = reportData.payItemCode,",
+				"          payItem = reportData.payItem,",
+				"          unitOfMeasure = reportData.unitOfMeasure,",
+				"          units = reportData.units,",
+				"          rate = reportData.rate,",
+				"          total = reportData.total,",
+				"          role = reportData.role,",
+				"          roleCode = reportData.roleCode,",
+				"          project = reportData.project,",
+				"          projectCode = reportData.projectCode,",
+				"          location = reportData.location,",
+				"          locationCode = reportData.locationCode,",
+				"          department = reportData.department,",
+				"          departmentCode = reportData.departmentCode,",
+				"          workOrder = reportData.workOrder,",
+				"          workOrderCode = reportData.workOrderCode,",
+				"          leaveType = reportData.leaveType,",
+				"          leaveReason = reportData.leaveReason,",
+				"          periodStartDate = reportData.periodStartDate,",
+				"          periodEndDate = reportData.periodEndDate",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+			]
+		}
+	}
+}
