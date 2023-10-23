@@ -1507,7 +1507,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?fromDate=',addDays(utcNow(),-35),\n'&toDate',addDays(utcNow(),7),\n'&includeTerminated=true'\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-35), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),7), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)",
 													"type": "Expression"
 												}
 											}
