@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat('/api/company/', item().organizationId, '/reporting/pay-runs?FromDate=2023-06-24&reportType=AggregatePerPayRun')\n",
+											"value": "@concat('/api/company/', item().organizationId, '/reporting/pay-runs?FromDate=2023-09-30&reportType=AggregatePerPayRun')\n",
 											"type": "Expression"
 										}
 									}
@@ -187,7 +187,7 @@
 							},
 							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "Definitiv_Payslips"
+								"param_TableName": "Definitiv_Payslips _Staging"
 							}
 						}
 					},
@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_Payslips"
+				"defaultValue": "Definitiv_Payslips _Staging"
 			}
 		},
 		"folder": {
