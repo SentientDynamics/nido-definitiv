@@ -6,84 +6,55 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName1": {
-			"type": "string",
-			"defaultValue": "Employees"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName2": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName2": {
-			"type": "string",
-			"defaultValue": "EmployeePaymentAccounts"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName3": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName3": {
-			"type": "string",
-			"defaultValue": "EmployeePhoneNumbers"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName4": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName4": {
-			"type": "string",
-			"defaultValue": "EmployeeStreetAddresses"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName5": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName5": {
-			"type": "string",
-			"defaultValue": "EmployeeSuperAccounts"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName6": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName6": {
-			"type": "string",
-			"defaultValue": "EmployeeSuperContributions"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName7": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7": {
-			"type": "string",
-			"defaultValue": "EmployeeTaxDeclarations"
-		},
-		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
-		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "Employee_Pay_Policies"
-		},
-		"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
-		"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "Employee_Table_Master"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Rosters')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "04_Rosters"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference"
+							},
+							"name": "sourceJson"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSql",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "castDateColumns",
+							"description": "Creating/updating the columns G'PipelineName, PipelineRunId, PipelineTriggerTime, QueryFinishDate, QueryStartDate, amount, createdByUser, createdDate, date1, employeeId, employmentType, end, firstName, lastName, modifiedByUser, modifiedDate, quantity, room, rosterEntryId, rosterId, serviceCode, start, SourceFileName'"
+						}
+					],
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Rosters\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tQueryFinishDate as date,\n\t\tQueryStartDate as date,\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(end = toTimestamp(concat(toString(toDate(date)), ' ', end, ':00')),\n\t\tstart = toTimestamp(concat(toString(toDate(date)), ' ', start, ':00')),\n\t\tdate = toDate(date),\n\t\tPipelineTriggerTime = toTimestamp(PipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'Australia/NSW'),\n\t\tcreatedDate = toDate(createdDate),\n\t\tmodifiedDate = toDate(modifiedDate)) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/df_Timesheets')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
@@ -164,6 +135,85 @@
 						}
 					],
 					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Wages\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tamount as double,\n\t\tdepartment as string,\n\t\temployeeId as string,\n\t\tfirstName as string,\n\t\tfullName as string,\n\t\t{hoursOrA/DCode} as integer,\n\t\t{hoursOrA/DCodeDesc} as string,\n\t\tidNumber as integer,\n\t\tlevel1Code as string,\n\t\tlevel2Code as string,\n\t\tlineItemId as integer,\n\t\tpayItemId as string,\n\t\tpayRunId as string,\n\t\tpayrunGroup as string,\n\t\tpayslipId as string,\n\t\tpositionID as string,\n\t\tpositionTitle as string,\n\t\troom as string,\n\t\tsurname as string,\n\t\tweekEndingDate as date\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(PipelineTriggerTime = toTimestamp(PipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'Australia/NSW')) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\trecreate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory + '/' + $param_DataflowName),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Organizations')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Organizations_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "SQLSink",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          organizationId as string,",
+						"          organizationCode as string,",
+						"          legalName as string,",
+						"          tradingName as string,",
+						"          wpn as string,",
+						"          abn as string,",
+						"          branchCode as string,",
+						"          acn as string,",
+						"          employeeSupportEmail as string,",
+						"          contactTitle as string,",
+						"          contactFirstName as string,",
+						"          contactSurname as string,",
+						"          contactEmail as string,",
+						"          contactPhone as string,",
+						"          fbtExempt as boolean,",
+						"          intermediary as string,",
+						"          beamTermsConfirmUserId as string,",
+						"          beamTermsConfirmUserName as string,",
+						"          beamTermsConfirmDate as string,",
+						"          streetAddress as string,",
+						"          reference as string,",
+						"          softwareProviderABN as string,",
+						"          softwareProviderName as string,",
+						"          softwareSubscriptionId as string,",
+						"          notificationUserIds as string,",
+						"          notifyLodgementSubmitters as boolean,",
+						"          excludeReportableFbtBelowThreshold as boolean",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
 				}
 			},
 			"dependsOn": []
@@ -4296,7 +4346,9 @@
 				"annotations": [],
 				"lastPublishTime": "2022-01-18T05:28:43Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Rosters')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_Timesheets_original')]",
@@ -5155,496 +5207,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/df_Wages')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Organizations",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "PreRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select organizationId, legalName from definitiv.Organizations",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_SchemaName": "definitiv",
-									"param_TableName": "Organizations"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Organization",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Organizations",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Organizations').output.value",
-								"type": "Expression"
-							},
-							"isSequential": false,
-							"activities": [
-								{
-									"name": "ApiToJson",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.03:00:00",
-										"retry": 3,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "RestSource",
-											"additionalColumns": [
-												{
-													"name": "Org.OrganizationId",
-													"value": {
-														"value": "@item().organizationId",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "Org.LegalName",
-													"value": {
-														"value": "@item().legalName",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "PipelineName",
-													"value": {
-														"value": "@pipeline().Pipeline",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "PipelineRunId",
-													"value": {
-														"value": "@pipeline().RunId",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "PipelineTriggerTime",
-													"value": {
-														"value": "@pipeline().TriggerTime",
-														"type": "Expression"
-													}
-												},
-												{
-													"name": "PipelineTriggerId",
-													"value": {
-														"value": "@pipeline().TriggerId",
-														"type": "Expression"
-													}
-												}
-											],
-											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
-												"type": "Expression"
-											},
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"supportRFC5988": "true"
-											}
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_rest_definitiv",
-											"type": "DatasetReference",
-											"parameters": {
-												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId, '/pay-runs')",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-											"type": "DatasetReference",
-											"parameters": {
-												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
-													"type": "Expression"
-												},
-												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
-													"type": "Expression"
-												},
-												"ds_FileSystem": {
-													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-													"type": "Expression"
-												},
-												"ds_Directory": {
-													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-													"type": "Expression"
-												},
-												"ds_PipelineName": {
-													"value": "@pipeline().Pipeline",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					},
-					{
-						"name": "df_OrgPayRuns",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "Organization",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 3,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "df_OrgPayRuns",
-								"type": "DataFlowReference",
-								"parameters": {
-									"param_FileSystem": {
-										"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
-										"type": "Expression"
-									},
-									"param_ErrorRowDirectory": {
-										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
-										"type": "Expression"
-									},
-									"param_DataflowName": "\"df_OrgPayRuns\""
-								},
-								"datasetParameters": {
-									"sourceJson": {
-										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										},
-										"ds_FileSystem": {
-											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-											"type": "Expression"
-										},
-										"ds_Directory": {
-											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-											"type": "Expression"
-										},
-										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									"sinkSql": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
-										"param_TableName": {
-											"value": "@pipeline().parameters.param_TableName",
-											"type": "Expression"
-										}
-									}
-								}
-							},
-							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
-							},
-							"traceLevel": "Fine"
-						}
-					},
-					{
-						"name": "pl_CopyFromApiToDefinitivSchema_Payslips",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "PostRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_CopyFromApiToDefinitivSchema_Payslips",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"param_SchemaName": "definitiv",
-								"param_TableName": "CustomReportPayslips"
-							}
-						}
-					},
-					{
-						"name": "PreRowCount",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) as PreRowCount from definitiv.OrganizationPayRuns",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
-									"param_TableName": {
-										"value": "@pipeline().parameters.param_TableName",
-										"type": "Expression"
-									}
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "PostRowCount",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "df_OrgPayRuns",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.OrganizationPayRuns",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
-									"param_TableName": {
-										"value": "@pipeline().parameters.param_TableName",
-										"type": "Expression"
-									}
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "pl_CopyFromApiToDefinitivSchema_Wages",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "PostRowCount",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "pl_CopyFromApiToDefinitivSchema_Wages",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"param_SchemaName": "definitiv",
-								"param_TableName": "CustomReportWages"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "definitiv"
-					},
-					"param_TableName": {
-						"type": "string",
-						"defaultValue": "OrganizationPayRuns"
-					}
-				},
-				"folder": {
-					"name": "07_PayRuns"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-21T07:04:52Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Payslips')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Wages')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_Employees_Scheduled_1d')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_Employees",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemeName1": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1')]",
-							"param_TableName1": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName1')]",
-							"param_SchemeName2": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName2')]",
-							"param_TableName2": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName2')]",
-							"param_SchemeName3": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName3')]",
-							"param_TableName3": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName3')]",
-							"param_SchemeName4": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName4')]",
-							"param_TableName4": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName4')]",
-							"param_SchemeName5": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName5')]",
-							"param_TableName5": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName5')]",
-							"param_SchemeName6": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName6')]",
-							"param_TableName6": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName6')]",
-							"param_SchemeName7": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName7')]",
-							"param_TableName7": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7')]"
-						}
-					},
-					{
-						"pipelineReference": {
-							"referenceName": "EmployeePayPolicies",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName')]"
-						}
-					},
-					{
-						"pipelineReference": {
-							"referenceName": "EmployeeTableMaster",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_TableName')]"
-						}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2022-06-07T04:42:00",
-						"timeZone": "AUS Eastern Standard Time",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								7
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Employees')]",
-				"[concat(variables('factoryId'), '/pipelines/EmployeePayPolicies')]",
-				"[concat(variables('factoryId'), '/pipelines/EmployeeTableMaster')]"
 			]
 		}
 	]
