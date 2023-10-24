@@ -13,6 +13,16 @@
 					"param_SchemaName": "definitiv",
 					"param_TableName": "ReportingLeaveBalances"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "LeaveBalances",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitiv_LeaveBalances"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
