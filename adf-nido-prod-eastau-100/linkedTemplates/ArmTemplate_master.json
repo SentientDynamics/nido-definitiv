@@ -115,14 +115,6 @@
 			"type": "string",
 			"defaultValue": "Definitiv_LeaveApplications"
 		},
-		"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "ReportingLeaveBalances"
-		},
 		"tr_LeaveBalances_Scheduled_1d_properties_LeaveBalances_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -454,12 +446,6 @@
 					},
 					"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName": {
 						"value": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName')]"
-					},
-					"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_SchemaName": {
-						"value": "[parameters('tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_SchemaName')]"
-					},
-					"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_TableName": {
-						"value": "[parameters('tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_TableName')]"
 					},
 					"tr_LeaveBalances_Scheduled_1d_properties_LeaveBalances_parameters_param_SchemaName": {
 						"value": "[parameters('tr_LeaveBalances_Scheduled_1d_properties_LeaveBalances_parameters_param_SchemaName')]"

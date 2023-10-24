@@ -86,12 +86,6 @@
 		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName": {
 			"value": "Definitiv_LeaveApplications"
 		},
-		"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_SchemaName": {
-			"value": "definitiv"
-		},
-		"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_TableName": {
-			"value": "ReportingLeaveBalances"
-		},
 		"tr_LeaveBalances_Scheduled_1d_properties_LeaveBalances_parameters_param_SchemaName": {
 			"value": "dbo"
 		},
