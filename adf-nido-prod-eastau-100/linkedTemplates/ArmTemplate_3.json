@@ -63,21 +63,21 @@
 			"type": "string",
 			"defaultValue": "EmployeeTaxDeclarations"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
+		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
+		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Employee_Pay_Policies"
+			"defaultValue": "Definitiv_PayPolicies"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_SchemaName": {
+		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_TableName": {
+		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Employee_Table_Master"
+			"defaultValue": "Definitiv_Employees"
 		},
 		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
 			"type": "string",
@@ -937,22 +937,22 @@
 					},
 					{
 						"pipelineReference": {
-							"referenceName": "EmployeePayPolicies",
+							"referenceName": "PayPolicies",
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName')]"
 						}
 					},
 					{
 						"pipelineReference": {
-							"referenceName": "EmployeeTableMaster",
+							"referenceName": "Employees",
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName')]"
 						}
 					}
 				],

@@ -62,17 +62,17 @@
 		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7": {
 			"value": "EmployeeTaxDeclarations"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
+		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
 			"value": "dbo"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
-			"value": "Employee_Pay_Policies"
+		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
+			"value": "Definitiv_PayPolicies"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_SchemaName": {
+		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
 			"value": "dbo"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeeTableMaster_parameters_param_TableName": {
-			"value": "Employee_Table_Master"
+		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
+			"value": "Definitiv_Employees"
 		},
 		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
 			"value": "definitiv"

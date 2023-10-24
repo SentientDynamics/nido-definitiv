@@ -13,43 +13,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/SQLSink')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sql_tnk001",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"param_TableName": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Datasets"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().param_SchemaName",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().param_TableName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/Timesheets_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -330,6 +293,40 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_SQL')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_tnk001",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"param_TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().param_SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().param_TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_adls2_stnidoprodeastau100_json_output')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -444,7 +441,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DefinitivRosters')]",
+			"name": "[concat(parameters('factoryName'), '/Employees_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -456,7 +453,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Rosters_ds",
+								"referenceName": "Employees_ds",
 								"type": "DatasetReference"
 							},
 							"name": "jsoninput"
@@ -465,214 +462,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "SQLSink",
-								"type": "DatasetReference"
-							},
-							"name": "WriteToSQLDB",
-							"description": "Export data to SQLSink"
-						}
-					],
-					"transformations": [
-						{
-							"name": "flatten1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
-						"          reportData as (organisationName as string, organisationExportCode as string, organisationGLCode as string, teamHierarchy as string, rosterName as string, rosterDescription as string, rosterPeriod as string, shiftPublishedState as string, sourceType as string, status as string, employee as string, date as string, dayIndex as string, role as string, timePeriodMode as string, startTimeOfDay as string, endTimeOfDay as string, durationHours as double, publicHolidayWorked as string, position as string, shiftType as string, project as string, projectWorkOrder as string, department as string, location as string, notes as string, breakTimes as string, breakDurationHours as double, responseDateTime as string, responseReason as string, deleted as string, customFields as (kmAllowance as string, staffMeeting as (StartTimeOfDay as string, EndTimeOfDay as string, DurationHours as string, Value as boolean)[]))[],",
-						"          extraReportData as string[],",
-						"          serverTime as string,",
-						"          addFooterRow as boolean,",
-						"          addStatusBar as boolean,",
-						"          reportVariantTag as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     documentForm: 'documentPerLine') ~> jsoninput",
-						"jsoninput foldDown(unroll(reportData),",
-						"     mapColumn(",
-						"          Organisation = reportData.organisationName,",
-						"          {Organisation GL Code} = reportData.organisationGLCode,",
-						"          {Roster Name} = reportData.rosterName,",
-						"          {Roster Period} = reportData.rosterPeriod,",
-						"          {Shift Published State} = reportData.shiftPublishedState,",
-						"          {Source Type} = reportData.sourceType,",
-						"          Status = reportData.status,",
-						"          Employee = reportData.employee,",
-						"          Date = reportData.date,",
-						"          DayofWeek = reportData.dayIndex,",
-						"          Role = reportData.role,",
-						"          Position = reportData.position,",
-						"          {Shift Type} = reportData.shiftType,",
-						"          Project = reportData.project,",
-						"          {Project WorkOrder} = reportData.projectWorkOrder,",
-						"          Department = reportData.department,",
-						"          Location = reportData.location,",
-						"          {Time Period Mode} = reportData.timePeriodMode,",
-						"          {Start Time} = reportData.startTimeOfDay,",
-						"          {End Time} = reportData.endTimeOfDay,",
-						"          {Duration Hours} = reportData.durationHours,",
-						"          {Break Duration Hours} = reportData.breakDurationHours,",
-						"          {Public Holiday Worked} = reportData.publicHolidayWorked,",
-						"          Notes = reportData.notes,",
-						"          {Break Times} = reportData.breakTimes,",
-						"          {Response DateTime} = reportData.responseDateTime,",
-						"          {Response Reason} = reportData.responseReason,",
-						"          {Deleted?} = reportData.deleted",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flatten1",
-						"flatten1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     truncate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DefinitivTimesheets')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "00_Definitv Dataflows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Timesheets_ds",
-								"type": "DatasetReference"
-							},
-							"name": "jsoninput",
-							"description": "Import data from Timesheets_ds"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "SQLSink",
-								"type": "DatasetReference"
-							},
-							"name": "WriteToSQLDB",
-							"description": "Export data to AzureSQLDatabaseTable"
-						}
-					],
-					"transformations": [
-						{
-							"name": "flatten1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
-						"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, employmentStatus as string, payCalendar as string, date as string, approvalStatus as string, type as string, leaveType as string, leaveReason as string, project as string, projectCode as string, role as string, roleCode as string, location as string, locationCode as string, department as string, departmentCode as string, shiftType as string, shiftTypeCode as string, workOrder as string, workOrderCode as string, durationHours as double, breakDurationHours as double, startTime as string, finishTime as string, submittedBy as string, submittedDateTime as string, approvers as string, approvedBy as string, approvalTime as string, notes as string, leaveTypeCode as string, leaveReasonCode as string, customFields as (kmAllowance as string, staffMeeting as string[]), publicHolidayWorked as string)[],",
-						"          extraReportData as string[],",
-						"          serverTime as string,",
-						"          addFooterRow as boolean,",
-						"          addStatusBar as boolean,",
-						"          reportVariantTag as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     documentForm: 'documentPerLine') ~> jsoninput",
-						"jsoninput foldDown(unroll(reportData),",
-						"     mapColumn(",
-						"          Organisation = reportData.organisationName,",
-						"          {Organisation GL Code} = reportData.glCode,",
-						"          {Emp No} = reportData.employeeNumber,",
-						"          {Print Name} = reportData.printName,",
-						"          {Employment Status} = reportData.employmentStatus,",
-						"          {Pay Calendar} = reportData.payCalendar,",
-						"          Date = reportData.date,",
-						"          {Approval Status} = reportData.approvalStatus,",
-						"          Type = reportData.type,",
-						"          {Leave Type} = reportData.leaveType,",
-						"          {Leave Reason} = reportData.leaveReason,",
-						"          Project = reportData.project,",
-						"          {Project Code} = reportData.projectCode,",
-						"          Role = reportData.role,",
-						"          {Role Code} = reportData.roleCode,",
-						"          Location = reportData.location,",
-						"          {Location Code} = reportData.locationCode,",
-						"          Department = reportData.department,",
-						"          {Department Code} = reportData.departmentCode,",
-						"          {Shift Type} = reportData.shiftType,",
-						"          {Shift Type Code} = reportData.shiftTypeCode,",
-						"          {Work Order} = reportData.workOrder,",
-						"          {Work Order Code} = reportData.workOrderCode,",
-						"          Duration = reportData.durationHours,",
-						"          {Break Duration} = reportData.breakDurationHours,",
-						"          {Start Time} = reportData.startTime,",
-						"          {Finish Time} = reportData.finishTime,",
-						"          {Submitted By} = reportData.submittedBy,",
-						"          {Submitted Time} = reportData.submittedDateTime,",
-						"          Approvers = reportData.approvers,",
-						"          {Approved By} = reportData.approvedBy,",
-						"          {Approval Time} = reportData.approvalTime,",
-						"          {Leave Type Code} = reportData.leaveTypeCode,",
-						"          {Leave Reason Code} = reportData.leaveReasonCode,",
-						"          {Public Holiday Worked} = reportData.publicHolidayWorked",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flatten1",
-						"flatten1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     truncate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]",
-				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/EmployeeMaster')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "00_Definitv Dataflows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "EmployeeMaster_ds",
-								"type": "DatasetReference"
-							},
-							"name": "jsoninput"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "SQLSink",
+								"referenceName": "ds_SQL",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB"
@@ -761,11 +551,11 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
+				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/EmployeePayPolicies')]",
+			"name": "[concat(parameters('factoryName'), '/LeaveApplications_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -777,7 +567,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "EmployeePayPolicies_ds",
+								"referenceName": "LeaveApplications_ds",
 								"type": "DatasetReference"
 							},
 							"name": "jsoninput"
@@ -786,7 +576,273 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "SQLSink",
+								"referenceName": "ds_SQL",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB",
+							"description": "Export data to SQLSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+						"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, gender as string, leaveDateStart as string, leaveDateEnd as string, leaveAppNumDays as integer, leaveUnits as double, leaveUnitOfMeasure as string, leavePaymentStatus as string, leaveTypeName as string, leaveReasonName as string, leaveNotes as string, status as string, dateSubmitted as string, approvers as string, leaveApplicationId as string, employeeId as string, leaveTypeId as string, primaryProject as string, primaryProjectGlCode as string, primaryProjectCode as string, primaryRole as string, primaryRoleCode as string, primaryLocation as string, primaryLocationGlCode as string, primaryLocationCode as string, primaryDepartment as string, primaryDepartmentGlCode as string, primaryDepartmentCode as string)[],",
+						"          extraReportData as string[],",
+						"          serverTime as string,",
+						"          addFooterRow as boolean,",
+						"          addStatusBar as boolean,",
+						"          reportVariantTag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput foldDown(unroll(reportData),",
+						"     mapColumn(",
+						"          Organisation = reportData.organisationName,",
+						"          {Organisation GL Code} = reportData.glCode,",
+						"          {Emp No} = reportData.employeeNumber,",
+						"          {Print Name} = reportData.printName,",
+						"          LeaveDateStart = reportData.leaveDateStart,",
+						"          LeaveDateEnd = reportData.leaveDateEnd,",
+						"          LeaveAppNumDays = reportData.leaveAppNumDays,",
+						"          LeaveUnits = reportData.leaveUnits,",
+						"          LeaveUnitOfMeasure = reportData.leaveUnitOfMeasure,",
+						"          LeavePaymentStatus = reportData.leavePaymentStatus,",
+						"          LeaveTypeName = reportData.leaveTypeName,",
+						"          LeaveReasonName = reportData.leaveReasonName,",
+						"          Status = reportData.status,",
+						"          {Date Submitted} = reportData.dateSubmitted,",
+						"          Approvers = reportData.approvers,",
+						"          LeaveApplicationID = reportData.leaveApplicationId,",
+						"          {Employee ID} = reportData.employeeId,",
+						"          LeaveTypeID = reportData.leaveTypeId,",
+						"          Project = reportData.primaryProject,",
+						"          {Project Code} = reportData.primaryProjectCode,",
+						"          Role = reportData.primaryRole,",
+						"          {Role Code} = reportData.primaryRoleCode,",
+						"          Location = reportData.primaryLocation,",
+						"          {Location Code} = reportData.primaryLocationCode,",
+						"          Department = reportData.primaryDepartment,",
+						"          {Department Code} = reportData.primaryDepartmentCode",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LeaveBalances_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "LeaveBalances_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_SQL",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB",
+							"description": "Export data to SQLSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+						"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, leaveTypeName as string, leaveEntitlementHours as double, leaveProRataHours as double, leaveTotalHours as double, primaryProjectName as string, primaryProjectGlCode as string, primaryProjectCode as string, primaryRoleName as string, primaryRoleCode as string, primaryLocationName as string, primaryLocationGlCode as string, primaryLocationCode as string, primaryDepartmentName as string, primaryDepartmentGlCode as string, primaryDepartmentCode as string, employeeId as string, leaveTypeId as string)[],",
+						"          extraReportData as string[],",
+						"          serverTime as string,",
+						"          addFooterRow as boolean,",
+						"          addStatusBar as boolean,",
+						"          reportVariantTag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput foldDown(unroll(reportData),",
+						"     mapColumn(",
+						"          Organisation = reportData.organisationName,",
+						"          {Organisation GL Code} = reportData.glCode,",
+						"          {Employee ID} = reportData.employeeId,",
+						"          {Emp No} = reportData.employeeNumber,",
+						"          {Print Name} = reportData.printName,",
+						"          LeaveTypeName = reportData.leaveTypeName,",
+						"          LeaveEntitlementHours = reportData.leaveEntitlementHours,",
+						"          LeaveProRataHours = reportData.leaveProRataHours,",
+						"          LeaveTotalHours = reportData.leaveTotalHours,",
+						"          Project = reportData.primaryProjectName,",
+						"          {Project Code} = reportData.primaryProjectCode,",
+						"          Role = reportData.primaryRoleName,",
+						"          {Role Code} = reportData.primaryRoleCode,",
+						"          Location = reportData.primaryLocationName,",
+						"          {Location Code} = reportData.primaryLocationCode,",
+						"          Department = reportData.primaryDepartmentName,",
+						"          {Department Code} = reportData.primaryDepartmentCode",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Organizations_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Organizations_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_SQL",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          organizationId as string,",
+						"          organizationCode as string,",
+						"          legalName as string,",
+						"          tradingName as string,",
+						"          wpn as string,",
+						"          abn as string,",
+						"          branchCode as string,",
+						"          acn as string,",
+						"          employeeSupportEmail as string,",
+						"          contactTitle as string,",
+						"          contactFirstName as string,",
+						"          contactSurname as string,",
+						"          contactEmail as string,",
+						"          contactPhone as string,",
+						"          fbtExempt as boolean,",
+						"          intermediary as string,",
+						"          beamTermsConfirmUserId as string,",
+						"          beamTermsConfirmUserName as string,",
+						"          beamTermsConfirmDate as string,",
+						"          streetAddress as string,",
+						"          reference as string,",
+						"          softwareProviderABN as string,",
+						"          softwareProviderName as string,",
+						"          softwareSubscriptionId as string,",
+						"          notificationUserIds as string,",
+						"          notifyLodgementSubmitters as boolean,",
+						"          excludeReportableFbtBelowThreshold as boolean",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PayPolicies_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "PayPolicies_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_SQL",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB"
@@ -872,11 +928,11 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
+				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/EmployeePayslips')]",
+			"name": "[concat(parameters('factoryName'), '/Payslips_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -897,7 +953,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "SQLSink",
+								"referenceName": "ds_SQL",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -973,11 +1029,11 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
+				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/LeaveApplications')]",
+			"name": "[concat(parameters('factoryName'), '/Rosters_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -989,7 +1045,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "LeaveApplications_ds",
+								"referenceName": "Rosters_ds",
 								"type": "DatasetReference"
 							},
 							"name": "jsoninput"
@@ -998,7 +1054,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "SQLSink",
+								"referenceName": "ds_SQL",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -1013,7 +1069,7 @@
 					"scriptLines": [
 						"source(output(",
 						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
-						"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, gender as string, leaveDateStart as string, leaveDateEnd as string, leaveAppNumDays as integer, leaveUnits as double, leaveUnitOfMeasure as string, leavePaymentStatus as string, leaveTypeName as string, leaveReasonName as string, leaveNotes as string, status as string, dateSubmitted as string, approvers as string, leaveApplicationId as string, employeeId as string, leaveTypeId as string, primaryProject as string, primaryProjectGlCode as string, primaryProjectCode as string, primaryRole as string, primaryRoleCode as string, primaryLocation as string, primaryLocationGlCode as string, primaryLocationCode as string, primaryDepartment as string, primaryDepartmentGlCode as string, primaryDepartmentCode as string)[],",
+						"          reportData as (organisationName as string, organisationExportCode as string, organisationGLCode as string, teamHierarchy as string, rosterName as string, rosterDescription as string, rosterPeriod as string, shiftPublishedState as string, sourceType as string, status as string, employee as string, date as string, dayIndex as string, role as string, timePeriodMode as string, startTimeOfDay as string, endTimeOfDay as string, durationHours as double, publicHolidayWorked as string, position as string, shiftType as string, project as string, projectWorkOrder as string, department as string, location as string, notes as string, breakTimes as string, breakDurationHours as double, responseDateTime as string, responseReason as string, deleted as string, customFields as (kmAllowance as string, staffMeeting as (StartTimeOfDay as string, EndTimeOfDay as string, DurationHours as string, Value as boolean)[]))[],",
 						"          extraReportData as string[],",
 						"          serverTime as string,",
 						"          addFooterRow as boolean,",
@@ -1027,31 +1083,33 @@
 						"jsoninput foldDown(unroll(reportData),",
 						"     mapColumn(",
 						"          Organisation = reportData.organisationName,",
-						"          {Organisation GL Code} = reportData.glCode,",
-						"          {Emp No} = reportData.employeeNumber,",
-						"          {Print Name} = reportData.printName,",
-						"          LeaveDateStart = reportData.leaveDateStart,",
-						"          LeaveDateEnd = reportData.leaveDateEnd,",
-						"          LeaveAppNumDays = reportData.leaveAppNumDays,",
-						"          LeaveUnits = reportData.leaveUnits,",
-						"          LeaveUnitOfMeasure = reportData.leaveUnitOfMeasure,",
-						"          LeavePaymentStatus = reportData.leavePaymentStatus,",
-						"          LeaveTypeName = reportData.leaveTypeName,",
-						"          LeaveReasonName = reportData.leaveReasonName,",
+						"          {Organisation GL Code} = reportData.organisationGLCode,",
+						"          {Roster Name} = reportData.rosterName,",
+						"          {Roster Period} = reportData.rosterPeriod,",
+						"          {Shift Published State} = reportData.shiftPublishedState,",
+						"          {Source Type} = reportData.sourceType,",
 						"          Status = reportData.status,",
-						"          {Date Submitted} = reportData.dateSubmitted,",
-						"          Approvers = reportData.approvers,",
-						"          LeaveApplicationID = reportData.leaveApplicationId,",
-						"          {Employee ID} = reportData.employeeId,",
-						"          LeaveTypeID = reportData.leaveTypeId,",
-						"          Project = reportData.primaryProject,",
-						"          {Project Code} = reportData.primaryProjectCode,",
-						"          Role = reportData.primaryRole,",
-						"          {Role Code} = reportData.primaryRoleCode,",
-						"          Location = reportData.primaryLocation,",
-						"          {Location Code} = reportData.primaryLocationCode,",
-						"          Department = reportData.primaryDepartment,",
-						"          {Department Code} = reportData.primaryDepartmentCode",
+						"          Employee = reportData.employee,",
+						"          Date = reportData.date,",
+						"          DayofWeek = reportData.dayIndex,",
+						"          Role = reportData.role,",
+						"          Position = reportData.position,",
+						"          {Shift Type} = reportData.shiftType,",
+						"          Project = reportData.project,",
+						"          {Project WorkOrder} = reportData.projectWorkOrder,",
+						"          Department = reportData.department,",
+						"          Location = reportData.location,",
+						"          {Time Period Mode} = reportData.timePeriodMode,",
+						"          {Start Time} = reportData.startTimeOfDay,",
+						"          {End Time} = reportData.endTimeOfDay,",
+						"          {Duration Hours} = reportData.durationHours,",
+						"          {Break Duration Hours} = reportData.breakDurationHours,",
+						"          {Public Holiday Worked} = reportData.publicHolidayWorked,",
+						"          Notes = reportData.notes,",
+						"          {Break Times} = reportData.breakTimes,",
+						"          {Response DateTime} = reportData.responseDateTime,",
+						"          {Response Reason} = reportData.responseReason,",
+						"          {Deleted?} = reportData.deleted",
 						"     ),",
 						"     skipDuplicateMapInputs: false,",
 						"     skipDuplicateMapOutputs: false) ~> flatten1",
@@ -1070,11 +1128,11 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
+				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/LeaveBalances')]",
+			"name": "[concat(parameters('factoryName'), '/Timesheets_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1086,20 +1144,21 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "LeaveBalances_ds",
+								"referenceName": "Timesheets_ds",
 								"type": "DatasetReference"
 							},
-							"name": "jsoninput"
+							"name": "jsoninput",
+							"description": "Import data from Timesheets_ds"
 						}
 					],
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "SQLSink",
+								"referenceName": "ds_SQL",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
-							"description": "Export data to SQLSink"
+							"description": "Export data to AzureSQLDatabaseTable"
 						}
 					],
 					"transformations": [
@@ -1110,7 +1169,7 @@
 					"scriptLines": [
 						"source(output(",
 						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
-						"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, leaveTypeName as string, leaveEntitlementHours as double, leaveProRataHours as double, leaveTotalHours as double, primaryProjectName as string, primaryProjectGlCode as string, primaryProjectCode as string, primaryRoleName as string, primaryRoleCode as string, primaryLocationName as string, primaryLocationGlCode as string, primaryLocationCode as string, primaryDepartmentName as string, primaryDepartmentGlCode as string, primaryDepartmentCode as string, employeeId as string, leaveTypeId as string)[],",
+						"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, employmentStatus as string, payCalendar as string, date as string, approvalStatus as string, type as string, leaveType as string, leaveReason as string, project as string, projectCode as string, role as string, roleCode as string, location as string, locationCode as string, department as string, departmentCode as string, shiftType as string, shiftTypeCode as string, workOrder as string, workOrderCode as string, durationHours as double, breakDurationHours as double, startTime as string, finishTime as string, submittedBy as string, submittedDateTime as string, approvers as string, approvedBy as string, approvalTime as string, notes as string, leaveTypeCode as string, leaveReasonCode as string, customFields as (kmAllowance as string, staffMeeting as string[]), publicHolidayWorked as string)[],",
 						"          extraReportData as string[],",
 						"          serverTime as string,",
 						"          addFooterRow as boolean,",
@@ -1125,21 +1184,39 @@
 						"     mapColumn(",
 						"          Organisation = reportData.organisationName,",
 						"          {Organisation GL Code} = reportData.glCode,",
-						"          {Employee ID} = reportData.employeeId,",
 						"          {Emp No} = reportData.employeeNumber,",
 						"          {Print Name} = reportData.printName,",
-						"          LeaveTypeName = reportData.leaveTypeName,",
-						"          LeaveEntitlementHours = reportData.leaveEntitlementHours,",
-						"          LeaveProRataHours = reportData.leaveProRataHours,",
-						"          LeaveTotalHours = reportData.leaveTotalHours,",
-						"          Project = reportData.primaryProjectName,",
-						"          {Project Code} = reportData.primaryProjectCode,",
-						"          Role = reportData.primaryRoleName,",
-						"          {Role Code} = reportData.primaryRoleCode,",
-						"          Location = reportData.primaryLocationName,",
-						"          {Location Code} = reportData.primaryLocationCode,",
-						"          Department = reportData.primaryDepartmentName,",
-						"          {Department Code} = reportData.primaryDepartmentCode",
+						"          {Employment Status} = reportData.employmentStatus,",
+						"          {Pay Calendar} = reportData.payCalendar,",
+						"          Date = reportData.date,",
+						"          {Approval Status} = reportData.approvalStatus,",
+						"          Type = reportData.type,",
+						"          {Leave Type} = reportData.leaveType,",
+						"          {Leave Reason} = reportData.leaveReason,",
+						"          Project = reportData.project,",
+						"          {Project Code} = reportData.projectCode,",
+						"          Role = reportData.role,",
+						"          {Role Code} = reportData.roleCode,",
+						"          Location = reportData.location,",
+						"          {Location Code} = reportData.locationCode,",
+						"          Department = reportData.department,",
+						"          {Department Code} = reportData.departmentCode,",
+						"          {Shift Type} = reportData.shiftType,",
+						"          {Shift Type Code} = reportData.shiftTypeCode,",
+						"          {Work Order} = reportData.workOrder,",
+						"          {Work Order Code} = reportData.workOrderCode,",
+						"          Duration = reportData.durationHours,",
+						"          {Break Duration} = reportData.breakDurationHours,",
+						"          {Start Time} = reportData.startTime,",
+						"          {Finish Time} = reportData.finishTime,",
+						"          {Submitted By} = reportData.submittedBy,",
+						"          {Submitted Time} = reportData.submittedDateTime,",
+						"          Approvers = reportData.approvers,",
+						"          {Approved By} = reportData.approvedBy,",
+						"          {Approval Time} = reportData.approvalTime,",
+						"          {Leave Type Code} = reportData.leaveTypeCode,",
+						"          {Leave Reason Code} = reportData.leaveReasonCode,",
+						"          {Public Holiday Worked} = reportData.publicHolidayWorked",
 						"     ),",
 						"     skipDuplicateMapInputs: false,",
 						"     skipDuplicateMapOutputs: false) ~> flatten1",
@@ -1158,88 +1235,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Organizations')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "00_Definitv Dataflows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Organizations_ds",
-								"type": "DatasetReference"
-							},
-							"name": "jsoninput"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "SQLSink",
-								"type": "DatasetReference"
-							},
-							"name": "WriteToSQLDB"
-						}
-					],
-					"transformations": [],
-					"scriptLines": [
-						"source(output(",
-						"          organizationId as string,",
-						"          organizationCode as string,",
-						"          legalName as string,",
-						"          tradingName as string,",
-						"          wpn as string,",
-						"          abn as string,",
-						"          branchCode as string,",
-						"          acn as string,",
-						"          employeeSupportEmail as string,",
-						"          contactTitle as string,",
-						"          contactFirstName as string,",
-						"          contactSurname as string,",
-						"          contactEmail as string,",
-						"          contactPhone as string,",
-						"          fbtExempt as boolean,",
-						"          intermediary as string,",
-						"          beamTermsConfirmUserId as string,",
-						"          beamTermsConfirmUserName as string,",
-						"          beamTermsConfirmDate as string,",
-						"          streetAddress as string,",
-						"          reference as string,",
-						"          softwareProviderABN as string,",
-						"          softwareProviderName as string,",
-						"          softwareSubscriptionId as string,",
-						"          notificationUserIds as string,",
-						"          notifyLodgementSubmitters as boolean,",
-						"          excludeReportableFbtBelowThreshold as boolean",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     documentForm: 'documentPerLine') ~> jsoninput",
-						"jsoninput sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     truncate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SQLSink')]"
+				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]",
+				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
 			]
 		},
 		{
