@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Organizations",
+						"referenceName": "Organizations_df",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"jsoninput": {

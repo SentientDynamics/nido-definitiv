@@ -22,7 +22,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "SQLSink",
+						"referenceName": "ds_SQL",
 						"type": "DatasetReference",
 						"parameters": {
 							"param_SchemaName": "dbo",
@@ -160,7 +160,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "EmployeePayslips",
+						"referenceName": "Payslips_df",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"jsoninput": {

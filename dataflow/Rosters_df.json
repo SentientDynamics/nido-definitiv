@@ -1,5 +1,5 @@
 {
-	"name": "DefinitivRosters",
+	"name": "Rosters_df",
 	"properties": {
 		"folder": {
 			"name": "00_Definitv Dataflows"
@@ -18,7 +18,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SQLSink",
+						"referenceName": "ds_SQL",
 						"type": "DatasetReference"
 					},
 					"name": "WriteToSQLDB",
