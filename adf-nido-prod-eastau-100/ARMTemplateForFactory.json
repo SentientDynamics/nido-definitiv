@@ -143,6 +143,14 @@
 			"type": "string",
 			"defaultValue": "OrganizationPayRuns"
 		},
+		"tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Payslips _Staging"
+		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "definitiv"
@@ -150,6 +158,14 @@
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "CustomReportRosters"
+		},
+		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Rosters"
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
@@ -8856,6 +8872,16 @@
 							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName')]"
 						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Payslips",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -8881,7 +8907,8 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns')]",
+				"[concat(variables('factoryId'), '/pipelines/Payslips')]"
 			]
 		},
 		{
@@ -8901,12 +8928,22 @@
 							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
 						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Rosters",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Day",
+						"frequency": "Week",
 						"interval": 1,
 						"startTime": "2022-04-14T09:00:00",
 						"timeZone": "AUS Eastern Standard Time",
@@ -8923,6 +8960,13 @@
 								16,
 								17,
 								18
+							],
+							"weekDays": [
+								"Monday",
+								"Tuesday",
+								"Wednesday",
+								"Thursday",
+								"Friday"
 							]
 						}
 					}
@@ -8930,7 +8974,8 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]",
+				"[concat(variables('factoryId'), '/pipelines/Rosters')]"
 			]
 		},
 		{
@@ -9623,6 +9668,7 @@
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
+						"     truncate:true,",
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",

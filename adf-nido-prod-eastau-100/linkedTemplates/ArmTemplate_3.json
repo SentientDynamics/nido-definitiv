@@ -127,6 +127,14 @@
 			"type": "string",
 			"defaultValue": "CustomReportRosters"
 		},
+		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Rosters"
+		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -142,6 +150,14 @@
 		"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "OrganizationPayRuns"
+		},
+		"tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Payslips _Staging"
 		}
 	},
 	"variables": {
@@ -409,12 +425,22 @@
 							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
 						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Rosters",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Day",
+						"frequency": "Week",
 						"interval": 1,
 						"startTime": "2022-04-14T09:00:00",
 						"timeZone": "AUS Eastern Standard Time",
@@ -431,6 +457,13 @@
 								16,
 								17,
 								18
+							],
+							"weekDays": [
+								"Monday",
+								"Tuesday",
+								"Wednesday",
+								"Thursday",
+								"Friday"
 							]
 						}
 					}
@@ -494,6 +527,16 @@
 						"parameters": {
 							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName')]"
+						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Payslips",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_TableName')]"
 						}
 					}
 				],

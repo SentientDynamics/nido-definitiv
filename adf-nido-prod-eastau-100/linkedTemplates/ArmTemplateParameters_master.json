@@ -107,11 +107,23 @@
 		"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
 			"value": "OrganizationPayRuns"
 		},
+		"tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_TableName": {
+			"value": "Definitiv_Payslips _Staging"
+		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
 			"value": "definitiv"
 		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
 			"value": "CustomReportRosters"
+		},
+		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName": {
+			"value": "Definitiv_Rosters"
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"value": "dbo"
