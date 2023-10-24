@@ -429,9 +429,9 @@
 								}
 							},
 							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
 							},
 							"traceLevel": "Fine"
 						}
@@ -460,7 +460,6 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/EmployeePayPolicies')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/EmployeePayPolicies_ds')]"
 			]
@@ -662,9 +661,9 @@
 								}
 							},
 							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
 							},
 							"traceLevel": "Fine"
 						}
@@ -693,7 +692,6 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/EmployeeMaster')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/EmployeeMaster_ds')]"
 			]
@@ -895,9 +893,9 @@
 								}
 							},
 							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
 							},
 							"traceLevel": "Fine"
 						}
@@ -925,7 +923,6 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/LeaveApplications')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/LeaveApplications_ds')]"
 			]
@@ -1127,9 +1124,9 @@
 								}
 							},
 							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
 							},
 							"traceLevel": "Fine"
 						}
@@ -1157,7 +1154,6 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/LeaveBalances')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/LeaveBalances_ds')]"
 			]
@@ -1359,9 +1355,9 @@
 								}
 							},
 							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
 							},
 							"traceLevel": "Fine"
 						}
@@ -1389,7 +1385,6 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/EmployeePayslips')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Payslips_ds')]"
 			]
@@ -1591,9 +1586,9 @@
 								}
 							},
 							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
 							},
 							"traceLevel": "Fine"
 						}
@@ -1621,7 +1616,6 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/DefinitivRosters')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Rosters_ds')]"
 			]
@@ -1823,9 +1817,9 @@
 								}
 							},
 							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
 							},
 							"traceLevel": "Fine"
 						}
@@ -1854,7 +1848,6 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/DefinitivTimesheets')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]"
 			]
