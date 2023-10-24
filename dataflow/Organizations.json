@@ -1,0 +1,76 @@
+{
+	"name": "Organizations",
+	"properties": {
+		"folder": {
+			"name": "00_Definitv Dataflows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Organizations_ds",
+						"type": "DatasetReference"
+					},
+					"name": "jsoninput"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SQLSink",
+						"type": "DatasetReference"
+					},
+					"name": "WriteToSQLDB"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          organizationId as string,",
+				"          organizationCode as string,",
+				"          legalName as string,",
+				"          tradingName as string,",
+				"          wpn as string,",
+				"          abn as string,",
+				"          branchCode as string,",
+				"          acn as string,",
+				"          employeeSupportEmail as string,",
+				"          contactTitle as string,",
+				"          contactFirstName as string,",
+				"          contactSurname as string,",
+				"          contactEmail as string,",
+				"          contactPhone as string,",
+				"          fbtExempt as boolean,",
+				"          intermediary as string,",
+				"          beamTermsConfirmUserId as string,",
+				"          beamTermsConfirmUserName as string,",
+				"          beamTermsConfirmDate as string,",
+				"          streetAddress as string,",
+				"          reference as string,",
+				"          softwareProviderABN as string,",
+				"          softwareProviderName as string,",
+				"          softwareSubscriptionId as string,",
+				"          notificationUserIds as string,",
+				"          notifyLodgementSubmitters as boolean,",
+				"          excludeReportableFbtBelowThreshold as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> jsoninput",
+				"jsoninput sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+			]
+		}
+	}
+}

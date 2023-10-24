@@ -13,6 +13,16 @@
 					"param_SchemaName": "definitiv",
 					"param_TableName": "Organizations"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "Organizations",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitiv_Organizations"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",

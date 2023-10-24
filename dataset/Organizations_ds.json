@@ -1,0 +1,130 @@
+{
+	"name": "Organizations_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls2_stnidoprodeastau100",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ds_PipelineTriggerTime": {
+				"type": "string"
+			},
+			"ds_PipelineRunId": {
+				"type": "string"
+			},
+			"ds_FileSystem": {
+				"type": "string"
+			},
+			"ds_Directory": {
+				"type": "string"
+			},
+			"ds_PipelineName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "00_Definitiv Datasets"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().ds_FileSystem",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"organizationId": {
+					"type": "string"
+				},
+				"organizationCode": {
+					"type": "string"
+				},
+				"legalName": {
+					"type": "string"
+				},
+				"tradingName": {
+					"type": "string"
+				},
+				"wpn": {
+					"type": "null"
+				},
+				"abn": {
+					"type": "string"
+				},
+				"branchCode": {
+					"type": "null"
+				},
+				"acn": {
+					"type": "string"
+				},
+				"employeeSupportEmail": {
+					"type": "null"
+				},
+				"contactTitle": {
+					"type": "null"
+				},
+				"contactFirstName": {
+					"type": "null"
+				},
+				"contactSurname": {
+					"type": "null"
+				},
+				"contactEmail": {
+					"type": "null"
+				},
+				"contactPhone": {
+					"type": "null"
+				},
+				"fbtExempt": {
+					"type": "boolean"
+				},
+				"intermediary": {
+					"type": "null"
+				},
+				"beamTermsConfirmUserId": {
+					"type": "null"
+				},
+				"beamTermsConfirmUserName": {
+					"type": "null"
+				},
+				"beamTermsConfirmDate": {
+					"type": "null"
+				},
+				"streetAddress": {
+					"type": "null"
+				},
+				"reference": {
+					"type": "null"
+				},
+				"softwareProviderABN": {
+					"type": "null"
+				},
+				"softwareProviderName": {
+					"type": "null"
+				},
+				"softwareSubscriptionId": {
+					"type": "null"
+				},
+				"notificationUserIds": {
+					"type": "null"
+				},
+				"notifyLodgementSubmitters": {
+					"type": "boolean"
+				},
+				"excludeReportableFbtBelowThreshold": {
+					"type": "boolean"
+				}
+			}
+		}
+	}
+}
