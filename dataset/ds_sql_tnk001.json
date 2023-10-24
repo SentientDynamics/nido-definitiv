@@ -7,8 +7,7 @@
 		},
 		"parameters": {
 			"param_SchemaName": {
-				"type": "string",
-				"defaultValue": "definitiv"
+				"type": "string"
 			},
 			"param_TableName": {
 				"type": "string"
