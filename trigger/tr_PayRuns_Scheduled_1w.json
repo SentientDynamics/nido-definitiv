@@ -14,6 +14,16 @@
 					"param_SchemaName": "definitiv",
 					"param_TableName": "OrganizationPayRuns"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "Payslips",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitiv_Payslips _Staging"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
