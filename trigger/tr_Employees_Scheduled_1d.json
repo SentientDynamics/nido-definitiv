@@ -28,7 +28,7 @@
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "EmployeePayPolicies",
+					"referenceName": "PayPolicies",
 					"type": "PipelineReference"
 				},
 				"parameters": {
@@ -38,12 +38,12 @@
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "EmployeeTableMaster",
+					"referenceName": "Employees",
 					"type": "PipelineReference"
 				},
 				"parameters": {
 					"param_SchemaName": "dbo",
-					"param_TableName": "Employee_Table_Master"
+					"param_TableName": "Definitiv_Employees"
 				}
 			}
 		],

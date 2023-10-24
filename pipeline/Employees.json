@@ -1,5 +1,5 @@
 {
-	"name": "EmployeeTableMaster",
+	"name": "Employees",
 	"properties": {
 		"activities": [
 			{
@@ -22,7 +22,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "SQLSink",
+						"referenceName": "ds_SQL",
 						"type": "DatasetReference",
 						"parameters": {
 							"param_SchemaName": "dbo",
@@ -109,7 +109,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "EmployeeMaster_ds",
+									"referenceName": "Employees_ds",
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_PipelineTriggerTime": {
@@ -160,7 +160,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "EmployeeMaster",
+						"referenceName": "Employees_df",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"jsoninput": {
@@ -187,7 +187,7 @@
 							},
 							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "Employee_Table_Master"
+								"param_TableName": "Definitiv_Employees"
 							}
 						}
 					},
@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Employee_Table_Master"
+				"defaultValue": "Definitiv_Employees"
 			}
 		},
 		"folder": {

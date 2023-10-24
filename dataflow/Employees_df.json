@@ -1,5 +1,5 @@
 {
-	"name": "EmployeeMaster",
+	"name": "Employees_df",
 	"properties": {
 		"folder": {
 			"name": "00_Definitv Dataflows"
@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "EmployeeMaster_ds",
+						"referenceName": "Employees_ds",
 						"type": "DatasetReference"
 					},
 					"name": "jsoninput"
@@ -18,7 +18,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "SQLSink",
+						"referenceName": "ds_SQL",
 						"type": "DatasetReference"
 					},
 					"name": "WriteToSQLDB"

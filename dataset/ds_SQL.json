@@ -1,5 +1,5 @@
 {
-	"name": "SQLSink",
+	"name": "ds_SQL",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sql_tnk001",
@@ -13,9 +13,6 @@
 			"param_TableName": {
 				"type": "string"
 			}
-		},
-		"folder": {
-			"name": "00_Definitiv Datasets"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",

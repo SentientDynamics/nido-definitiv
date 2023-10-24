@@ -1,5 +1,5 @@
 {
-	"name": "EmployeeMaster_ds",
+	"name": "Employees_ds",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls2_stnidoprodeastau100",

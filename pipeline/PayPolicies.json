@@ -1,5 +1,5 @@
 {
-	"name": "EmployeePayPolicies",
+	"name": "PayPolicies",
 	"properties": {
 		"activities": [
 			{
@@ -22,7 +22,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "SQLSink",
+						"referenceName": "ds_SQL",
 						"type": "DatasetReference",
 						"parameters": {
 							"param_SchemaName": "dbo",
@@ -109,7 +109,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "EmployeePayPolicies_ds",
+									"referenceName": "PayPolicies_ds",
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_PipelineTriggerTime": {
@@ -160,7 +160,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "EmployeePayPolicies",
+						"referenceName": "PayPolicies_df",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"jsoninput": {

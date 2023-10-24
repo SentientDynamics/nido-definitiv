@@ -1,5 +1,5 @@
 {
-	"name": "EmployeePayPolicies_ds",
+	"name": "PayPolicies_ds",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls2_stnidoprodeastau100",
