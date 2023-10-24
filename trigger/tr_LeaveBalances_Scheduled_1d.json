@@ -3,7 +3,18 @@
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [],
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "definitiv",
+					"param_TableName": "ReportingLeaveBalances"
+				}
+			}
+		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
