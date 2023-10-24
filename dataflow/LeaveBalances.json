@@ -2,7 +2,7 @@
 	"name": "LeaveBalances",
 	"properties": {
 		"folder": {
-			"name": "00_Definitv DataFlows"
+			"name": "00_Definitv Dataflows"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
