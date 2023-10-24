@@ -92,6 +92,12 @@
 		"tr_LeaveBalances_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances_parameters_param_TableName": {
 			"value": "ReportingLeaveBalances"
 		},
+		"tr_LeaveBalances_Scheduled_1d_properties_LeaveBalances_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_LeaveBalances_Scheduled_1d_properties_LeaveBalances_parameters_param_TableName": {
+			"value": "Definitiv_LeaveBalances"
+		},
 		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName": {
 			"value": "definitiv"
 		},
