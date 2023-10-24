@@ -2,7 +2,7 @@
 	"name": "DefinitivRosters",
 	"properties": {
 		"folder": {
-			"name": "00_Definitv"
+			"name": "00_Definitv DataFlows"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
