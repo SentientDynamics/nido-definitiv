@@ -8,9 +8,6 @@
 		"ls_sql_tnk001_connectionString": {
 			"value": ""
 		},
-		"RestService1_properties_typeProperties_url": {
-			"value": "https://stnidoprodeastau100.dfs.core.windows.net/"
-		},
 		"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
 			"value": "https://stnidoprodeastau100.dfs.core.windows.net/"
 		},

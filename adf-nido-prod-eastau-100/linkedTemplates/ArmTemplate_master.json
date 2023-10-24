@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sql_tnk001'"
 		},
-		"RestService1_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://stnidoprodeastau100.dfs.core.windows.net/"
-		},
 		"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://stnidoprodeastau100.dfs.core.windows.net/"
@@ -321,9 +317,6 @@
 					},
 					"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
 						"value": "[parameters('ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl')]"
-					},
-					"RestService1_properties_typeProperties_url": {
-						"value": "[parameters('RestService1_properties_typeProperties_url')]"
 					},
 					"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
 						"value": "[parameters('ls_adls2_stnidoprodeastau100_properties_typeProperties_url')]"

@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sql_tnk001'"
 		},
-		"RestService1_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://stnidoprodeastau100.dfs.core.windows.net/"
-		},
 		"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://stnidoprodeastau100.dfs.core.windows.net/"
@@ -266,7 +262,7 @@
 								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference",
 								"parameters": {
 									"param_SchemaName": "dbo",
@@ -466,7 +462,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]",
 				"[concat(variables('factoryId'), '/dataflows/Employees_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Employees_ds')]"
@@ -498,7 +494,7 @@
 								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference",
 								"parameters": {
 									"param_SchemaName": "dbo",
@@ -697,7 +693,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]",
 				"[concat(variables('factoryId'), '/dataflows/LeaveApplications_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/LeaveApplications_ds')]"
@@ -729,7 +725,7 @@
 								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference",
 								"parameters": {
 									"param_SchemaName": "dbo",
@@ -928,7 +924,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]",
 				"[concat(variables('factoryId'), '/dataflows/LeaveBalances_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/LeaveBalances_ds')]"
@@ -1150,7 +1146,7 @@
 								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference",
 								"parameters": {
 									"param_SchemaName": "dbo",
@@ -1350,7 +1346,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]",
 				"[concat(variables('factoryId'), '/dataflows/PayPolicies_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/PayPolicies_ds')]"
@@ -1382,7 +1378,7 @@
 								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference",
 								"parameters": {
 									"param_SchemaName": "dbo",
@@ -1581,7 +1577,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]",
 				"[concat(variables('factoryId'), '/dataflows/Payslips_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Payslips_ds')]"
@@ -1613,7 +1609,7 @@
 								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference",
 								"parameters": {
 									"param_SchemaName": "dbo",
@@ -1812,7 +1808,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]",
 				"[concat(variables('factoryId'), '/dataflows/Rosters_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Rosters_ds')]"
@@ -1844,7 +1840,7 @@
 								"partitionOption": "None"
 							},
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference",
 								"parameters": {
 									"param_SchemaName": "dbo",
@@ -2044,7 +2040,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]",
 				"[concat(variables('factoryId'), '/dataflows/Timesheets_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]"
@@ -8338,43 +8334,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_SQL')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sql_tnk001",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"param_TableName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().param_SchemaName",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().param_TableName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ds_adls2_stnidoprodeastau100_json_output')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -8461,6 +8420,43 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_tnk001",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"param_TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().param_SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().param_TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_sql_tnk001')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -8495,28 +8491,6 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RestService1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "RestService",
-				"typeProperties": {
-					"url": "[parameters('RestService1_properties_typeProperties_url')]",
-					"enableServerCertificateValidation": true,
-					"authenticationType": "Anonymous"
-				},
-				"connectVia": {
-					"referenceName": "AutoResolveIntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -9118,7 +9092,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB"
@@ -9209,7 +9183,7 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/Employees_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
 			]
 		},
 		{
@@ -9234,7 +9208,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -9308,7 +9282,7 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/LeaveApplications_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
 			]
 		},
 		{
@@ -9333,7 +9307,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -9398,7 +9372,7 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/LeaveBalances_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
 			]
 		},
 		{
@@ -9423,7 +9397,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB"
@@ -9481,7 +9455,7 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/Organizations_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
 			]
 		},
 		{
@@ -9506,7 +9480,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB"
@@ -9594,7 +9568,7 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/PayPolicies_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
 			]
 		},
 		{
@@ -9619,7 +9593,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -9697,7 +9671,7 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/Payslips_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
 			]
 		},
 		{
@@ -9722,7 +9696,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -9798,7 +9772,7 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/Rosters_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
 			]
 		},
 		{
@@ -9824,7 +9798,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_SQL",
+								"referenceName": "ds_sql",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -9907,7 +9881,7 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_SQL')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
 			]
 		},
 		{
