@@ -13,12 +13,22 @@
 					"param_SchemaName": "definitiv",
 					"param_TableName": "CustomReportRosters"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "Rosters",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitiv_Rosters"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
-				"frequency": "Day",
+				"frequency": "Week",
 				"interval": 1,
 				"startTime": "2022-04-14T09:00:00",
 				"timeZone": "AUS Eastern Standard Time",
@@ -35,6 +45,13 @@
 						16,
 						17,
 						18
+					],
+					"weekDays": [
+						"Monday",
+						"Tuesday",
+						"Wednesday",
+						"Thursday",
+						"Friday"
 					]
 				}
 			}
