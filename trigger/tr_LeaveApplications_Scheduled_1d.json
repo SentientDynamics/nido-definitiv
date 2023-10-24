@@ -6,16 +6,6 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"param_SchemaName": "definitiv",
-					"param_TableName": "ReportingLeaveApplications"
-				}
-			},
-			{
-				"pipelineReference": {
 					"referenceName": "LeaveApplications",
 					"type": "PipelineReference"
 				},
