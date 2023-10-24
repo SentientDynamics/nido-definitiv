@@ -5981,6 +5981,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
@@ -6378,6 +6381,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
@@ -6686,6 +6692,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
@@ -6940,6 +6949,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
@@ -7163,6 +7175,9 @@
 					"ds_PipelineName": {
 						"type": "string"
 					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
 				},
 				"annotations": [],
 				"type": "Json",
@@ -7461,6 +7476,9 @@
 					"ds_PipelineName": {
 						"type": "string"
 					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
 				},
 				"annotations": [],
 				"type": "Json",
@@ -7771,6 +7789,9 @@
 					"ds_PipelineName": {
 						"type": "string"
 					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
 				},
 				"annotations": [],
 				"type": "Json",
@@ -8743,7 +8764,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv"
+					"name": "00_Definitv DataFlows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -8844,7 +8865,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv"
+					"name": "00_Definitv DataFlows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -8953,7 +8974,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv"
+					"name": "00_Definitv DataFlows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -9069,7 +9090,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv"
+					"name": "00_Definitv DataFlows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -9182,7 +9203,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv"
+					"name": "00_Definitv DataFlows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -9285,7 +9306,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv"
+					"name": "00_Definitv DataFlows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -9384,7 +9405,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv"
+					"name": "00_Definitv DataFlows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {

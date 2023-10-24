@@ -618,6 +618,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
@@ -1014,6 +1017,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
@@ -1321,6 +1327,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
@@ -1574,6 +1583,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
@@ -1796,6 +1808,9 @@
 					"ds_PipelineName": {
 						"type": "string"
 					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
 				},
 				"annotations": [],
 				"type": "Json",
@@ -2093,6 +2108,9 @@
 					"ds_PipelineName": {
 						"type": "string"
 					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
 				},
 				"annotations": [],
 				"type": "Json",
