@@ -93,40 +93,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_sql')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sql_tnk001",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"param_TableName": {
-						"type": "string"
-					}
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": {
-						"value": "@dataset().param_SchemaName",
-						"type": "Expression"
-					},
-					"table": {
-						"value": "@dataset().param_TableName",
-						"type": "Expression"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/ds_sql_tnk001')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -137,8 +103,7 @@
 				},
 				"parameters": {
 					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "definitiv"
+						"type": "string"
 					},
 					"param_TableName": {
 						"type": "string"
@@ -182,7 +147,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sql",
+								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB"
@@ -271,7 +236,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
 		{
@@ -296,7 +261,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sql",
+								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -368,7 +333,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
 		{
@@ -393,7 +358,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sql",
+								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -456,7 +421,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
 		{
@@ -481,7 +446,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sql",
+								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB"
@@ -537,7 +502,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
 		{
@@ -562,7 +527,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sql",
+								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB"
@@ -648,7 +613,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
 		{
@@ -673,7 +638,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sql",
+								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -749,7 +714,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
 		{
@@ -774,7 +739,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sql",
+								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -848,7 +813,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
 		{
@@ -874,7 +839,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sql",
+								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference"
 							},
 							"name": "WriteToSQLDB",
@@ -955,7 +920,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql')]"
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
 		{
@@ -1632,6 +1597,52 @@
 						"     transactionCommit: 'batch',",
 						"     reportSuccessOnError: true) ~> sinkSql"
 					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Rosters')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "04_Rosters"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference"
+							},
+							"name": "sourceJson"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "sinkSql",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_adls2_stnidoprodeastau100",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "castDateColumns",
+							"description": "Creating/updating the columns G'PipelineName, PipelineRunId, PipelineTriggerTime, QueryFinishDate, QueryStartDate, amount, createdByUser, createdDate, date1, employeeId, employmentType, end, firstName, lastName, modifiedByUser, modifiedDate, quantity, room, rosterEntryId, rosterId, serviceCode, start, SourceFileName'"
+						}
+					],
+					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Rosters\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tQueryFinishDate as date,\n\t\tQueryStartDate as date,\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(end = toTimestamp(concat(toString(toDate(date)), ' ', end, ':00')),\n\t\tstart = toTimestamp(concat(toString(toDate(date)), ' ', start, ':00')),\n\t\tdate = toDate(date),\n\t\tPipelineTriggerTime = toTimestamp(PipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'Australia/NSW'),\n\t\tcreatedDate = toDate(createdDate),\n\t\tmodifiedDate = toDate(modifiedDate)) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
 				}
 			},
 			"dependsOn": [
