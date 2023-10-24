@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Employee_Pay_Policies"
+				"defaultValue": "Definitiv_PayPolicies"
 			}
 		},
 		"folder": {
