@@ -6,16 +6,6 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"param_SchemaName": "definitiv",
-					"param_TableName": "ReportingLeaveBalances"
-				}
-			},
-			{
-				"pipelineReference": {
 					"referenceName": "LeaveBalances",
 					"type": "PipelineReference"
 				},
