@@ -80,12 +80,6 @@
 		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName": {
 			"value": "EmployeesEmploymentHistory"
 		},
-		"tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_SchemaName": {
-			"value": "definitiv"
-		},
-		"tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_TableName": {
-			"value": "ReportingLeaveApplications"
-		},
 		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName": {
 			"value": "dbo"
 		},

@@ -87,14 +87,6 @@
 			"type": "string",
 			"defaultValue": "EmployeesEmploymentHistory"
 		},
-		"tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "ReportingLeaveApplications"
-		},
 		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -5421,16 +5413,6 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemaName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications_parameters_param_TableName')]"
-						}
-					},
-					{
-						"pipelineReference": {
 							"referenceName": "LeaveApplications",
 							"type": "PipelineReference"
 						},
@@ -5459,7 +5441,6 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_ReportingLeaveApplications')]",
 				"[concat(variables('factoryId'), '/pipelines/LeaveApplications')]"
 			]
 		},
