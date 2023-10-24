@@ -17,16 +17,16 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select organizationId from definitiv.Organizations",
+						"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "ds_sql_tnk001",
+						"referenceName": "SQLSink",
 						"type": "DatasetReference",
 						"parameters": {
-							"param_SchemaName": "definitiv",
-							"param_TableName": "Organizations"
+							"param_SchemaName": "dbo",
+							"param_TableName": "Definitiv_Organizations"
 						}
 					},
 					"firstRowOnly": false
