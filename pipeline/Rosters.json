@@ -22,7 +22,7 @@
 						"partitionOption": "None"
 					},
 					"dataset": {
-						"referenceName": "ds_SQL",
+						"referenceName": "ds_sql",
 						"type": "DatasetReference",
 						"parameters": {
 							"param_SchemaName": "dbo",

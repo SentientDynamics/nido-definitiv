@@ -18,7 +18,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_SQL",
+						"referenceName": "ds_sql",
 						"type": "DatasetReference"
 					},
 					"name": "WriteToSQLDB"

@@ -1,5 +1,5 @@
 {
-	"name": "ds_SQL",
+	"name": "ds_sql",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sql_tnk001",
