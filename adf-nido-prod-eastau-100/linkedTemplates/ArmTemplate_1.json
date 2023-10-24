@@ -412,7 +412,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv DataFlows"
+					"name": "00_Definitv Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -509,7 +509,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv DataFlows"
+					"name": "00_Definitv Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -616,7 +616,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv DataFlows"
+					"name": "00_Definitv Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -728,7 +728,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv DataFlows"
+					"name": "00_Definitv Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -837,7 +837,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv DataFlows"
+					"name": "00_Definitv Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -936,7 +936,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv DataFlows"
+					"name": "00_Definitv Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -1031,7 +1031,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "00_Definitv DataFlows"
+					"name": "00_Definitv Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {

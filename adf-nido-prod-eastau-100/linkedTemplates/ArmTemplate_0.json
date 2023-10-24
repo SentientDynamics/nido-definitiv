@@ -2376,6 +2376,9 @@
 						"type": "string"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "AzureSqlTable",
 				"schema": [],
