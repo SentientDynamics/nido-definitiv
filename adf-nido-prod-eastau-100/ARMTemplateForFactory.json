@@ -23,69 +23,13 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
 		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName1": {
-			"type": "string",
-			"defaultValue": "Employees"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName2": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName2": {
-			"type": "string",
-			"defaultValue": "EmployeePaymentAccounts"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName3": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName3": {
-			"type": "string",
-			"defaultValue": "EmployeePhoneNumbers"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName4": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName4": {
-			"type": "string",
-			"defaultValue": "EmployeeStreetAddresses"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName5": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName5": {
-			"type": "string",
-			"defaultValue": "EmployeeSuperAccounts"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName6": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName6": {
-			"type": "string",
-			"defaultValue": "EmployeeSuperContributions"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName7": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7": {
-			"type": "string",
-			"defaultValue": "EmployeeTaxDeclarations"
-		},
 		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
 		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_PayPolicies"
+			"defaultValue": "Employee_Pay_Policies"
 		},
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
 			"type": "string",
@@ -93,15 +37,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Employees"
-		},
-		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "EmployeesEmploymentHistory"
+			"defaultValue": "Employee_Table_Master"
 		},
 		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName": {
 			"type": "string",
@@ -118,14 +54,6 @@
 		"tr_LeaveBalances_Scheduled_1d_properties_LeaveBalances_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_LeaveBalances"
-		},
-		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "Organizations"
 		},
 		"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_SchemaName": {
 			"type": "string",
@@ -404,7 +332,7 @@
 						}
 					},
 					{
-						"name": "EmployeeMaster",
+						"name": "Employees_df",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -452,7 +380,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Employees"
+										"param_TableName": "Employee_Table_Master"
 									}
 								}
 							},
@@ -475,7 +403,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Employees"
+						"defaultValue": "Employee_Table_Master"
 					}
 				},
 				"folder": {
@@ -636,7 +564,7 @@
 						}
 					},
 					{
-						"name": "LeaveApplications",
+						"name": "LeaveApplications_df",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -867,7 +795,7 @@
 						}
 					},
 					{
-						"name": "LeaveBalances",
+						"name": "LeaveBalances_df",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -961,7 +889,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Organizations",
+						"name": "Organizations_df",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -1288,7 +1216,7 @@
 						}
 					},
 					{
-						"name": "EmployeePayPolicies",
+						"name": "PayPolicies_df",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -1336,7 +1264,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_PayPolicies"
+										"param_TableName": "Employee_Pay_Policies"
 									}
 								}
 							},
@@ -1359,7 +1287,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_PayPolicies"
+						"defaultValue": "Employee_Pay_Policies"
 					}
 				},
 				"folder": {
@@ -1481,7 +1409,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId, '/reporting/pay-runs?FromDate=2023-09-30&reportType=AggregatePerPayRun')\n",
+													"value": "@concat('/api/company/', item().organizationId, '/reporting/pay-runs?FromDate=2023-10-14&reportType=AggregatePerPayRun')\n",
 													"type": "Expression"
 												}
 											}
@@ -1520,7 +1448,7 @@
 						}
 					},
 					{
-						"name": "EmployeePayslips",
+						"name": "Payslips_df",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -1751,7 +1679,7 @@
 						}
 					},
 					{
-						"name": "DefinitivRosters",
+						"name": "Rosters_df",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -1982,7 +1910,7 @@
 						}
 					},
 					{
-						"name": "DefinitivRostersTest",
+						"name": "Rosters_dfTest",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -2213,7 +2141,7 @@
 						}
 					},
 					{
-						"name": "DefinitivTimesheets",
+						"name": "Timesheets_df",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -9130,28 +9058,6 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_Employees",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemeName1": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1')]",
-							"param_TableName1": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName1')]",
-							"param_SchemeName2": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName2')]",
-							"param_TableName2": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName2')]",
-							"param_SchemeName3": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName3')]",
-							"param_TableName3": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName3')]",
-							"param_SchemeName4": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName4')]",
-							"param_TableName4": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName4')]",
-							"param_SchemeName5": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName5')]",
-							"param_TableName5": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName5')]",
-							"param_SchemeName6": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName6')]",
-							"param_TableName6": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName6')]",
-							"param_SchemeName7": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName7')]",
-							"param_TableName7": "[parameters('tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7')]"
-						}
-					},
-					{
-						"pipelineReference": {
 							"referenceName": "PayPolicies",
 							"type": "PipelineReference"
 						},
@@ -9191,55 +9097,8 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Employees')]",
 				"[concat(variables('factoryId'), '/pipelines/PayPolicies')]",
 				"[concat(variables('factoryId'), '/pipelines/Employees')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/tr_EmploymentHistory_Scheduled_1w')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_EmploymentHistory",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemaName": "[parameters('tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName')]"
-						}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Week",
-						"interval": 1,
-						"startTime": "2022-06-08T05:19:00",
-						"endTime": "2023-09-01T09:04:42",
-						"timeZone": "AUS Eastern Standard Time",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								3
-							],
-							"weekDays": [
-								"Saturday"
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_EmploymentHistory')]"
 			]
 		},
 		{
@@ -9327,36 +9186,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_Monitoring_Scheduled_1d')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"pipelines": [],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2022-06-12T01:17:00",
-						"timeZone": "AUS Eastern Standard Time",
-						"schedule": {
-							"minutes": [
-								0
-							],
-							"hours": [
-								8
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[variables('factoryId')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/tr_Organizations_Scheduled_1w')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -9364,16 +9193,6 @@
 				"annotations": [],
 				"runtimeState": "Started",
 				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_Organizations",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemaName": "[parameters('tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName')]"
-						}
-					},
 					{
 						"pipelineReference": {
 							"referenceName": "Organizations",
@@ -9408,7 +9227,6 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Organizations')]",
 				"[concat(variables('factoryId'), '/pipelines/Organizations')]"
 			]
 		},

@@ -17,65 +17,17 @@
 		"ls_rest_definitiv_properties_typeProperties_url": {
 			"value": "@{linkedService().sourceBaseUrl}"
 		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName1": {
-			"value": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName1": {
-			"value": "Employees"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName2": {
-			"value": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName2": {
-			"value": "EmployeePaymentAccounts"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName3": {
-			"value": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName3": {
-			"value": "EmployeePhoneNumbers"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName4": {
-			"value": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName4": {
-			"value": "EmployeeStreetAddresses"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName5": {
-			"value": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName5": {
-			"value": "EmployeeSuperAccounts"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName6": {
-			"value": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName6": {
-			"value": "EmployeeSuperContributions"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_SchemeName7": {
-			"value": "definitiv"
-		},
-		"tr_Employees_Scheduled_1d_properties_pl_CopyFromApiToDefinitivSchema_Employees_parameters_param_TableName7": {
-			"value": "EmployeeTaxDeclarations"
-		},
 		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
 			"value": "dbo"
 		},
 		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
-			"value": "Definitiv_PayPolicies"
+			"value": "Employee_Pay_Policies"
 		},
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
 			"value": "dbo"
 		},
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
-			"value": "Definitiv_Employees"
-		},
-		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_SchemaName": {
-			"value": "definitiv"
-		},
-		"tr_EmploymentHistory_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_EmploymentHistory_parameters_param_TableName": {
-			"value": "EmployeesEmploymentHistory"
+			"value": "Employee_Table_Master"
 		},
 		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName": {
 			"value": "dbo"
@@ -88,12 +40,6 @@
 		},
 		"tr_LeaveBalances_Scheduled_1d_properties_LeaveBalances_parameters_param_TableName": {
 			"value": "Definitiv_LeaveBalances"
-		},
-		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_SchemaName": {
-			"value": "definitiv"
-		},
-		"tr_Organizations_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_Organizations_parameters_param_TableName": {
-			"value": "Organizations"
 		},
 		"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_SchemaName": {
 			"value": "dbo"
