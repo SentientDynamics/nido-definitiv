@@ -1600,7 +1600,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Definitv_Rosters"
+										"param_TableName": "Definitiv_Rosters"
 									}
 								}
 							},
@@ -1623,7 +1623,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitv_Rosters"
+						"defaultValue": "Definitiv_Rosters"
 					}
 				},
 				"folder": {

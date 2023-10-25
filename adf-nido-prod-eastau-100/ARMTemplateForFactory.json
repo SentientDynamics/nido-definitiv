@@ -1791,7 +1791,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Definitv_Rosters"
+										"param_TableName": "Definitiv_Rosters"
 									}
 								}
 							},
@@ -1814,7 +1814,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitv_Rosters"
+						"defaultValue": "Definitiv_Rosters"
 					}
 				},
 				"folder": {
@@ -1826,6 +1826,7 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/Rosters_df')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Rosters_ds')]"
 			]
