@@ -2194,6 +2194,324 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Rosters_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "null"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"organisationName": {
+										"type": "string"
+									},
+									"organisationExportCode": {
+										"type": "null"
+									},
+									"organisationGLCode": {
+										"type": "string"
+									},
+									"rosterName": {
+										"type": "string"
+									},
+									"employeeNumber": {
+										"type": "string"
+									},
+									"employee": {
+										"type": "string"
+									},
+									"employmentStatus": {
+										"type": "string"
+									},
+									"date": {
+										"type": "string"
+									},
+									"payItemType": {
+										"type": "string"
+									},
+									"payItemCode": {
+										"type": "string"
+									},
+									"payItem": {
+										"type": "string"
+									},
+									"unitOfMeasure": {
+										"type": "string"
+									},
+									"units": {
+										"type": "number"
+									},
+									"rate": {
+										"type": "number"
+									},
+									"total": {
+										"type": "number"
+									},
+									"payItemGLDebitCode": {
+										"type": "string"
+									},
+									"payItemGLCreditCode": {
+										"type": "null"
+									},
+									"role": {
+										"type": "string"
+									},
+									"roleCode": {
+										"type": "null"
+									},
+									"project": {
+										"type": "string"
+									},
+									"projectCode": {
+										"type": "string"
+									},
+									"projectGlCode": {
+										"type": "string"
+									},
+									"location": {
+										"type": "string"
+									},
+									"locationCode": {
+										"type": "string"
+									},
+									"locationGlCode": {
+										"type": "null"
+									},
+									"department": {
+										"type": "string"
+									},
+									"departmentCode": {
+										"type": "null"
+									},
+									"departmentGlCode": {
+										"type": "null"
+									},
+									"projectWorkOrder": {
+										"type": "null"
+									},
+									"projectWorkOrderCode": {
+										"type": "null"
+									},
+									"leaveType": {
+										"type": "null"
+									},
+									"leaveReason": {
+										"type": "null"
+									},
+									"notes": {
+										"type": "null"
+									},
+									"payItemCustomFields": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"customFieldId": {
+													"type": "string"
+												},
+												"targetEntity": {
+													"type": "integer"
+												},
+												"dataType": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"displayName": {
+													"type": "string"
+												},
+												"description": {
+													"type": "string"
+												},
+												"enabled": {
+													"type": "boolean"
+												},
+												"global": {
+													"type": "boolean"
+												},
+												"options": {
+													"type": "array"
+												},
+												"isMandatory": {
+													"type": "boolean"
+												},
+												"order": {
+													"type": "integer"
+												},
+												"dateDriven": {
+													"type": "boolean"
+												},
+												"timeBased": {
+													"type": "boolean"
+												},
+												"displayOnTimesheetSummary": {
+													"type": "boolean"
+												},
+												"preventMultipleEntries": {
+													"type": "boolean"
+												},
+												"timePeriodMode": {
+													"type": "null"
+												},
+												"inheritTimesheetPeriod": {
+													"type": "null"
+												},
+												"customFieldDisplayStatus": {
+													"type": "null"
+												}
+											}
+										}
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Rosters_dsTest')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2442,288 +2760,6 @@
 												}
 											}
 										}
-									}
-								}
-							}
-						},
-						"extraReportData": {
-							"type": "array"
-						},
-						"serverTime": {
-							"type": "string"
-						},
-						"addFooterRow": {
-							"type": "boolean"
-						},
-						"addStatusBar": {
-							"type": "boolean"
-						},
-						"reportVariantTag": {
-							"type": "string"
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Timesheets_ds')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls2_stnidoprodeastau100",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"ds_PipelineTriggerTime": {
-						"type": "string"
-					},
-					"ds_PipelineRunId": {
-						"type": "string"
-					},
-					"ds_FileSystem": {
-						"type": "string"
-					},
-					"ds_Directory": {
-						"type": "string"
-					},
-					"ds_PipelineName": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Datasets"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": {
-							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
-							"type": "Expression"
-						},
-						"fileSystem": {
-							"value": "@dataset().ds_FileSystem",
-							"type": "Expression"
-						}
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"headers": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"title": {
-										"type": "string"
-									},
-									"filterDisabled": {
-										"type": "boolean"
-									},
-									"sortDisabled": {
-										"type": "boolean"
-									},
-									"hiddenByDefault": {
-										"type": "boolean"
-									},
-									"searchDisabled": {
-										"type": "boolean"
-									},
-									"dataType": {
-										"type": "string"
-									},
-									"fieldName": {
-										"type": "string"
-									},
-									"defaultPivotColumnOrder": {
-										"type": "integer"
-									},
-									"defaultPivotRowOrder": {
-										"type": "integer"
-									},
-									"defaultPivotValueOrder": {
-										"type": "integer"
-									},
-									"defaultSortOrder": {
-										"type": "integer"
-									},
-									"defaultSortDirection": {
-										"type": "string"
-									},
-									"defaultPivotAggregation": {
-										"type": "null"
-									},
-									"isDynamicColumns": {
-										"type": "boolean"
-									},
-									"isCustomFields": {
-										"type": "boolean"
-									},
-									"customFieldsKeyName": {
-										"type": "null"
-									},
-									"createDayOfWeekColumn": {
-										"type": "boolean"
-									},
-									"prependBaseColumnNameToDayOfWeekColumn": {
-										"type": "boolean"
-									},
-									"trueText": {
-										"type": "null"
-									},
-									"falseText": {
-										"type": "null"
-									},
-									"nullDisplayText": {
-										"type": "null"
-									},
-									"disableDefaultAggregation": {
-										"type": "boolean"
-									},
-									"numericPrecision": {
-										"type": "null"
-									}
-								}
-							}
-						},
-						"reportData": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"organisationName": {
-										"type": "string"
-									},
-									"glCode": {
-										"type": "string"
-									},
-									"exportCode": {
-										"type": "null"
-									},
-									"employeeNumber": {
-										"type": "string"
-									},
-									"printName": {
-										"type": "string"
-									},
-									"firstName": {
-										"type": "string"
-									},
-									"surname": {
-										"type": "string"
-									},
-									"employmentStatus": {
-										"type": "string"
-									},
-									"payCalendar": {
-										"type": "string"
-									},
-									"date": {
-										"type": "string"
-									},
-									"approvalStatus": {
-										"type": "string"
-									},
-									"type": {
-										"type": "string"
-									},
-									"leaveType": {
-										"type": "null"
-									},
-									"leaveReason": {
-										"type": "null"
-									},
-									"project": {
-										"type": "string"
-									},
-									"projectCode": {
-										"type": "string"
-									},
-									"role": {
-										"type": "string"
-									},
-									"roleCode": {
-										"type": "null"
-									},
-									"location": {
-										"type": "string"
-									},
-									"locationCode": {
-										"type": "string"
-									},
-									"department": {
-										"type": "string"
-									},
-									"departmentCode": {
-										"type": "null"
-									},
-									"shiftType": {
-										"type": "null"
-									},
-									"shiftTypeCode": {
-										"type": "null"
-									},
-									"workOrder": {
-										"type": "null"
-									},
-									"workOrderCode": {
-										"type": "null"
-									},
-									"durationHours": {
-										"type": "number"
-									},
-									"breakDurationHours": {
-										"type": "number"
-									},
-									"startTime": {
-										"type": "string"
-									},
-									"finishTime": {
-										"type": "string"
-									},
-									"submittedBy": {
-										"type": "null"
-									},
-									"submittedDateTime": {
-										"type": "string"
-									},
-									"approvers": {
-										"type": "string"
-									},
-									"approvedBy": {
-										"type": "null"
-									},
-									"approvalTime": {
-										"type": "null"
-									},
-									"notes": {
-										"type": "null"
-									},
-									"leaveTypeCode": {
-										"type": "null"
-									},
-									"leaveReasonCode": {
-										"type": "null"
-									},
-									"customFields": {
-										"type": "object",
-										"properties": {
-											"kmAllowance": {
-												"type": "null"
-											},
-											"staffMeeting": {
-												"type": "array"
-											}
-										}
-									},
-									"publicHolidayWorked": {
-										"type": "null"
 									}
 								}
 							}
