@@ -1,5 +1,5 @@
 {
-	"name": "RostersTest",
+	"name": "Rosters",
 	"properties": {
 		"activities": [
 			{
@@ -102,7 +102,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3',\n'?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-28), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),28), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-28), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),28), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
 											"type": "Expression"
 										}
 									}
@@ -110,7 +110,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "Rosters_dsTest",
+									"referenceName": "Rosters_ds",
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_PipelineTriggerTime": {
@@ -141,7 +141,7 @@
 				}
 			},
 			{
-				"name": "DefinitivRostersTest",
+				"name": "DefinitivRosters",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -161,7 +161,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Rosters_dfTest",
+						"referenceName": "Rosters_df",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"jsoninput": {
@@ -188,7 +188,7 @@
 							},
 							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "Definitiv_RostersTest"
+								"param_TableName": "Definitiv_Rosters"
 							}
 						}
 					},
@@ -207,7 +207,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_RostersTest"
+				"defaultValue": "Definitiv_Rosters"
 			}
 		},
 		"folder": {

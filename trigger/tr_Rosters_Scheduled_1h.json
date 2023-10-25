@@ -16,12 +16,22 @@
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "Rosterstest",
+					"referenceName": "RostersTest",
 					"type": "PipelineReference"
 				},
 				"parameters": {
 					"param_SchemaName": "dbo",
 					"param_TableName": "Definitiv_RostersTest"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "Rosters",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitiv_Rosters"
 				}
 			}
 		],
