@@ -1652,6 +1652,7 @@
 								"value": "@activity('Organizations').output.value",
 								"type": "Expression"
 							},
+							"batchCount": 8,
 							"activities": [
 								{
 									"name": "ApiToJson",
@@ -1826,7 +1827,6 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/Rosters_df')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Rosters_ds')]"
 			]
