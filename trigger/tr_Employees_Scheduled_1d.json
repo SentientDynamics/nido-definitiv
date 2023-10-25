@@ -6,28 +6,6 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_Employees",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"param_SchemeName1": "definitiv",
-					"param_TableName1": "Employees",
-					"param_SchemeName2": "definitiv",
-					"param_TableName2": "EmployeePaymentAccounts",
-					"param_SchemeName3": "definitiv",
-					"param_TableName3": "EmployeePhoneNumbers",
-					"param_SchemeName4": "definitiv",
-					"param_TableName4": "EmployeeStreetAddresses",
-					"param_SchemeName5": "definitiv",
-					"param_TableName5": "EmployeeSuperAccounts",
-					"param_SchemeName6": "definitiv",
-					"param_TableName6": "EmployeeSuperContributions",
-					"param_SchemeName7": "definitiv",
-					"param_TableName7": "EmployeeTaxDeclarations"
-				}
-			},
-			{
-				"pipelineReference": {
 					"referenceName": "PayPolicies",
 					"type": "PipelineReference"
 				},
