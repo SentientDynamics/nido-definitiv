@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_Employees"
+				"defaultValue": "Employee_Table_Master"
 			}
 		},
 		"folder": {
