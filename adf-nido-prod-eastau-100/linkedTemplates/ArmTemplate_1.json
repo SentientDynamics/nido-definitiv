@@ -126,6 +126,322 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Rosters_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "null"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"organisationName": {
+										"type": "string"
+									},
+									"organisationExportCode": {
+										"type": "null"
+									},
+									"organisationGLCode": {
+										"type": "string"
+									},
+									"rosterName": {
+										"type": "string"
+									},
+									"employeeNumber": {
+										"type": "string"
+									},
+									"employee": {
+										"type": "string"
+									},
+									"employmentStatus": {
+										"type": "string"
+									},
+									"date": {
+										"type": "string"
+									},
+									"payItemType": {
+										"type": "string"
+									},
+									"payItemCode": {
+										"type": "string"
+									},
+									"payItem": {
+										"type": "string"
+									},
+									"unitOfMeasure": {
+										"type": "string"
+									},
+									"units": {
+										"type": "number"
+									},
+									"rate": {
+										"type": "number"
+									},
+									"total": {
+										"type": "number"
+									},
+									"payItemGLDebitCode": {
+										"type": "string"
+									},
+									"payItemGLCreditCode": {
+										"type": "null"
+									},
+									"role": {
+										"type": "string"
+									},
+									"roleCode": {
+										"type": "null"
+									},
+									"project": {
+										"type": "string"
+									},
+									"projectCode": {
+										"type": "string"
+									},
+									"projectGlCode": {
+										"type": "string"
+									},
+									"location": {
+										"type": "string"
+									},
+									"locationCode": {
+										"type": "string"
+									},
+									"locationGlCode": {
+										"type": "null"
+									},
+									"department": {
+										"type": "string"
+									},
+									"departmentCode": {
+										"type": "null"
+									},
+									"departmentGlCode": {
+										"type": "null"
+									},
+									"projectWorkOrder": {
+										"type": "null"
+									},
+									"projectWorkOrderCode": {
+										"type": "null"
+									},
+									"leaveType": {
+										"type": "null"
+									},
+									"leaveReason": {
+										"type": "null"
+									},
+									"notes": {
+										"type": "null"
+									},
+									"payItemCustomFields": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"customFieldId": {
+													"type": "string"
+												},
+												"targetEntity": {
+													"type": "integer"
+												},
+												"dataType": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"displayName": {
+													"type": "string"
+												},
+												"description": {
+													"type": "string"
+												},
+												"enabled": {
+													"type": "boolean"
+												},
+												"global": {
+													"type": "boolean"
+												},
+												"options": {
+													"type": "array"
+												},
+												"isMandatory": {
+													"type": "boolean"
+												},
+												"order": {
+													"type": "integer"
+												},
+												"dateDriven": {
+													"type": "boolean"
+												},
+												"timeBased": {
+													"type": "boolean"
+												},
+												"displayOnTimesheetSummary": {
+													"type": "boolean"
+												},
+												"preventMultipleEntries": {
+													"type": "boolean"
+												},
+												"timePeriodMode": {
+													"type": "null"
+												},
+												"inheritTimesheetPeriod": {
+													"type": "null"
+												},
+												"customFieldDisplayStatus": {
+													"type": "null"
+												}
+											}
+										}
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Employees_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -719,7 +1035,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Rosters_df')]",
+			"name": "[concat(parameters('factoryName'), '/Rosters_dfTest')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -731,7 +1047,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Rosters_ds",
+								"referenceName": "Rosters_dsTest",
 								"type": "DatasetReference"
 							},
 							"name": "jsoninput"
@@ -1598,52 +1914,6 @@
 						"     transactionCommit: 'batch',",
 						"     reportSuccessOnError: true) ~> sinkSql"
 					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_Rosters')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "04_Rosters"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "sourceJson"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSql",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [
-						{
-							"name": "castDateColumns",
-							"description": "Creating/updating the columns G'PipelineName, PipelineRunId, PipelineTriggerTime, QueryFinishDate, QueryStartDate, amount, createdByUser, createdDate, date1, employeeId, employmentType, end, firstName, lastName, modifiedByUser, modifiedDate, quantity, room, rosterEntryId, rosterId, serviceCode, start, SourceFileName'"
-						}
-					],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Rosters\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tQueryFinishDate as date,\n\t\tQueryStartDate as date,\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(end = toTimestamp(concat(toString(toDate(date)), ' ', end, ':00')),\n\t\tstart = toTimestamp(concat(toString(toDate(date)), ' ', start, ':00')),\n\t\tdate = toDate(date),\n\t\tPipelineTriggerTime = toTimestamp(PipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'Australia/NSW'),\n\t\tcreatedDate = toDate(createdDate),\n\t\tmodifiedDate = toDate(modifiedDate)) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
 				}
 			},
 			"dependsOn": [

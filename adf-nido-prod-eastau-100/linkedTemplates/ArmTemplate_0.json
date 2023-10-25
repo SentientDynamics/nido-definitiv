@@ -2194,7 +2194,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Rosters_ds')]",
+			"name": "[concat(parameters('factoryName'), '/Rosters_dsTest')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
