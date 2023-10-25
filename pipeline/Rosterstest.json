@@ -1,5 +1,5 @@
 {
-	"name": "Rosters",
+	"name": "Rosterstest",
 	"properties": {
 		"activities": [
 			{
@@ -110,7 +110,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "Rosters_ds",
+									"referenceName": "Rosters_dsTest",
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_PipelineTriggerTime": {
@@ -141,7 +141,7 @@
 				}
 			},
 			{
-				"name": "DefinitivRosters",
+				"name": "DefinitivRostersTest",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -161,7 +161,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Rosters_df",
+						"referenceName": "Rosters_dfTest",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"jsoninput": {
@@ -188,7 +188,7 @@
 							},
 							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "Definitiv_Rosters"
+								"param_TableName": "Definitiv_RostersTest"
 							}
 						}
 					},
@@ -207,7 +207,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_Rosters"
+				"defaultValue": "Definitiv_RostersTest"
 			}
 		},
 		"folder": {

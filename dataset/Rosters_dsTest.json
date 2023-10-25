@@ -1,5 +1,5 @@
 {
-	"name": "Rosters_ds",
+	"name": "Rosters_dsTest",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls2_stnidoprodeastau100",
