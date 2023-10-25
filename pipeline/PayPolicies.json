@@ -140,7 +140,7 @@
 				}
 			},
 			{
-				"name": "EmployeePayPolicies",
+				"name": "PayPolicies",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -187,7 +187,7 @@
 							},
 							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "Definitiv_PayPolicies"
+								"param_TableName": "Employee_Pay_Policies"
 							}
 						}
 					},
@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_PayPolicies"
+				"defaultValue": "Employee_Pay_Policies"
 			}
 		},
 		"folder": {
