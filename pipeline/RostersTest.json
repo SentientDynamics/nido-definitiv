@@ -140,7 +140,7 @@
 				}
 			},
 			{
-				"name": "DefinitivRostersTest",
+				"name": "Rosters_dfTest",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
