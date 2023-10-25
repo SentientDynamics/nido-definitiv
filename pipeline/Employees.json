@@ -140,7 +140,7 @@
 				}
 			},
 			{
-				"name": "EmployeeMaster",
+				"name": "Employees",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -187,7 +187,7 @@
 							},
 							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "Definitiv_Employees"
+								"param_TableName": "Employee_Table_Master"
 							}
 						}
 					},
