@@ -2,7 +2,7 @@
 	"name": "tr_Rosters_Scheduled_1h",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
