@@ -80,6 +80,9 @@
 						"defaultValue": "/api/v2/organizations"
 					}
 				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
 				"annotations": [],
 				"type": "RestResource",
 				"typeProperties": {
@@ -108,6 +111,9 @@
 					"param_TableName": {
 						"type": "string"
 					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
@@ -1027,7 +1033,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "05_Employees"
+					"name": "01_Sentient Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -1195,7 +1201,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "05_Employees"
+					"name": "01_Sentient Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -1232,7 +1238,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "06_Leave"
+					"name": "01_Sentient Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -1333,7 +1339,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "07_PayRuns"
+					"name": "01_Sentient Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -1381,7 +1387,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "08_Organizations"
+					"name": "01_Sentient Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -1422,7 +1428,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "01_Payslips"
+					"name": "01_Sentient Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -1467,7 +1473,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "06_Leave"
+					"name": "01_Sentient Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
@@ -1587,7 +1593,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"folder": {
-					"name": "06_Leave"
+					"name": "01_Sentient Dataflows"
 				},
 				"type": "MappingDataFlow",
 				"typeProperties": {
