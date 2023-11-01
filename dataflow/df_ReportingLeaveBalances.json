@@ -2,7 +2,7 @@
 	"name": "df_ReportingLeaveBalances",
 	"properties": {
 		"folder": {
-			"name": "06_Leave"
+			"name": "01_Sentient Dataflows"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {

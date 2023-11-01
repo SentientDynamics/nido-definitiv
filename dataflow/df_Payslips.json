@@ -2,7 +2,7 @@
 	"name": "df_Payslips",
 	"properties": {
 		"folder": {
-			"name": "01_Payslips"
+			"name": "01_Sentient Dataflows"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {

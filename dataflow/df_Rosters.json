@@ -2,7 +2,7 @@
 	"name": "df_Rosters",
 	"properties": {
 		"folder": {
-			"name": "04_Rosters"
+			"name": "01_Sentient Dataflows"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {

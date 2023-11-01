@@ -2,7 +2,7 @@
 	"name": "df_Organizations",
 	"properties": {
 		"folder": {
-			"name": "08_Organizations"
+			"name": "01_Sentient Dataflows"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
