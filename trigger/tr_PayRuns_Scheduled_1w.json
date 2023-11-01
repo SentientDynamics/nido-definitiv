@@ -22,7 +22,7 @@
 				},
 				"parameters": {
 					"param_SchemaName": "dbo",
-					"param_TableName": "Definitiv_Payslips _Staging"
+					"param_TableName": "Definitiv_Payslips_Staging"
 				}
 			}
 		],
