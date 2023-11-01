@@ -77,7 +77,7 @@
 		},
 		"tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Payslips _Staging"
+			"defaultValue": "Definitiv_Payslips_Staging"
 		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
 			"type": "string",

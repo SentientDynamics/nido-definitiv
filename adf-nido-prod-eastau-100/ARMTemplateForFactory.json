@@ -77,7 +77,7 @@
 		},
 		"tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Payslips _Staging"
+			"defaultValue": "Definitiv_Payslips_Staging"
 		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
 			"type": "string",
@@ -1393,7 +1393,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId, '/reporting/pay-runs?FromDate=2023-09-30&reportType=AggregatePerPayRun')\n",
+													"value": "@concat('/api/company/', item().organizationId, '/reporting/pay-runs?FromDate=2023-10-14&reportType=AggregatePerPayRun')\n",
 													"type": "Expression"
 												}
 											}
@@ -1480,7 +1480,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Payslips _Staging"
+										"param_TableName": "Definitiv_Payslips_Staging"
 									}
 								}
 							},
@@ -1503,7 +1503,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Payslips _Staging"
+						"defaultValue": "Definitiv_Payslips_Staging"
 					}
 				},
 				"folder": {
@@ -1515,6 +1515,7 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/Payslips_df')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Payslips_ds')]"
 			]
