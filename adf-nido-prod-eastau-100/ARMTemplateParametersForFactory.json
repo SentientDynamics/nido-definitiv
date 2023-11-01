@@ -47,12 +47,6 @@
 		"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_TableName": {
 			"value": "Definitiv_Organizations"
 		},
-		"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_SchemaName": {
-			"value": "definitiv"
-		},
-		"tr_PayRuns_Scheduled_1w_properties_pl_CopyFromApiToDefinitivSchema_OrganizationPayRuns_parameters_param_TableName": {
-			"value": "OrganizationPayRuns"
-		},
 		"tr_PayRuns_Scheduled_1w_properties_Payslips_parameters_param_SchemaName": {
 			"value": "dbo"
 		},
