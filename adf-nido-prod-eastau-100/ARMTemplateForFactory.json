@@ -501,7 +501,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=2023-04-01',\n'&toDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),35), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'))",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=2023-04-01',\n'&toDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 35), 'yyyy-MM-dd'))",
 													"type": "Expression"
 												}
 											}
@@ -1385,7 +1385,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId,\n'/reporting/pay-runs?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-32), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&reportType=AggregatePerPayRun')\n",
+													"value": "@concat('/api/company/', item().organizationId,\n'/reporting/pay-runs?FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -33), 'yyyy-MM-dd'),\n'&reportType=AggregatePerPayRun')\n",
 													"type": "Expression"
 												}
 											}
@@ -1616,7 +1616,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-28), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),28), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 28), 'yyyy-MM-dd')\n)",
 													"type": "Expression"
 												}
 											}
@@ -1847,7 +1847,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3',\n'?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-28), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),28), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3',\n'?FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 28), 'yyyy-MM-dd')\n)",
 													"type": "Expression"
 												}
 											}
@@ -2078,7 +2078,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),-35), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(convertFromUtc(addDays(utcNow(),7), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -35), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 7), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)",
 													"type": "Expression"
 												}
 											}
