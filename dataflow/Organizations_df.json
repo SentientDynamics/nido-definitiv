@@ -58,6 +58,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true,",
 				"     documentForm: 'documentPerLine') ~> jsoninput",
 				"jsoninput sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",

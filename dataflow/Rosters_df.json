@@ -43,6 +43,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true,",
 				"     documentForm: 'documentPerLine') ~> jsoninput",
 				"jsoninput foldDown(unroll(reportData),",
 				"     mapColumn(",
