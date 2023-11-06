@@ -2,7 +2,7 @@
 	"name": "tr_Organizations_Scheduled_1w",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
