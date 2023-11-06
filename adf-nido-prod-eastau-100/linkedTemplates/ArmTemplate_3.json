@@ -23,19 +23,19 @@
 			"type": "string",
 			"defaultValue": "Employee_Table_Master"
 		},
-		"tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_SchemaName": {
+		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_TableName": {
+		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_LeaveApplications"
 		},
-		"tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_SchemaName": {
+		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_TableName": {
+		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_LeaveBalances"
 		},
@@ -883,7 +883,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_LeaveApplications_Scheduled_1w')]",
+			"name": "[concat(parameters('factoryName'), '/tr_LeaveApplications_Scheduled_2w')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -896,8 +896,8 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_TableName')]"
 						}
 					}
 				],
@@ -905,8 +905,8 @@
 				"typeProperties": {
 					"recurrence": {
 						"frequency": "Week",
-						"interval": 1,
-						"startTime": "2022-06-08T05:45:00",
+						"interval": 2,
+						"startTime": "2023-11-16T03:00:00",
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
@@ -916,7 +916,7 @@
 								4
 							],
 							"weekDays": [
-								"Monday"
+								"Thursday"
 							]
 						}
 					}
@@ -925,7 +925,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_LeaveBalances_Scheduled_1w')]",
+			"name": "[concat(parameters('factoryName'), '/tr_LeaveBalances_Scheduled_2w')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -938,8 +938,8 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName')]"
 						}
 					}
 				],
@@ -947,8 +947,8 @@
 				"typeProperties": {
 					"recurrence": {
 						"frequency": "Week",
-						"interval": 1,
-						"startTime": "2022-06-08T06:03:00",
+						"interval": 2,
+						"startTime": "2023-11-16T04:00:00",
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
@@ -958,7 +958,7 @@
 								5
 							],
 							"weekDays": [
-								"Monday"
+								"Thursday"
 							]
 						}
 					}

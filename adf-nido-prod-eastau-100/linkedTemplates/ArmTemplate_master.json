@@ -39,19 +39,19 @@
 			"type": "string",
 			"defaultValue": "Employee_Table_Master"
 		},
-		"tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_SchemaName": {
+		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_TableName": {
+		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_LeaveApplications"
 		},
-		"tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_SchemaName": {
+		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_TableName": {
+		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_LeaveBalances"
 		},
@@ -322,17 +322,17 @@
 					"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
 						"value": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName')]"
 					},
-					"tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_SchemaName": {
-						"value": "[parameters('tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_SchemaName')]"
+					"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
+						"value": "[parameters('tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName')]"
 					},
-					"tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_TableName": {
-						"value": "[parameters('tr_LeaveApplications_Scheduled_1w_properties_LeaveApplications_parameters_param_TableName')]"
+					"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_TableName": {
+						"value": "[parameters('tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_TableName')]"
 					},
-					"tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_SchemaName": {
-						"value": "[parameters('tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_SchemaName')]"
+					"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_SchemaName": {
+						"value": "[parameters('tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_SchemaName')]"
 					},
-					"tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_TableName": {
-						"value": "[parameters('tr_LeaveBalances_Scheduled_1w_properties_LeaveBalances_parameters_param_TableName')]"
+					"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName": {
+						"value": "[parameters('tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName')]"
 					},
 					"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_SchemaName": {
 						"value": "[parameters('tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_SchemaName')]"
