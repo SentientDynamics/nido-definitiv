@@ -187,7 +187,7 @@
 							},
 							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "Employee_Table_Master"
+								"param_TableName": "Definitiv_Employees"
 							}
 						}
 					},
@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Employee_Table_Master"
+				"defaultValue": "Definitiv_Employees"
 			}
 		},
 		"folder": {
