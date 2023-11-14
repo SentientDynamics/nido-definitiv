@@ -13,7 +13,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Employee_Pay_Policies"
+			"defaultValue": "Definitiv_PayPolicies"
 		},
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
 			"type": "string",
@@ -21,7 +21,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Employee_Table_Master"
+			"defaultValue": "Definitiv_Employees"
 		},
 		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
 			"type": "string",

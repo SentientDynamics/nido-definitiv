@@ -29,7 +29,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Employee_Pay_Policies"
+			"defaultValue": "Definitiv_PayPolicies"
 		},
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
 			"type": "string",
@@ -37,7 +37,7 @@
 		},
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Employee_Table_Master"
+			"defaultValue": "Definitiv_Employees"
 		},
 		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
 			"type": "string",
@@ -356,7 +356,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Employee_Table_Master"
+										"param_TableName": "Definitiv_Employees"
 									}
 								}
 							},
@@ -379,7 +379,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Employee_Table_Master"
+						"defaultValue": "Definitiv_Employees"
 					}
 				},
 				"folder": {
@@ -392,6 +392,7 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/Employees_df')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Employees_ds')]"
 			]
@@ -1240,7 +1241,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Employee_Pay_Policies"
+										"param_TableName": "Definitiv_PayPolicies"
 									}
 								}
 							},
@@ -1263,7 +1264,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Employee_Pay_Policies"
+						"defaultValue": "Definitiv_PayPolicies"
 					}
 				},
 				"folder": {
@@ -1276,6 +1277,7 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/PayPolicies_df')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/PayPolicies_ds')]"
 			]
