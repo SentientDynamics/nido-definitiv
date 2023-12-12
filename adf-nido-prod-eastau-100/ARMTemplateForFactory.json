@@ -79,14 +79,6 @@
 			"type": "string",
 			"defaultValue": "CustomReportRosters"
 		},
-		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
-		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "Definitiv_Rosters"
-		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -9294,16 +9286,6 @@
 							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
 						}
-					},
-					{
-						"pipelineReference": {
-							"referenceName": "Rosters",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName')]"
-						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -9337,8 +9319,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]",
-				"[concat(variables('factoryId'), '/pipelines/Rosters')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]"
 			]
 		},
 		{
