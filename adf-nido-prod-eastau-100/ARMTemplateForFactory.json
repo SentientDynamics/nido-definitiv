@@ -417,7 +417,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nwhere organizationId <> 'dca2633e-578e-4358-a5bf-0c38a96bb4cb'",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nwhere organizationId NOT IN ('dca2633e-578e-4358-a5bf-0c38a96bb4cb','06a54b6b-65ab-40be-b3d7-a99999967b35')",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
