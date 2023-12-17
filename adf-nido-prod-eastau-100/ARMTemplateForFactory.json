@@ -501,7 +501,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=2023-04-01',\n'&toDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -4), 'yyyy-MM-dd'))",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -200), 'yyyy-MM-dd'),\n'&toDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -4), 'yyyy-MM-dd'))",
 													"type": "Expression"
 												}
 											}
