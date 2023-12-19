@@ -2078,7 +2078,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=2022-07-01',\n'&ToDate=2022-07-31',\n'&includeTerminated=true'\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=2022-08-01',\n'&ToDate=2022-08-31',\n'&includeTerminated=true'\n)",
 													"type": "Expression"
 												}
 											}
