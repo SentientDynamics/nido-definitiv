@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_Timesheets"
+				"defaultValue": "Definitiv_Timesheets_Staging"
 			}
 		},
 		"folder": {
