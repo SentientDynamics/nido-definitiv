@@ -284,6 +284,10 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
 							"url": {
 								"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'failed',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
 								"type": "Expression"
@@ -291,10 +295,6 @@
 							"connectVia": {
 								"referenceName": "AustraliaEastIntegrationRuntime",
 								"type": "IntegrationRuntimeReference"
-							},
-							"method": "POST",
-							"headers": {
-								"Content-Type": "application/json"
 							},
 							"body": {
 								"PipelineName": "@{pipeline().parameters.PipelineName}",
@@ -380,6 +380,10 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
 							"url": {
 								"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'succeeded',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
 								"type": "Expression"
@@ -387,10 +391,6 @@
 							"connectVia": {
 								"referenceName": "AustraliaEastIntegrationRuntime",
 								"type": "IntegrationRuntimeReference"
-							},
-							"method": "POST",
-							"headers": {
-								"Content-Type": "application/json"
 							},
 							"body": {
 								"PipelineName": "@{pipeline().parameters.PipelineName}",
