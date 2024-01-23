@@ -2104,6 +2104,33 @@
 							},
 							"traceLevel": "Fine"
 						}
+					},
+					{
+						"name": "Execute TimesheetsUpdate",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Timesheets_df",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[TimesheetsUpdate]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_sql_tnk001",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {
