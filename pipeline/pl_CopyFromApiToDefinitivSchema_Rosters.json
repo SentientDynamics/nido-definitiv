@@ -136,7 +136,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"sourceRelativeUrl": {
-								"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Rosters,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=', \nformatDateTime(variables('varRosterStartDate'), 'yyyy-MM-dd'),\n'&endDate=', \nformatDateTime(variables('varRosterFinishDate'), 'yyyy-MM-dd')\n)",
+								"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Rosters,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=2024-01-01',\n'&endDate=2024-03-04'\n)",
 								"type": "Expression"
 							}
 						}
