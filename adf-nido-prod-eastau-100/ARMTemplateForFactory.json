@@ -79,6 +79,14 @@
 			"type": "string",
 			"defaultValue": "CustomReportRosters"
 		},
+		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Rosters"
+		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -1644,7 +1652,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=2024-02-05',\n'&ToDate=2024-03-17'\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -14), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 28), 'yyyy-MM-dd')\n)",
 													"type": "Expression"
 												}
 											}
@@ -9351,6 +9359,16 @@
 							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
 						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Rosters",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -9384,7 +9402,8 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]",
+				"[concat(variables('factoryId'), '/pipelines/Rosters')]"
 			]
 		},
 		{
