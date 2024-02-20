@@ -71,14 +71,6 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Payslips_Staging"
 		},
-		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "definitiv"
-		},
-		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "CustomReportRosters"
-		},
 		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -9352,16 +9344,6 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "pl_CopyFromApiToDefinitivSchema_Rosters",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
-						}
-					},
-					{
-						"pipelineReference": {
 							"referenceName": "Rosters",
 							"type": "PipelineReference"
 						},
@@ -9380,14 +9362,17 @@
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
-								30
+								15
 							],
 							"hours": [
 								9,
+								10,
 								11,
+								12,
 								13,
+								14,
 								15,
-								17
+								16
 							],
 							"weekDays": [
 								"Monday",
@@ -9402,7 +9387,6 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]",
 				"[concat(variables('factoryId'), '/pipelines/Rosters')]"
 			]
 		},
@@ -9437,7 +9421,7 @@
 								0
 							],
 							"hours": [
-								10
+								9
 							],
 							"weekDays": [
 								"Monday",
