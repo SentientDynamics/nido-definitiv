@@ -13,6 +13,16 @@
 					"param_SchemaName": "dbo",
 					"param_TableName": "Definitiv_Rosters"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "pl_CopyFromApiToDefinitivSchema_Rosters",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "definitiv",
+					"param_TableName": "CustomReportRosters"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
