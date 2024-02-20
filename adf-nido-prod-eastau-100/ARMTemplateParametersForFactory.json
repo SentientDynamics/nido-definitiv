@@ -59,6 +59,12 @@
 		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName": {
 			"value": "Definitiv_Rosters"
 		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
+			"value": "definitiv"
+		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
+			"value": "CustomReportRosters"
+		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"value": "dbo"
 		},

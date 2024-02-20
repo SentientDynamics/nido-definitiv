@@ -79,6 +79,14 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Rosters"
 		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "definitiv"
+		},
+		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "CustomReportRosters"
+		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -351,6 +359,12 @@
 					},
 					"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName": {
 						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName')]"
+					},
+					"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName')]"
+					},
+					"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
 					},
 					"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName')]"
