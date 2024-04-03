@@ -8931,7 +8931,7 @@
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
-								0
+								50
 							],
 							"hours": [
 								9,
@@ -8942,6 +8942,7 @@
 								14,
 								15,
 								16,
+								8,
 								17
 							],
 							"weekDays": [
