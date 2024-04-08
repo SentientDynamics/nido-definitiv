@@ -1514,7 +1514,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=2024-01-01',\n'&ToDate=2024-01-31'\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=2024-02-01',\n'&ToDate=2024-02-29'\n)",
 													"type": "Expression"
 												}
 											}
