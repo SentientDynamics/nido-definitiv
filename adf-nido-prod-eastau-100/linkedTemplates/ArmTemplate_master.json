@@ -297,18 +297,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName')]"
-					},
-					"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName')]"
-					},
-					"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName')]"
-					},
-					"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName')]"
 					}
 				}
 			},
@@ -329,6 +317,18 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName')]"
+					},
+					"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName')]"
+					},
+					"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName')]"
+					},
+					"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName')]"
 					},
 					"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
 						"value": "[parameters('tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName')]"

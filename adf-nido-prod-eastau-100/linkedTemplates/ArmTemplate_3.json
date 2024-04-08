@@ -7,6 +7,22 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
 		},
+		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_PayPolicies"
+		},
+		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Employees"
+		},
 		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -68,6 +84,62 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Employees_Scheduled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PayPolicies",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName')]"
+						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Employees",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2022-06-07T04:42:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								7
+							],
+							"weekDays": [
+								"Monday",
+								"Tuesday",
+								"Wednesday",
+								"Thursday",
+								"Friday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/tr_LeaveApplications_Scheduled_2w')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
