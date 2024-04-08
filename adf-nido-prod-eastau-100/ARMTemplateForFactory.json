@@ -1652,7 +1652,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -5), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 26), 'yyyy-MM-dd')\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=2024-01-01',\n'&ToDate=2024-01-31'\n)",
 													"type": "Expression"
 												}
 											}
@@ -1739,7 +1739,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Rosters"
+										"param_TableName": "Definitiv_Rosters_Staging"
 									}
 								}
 							},
@@ -1762,7 +1762,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Rosters"
+						"defaultValue": "Definitiv_Rosters_Staging"
 					}
 				},
 				"folder": {
@@ -9715,7 +9715,6 @@
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
-						"     truncate:true,",
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
