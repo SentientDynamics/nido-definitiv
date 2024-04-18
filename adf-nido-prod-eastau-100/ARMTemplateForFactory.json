@@ -1652,7 +1652,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -5), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 26), 'yyyy-MM-dd')\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\n'2024-04-01',\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 1), 'yyyy-MM-dd')\n)",
 													"type": "Expression"
 												}
 											}
@@ -9099,6 +9099,7 @@
 								30
 							],
 							"hours": [
+								8,
 								9,
 								10,
 								11,
@@ -9107,7 +9108,7 @@
 								14,
 								15,
 								16,
-								8
+								17
 							],
 							"weekDays": [
 								"Monday",
@@ -9157,6 +9158,7 @@
 								50
 							],
 							"hours": [
+								8,
 								9,
 								10,
 								11,
@@ -9165,7 +9167,6 @@
 								14,
 								15,
 								16,
-								8,
 								17
 							],
 							"weekDays": [
