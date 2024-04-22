@@ -1,5 +1,5 @@
 {
-	"name": "RosterCosts_ds",
+	"name": "RostersCosts_ds",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adls2_stnidoprodeastau100",

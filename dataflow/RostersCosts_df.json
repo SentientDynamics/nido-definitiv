@@ -1,5 +1,5 @@
 {
-	"name": "Rosters_df",
+	"name": "RostersCosts_df",
 	"properties": {
 		"folder": {
 			"name": "00_Definitv Dataflows"
@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Rosters_ds",
+						"referenceName": "RostersCosts_ds",
 						"type": "DatasetReference"
 					},
 					"name": "jsoninput"
