@@ -71,11 +71,11 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Payslips_Staging"
 		},
-		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName": {
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName": {
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Rosters"
 		},
@@ -1548,7 +1548,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Rosters')]",
+			"name": "[concat(parameters('factoryName'), '/RostersCosts')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1660,7 +1660,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "Rosters_ds",
+											"referenceName": "RostersCosts_ds",
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
@@ -1711,7 +1711,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Rosters_df",
+								"referenceName": "RostersCosts_df",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -1800,10 +1800,269 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/Rosters_df')]",
+				"[concat(variables('factoryId'), '/dataflows/RostersCosts_df')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
-				"[concat(variables('factoryId'), '/datasets/Rosters_ds')]"
+				"[concat(variables('factoryId'), '/datasets/RostersCosts_ds')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RostersV3')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Organizations",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": "dbo",
+									"param_TableName": "Definitiv_Organizations"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Organization",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Organizations",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Organizations').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "ApiToJson",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.03:00:00",
+										"retry": 3,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "Org.OrganizationId",
+													"value": {
+														"value": "@item().organizationId",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": {
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
+												"type": "Expression"
+											},
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -7), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 26), 'yyyy-MM-dd')\n)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "RostersCosts_ds",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Rosters_df",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Organization",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.03:00:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "RostersCosts_df",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"jsoninput": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"WriteToSQLDB": {
+										"param_SchemaName": "dbo",
+										"param_TableName": "Definitiv_Rosters_Staging"
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Execute RosterUpdate",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Rosters_df",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[RosterUpdate]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_sql_tnk001",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "Definitiv_Rosters_Staging"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/dataflows/RostersCosts_df')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
+				"[concat(variables('factoryId'), '/datasets/RostersCosts_ds')]"
 			]
 		},
 		{
@@ -7998,7 +8257,58 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Rosters_ds')]",
+			"name": "[concat(parameters('factoryName'), '/RostersCosts_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RostersV3_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -8130,162 +8440,119 @@
 										"type": "string"
 									},
 									"organisationExportCode": {
-										"type": "null"
+										"type": "string"
 									},
 									"organisationGLCode": {
 										"type": "string"
 									},
+									"teamHierarchy": {
+										"type": "null"
+									},
 									"rosterName": {
 										"type": "string"
 									},
-									"employeeNumber": {
+									"rosterDescription": {
+										"type": "string"
+									},
+									"rosterPeriod": {
+										"type": "string"
+									},
+									"shiftPublishedState": {
+										"type": "string"
+									},
+									"sourceType": {
+										"type": "string"
+									},
+									"status": {
 										"type": "string"
 									},
 									"employee": {
 										"type": "string"
 									},
-									"employmentStatus": {
-										"type": "string"
-									},
 									"date": {
 										"type": "string"
 									},
-									"payItemType": {
+									"dayIndex": {
 										"type": "string"
-									},
-									"payItemCode": {
-										"type": "string"
-									},
-									"payItem": {
-										"type": "string"
-									},
-									"unitOfMeasure": {
-										"type": "string"
-									},
-									"units": {
-										"type": "number"
-									},
-									"rate": {
-										"type": "number"
-									},
-									"total": {
-										"type": "number"
-									},
-									"payItemGLDebitCode": {
-										"type": "string"
-									},
-									"payItemGLCreditCode": {
-										"type": "null"
 									},
 									"role": {
 										"type": "string"
 									},
-									"roleCode": {
+									"timePeriodMode": {
+										"type": "string"
+									},
+									"startTimeOfDay": {
+										"type": "string"
+									},
+									"endTimeOfDay": {
+										"type": "string"
+									},
+									"durationHours": {
+										"type": "number"
+									},
+									"publicHolidayWorked": {
 										"type": "null"
+									},
+									"position": {
+										"type": "string"
+									},
+									"shiftType": {
+										"type": "string"
 									},
 									"project": {
 										"type": "string"
 									},
-									"projectCode": {
+									"projectWorkOrder": {
 										"type": "string"
 									},
-									"projectGlCode": {
+									"department": {
 										"type": "string"
 									},
 									"location": {
 										"type": "string"
 									},
-									"locationCode": {
-										"type": "string"
-									},
-									"locationGlCode": {
-										"type": "null"
-									},
-									"department": {
-										"type": "string"
-									},
-									"departmentCode": {
-										"type": "null"
-									},
-									"departmentGlCode": {
-										"type": "null"
-									},
-									"projectWorkOrder": {
-										"type": "null"
-									},
-									"projectWorkOrderCode": {
-										"type": "null"
-									},
-									"leaveType": {
-										"type": "null"
-									},
-									"leaveReason": {
-										"type": "null"
-									},
 									"notes": {
+										"type": "string"
+									},
+									"breakTimes": {
+										"type": "string"
+									},
+									"breakDurationHours": {
+										"type": "number"
+									},
+									"responseDateTime": {
 										"type": "null"
 									},
-									"payItemCustomFields": {
-										"type": "array",
-										"items": {
-											"type": "object",
-											"properties": {
-												"customFieldId": {
-													"type": "string"
-												},
-												"targetEntity": {
-													"type": "integer"
-												},
-												"dataType": {
-													"type": "string"
-												},
-												"value": {
-													"type": "string"
-												},
-												"name": {
-													"type": "string"
-												},
-												"displayName": {
-													"type": "string"
-												},
-												"description": {
-													"type": "string"
-												},
-												"enabled": {
-													"type": "boolean"
-												},
-												"global": {
-													"type": "boolean"
-												},
-												"options": {
-													"type": "array"
-												},
-												"isMandatory": {
-													"type": "boolean"
-												},
-												"order": {
-													"type": "integer"
-												},
-												"dateDriven": {
-													"type": "boolean"
-												},
-												"timeBased": {
-													"type": "boolean"
-												},
-												"displayOnTimesheetSummary": {
-													"type": "boolean"
-												},
-												"preventMultipleEntries": {
-													"type": "boolean"
-												},
-												"timePeriodMode": {
-													"type": "null"
-												},
-												"inheritTimesheetPeriod": {
-													"type": "null"
-												},
-												"customFieldDisplayStatus": {
-													"type": "null"
+									"responseReason": {
+										"type": "null"
+									},
+									"deleted": {
+										"type": "string"
+									},
+									"customFields": {
+										"type": "object",
+										"properties": {
+											"kmAllowance": {
+												"type": "null"
+											},
+											"staffMeeting": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"StartTimeOfDay": {
+															"type": "null"
+														},
+														"EndTimeOfDay": {
+															"type": "null"
+														},
+														"DurationHours": {
+															"type": "null"
+														},
+														"Value": {
+															"type": "boolean"
+														}
+													}
 												}
 											}
 										}
@@ -9068,12 +9335,12 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "Rosters",
+							"referenceName": "RostersCosts",
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName')]"
 						}
 					},
 					{
@@ -9123,7 +9390,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/Rosters')]",
+				"[concat(variables('factoryId'), '/pipelines/RostersCosts')]",
 				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]"
 			]
 		},
@@ -9854,7 +10121,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Rosters_df')]",
+			"name": "[concat(parameters('factoryName'), '/RostersCosts_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -9866,7 +10133,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "Rosters_ds",
+								"referenceName": "RostersCosts_ds",
 								"type": "DatasetReference"
 							},
 							"name": "jsoninput"
@@ -9949,7 +10216,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/Rosters_ds')]",
+				"[concat(variables('factoryId'), '/datasets/RostersCosts_ds')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},

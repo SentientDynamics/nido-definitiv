@@ -53,10 +53,10 @@
 		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
 			"value": "Definitiv_Payslips_Staging"
 		},
-		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_SchemaName": {
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
 			"value": "dbo"
 		},
-		"tr_Rosters_Scheduled_1h_properties_Rosters_parameters_param_TableName": {
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
 			"value": "Definitiv_Rosters"
 		},
 		"tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName": {

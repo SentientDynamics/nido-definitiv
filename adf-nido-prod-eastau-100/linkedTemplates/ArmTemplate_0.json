@@ -2166,7 +2166,57 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Rosters_ds')]",
+			"name": "[concat(parameters('factoryName'), '/RostersCosts_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RostersV3_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2298,162 +2348,119 @@
 										"type": "string"
 									},
 									"organisationExportCode": {
-										"type": "null"
+										"type": "string"
 									},
 									"organisationGLCode": {
 										"type": "string"
 									},
+									"teamHierarchy": {
+										"type": "null"
+									},
 									"rosterName": {
 										"type": "string"
 									},
-									"employeeNumber": {
+									"rosterDescription": {
+										"type": "string"
+									},
+									"rosterPeriod": {
+										"type": "string"
+									},
+									"shiftPublishedState": {
+										"type": "string"
+									},
+									"sourceType": {
+										"type": "string"
+									},
+									"status": {
 										"type": "string"
 									},
 									"employee": {
 										"type": "string"
 									},
-									"employmentStatus": {
-										"type": "string"
-									},
 									"date": {
 										"type": "string"
 									},
-									"payItemType": {
+									"dayIndex": {
 										"type": "string"
-									},
-									"payItemCode": {
-										"type": "string"
-									},
-									"payItem": {
-										"type": "string"
-									},
-									"unitOfMeasure": {
-										"type": "string"
-									},
-									"units": {
-										"type": "number"
-									},
-									"rate": {
-										"type": "number"
-									},
-									"total": {
-										"type": "number"
-									},
-									"payItemGLDebitCode": {
-										"type": "string"
-									},
-									"payItemGLCreditCode": {
-										"type": "null"
 									},
 									"role": {
 										"type": "string"
 									},
-									"roleCode": {
+									"timePeriodMode": {
+										"type": "string"
+									},
+									"startTimeOfDay": {
+										"type": "string"
+									},
+									"endTimeOfDay": {
+										"type": "string"
+									},
+									"durationHours": {
+										"type": "number"
+									},
+									"publicHolidayWorked": {
 										"type": "null"
+									},
+									"position": {
+										"type": "string"
+									},
+									"shiftType": {
+										"type": "string"
 									},
 									"project": {
 										"type": "string"
 									},
-									"projectCode": {
+									"projectWorkOrder": {
 										"type": "string"
 									},
-									"projectGlCode": {
+									"department": {
 										"type": "string"
 									},
 									"location": {
 										"type": "string"
 									},
-									"locationCode": {
-										"type": "string"
-									},
-									"locationGlCode": {
-										"type": "null"
-									},
-									"department": {
-										"type": "string"
-									},
-									"departmentCode": {
-										"type": "null"
-									},
-									"departmentGlCode": {
-										"type": "null"
-									},
-									"projectWorkOrder": {
-										"type": "null"
-									},
-									"projectWorkOrderCode": {
-										"type": "null"
-									},
-									"leaveType": {
-										"type": "null"
-									},
-									"leaveReason": {
-										"type": "null"
-									},
 									"notes": {
+										"type": "string"
+									},
+									"breakTimes": {
+										"type": "string"
+									},
+									"breakDurationHours": {
+										"type": "number"
+									},
+									"responseDateTime": {
 										"type": "null"
 									},
-									"payItemCustomFields": {
-										"type": "array",
-										"items": {
-											"type": "object",
-											"properties": {
-												"customFieldId": {
-													"type": "string"
-												},
-												"targetEntity": {
-													"type": "integer"
-												},
-												"dataType": {
-													"type": "string"
-												},
-												"value": {
-													"type": "string"
-												},
-												"name": {
-													"type": "string"
-												},
-												"displayName": {
-													"type": "string"
-												},
-												"description": {
-													"type": "string"
-												},
-												"enabled": {
-													"type": "boolean"
-												},
-												"global": {
-													"type": "boolean"
-												},
-												"options": {
-													"type": "array"
-												},
-												"isMandatory": {
-													"type": "boolean"
-												},
-												"order": {
-													"type": "integer"
-												},
-												"dateDriven": {
-													"type": "boolean"
-												},
-												"timeBased": {
-													"type": "boolean"
-												},
-												"displayOnTimesheetSummary": {
-													"type": "boolean"
-												},
-												"preventMultipleEntries": {
-													"type": "boolean"
-												},
-												"timePeriodMode": {
-													"type": "null"
-												},
-												"inheritTimesheetPeriod": {
-													"type": "null"
-												},
-												"customFieldDisplayStatus": {
-													"type": "null"
+									"responseReason": {
+										"type": "null"
+									},
+									"deleted": {
+										"type": "string"
+									},
+									"customFields": {
+										"type": "object",
+										"properties": {
+											"kmAllowance": {
+												"type": "null"
+											},
+											"staffMeeting": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"StartTimeOfDay": {
+															"type": "null"
+														},
+														"EndTimeOfDay": {
+															"type": "null"
+														},
+														"DurationHours": {
+															"type": "null"
+														},
+														"Value": {
+															"type": "boolean"
+														}
+													}
 												}
 											}
 										}
@@ -2760,58 +2767,6 @@
 						}
 					}
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_adls2_stnidoprodeastau100_json_output')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls2_stnidoprodeastau100",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"ds_PipelineTriggerTime": {
-						"type": "string",
-						"defaultValue": "2022-01-25T00:18:17.611502Z"
-					},
-					"ds_PipelineRunId": {
-						"type": "string",
-						"defaultValue": "187d99be-a307-4534-9acc-0a17fc03d0ab"
-					},
-					"ds_FileSystem": {
-						"type": "string",
-						"defaultValue": "container-adf-nido-prod-eastau-100-1"
-					},
-					"ds_Directory": {
-						"type": "string",
-						"defaultValue": "ds_adls2_stnidoprodeastau100_json_output"
-					},
-					"ds_PipelineName": {
-						"type": "string",
-						"defaultValue": "pl_B1_Payslips_ApiToDefinitiv"
-					}
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": {
-							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
-							"type": "Expression"
-						},
-						"fileSystem": {
-							"value": "@dataset().ds_FileSystem",
-							"type": "Expression"
-						}
-					}
-				},
-				"schema": {}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
