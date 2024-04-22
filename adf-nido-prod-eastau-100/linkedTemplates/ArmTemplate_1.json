@@ -829,6 +829,110 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/RostersV3_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "RostersV3_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput",
+							"description": "Import data from RostersV3_ds"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB",
+							"description": "Export data to SQLSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+						"          reportData as (organisationName as string, organisationExportCode as string, organisationGLCode as string, teamHierarchy as string, rosterName as string, rosterDescription as string, rosterPeriod as string, shiftPublishedState as string, sourceType as string, status as string, employee as string, date as string, dayIndex as string, role as string, timePeriodMode as string, startTimeOfDay as string, endTimeOfDay as string, durationHours as double, publicHolidayWorked as string, position as string, shiftType as string, project as string, projectWorkOrder as string, department as string, location as string, notes as string, breakTimes as string, breakDurationHours as double, responseDateTime as string, responseReason as string, deleted as string, customFields as (kmAllowance as string, staffMeeting as (StartTimeOfDay as string, EndTimeOfDay as string, DurationHours as string, Value as boolean)[]))[],",
+						"          extraReportData as string[],",
+						"          serverTime as string,",
+						"          addFooterRow as boolean,",
+						"          addStatusBar as boolean,",
+						"          reportVariantTag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     purgeFiles: true,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput foldDown(unroll(reportData),",
+						"     mapColumn(",
+						"          organisationName = reportData.organisationName,",
+						"          organisationExportCode = reportData.organisationExportCode,",
+						"          organisationGLCode = reportData.organisationGLCode,",
+						"          teamHierarchy = reportData.teamHierarchy,",
+						"          rosterName = reportData.rosterName,",
+						"          rosterDescription = reportData.rosterDescription,",
+						"          rosterPeriod = reportData.rosterPeriod,",
+						"          shiftPublishedState = reportData.shiftPublishedState,",
+						"          sourceType = reportData.sourceType,",
+						"          status = reportData.status,",
+						"          employee = reportData.employee,",
+						"          date = reportData.date,",
+						"          dayIndex = reportData.dayIndex,",
+						"          role = reportData.role,",
+						"          timePeriodMode = reportData.timePeriodMode,",
+						"          startTimeOfDay = reportData.startTimeOfDay,",
+						"          endTimeOfDay = reportData.endTimeOfDay,",
+						"          durationHours = reportData.durationHours,",
+						"          publicHolidayWorked = reportData.publicHolidayWorked,",
+						"          position = reportData.position,",
+						"          shiftType = reportData.shiftType,",
+						"          project = reportData.project,",
+						"          projectWorkOrder = reportData.projectWorkOrder,",
+						"          department = reportData.department,",
+						"          location = reportData.location,",
+						"          notes = reportData.notes,",
+						"          breakTimes = reportData.breakTimes,",
+						"          breakDurationHours = reportData.breakDurationHours,",
+						"          responseDateTime = reportData.responseDateTime,",
+						"          responseReason = reportData.responseReason,",
+						"          deleted = reportData.deleted",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Timesheets_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1610,52 +1714,6 @@
 						"     transactionCommit: 'batch',",
 						"     reportSuccessOnError: true) ~> sinkSql"
 					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_Rosters')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "01_Sentient Dataflows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "sourceJson"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSql",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [
-						{
-							"name": "castDateColumns",
-							"description": "Creating/updating the columns G'PipelineName, PipelineRunId, PipelineTriggerTime, QueryFinishDate, QueryStartDate, amount, createdByUser, createdDate, date1, employeeId, employmentType, end, firstName, lastName, modifiedByUser, modifiedDate, quantity, room, rosterEntryId, rosterId, serviceCode, start, SourceFileName'"
-						}
-					],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Rosters\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tQueryFinishDate as date,\n\t\tQueryStartDate as date,\n\t\tamount as double,\n\t\tcreatedByUser as string,\n\t\tcreatedDate as string,\n\t\tdate as string,\n\t\temployeeId as string,\n\t\temploymentType as string,\n\t\tend as string,\n\t\tfirstName as string,\n\t\tlastName as string,\n\t\tmodifiedByUser as string,\n\t\tmodifiedDate as string,\n\t\tquantity as double,\n\t\troom as string,\n\t\trosterEntryId as string,\n\t\trosterId as string,\n\t\tserviceCode as string,\n\t\tstart as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\tpurgeFiles: true,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson derive(end = toTimestamp(concat(toString(toDate(date)), ' ', end, ':00')),\n\t\tstart = toTimestamp(concat(toString(toDate(date)), ' ', start, ':00')),\n\t\tdate = toDate(date),\n\t\tPipelineTriggerTime = toTimestamp(PipelineTriggerTime, 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'Australia/NSW'),\n\t\tcreatedDate = toDate(createdDate),\n\t\tmodifiedDate = toDate(modifiedDate)) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
 				}
 			},
 			"dependsOn": [

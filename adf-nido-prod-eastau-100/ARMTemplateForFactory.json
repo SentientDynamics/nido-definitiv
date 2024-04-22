@@ -87,6 +87,14 @@
 			"type": "string",
 			"defaultValue": "CustomReportRosters"
 		},
+		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Rosters_V3"
+		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -1911,7 +1919,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -7), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 26), 'yyyy-MM-dd')\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3',\n'?FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -1), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 2), 'yyyy-MM-dd')\n)",
 													"type": "Expression"
 												}
 											}
@@ -1919,7 +1927,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "RostersCosts_ds",
+											"referenceName": "RostersV3_ds",
 											"type": "DatasetReference",
 											"parameters": {
 												"ds_PipelineTriggerTime": {
@@ -1950,7 +1958,7 @@
 						}
 					},
 					{
-						"name": "Rosters_df",
+						"name": "RostersV3_df",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [
 							{
@@ -1970,7 +1978,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "RostersCosts_df",
+								"referenceName": "RostersV3_df",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -1998,7 +2006,7 @@
 									},
 									"WriteToSQLDB": {
 										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Rosters_Staging"
+										"param_TableName": "Definitiv_Rosters_V3"
 									}
 								}
 							},
@@ -2008,33 +2016,6 @@
 								"computeType": "General"
 							},
 							"traceLevel": "Fine"
-						}
-					},
-					{
-						"name": "Execute RosterUpdate",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [
-							{
-								"activity": "Rosters_df",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[RosterUpdate]"
-						},
-						"linkedServiceName": {
-							"referenceName": "ls_sql_tnk001",
-							"type": "LinkedServiceReference"
 						}
 					}
 				],
@@ -2048,7 +2029,7 @@
 					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Rosters_Staging"
+						"defaultValue": "Definitiv_Rosters_V3"
 					}
 				},
 				"folder": {
@@ -2059,10 +2040,9 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/RostersCosts_df')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/dataflows/RostersV3_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
-				"[concat(variables('factoryId'), '/datasets/RostersCosts_ds')]"
+				"[concat(variables('factoryId'), '/datasets/RostersV3_ds')]"
 			]
 		},
 		{
@@ -9352,6 +9332,16 @@
 							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_pl_CopyFromApiToDefinitivSchema_Rosters_parameters_param_TableName')]"
 						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "RostersV3",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -9391,7 +9381,8 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/pipelines/RostersCosts')]",
-				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]"
+				"[concat(variables('factoryId'), '/pipelines/pl_CopyFromApiToDefinitivSchema_Rosters')]",
+				"[concat(variables('factoryId'), '/pipelines/RostersV3')]"
 			]
 		},
 		{
@@ -10217,6 +10208,112 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/RostersCosts_ds')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RostersV3_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "RostersV3_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput",
+							"description": "Import data from RostersV3_ds"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB",
+							"description": "Export data to SQLSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+						"          reportData as (organisationName as string, organisationExportCode as string, organisationGLCode as string, teamHierarchy as string, rosterName as string, rosterDescription as string, rosterPeriod as string, shiftPublishedState as string, sourceType as string, status as string, employee as string, date as string, dayIndex as string, role as string, timePeriodMode as string, startTimeOfDay as string, endTimeOfDay as string, durationHours as double, publicHolidayWorked as string, position as string, shiftType as string, project as string, projectWorkOrder as string, department as string, location as string, notes as string, breakTimes as string, breakDurationHours as double, responseDateTime as string, responseReason as string, deleted as string, customFields as (kmAllowance as string, staffMeeting as (StartTimeOfDay as string, EndTimeOfDay as string, DurationHours as string, Value as boolean)[]))[],",
+						"          extraReportData as string[],",
+						"          serverTime as string,",
+						"          addFooterRow as boolean,",
+						"          addStatusBar as boolean,",
+						"          reportVariantTag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     purgeFiles: true,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput foldDown(unroll(reportData),",
+						"     mapColumn(",
+						"          organisationName = reportData.organisationName,",
+						"          organisationExportCode = reportData.organisationExportCode,",
+						"          organisationGLCode = reportData.organisationGLCode,",
+						"          teamHierarchy = reportData.teamHierarchy,",
+						"          rosterName = reportData.rosterName,",
+						"          rosterDescription = reportData.rosterDescription,",
+						"          rosterPeriod = reportData.rosterPeriod,",
+						"          shiftPublishedState = reportData.shiftPublishedState,",
+						"          sourceType = reportData.sourceType,",
+						"          status = reportData.status,",
+						"          employee = reportData.employee,",
+						"          date = reportData.date,",
+						"          dayIndex = reportData.dayIndex,",
+						"          role = reportData.role,",
+						"          timePeriodMode = reportData.timePeriodMode,",
+						"          startTimeOfDay = reportData.startTimeOfDay,",
+						"          endTimeOfDay = reportData.endTimeOfDay,",
+						"          durationHours = reportData.durationHours,",
+						"          publicHolidayWorked = reportData.publicHolidayWorked,",
+						"          position = reportData.position,",
+						"          shiftType = reportData.shiftType,",
+						"          project = reportData.project,",
+						"          projectWorkOrder = reportData.projectWorkOrder,",
+						"          department = reportData.department,",
+						"          location = reportData.location,",
+						"          notes = reportData.notes,",
+						"          breakTimes = reportData.breakTimes,",
+						"          breakDurationHours = reportData.breakDurationHours,",
+						"          responseDateTime = reportData.responseDateTime,",
+						"          responseReason = reportData.responseReason,",
+						"          deleted = reportData.deleted",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/RostersV3_ds')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
