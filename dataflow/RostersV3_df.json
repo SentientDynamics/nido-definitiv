@@ -1,0 +1,100 @@
+{
+	"name": "RostersV3_df",
+	"properties": {
+		"folder": {
+			"name": "00_Definitv Dataflows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "RostersV3_ds",
+						"type": "DatasetReference"
+					},
+					"name": "jsoninput",
+					"description": "Import data from RostersV3_ds"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference"
+					},
+					"name": "WriteToSQLDB",
+					"description": "Export data to SQLSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+				"          reportData as (organisationName as string, organisationExportCode as string, organisationGLCode as string, teamHierarchy as string, rosterName as string, rosterDescription as string, rosterPeriod as string, shiftPublishedState as string, sourceType as string, status as string, employee as string, date as string, dayIndex as string, role as string, timePeriodMode as string, startTimeOfDay as string, endTimeOfDay as string, durationHours as double, publicHolidayWorked as string, position as string, shiftType as string, project as string, projectWorkOrder as string, department as string, location as string, notes as string, breakTimes as string, breakDurationHours as double, responseDateTime as string, responseReason as string, deleted as string, customFields as (kmAllowance as string, staffMeeting as (StartTimeOfDay as string, EndTimeOfDay as string, DurationHours as string, Value as boolean)[]))[],",
+				"          extraReportData as string[],",
+				"          serverTime as string,",
+				"          addFooterRow as boolean,",
+				"          addStatusBar as boolean,",
+				"          reportVariantTag as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true,",
+				"     documentForm: 'documentPerLine') ~> jsoninput",
+				"jsoninput foldDown(unroll(reportData),",
+				"     mapColumn(",
+				"          organisationName = reportData.organisationName,",
+				"          organisationExportCode = reportData.organisationExportCode,",
+				"          organisationGLCode = reportData.organisationGLCode,",
+				"          teamHierarchy = reportData.teamHierarchy,",
+				"          rosterName = reportData.rosterName,",
+				"          rosterDescription = reportData.rosterDescription,",
+				"          rosterPeriod = reportData.rosterPeriod,",
+				"          shiftPublishedState = reportData.shiftPublishedState,",
+				"          sourceType = reportData.sourceType,",
+				"          status = reportData.status,",
+				"          employee = reportData.employee,",
+				"          date = reportData.date,",
+				"          dayIndex = reportData.dayIndex,",
+				"          role = reportData.role,",
+				"          timePeriodMode = reportData.timePeriodMode,",
+				"          startTimeOfDay = reportData.startTimeOfDay,",
+				"          endTimeOfDay = reportData.endTimeOfDay,",
+				"          durationHours = reportData.durationHours,",
+				"          publicHolidayWorked = reportData.publicHolidayWorked,",
+				"          position = reportData.position,",
+				"          shiftType = reportData.shiftType,",
+				"          project = reportData.project,",
+				"          projectWorkOrder = reportData.projectWorkOrder,",
+				"          department = reportData.department,",
+				"          location = reportData.location,",
+				"          notes = reportData.notes,",
+				"          breakTimes = reportData.breakTimes,",
+				"          breakDurationHours = reportData.breakDurationHours,",
+				"          responseDateTime = reportData.responseDateTime,",
+				"          responseReason = reportData.responseReason,",
+				"          deleted = reportData.deleted,",
+				"          customFields = reportData.customFields",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+			]
+		}
+	}
+}

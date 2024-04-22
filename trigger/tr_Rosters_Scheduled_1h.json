@@ -23,6 +23,16 @@
 					"param_SchemaName": "definitiv",
 					"param_TableName": "CustomReportRosters"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "RostersV3",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitiv_Rosters_V3"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
