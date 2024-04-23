@@ -65,7 +65,6 @@
 				"          endTimeOfDay = reportData.endTimeOfDay,",
 				"          durationHours = reportData.durationHours,",
 				"          publicHolidayWorked = reportData.publicHolidayWorked,",
-				"          position = reportData.position,",
 				"          project = reportData.project,",
 				"          projectWorkOrder = reportData.projectWorkOrder,",
 				"          department = reportData.department,",
