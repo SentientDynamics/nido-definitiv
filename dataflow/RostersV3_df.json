@@ -84,7 +84,7 @@
 				"     upsertable:false,",
 				"     truncate:true,",
 				"     format: 'table',",
-				"     postSQLs:['DELETE FROM [dbo].[Definitiv_Rosters_V3]\\nWHERE DATE < DATEADD(DAY,-7,GETDATE()) OR DATE > DATEADD(DAY,26,GETDATE())'],",
+				"     postSQLs:['DELETE FROM [dbo].[Definitiv_Rosters_V3]\\nWHERE DATE < DATEADD(DAY,-7,GETDATE()) OR DATE > DATEADD(DAY,26,GETDATE()) OR DATE IS NULL'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
