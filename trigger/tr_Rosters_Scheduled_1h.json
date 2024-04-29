@@ -16,16 +16,6 @@
 			},
 			{
 				"pipelineReference": {
-					"referenceName": "pl_CopyFromApiToDefinitivSchema_Rosters",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"param_SchemaName": "definitiv",
-					"param_TableName": "CustomReportRosters"
-				}
-			},
-			{
-				"pipelineReference": {
 					"referenceName": "RostersV3",
 					"type": "PipelineReference"
 				},
