@@ -1606,7 +1606,7 @@
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
-										"timeout": "0.03:00:00",
+										"timeout": "0.01:00:00",
 										"retry": 3,
 										"retryIntervalInSeconds": 30,
 										"secureOutput": false,
@@ -1865,7 +1865,7 @@
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
-										"timeout": "0.03:00:00",
+										"timeout": "0.01:00:00",
 										"retry": 3,
 										"retryIntervalInSeconds": 30,
 										"secureOutput": false,
