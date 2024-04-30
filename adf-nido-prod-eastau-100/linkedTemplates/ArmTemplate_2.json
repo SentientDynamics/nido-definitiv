@@ -705,7 +705,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employees',\n'?asofDate=2023-09-01',\n'&includeTerminated=true'\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employees',\n'?asofDate=2023-10-01',\n'&includeTerminated=true'\n)",
 													"type": "Expression"
 												}
 											}
