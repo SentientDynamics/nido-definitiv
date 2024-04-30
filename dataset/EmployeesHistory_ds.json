@@ -1,0 +1,394 @@
+{
+	"name": "EmployeesHistory_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls2_stnidoprodeastau100",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ds_PipelineTriggerTime": {
+				"type": "string"
+			},
+			"ds_PipelineRunId": {
+				"type": "string"
+			},
+			"ds_FileSystem": {
+				"type": "string"
+			},
+			"ds_Directory": {
+				"type": "string"
+			},
+			"ds_PipelineName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "00_Definitiv Datasets"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().ds_FileSystem",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"headers": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"title": {
+								"type": "string"
+							},
+							"filterDisabled": {
+								"type": "boolean"
+							},
+							"sortDisabled": {
+								"type": "boolean"
+							},
+							"hiddenByDefault": {
+								"type": "boolean"
+							},
+							"searchDisabled": {
+								"type": "boolean"
+							},
+							"dataType": {
+								"type": "string"
+							},
+							"fieldName": {
+								"type": "string"
+							},
+							"defaultPivotColumnOrder": {
+								"type": "integer"
+							},
+							"defaultPivotRowOrder": {
+								"type": "integer"
+							},
+							"defaultPivotValueOrder": {
+								"type": "integer"
+							},
+							"defaultSortOrder": {
+								"type": "integer"
+							},
+							"defaultSortDirection": {
+								"type": "string"
+							},
+							"defaultPivotAggregation": {
+								"type": "string"
+							},
+							"isDynamicColumns": {
+								"type": "boolean"
+							},
+							"isCustomFields": {
+								"type": "boolean"
+							},
+							"customFieldsKeyName": {
+								"type": "null"
+							},
+							"createDayOfWeekColumn": {
+								"type": "boolean"
+							},
+							"prependBaseColumnNameToDayOfWeekColumn": {
+								"type": "boolean"
+							},
+							"trueText": {
+								"type": "null"
+							},
+							"falseText": {
+								"type": "null"
+							},
+							"nullDisplayText": {
+								"type": "null"
+							},
+							"disableDefaultAggregation": {
+								"type": "boolean"
+							},
+							"numericPrecision": {
+								"type": "null"
+							}
+						}
+					}
+				},
+				"reportData": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"organisationName": {
+								"type": "string"
+							},
+							"glCode": {
+								"type": "string"
+							},
+							"exportCode": {
+								"type": "null"
+							},
+							"employeeNumber": {
+								"type": "string"
+							},
+							"printName": {
+								"type": "string"
+							},
+							"title": {
+								"type": "string"
+							},
+							"firstName": {
+								"type": "string"
+							},
+							"surname": {
+								"type": "string"
+							},
+							"middleName": {
+								"type": "null"
+							},
+							"preferredName": {
+								"type": "string"
+							},
+							"gender": {
+								"type": "string"
+							},
+							"dateOfBirth": {
+								"type": "string"
+							},
+							"phoneNumbers": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"headerName": {
+											"type": "string"
+										},
+										"value": {
+											"type": "string"
+										},
+										"dataType": {
+											"type": "null"
+										},
+										"defaultPivotAggregation": {
+											"type": "null"
+										},
+										"defaultPivotValueOrder": {
+											"type": "null"
+										},
+										"defaultDynamicHidden": {
+											"type": "null"
+										},
+										"columnTooltip": {
+											"type": "null"
+										}
+									}
+								}
+							},
+							"addresses": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"headerName": {
+											"type": "string"
+										},
+										"value": {
+											"type": "string"
+										},
+										"dataType": {
+											"type": "null"
+										},
+										"defaultPivotAggregation": {
+											"type": "null"
+										},
+										"defaultPivotValueOrder": {
+											"type": "null"
+										},
+										"defaultDynamicHidden": {
+											"type": "null"
+										},
+										"columnTooltip": {
+											"type": "null"
+										}
+									}
+								}
+							},
+							"emailAddresses": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"headerName": {
+											"type": "string"
+										},
+										"value": {
+											"type": "string"
+										},
+										"dataType": {
+											"type": "null"
+										},
+										"defaultPivotAggregation": {
+											"type": "null"
+										},
+										"defaultPivotValueOrder": {
+											"type": "null"
+										},
+										"defaultDynamicHidden": {
+											"type": "null"
+										},
+										"columnTooltip": {
+											"type": "null"
+										}
+									}
+								}
+							},
+							"hireDate": {
+								"type": "string"
+							},
+							"yearsOfServiceStartDate": {
+								"type": "string"
+							},
+							"hireReason": {
+								"type": "string"
+							},
+							"terminateDate": {
+								"type": "null"
+							},
+							"terminationReason": {
+								"type": "null"
+							},
+							"lastPaidDate": {
+								"type": "string"
+							},
+							"positionOrgChart": {
+								"type": "string"
+							},
+							"divisionOrgChart": {
+								"type": "string"
+							},
+							"employmentStatus": {
+								"type": "string"
+							},
+							"managerIds": {
+								"type": "string"
+							},
+							"payCalendar": {
+								"type": "string"
+							},
+							"primaryProjectName": {
+								"type": "string"
+							},
+							"primaryProjectCode": {
+								"type": "string"
+							},
+							"canOnlyWorkAssignedProjects": {
+								"type": "string"
+							},
+							"primaryRoleName": {
+								"type": "string"
+							},
+							"primaryRoleCode": {
+								"type": "null"
+							},
+							"primaryLocationName": {
+								"type": "string"
+							},
+							"primaryLocationCode": {
+								"type": "string"
+							},
+							"primaryDepartmentName": {
+								"type": "string"
+							},
+							"primaryDepartmentCode": {
+								"type": "null"
+							},
+							"workSchedule": {
+								"type": "string"
+							},
+							"shiftType": {
+								"type": "null"
+							},
+							"shiftTypeCode": {
+								"type": "null"
+							},
+							"usualPlaceOfResidence": {
+								"type": "null"
+							},
+							"employeeId": {
+								"type": "string"
+							},
+							"primaryProjectId": {
+								"type": "string"
+							},
+							"primaryRoleId": {
+								"type": "string"
+							},
+							"primaryLocationId": {
+								"type": "string"
+							},
+							"primaryDepartmentId": {
+								"type": "string"
+							},
+							"username": {
+								"type": "string"
+							},
+							"customFields": {
+								"type": "object",
+								"properties": {
+									"asOfDate": {
+										"type": "string"
+									},
+									"contractedHours": {
+										"type": "number"
+									},
+									"jobAdderCandidateId": {
+										"type": "null"
+									},
+									"aboriginalTorresStIslanderStatus": {
+										"type": "boolean"
+									},
+									"bonus2": {
+										"type": "null"
+									},
+									"notes": {
+										"type": "null"
+									},
+									"legalRightToWorkInAustralia": {
+										"type": "boolean"
+									},
+									"probationEndDate": {
+										"type": "string"
+									},
+									"ineligibleForPerformanceReview": {
+										"type": "boolean"
+									}
+								}
+							}
+						}
+					}
+				},
+				"extraReportData": {
+					"type": "array"
+				},
+				"serverTime": {
+					"type": "string"
+				},
+				"addFooterRow": {
+					"type": "boolean"
+				},
+				"addStatusBar": {
+					"type": "boolean"
+				},
+				"reportVariantTag": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
