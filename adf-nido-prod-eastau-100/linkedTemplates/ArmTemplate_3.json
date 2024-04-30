@@ -85,6 +85,1268 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_ReportingLeaveBalances')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Organizations",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "varLeaveBalanceDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select organizationId from definitiv.Organizations",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": "definitiv",
+									"param_TableName": "Organizations"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Organization",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Organizations",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Organizations').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "ApiToJson",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.03:00:00",
+										"retry": 3,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "PipelineName",
+													"value": {
+														"value": "@pipeline().Pipeline",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineRunId",
+													"value": {
+														"value": "@pipeline().RunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineTriggerTime",
+													"value": {
+														"value": "@pipeline().TriggerTime",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "Org.OrganizationId",
+													"value": {
+														"value": "@item().organizationId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "QueryLeaveBalanceDate",
+													"value": {
+														"value": "@variables('varLeaveBalanceDate')",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": {
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
+												"type": "Expression"
+											},
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat(\r\n'/api/company/', \r\nitem().organizationId, \r\n'/reporting/leave-balances?asOfDate=',\r\nvariables('varLeaveBalanceDate')\r\n)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "df_ReportingLeaveBalances",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Organization",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.03:00:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_ReportingLeaveBalances",
+								"type": "DataFlowReference",
+								"parameters": {
+									"param_FileSystem": {
+										"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+										"type": "Expression"
+									},
+									"param_ErrorRowDirectory": {
+										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+										"type": "Expression"
+									},
+									"param_DataflowName": "\"df_ReportingLeaveBalances\""
+								},
+								"datasetParameters": {
+									"sourceJson": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"sinkSql": {
+										"param_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemaName",
+											"type": "Expression"
+										},
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
+									}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "varLeaveBalanceDate",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "PreRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varLeaveBalanceDate",
+							"value": {
+								"value": "@formatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "PreRowCount",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select count(*) as PreRowCount from definitiv.ReportingLeaveBalances",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": {
+										"value": "@pipeline().parameters.param_SchemaName",
+										"type": "Expression"
+									},
+									"param_TableName": {
+										"value": "@pipeline().parameters.param_TableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "PostRowCount",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "df_ReportingLeaveBalances",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.ReportingLeaveBalances",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": {
+										"value": "@pipeline().parameters.param_SchemaName",
+										"type": "Expression"
+									},
+									"param_TableName": {
+										"value": "@pipeline().parameters.param_TableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "ReportingLeaveBalances"
+					}
+				},
+				"variables": {
+					"varLeaveBalanceDate": {
+						"type": "String",
+						"defaultValue": "2022-06-01"
+					}
+				},
+				"folder": {
+					"name": "01_Sentient Pipelines"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_Rosters')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "RosterStartDate",
+						"description": "",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varRosterStartDate",
+							"value": {
+								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "RosterFinishDate",
+						"description": "",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varRosterFinishDate",
+							"value": {
+								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 28), 'yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ApiToJson",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "RosterStartDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "RosterFinishDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "PreRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.03:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "RestSource",
+								"additionalColumns": [
+									{
+										"name": "PipelineName",
+										"value": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "PipelineRunId",
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "PipelineTriggerTime",
+										"value": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "QueryStartDate",
+										"value": {
+											"value": "@variables('varRosterStartDate')",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "QueryFinishDate",
+										"value": {
+											"value": "@variables('varRosterFinishDate')",
+											"type": "Expression"
+										}
+									}
+								],
+								"httpRequestTimeout": {
+									"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_90min}",
+									"type": "Expression"
+								},
+								"requestInterval": "00.00:00:00.010",
+								"requestMethod": "GET",
+								"paginationRules": {
+									"supportRFC5988": "true"
+								}
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_rest_definitiv",
+								"type": "DatasetReference",
+								"parameters": {
+									"sourceRelativeUrl": {
+										"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Rosters,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -7), 'yyyy-MM-dd'),\n'&endDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 26), 'yyyy-MM-dd')\n)",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+								"type": "DatasetReference",
+								"parameters": {
+									"ds_PipelineTriggerTime": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									},
+									"ds_PipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"ds_FileSystem": {
+										"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+										"type": "Expression"
+									},
+									"ds_Directory": {
+										"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+										"type": "Expression"
+									},
+									"ds_PipelineName": {
+										"value": "@pipeline().Pipeline",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "df_Rosters",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ApiToJson",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.03:00:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Rosters",
+								"type": "DataFlowReference",
+								"parameters": {
+									"param_FileSystem": {
+										"value": "'@{pipeline().globalParameters.global_adls2_FileSystem}'",
+										"type": "Expression"
+									},
+									"param_ErrorRowDirectory": {
+										"value": "'@{pipeline().globalParameters.global_adls2_SqlErrorRowDirectory}'",
+										"type": "Expression"
+									},
+									"param_DataflowName": "\"df_Rosters\""
+								},
+								"datasetParameters": {
+									"sourceJson": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"sinkSql": {
+										"param_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemaName",
+											"type": "Expression"
+										},
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "PreRowCount",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select count(*) as PreRowCount from definitiv.CustomReportRosters",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": {
+										"value": "@pipeline().parameters.param_SchemaName",
+										"type": "Expression"
+									},
+									"param_TableName": {
+										"value": "@pipeline().parameters.param_TableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "PostRowCount",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "df_Rosters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.CustomReportRosters",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": {
+										"value": "@pipeline().parameters.param_SchemaName",
+										"type": "Expression"
+									},
+									"param_TableName": {
+										"value": "@pipeline().parameters.param_TableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "CustomReportRosters"
+					}
+				},
+				"variables": {
+					"varRosterStartDate": {
+						"type": "String"
+					},
+					"varRosterFinishDate": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "01_Sentient Pipelines"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_Timesheets_original')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "TimesheetStartDate",
+						"description": "",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "PreRowCount",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varTimesheetStartDate",
+							"value": {
+								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -35), 'yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "TimesheetFinishDate",
+						"description": "",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "TimesheetStartDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varTimesheetFinishDate",
+							"value": {
+								"value": "@formatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 7), 'yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "df_Timesheets",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "QueryDateIsFinishDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.03:00:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Timesheets",
+								"type": "DataFlowReference",
+								"parameters": {
+									"param_FileSystem": "\"container-adf-nido-prod-eastau-100-1\"",
+									"param_ErrorRowDirectory": "\"ErrorRows\"",
+									"param_DataflowName": "\"df_Timesheets\""
+								},
+								"datasetParameters": {
+									"sourceJson": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"sinkSql": {
+										"param_SchemaName": {
+											"value": "@pipeline().parameters.param_SchemaName",
+											"type": "Expression"
+										},
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
+									}
+								}
+							},
+							"staging": {},
+							"integrationRuntime": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "PreRowCount",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select count(*) as PreRowCount from definitiv.CustomReportTimesheets",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": {
+										"value": "@pipeline().parameters.param_SchemaName",
+										"type": "Expression"
+									},
+									"param_TableName": {
+										"value": "@pipeline().parameters.param_TableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "PostRowCount",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "df_Timesheets",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select count(*) as PostRowCount from definitiv.CustomReportTimesheets",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": {
+										"value": "@pipeline().parameters.param_SchemaName",
+										"type": "Expression"
+									},
+									"param_TableName": {
+										"value": "@pipeline().parameters.param_TableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "QueryDateIsFinishDate",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "TimesheetQueryDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(variables('varTimesheetQueryDate'), variables('varTimesheetFinishDate'))",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "ApiToJson",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.03:00:00",
+										"retry": 3,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "PipelineTriggerTime",
+													"value": {
+														"value": "@pipeline().TriggerTime",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineRunId",
+													"value": {
+														"value": "@pipeline().RunId",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "PipelineName",
+													"value": {
+														"value": "@pipeline().Pipeline",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "QueryStartDate",
+													"value": {
+														"value": "@variables('varTimesheetStartDate')",
+														"type": "Expression"
+													}
+												},
+												{
+													"name": "QueryFinishDate",
+													"value": {
+														"value": "@variables('varTimesheetFinishDate')",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": {
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
+												"type": "Expression"
+											},
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat(\n'/api/custom-reports/',\npipeline().globalParameters.global_CustomReportId_Timesheets,\n'?organizationId=',\npipeline().globalParameters.global_CustomReportId_GenericOrgId,\n'&startDate=', \nformatDateTime(variables('varTimesheetQueryDate'), 'yyyy-MM-dd')\n)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "TimesheetQueryDatePlusOne",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "varTimesheetQueryDatePlusOne",
+										"value": {
+											"value": "@formatDateTime(addDays(variables('varTimesheetQueryDate'), 1), 'yyyy-MM-dd')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "NextTimesheetQueryDate",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "TimesheetQueryDatePlusOne",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "varTimesheetQueryDate",
+										"value": {
+											"value": "@variables('varTimesheetQueryDatePlusOne')",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "logic-nido-prod-eastau-101_1",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "ApiToJson",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"policy": {
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "pl_monitoring_logic-nido-prod-eastau-101",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"PipelineName": {
+												"value": "@pipeline().Pipeline",
+												"type": "Expression"
+											},
+											"PipelineRunId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"PipelineTriggerId": {
+												"value": "@pipeline().TriggerId",
+												"type": "Expression"
+											},
+											"PipelineTriggerName": {
+												"value": "@pipeline().TriggerName",
+												"type": "Expression"
+											},
+											"PipelineTriggerTime": {
+												"value": "@pipeline().TriggerTime",
+												"type": "Expression"
+											},
+											"PipelineTriggerType": {
+												"value": "@pipeline().TriggerType",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineName": {
+												"value": "@pipeline()?.TriggeredByPipelineName",
+												"type": "Expression"
+											},
+											"PipelineTriggeredByPipelineRunId": {
+												"value": "@pipeline()?.TriggeredByPipelineRunId",
+												"type": "Expression"
+											},
+											"ActivityOutputMessage": {
+												"value": "@activity('ApiToJson').output.errors[0].Message",
+												"type": "Expression"
+											},
+											"AzureSqlTargetTable": {
+												"value": "@pipeline().parameters.param_TableName",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							],
+							"timeout": "7.00:00:00"
+						}
+					},
+					{
+						"name": "TimesheetQueryDate",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "TimesheetFinishDate",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varTimesheetQueryDate",
+							"value": {
+								"value": "@variables('varTimesheetStartDate')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "definitiv"
+					},
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "CustomReportTimesheets"
+					}
+				},
+				"variables": {
+					"varTimesheetStartDate": {
+						"type": "String"
+					},
+					"varTimesheetFinishDate": {
+						"type": "String"
+					},
+					"varTimesheetQueryDate": {
+						"type": "String"
+					},
+					"varTimesheetQueryDatePlusOne": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "01_Sentient Pipelines"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pl_CopyFromApiToDefinitivSchema_Wages')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
