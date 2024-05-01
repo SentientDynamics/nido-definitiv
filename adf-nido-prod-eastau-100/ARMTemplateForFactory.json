@@ -10042,6 +10042,7 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
+						"     postSQLs:['  DELETE FROM [Definitiv_Employees_History]\\n  WHERE [Organisation GL Code] IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
