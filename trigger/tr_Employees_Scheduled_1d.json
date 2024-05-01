@@ -23,6 +23,16 @@
 					"param_SchemaName": "dbo",
 					"param_TableName": "Definitiv_Employees"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "EmployeesHistory",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitiv_Employees_History"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
