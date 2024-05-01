@@ -39,6 +39,14 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Employees"
 		},
+		"tr_Employees_Scheduled_1d_properties_EmployeesHistory_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_Employees_Scheduled_1d_properties_EmployeesHistory_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Employees_History"
+		},
 		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -509,7 +517,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employees',\n'?asofDate=2024-05-01'\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employees',\n'?asofDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
 													"type": "Expression"
 												}
 											}
@@ -9521,6 +9529,16 @@
 							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName')]"
 						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "EmployeesHistory",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeesHistory_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeesHistory_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -9551,7 +9569,8 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/pipelines/PayPolicies')]",
-				"[concat(variables('factoryId'), '/pipelines/Employees')]"
+				"[concat(variables('factoryId'), '/pipelines/Employees')]",
+				"[concat(variables('factoryId'), '/pipelines/EmployeesHistory')]"
 			]
 		},
 		{
