@@ -29,12 +29,6 @@
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
 			"value": "Definitiv_Employees"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeesHistory_parameters_param_SchemaName": {
-			"value": "dbo"
-		},
-		"tr_Employees_Scheduled_1d_properties_EmployeesHistory_parameters_param_TableName": {
-			"value": "Definitiv_Employees_History"
-		},
 		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
 			"value": "dbo"
 		},
@@ -76,6 +70,12 @@
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 			"value": "Definitiv_Timesheets_Staging"
+		},
+		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName": {
+			"value": "Definitiv_Employees_History"
 		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"value": "container-adf-nido-prod-eastau-100-1"
