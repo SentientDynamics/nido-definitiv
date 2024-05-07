@@ -64,7 +64,9 @@
 			}
 		},
 		"globalConfigurations": {
-			"PipelineBillingEnabled": "true"
+			"PipelineBillingEnabled": "true",
+			"factoryStagingLSReferenceName": "ls_adls2_stnidoprodeastau100",
+			"factoryStagingLSType": "LinkedServiceReference"
 		}
 	},
 	"location": "australiaeast",
