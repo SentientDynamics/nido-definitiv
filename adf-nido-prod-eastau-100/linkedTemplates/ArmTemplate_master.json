@@ -23,6 +23,14 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
 		},
+		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Employees_History"
+		},
 		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -95,14 +103,6 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Timesheets_Staging"
 		},
-		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
-		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "Definitiv_Employees_History"
-		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
 			"defaultValue": "container-adf-nido-prod-eastau-100-1"
@@ -165,7 +165,15 @@
 		},
 		"dataFactory_properties_globalConfigurations_PipelineBillingEnabled": {
 			"type": "string",
-			"defaultValue": "true"
+			"defaultValue": "false"
+		},
+		"dataFactory_properties_globalConfigurations_factoryStagingLSReferenceName": {
+			"type": "string",
+			"defaultValue": "ls_adls2_stnidoprodeastau100"
+		},
+		"dataFactory_properties_globalConfigurations_factoryStagingLSType": {
+			"type": "string",
+			"defaultValue": "LinkedServiceReference"
 		},
 		"dataFactory_location": {
 			"type": "string",
@@ -204,6 +212,15 @@
 					},
 					"ls_sql_tnk001_connectionString": {
 						"value": "[parameters('ls_sql_tnk001_connectionString')]"
+					},
+					"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
+						"value": "[parameters('ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl')]"
+					},
+					"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
+						"value": "[parameters('ls_adls2_stnidoprodeastau100_properties_typeProperties_url')]"
+					},
+					"ls_rest_definitiv_properties_typeProperties_url": {
+						"value": "[parameters('ls_rest_definitiv_properties_typeProperties_url')]"
 					},
 					"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_FileSystem_value')]"
@@ -253,20 +270,17 @@
 					"dataFactory_properties_globalConfigurations_PipelineBillingEnabled": {
 						"value": "[parameters('dataFactory_properties_globalConfigurations_PipelineBillingEnabled')]"
 					},
+					"dataFactory_properties_globalConfigurations_factoryStagingLSReferenceName": {
+						"value": "[parameters('dataFactory_properties_globalConfigurations_factoryStagingLSReferenceName')]"
+					},
+					"dataFactory_properties_globalConfigurations_factoryStagingLSType": {
+						"value": "[parameters('dataFactory_properties_globalConfigurations_factoryStagingLSType')]"
+					},
 					"dataFactory_location": {
 						"value": "[parameters('dataFactory_location')]"
 					},
 					"dataFactory_identity_type": {
 						"value": "[parameters('dataFactory_identity_type')]"
-					},
-					"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
-						"value": "[parameters('ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl')]"
-					},
-					"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
-						"value": "[parameters('ls_adls2_stnidoprodeastau100_properties_typeProperties_url')]"
-					},
-					"ls_rest_definitiv_properties_typeProperties_url": {
-						"value": "[parameters('ls_rest_definitiv_properties_typeProperties_url')]"
 					}
 				}
 			},
@@ -326,6 +340,12 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName": {
+						"value": "[parameters('tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName')]"
+					},
+					"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName": {
+						"value": "[parameters('tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName')]"
+					},
 					"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
 						"value": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName')]"
 					},
@@ -379,12 +399,6 @@
 					},
 					"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName')]"
-					},
-					"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName": {
-						"value": "[parameters('tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName')]"
-					},
-					"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName": {
-						"value": "[parameters('tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName')]"
 					}
 				}
 			},

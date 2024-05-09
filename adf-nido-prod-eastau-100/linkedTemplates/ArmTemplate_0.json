@@ -11,6 +11,18 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_sql_tnk001'"
 		},
+		"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-nido-prod-eastau-100.vault.azure.net/"
+		},
+		"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stnidoprodeastau100.dfs.core.windows.net/"
+		},
+		"ls_rest_definitiv_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().sourceBaseUrl}"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
 			"defaultValue": "container-adf-nido-prod-eastau-100-1"
@@ -73,7 +85,15 @@
 		},
 		"dataFactory_properties_globalConfigurations_PipelineBillingEnabled": {
 			"type": "string",
-			"defaultValue": "true"
+			"defaultValue": "false"
+		},
+		"dataFactory_properties_globalConfigurations_factoryStagingLSReferenceName": {
+			"type": "string",
+			"defaultValue": "ls_adls2_stnidoprodeastau100"
+		},
+		"dataFactory_properties_globalConfigurations_factoryStagingLSType": {
+			"type": "string",
+			"defaultValue": "LinkedServiceReference"
 		},
 		"dataFactory_location": {
 			"type": "string",
@@ -82,101 +102,12 @@
 		"dataFactory_identity_type": {
 			"type": "string",
 			"defaultValue": "SystemAssigned"
-		},
-		"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
-			"type": "string",
-			"defaultValue": "https://kv-nido-prod-eastau-100.vault.azure.net/"
-		},
-		"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://stnidoprodeastau100.dfs.core.windows.net/"
-		},
-		"ls_rest_definitiv_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "@{linkedService().sourceBaseUrl}"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[parameters('factoryName')]",
-			"type": "Microsoft.DataFactory/factories",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"globalParameters": {
-					"global_adls2_FileSystem": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_FileSystem_value')]"
-					},
-					"global_adls2_InputDirectory_Json": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_InputDirectory_Json_value')]"
-					},
-					"global_adls2_OutputDirectory_Json": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_OutputDirectory_Json_value')]"
-					},
-					"global_adls2_LogDirectory": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_LogDirectory_value')]"
-					},
-					"global_logic_Monitoring_baseUrl": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value')]"
-					},
-					"global_logic_Monitoring_SAS": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value')]"
-					},
-					"global_adls2_SqlErrorRowDirectory": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value')]"
-					},
-					"global_CustomReportId_Timesheets": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Timesheets_value')]"
-					},
-					"global_CustomReportId_Rosters": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value')]"
-					},
-					"global_CustomReportId_Payslips": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value')]"
-					},
-					"global_CustomReportId_Wages": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Wages_value')]"
-					},
-					"global_CustomReportId_GenericOrgId": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value')]"
-					},
-					"global_REST_RequestTimeoutDuration_30min": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_30min_value')]"
-					},
-					"global_REST_RequestTimeoutDuration_90min": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_90min_value')]"
-					},
-					"global_CustomReportId_ReportingLeaveApplications": {
-						"type": "string",
-						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_ReportingLeaveApplications_value')]"
-					}
-				},
-				"globalConfigurations": {
-					"PipelineBillingEnabled": "[parameters('dataFactory_properties_globalConfigurations_PipelineBillingEnabled')]"
-				}
-			},
-			"dependsOn": [],
-			"location": "[parameters('dataFactory_location')]",
-			"identity": {
-				"type": "[parameters('dataFactory_identity_type')]"
-			}
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_keyvault_kvnidoprodeastau100')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -538,6 +469,87 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
+		},
+		{
+			"name": "[parameters('factoryName')]",
+			"type": "Microsoft.DataFactory/factories",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"globalParameters": {
+					"global_adls2_FileSystem": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_FileSystem_value')]"
+					},
+					"global_adls2_InputDirectory_Json": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_InputDirectory_Json_value')]"
+					},
+					"global_adls2_OutputDirectory_Json": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_OutputDirectory_Json_value')]"
+					},
+					"global_adls2_LogDirectory": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_LogDirectory_value')]"
+					},
+					"global_logic_Monitoring_baseUrl": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_baseUrl_value')]"
+					},
+					"global_logic_Monitoring_SAS": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_logic_Monitoring_SAS_value')]"
+					},
+					"global_adls2_SqlErrorRowDirectory": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_adls2_SqlErrorRowDirectory_value')]"
+					},
+					"global_CustomReportId_Timesheets": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Timesheets_value')]"
+					},
+					"global_CustomReportId_Rosters": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Rosters_value')]"
+					},
+					"global_CustomReportId_Payslips": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Payslips_value')]"
+					},
+					"global_CustomReportId_Wages": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_Wages_value')]"
+					},
+					"global_CustomReportId_GenericOrgId": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_GenericOrgId_value')]"
+					},
+					"global_REST_RequestTimeoutDuration_30min": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_30min_value')]"
+					},
+					"global_REST_RequestTimeoutDuration_90min": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_REST_RequestTimeoutDuration_90min_value')]"
+					},
+					"global_CustomReportId_ReportingLeaveApplications": {
+						"type": "string",
+						"value": "[parameters('dataFactory_properties_globalParameters_global_CustomReportId_ReportingLeaveApplications_value')]"
+					}
+				},
+				"globalConfigurations": {
+					"PipelineBillingEnabled": "[parameters('dataFactory_properties_globalConfigurations_PipelineBillingEnabled')]",
+					"factoryStagingLSReferenceName": "[parameters('dataFactory_properties_globalConfigurations_factoryStagingLSReferenceName')]",
+					"factoryStagingLSType": "[parameters('dataFactory_properties_globalConfigurations_factoryStagingLSType')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			],
+			"location": "[parameters('dataFactory_location')]",
+			"identity": {
+				"type": "[parameters('dataFactory_identity_type')]"
+			}
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/EmployeesHistory_ds')]",
