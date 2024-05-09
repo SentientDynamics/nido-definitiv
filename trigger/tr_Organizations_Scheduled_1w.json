@@ -2,7 +2,7 @@
 	"name": "tr_Organizations_Scheduled_1w",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
@@ -20,7 +20,7 @@
 			"recurrence": {
 				"frequency": "Week",
 				"interval": 1,
-				"startTime": "2022-06-06T04:33:00",
+				"startTime": "2024-05-08T04:33:00",
 				"timeZone": "AUS Eastern Standard Time",
 				"schedule": {
 					"minutes": [
