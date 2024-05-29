@@ -24,13 +24,11 @@
 				"timeZone": "AUS Eastern Standard Time",
 				"schedule": {
 					"minutes": [
-						0
-					],
-					"hours": [
-						2
+						30
 					],
 					"weekDays": [
-						"Thursday"
+						"Thursday",
+						"Wednesday"
 					]
 				}
 			}
