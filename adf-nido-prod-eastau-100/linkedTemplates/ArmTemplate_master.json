@@ -79,13 +79,13 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Payslips_Staging"
 		},
-		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 1_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 1_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Rosters"
+			"defaultValue": "Definitiv_Rosters_Staging"
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName": {
 			"type": "string",
@@ -94,6 +94,14 @@
 		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Rosters_V3"
+		},
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 2_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 2_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Rosters_Staging"
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 			"type": "string",
@@ -382,17 +390,23 @@
 					"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
 						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName')]"
 					},
-					"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
-						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName')]"
+					"tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 1_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 1_parameters_param_SchemaName')]"
 					},
-					"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
-						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName')]"
+					"tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 1_parameters_param_TableName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 1_parameters_param_TableName')]"
 					},
 					"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName": {
 						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName')]"
 					},
 					"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
 						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName')]"
+					},
+					"tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 2_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 2_parameters_param_SchemaName')]"
+					},
+					"tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 2_parameters_param_TableName": {
+						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_Part 2_parameters_param_TableName')]"
 					},
 					"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName')]"
