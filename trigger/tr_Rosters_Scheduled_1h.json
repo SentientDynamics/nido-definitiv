@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "RostersCosts_Part 1",
+					"referenceName": "RostersCosts",
 					"type": "PipelineReference"
 				},
 				"parameters": {

@@ -1,5 +1,5 @@
 {
-	"name": "RostersCosts_Part 1",
+	"name": "RostersCosts",
 	"properties": {
 		"activities": [
 			{
@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
+						"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nWHERE tradingName in (\n'Nido Early School Kingsley',\n'CMS Pty Ltd',\n'Ferntree Gully',\n'Nido Early School Alkimos',\n'Nest Employee Services Pty Ltd',\n'NAED Employee Services Pty Ltd',\n'Edmur - Wembley Downs')",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -7), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 4), 'yyyy-MM-dd')\n)",
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -1), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 19), 'yyyy-MM-dd')\n)",
 											"type": "Expression"
 										}
 									}
