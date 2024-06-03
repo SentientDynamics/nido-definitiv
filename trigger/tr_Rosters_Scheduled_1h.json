@@ -23,16 +23,6 @@
 					"param_SchemaName": "dbo",
 					"param_TableName": "Definitiv_Rosters_V3"
 				}
-			},
-			{
-				"pipelineReference": {
-					"referenceName": "RostersCosts_Part 2",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"param_SchemaName": "dbo",
-					"param_TableName": "Definitiv_Rosters_Staging"
-				}
 			}
 		],
 		"type": "ScheduleTrigger",
