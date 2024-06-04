@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\n'?FromDate=2024-05-05',\n'&ToDate=2024-06-02'\n)",
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/rostering-v3/roster-costs',\n'?PublishedStatus=Published',\n'&FromDate=',\n'?FromDate=2024-05-10',\n'&ToDate=2024-06-02'\n)",
 											"type": "Expression"
 										}
 									}
