@@ -19,15 +19,17 @@
 		"typeProperties": {
 			"recurrence": {
 				"frequency": "Week",
-				"interval": 1,
-				"startTime": "2023-11-15T01:00:00",
+				"interval": 2,
+				"startTime": "2024-06-12T20:00:00",
 				"timeZone": "AUS Eastern Standard Time",
 				"schedule": {
 					"minutes": [
-						30
+						0
+					],
+					"hours": [
+						22
 					],
 					"weekDays": [
-						"Thursday",
 						"Wednesday"
 					]
 				}
