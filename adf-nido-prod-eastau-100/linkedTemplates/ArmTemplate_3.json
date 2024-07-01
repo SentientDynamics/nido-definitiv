@@ -2369,10 +2369,10 @@
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
-								0
+								45
 							],
 							"hours": [
-								22
+								17
 							],
 							"weekDays": [
 								"Wednesday"
