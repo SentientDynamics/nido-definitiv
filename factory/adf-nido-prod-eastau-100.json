@@ -64,7 +64,7 @@
 			}
 		},
 		"globalConfigurations": {
-			"PipelineBillingEnabled": "false",
+			"PipelineBillingEnabled": "true",
 			"factoryStagingLSReferenceName": "ls_adls2_stnidoprodeastau100",
 			"factoryStagingLSType": "LinkedServiceReference"
 		}
