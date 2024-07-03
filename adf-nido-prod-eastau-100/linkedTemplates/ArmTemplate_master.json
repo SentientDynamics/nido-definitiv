@@ -165,7 +165,7 @@
 		},
 		"dataFactory_properties_globalConfigurations_PipelineBillingEnabled": {
 			"type": "string",
-			"defaultValue": "false"
+			"defaultValue": "true"
 		},
 		"dataFactory_properties_globalConfigurations_factoryStagingLSReferenceName": {
 			"type": "string",

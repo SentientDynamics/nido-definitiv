@@ -123,7 +123,7 @@
 			"value": "A1D9B4D7-3A79-413F-B13D-4BA5BC567BDC"
 		},
 		"dataFactory_properties_globalConfigurations_PipelineBillingEnabled": {
-			"value": "false"
+			"value": "true"
 		},
 		"dataFactory_properties_globalConfigurations_factoryStagingLSReferenceName": {
 			"value": "ls_adls2_stnidoprodeastau100"
