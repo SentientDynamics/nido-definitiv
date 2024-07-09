@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat('/api/company/', item().organizationId,\n'/reporting/pay-runs?FromDate=2024-01-06&toDate=2024-02-02',\n'&reportType=AggregatePerDate')\n\n",
+											"value": "@concat('/api/company/', item().organizationId,\n'/reporting/pay-runs?FromDate=2024-02-03&toDate=2024-03-15',\n'&reportType=AggregatePerDate')\n\n",
 											"type": "Expression"
 										}
 									}
