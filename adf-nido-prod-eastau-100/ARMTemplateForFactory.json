@@ -2537,7 +2537,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nWHERE organizationCode <> 'cms-pty-ltd'",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -2621,7 +2621,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=2024-07-06',\n'&ToDate=2024-07-16',\n'&includeTerminated=true'\n)\n",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=2024-07-06',\n'&ToDate=2024-07-08',\n'&includeTerminated=true'\n)\n",
 													"type": "Expression"
 												}
 											}
