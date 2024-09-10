@@ -8301,6 +8301,112 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PayPoliciesHistory_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"payPolicyAssignmentId": {
+							"type": "string"
+						},
+						"payPolicyId": {
+							"type": "null"
+						},
+						"payPolicyName": {
+							"type": "null"
+						},
+						"commencementDate": {
+							"type": "string"
+						},
+						"ceaseDate": {
+							"type": "string"
+						},
+						"hoursInWorkingWeek": {
+							"type": "null"
+						},
+						"fullTimeEquivalentWeeklyHours": {
+							"type": "null"
+						},
+						"customPayPolicy": {
+							"type": "object",
+							"properties": {
+								"customPayPolicyId": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"baseRate": {
+									"type": "object",
+									"properties": {
+										"isDraft": {
+											"type": "boolean"
+										},
+										"type": {
+											"type": "string"
+										},
+										"salary": {
+											"type": "null"
+										},
+										"totalPackage": {
+											"type": "null"
+										},
+										"weeklyHours": {
+											"type": "null"
+										},
+										"fullTimeEquivalentWeeklyHours": {
+											"type": "null"
+										},
+										"dailyRate": {
+											"type": "null"
+										},
+										"dailyHours": {
+											"type": "null"
+										},
+										"hourlyRate": {
+											"type": "number"
+										},
+										"allPurposeRate": {
+											"type": "null"
+										},
+										"hourlyRateRuleId": {
+											"type": "null"
+										}
+									}
+								},
+								"payRates": {
+									"type": "array"
+								},
+								"payRateRules": {
+									"type": "array"
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PayPolicies_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",

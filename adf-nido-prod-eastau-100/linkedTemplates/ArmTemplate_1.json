@@ -13,6 +13,279 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/RostersV3_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "null"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"organisationName": {
+										"type": "string"
+									},
+									"organisationExportCode": {
+										"type": "string"
+									},
+									"organisationGLCode": {
+										"type": "string"
+									},
+									"teamHierarchy": {
+										"type": "null"
+									},
+									"rosterName": {
+										"type": "string"
+									},
+									"rosterDescription": {
+										"type": "string"
+									},
+									"rosterPeriod": {
+										"type": "string"
+									},
+									"shiftPublishedState": {
+										"type": "string"
+									},
+									"sourceType": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									},
+									"employee": {
+										"type": "string"
+									},
+									"date": {
+										"type": "string"
+									},
+									"dayIndex": {
+										"type": "string"
+									},
+									"role": {
+										"type": "string"
+									},
+									"timePeriodMode": {
+										"type": "string"
+									},
+									"startTimeOfDay": {
+										"type": "string"
+									},
+									"endTimeOfDay": {
+										"type": "string"
+									},
+									"durationHours": {
+										"type": "number"
+									},
+									"publicHolidayWorked": {
+										"type": "null"
+									},
+									"position": {
+										"type": "string"
+									},
+									"shiftType": {
+										"type": "string"
+									},
+									"project": {
+										"type": "string"
+									},
+									"projectWorkOrder": {
+										"type": "string"
+									},
+									"department": {
+										"type": "string"
+									},
+									"location": {
+										"type": "string"
+									},
+									"notes": {
+										"type": "string"
+									},
+									"breakTimes": {
+										"type": "string"
+									},
+									"breakDurationHours": {
+										"type": "number"
+									},
+									"responseDateTime": {
+										"type": "null"
+									},
+									"responseReason": {
+										"type": "null"
+									},
+									"deleted": {
+										"type": "string"
+									},
+									"customFields": {
+										"type": "object",
+										"properties": {
+											"kmAllowance": {
+												"type": "null"
+											},
+											"staffMeeting": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"StartTimeOfDay": {
+															"type": "null"
+														},
+														"EndTimeOfDay": {
+															"type": "null"
+														},
+														"DurationHours": {
+															"type": "null"
+														},
+														"Value": {
+															"type": "boolean"
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Timesheets_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1423,6 +1696,7 @@
 				}
 			},
 			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/RostersV3_ds')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -1882,47 +2156,6 @@
 						}
 					],
 					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_OrgPayRuns\")\n}\nsource(output(\n\t\t{Org.LegalName} as string,\n\t\t{Org.OrganizationId} as string,\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerId as string,\n\t\tPipelineTriggerTime as string,\n\t\tcurrentFinancialYearEndDate as string,\n\t\tcurrentFinancialYearStartDate as string,\n\t\tpayCalendars as (atoLodgementsEnabled as boolean, description as string, payCalendarId as string, period as string, periodStartDate as string, proRataMode as string, weeklyFactor as double, weeklyFactorEquation as short)[],\n\t\tpayRuns as (backPayDateOverride as string, dateLastCalculated as string, dateOpened as string, datePublished as string, employeeCount as short, eofyLodgementStatus as string, financialYearEndDate as string, financialYearStartDate as string, initiatingUserId as string, initiatingUserName as string, lodgementStatus as string, notes as string, payCalendarId as string, payCalendarName as string, payRunId as string, paymentDate as string, payslipGenerationStatus as string, periodEnd as string, periodStart as string, publishingUserId as string, publishingUserName as string, runNumber as short, status as string, superannuationPaymentDate as string, type as string)[]\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> sourceJson\nsourceJson foldDown(unroll(payRuns),\n\tmapColumn(\n\t\tbackPayDateOverride = payRuns.backPayDateOverride,\n\t\tdateLastCalculated = payRuns.dateLastCalculated,\n\t\tdateOpened = payRuns.dateOpened,\n\t\tdatePublished = payRuns.datePublished,\n\t\temployeeCount = payRuns.employeeCount,\n\t\teofyLodgementStatus = payRuns.eofyLodgementStatus,\n\t\tfinancialYearEndDate = payRuns.financialYearEndDate,\n\t\tfinancialYearStartDate = payRuns.financialYearStartDate,\n\t\tinitiatingUserId = payRuns.initiatingUserId,\n\t\tinitiatingUserName = payRuns.initiatingUserName,\n\t\tlodgementStatus = payRuns.lodgementStatus,\n\t\tnotes = payRuns.notes,\n\t\tpayCalendarId = payRuns.payCalendarId,\n\t\tpayCalendarName = payRuns.payCalendarName,\n\t\tpayRunId = payRuns.payRunId,\n\t\tpaymentDate = payRuns.paymentDate,\n\t\tpayslipGenerationStatus = payRuns.payslipGenerationStatus,\n\t\tperiodEnd = payRuns.periodEnd,\n\t\tperiodStart = payRuns.periodStart,\n\t\tpublishingUserId = payRuns.publishingUserId,\n\t\tpublishingUserName = payRuns.publishingUserName,\n\t\trunNumber = payRuns.runNumber,\n\t\tstatus = payRuns.status,\n\t\tsuperannuationPaymentDate = payRuns.superannuationPaymentDate,\n\t\ttype = payRuns.type,\n\t\t{Org.LegalName},\n\t\t{Org.OrganizationId},\n\t\tPipelineName,\n\t\tPipelineRunId,\n\t\tPipelineTriggerTime,\n\t\tcurrentFinancialYearEndDate,\n\t\tcurrentFinancialYearStartDate\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> flattenPayRuns\nflattenPayRuns derive(each(match(not(typeMatch(type,'datetime'))&&(like(name,'%date%')||like(name,'%Date%')||like(name,'%Time%')||like(name,'%time%'))), $$ = toTimestamp(toString($$), 'yyyy-MM-dd\\'T\\'HH:mm:ss', 'A.U.S. Eastern Standard Time'))) ~> castDateColumns\ncastDateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: ($param_FileSystem),\n\trejectedData_folderPath: ($param_ErrorRowDirectory),\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> sinkSql"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_Organizations')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "01_Sentient Dataflows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-								"type": "DatasetReference"
-							},
-							"name": "SourceBlobDefinitiv"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "SinkSqlDefinitiv",
-							"rejectedDataLinkedService": {
-								"referenceName": "ls_adls2_stnidoprodeastau100",
-								"type": "LinkedServiceReference"
-							}
-						}
-					],
-					"transformations": [],
-					"script": "parameters{\n\tparam_FileSystem as string (\"container-adf-nido-prod-eastau-100-1\"),\n\tparam_ErrorRowDirectory as string (\"ErrorRows\"),\n\tparam_DataflowName as string (\"df_Organizations\")\n}\nsource(output(\n\t\tPipelineName as string,\n\t\tPipelineRunId as string,\n\t\tPipelineTriggerTime as string,\n\t\tabn as string,\n\t\tacn as string,\n\t\tbeamTermsConfirmDate as string,\n\t\tbeamTermsConfirmUserId as string,\n\t\tbeamTermsConfirmUserName as string,\n\t\tbranchCode as string,\n\t\tcontactEmail as string,\n\t\tcontactFirstName as string,\n\t\tcontactPhone as string,\n\t\tcontactSurname as string,\n\t\tcontactTitle as string,\n\t\temployeeSupportEmail as string,\n\t\tfbtExempt as boolean,\n\t\tintermediary as string,\n\t\tlegalName as string,\n\t\tnotificationUserIds as string,\n\t\tnotifyLodgementSubmitters as boolean,\n\t\torganizationCode as string,\n\t\torganizationId as string,\n\t\treference as string,\n\t\tsoftwareProviderABN as string,\n\t\tsoftwareProviderName as string,\n\t\tsoftwareSubscriptionId as string,\n\t\tstreetAddress as string,\n\t\ttradingName as string,\n\t\twpn as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\tignoreNoFilesFound: false,\n\trowUrlColumn: 'SourceFileName',\n\tdocumentForm: 'documentPerLine') ~> SourceBlobDefinitiv\nSourceBlobDefinitiv sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\ttruncate:true,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'allErrors',\n\toutputRejectedData: true,\n\trejectedData_fileSystem: 'container-adf-nido-prod-eastau-100-1',\n\trejectedData_folderPath: 'ds_adsl2_stnidoprodeastau100_csv/definitiv.Organizations',\n\ttransactionCommit: 'batch',\n\treportSuccessOnError: true) ~> SinkSqlDefinitiv"
 				}
 			},
 			"dependsOn": [

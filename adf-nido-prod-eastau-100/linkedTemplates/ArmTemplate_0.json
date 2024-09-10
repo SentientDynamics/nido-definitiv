@@ -1967,6 +1967,111 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PayPoliciesHistory_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"payPolicyAssignmentId": {
+							"type": "string"
+						},
+						"payPolicyId": {
+							"type": "null"
+						},
+						"payPolicyName": {
+							"type": "null"
+						},
+						"commencementDate": {
+							"type": "string"
+						},
+						"ceaseDate": {
+							"type": "string"
+						},
+						"hoursInWorkingWeek": {
+							"type": "null"
+						},
+						"fullTimeEquivalentWeeklyHours": {
+							"type": "null"
+						},
+						"customPayPolicy": {
+							"type": "object",
+							"properties": {
+								"customPayPolicyId": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"baseRate": {
+									"type": "object",
+									"properties": {
+										"isDraft": {
+											"type": "boolean"
+										},
+										"type": {
+											"type": "string"
+										},
+										"salary": {
+											"type": "null"
+										},
+										"totalPackage": {
+											"type": "null"
+										},
+										"weeklyHours": {
+											"type": "null"
+										},
+										"fullTimeEquivalentWeeklyHours": {
+											"type": "null"
+										},
+										"dailyRate": {
+											"type": "null"
+										},
+										"dailyHours": {
+											"type": "null"
+										},
+										"hourlyRate": {
+											"type": "number"
+										},
+										"allPurposeRate": {
+											"type": "null"
+										},
+										"hourlyRateRuleId": {
+											"type": "null"
+										}
+									}
+								},
+								"payRates": {
+									"type": "array"
+								},
+								"payRateRules": {
+									"type": "array"
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PayPolicies_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2621,281 +2726,6 @@
 					}
 				},
 				"schema": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/RostersV3_ds')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls2_stnidoprodeastau100",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"ds_PipelineTriggerTime": {
-						"type": "string"
-					},
-					"ds_PipelineRunId": {
-						"type": "string"
-					},
-					"ds_FileSystem": {
-						"type": "string"
-					},
-					"ds_Directory": {
-						"type": "string"
-					},
-					"ds_PipelineName": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Datasets"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": {
-							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
-							"type": "Expression"
-						},
-						"fileSystem": {
-							"value": "@dataset().ds_FileSystem",
-							"type": "Expression"
-						}
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"headers": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"title": {
-										"type": "string"
-									},
-									"filterDisabled": {
-										"type": "boolean"
-									},
-									"sortDisabled": {
-										"type": "boolean"
-									},
-									"hiddenByDefault": {
-										"type": "boolean"
-									},
-									"searchDisabled": {
-										"type": "boolean"
-									},
-									"dataType": {
-										"type": "string"
-									},
-									"fieldName": {
-										"type": "string"
-									},
-									"defaultPivotColumnOrder": {
-										"type": "integer"
-									},
-									"defaultPivotRowOrder": {
-										"type": "integer"
-									},
-									"defaultPivotValueOrder": {
-										"type": "integer"
-									},
-									"defaultSortOrder": {
-										"type": "integer"
-									},
-									"defaultSortDirection": {
-										"type": "string"
-									},
-									"defaultPivotAggregation": {
-										"type": "null"
-									},
-									"isDynamicColumns": {
-										"type": "boolean"
-									},
-									"isCustomFields": {
-										"type": "boolean"
-									},
-									"customFieldsKeyName": {
-										"type": "null"
-									},
-									"createDayOfWeekColumn": {
-										"type": "boolean"
-									},
-									"prependBaseColumnNameToDayOfWeekColumn": {
-										"type": "boolean"
-									},
-									"trueText": {
-										"type": "null"
-									},
-									"falseText": {
-										"type": "null"
-									},
-									"nullDisplayText": {
-										"type": "null"
-									},
-									"disableDefaultAggregation": {
-										"type": "boolean"
-									},
-									"numericPrecision": {
-										"type": "null"
-									}
-								}
-							}
-						},
-						"reportData": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"organisationName": {
-										"type": "string"
-									},
-									"organisationExportCode": {
-										"type": "string"
-									},
-									"organisationGLCode": {
-										"type": "string"
-									},
-									"teamHierarchy": {
-										"type": "null"
-									},
-									"rosterName": {
-										"type": "string"
-									},
-									"rosterDescription": {
-										"type": "string"
-									},
-									"rosterPeriod": {
-										"type": "string"
-									},
-									"shiftPublishedState": {
-										"type": "string"
-									},
-									"sourceType": {
-										"type": "string"
-									},
-									"status": {
-										"type": "string"
-									},
-									"employee": {
-										"type": "string"
-									},
-									"date": {
-										"type": "string"
-									},
-									"dayIndex": {
-										"type": "string"
-									},
-									"role": {
-										"type": "string"
-									},
-									"timePeriodMode": {
-										"type": "string"
-									},
-									"startTimeOfDay": {
-										"type": "string"
-									},
-									"endTimeOfDay": {
-										"type": "string"
-									},
-									"durationHours": {
-										"type": "number"
-									},
-									"publicHolidayWorked": {
-										"type": "null"
-									},
-									"position": {
-										"type": "string"
-									},
-									"shiftType": {
-										"type": "string"
-									},
-									"project": {
-										"type": "string"
-									},
-									"projectWorkOrder": {
-										"type": "string"
-									},
-									"department": {
-										"type": "string"
-									},
-									"location": {
-										"type": "string"
-									},
-									"notes": {
-										"type": "string"
-									},
-									"breakTimes": {
-										"type": "string"
-									},
-									"breakDurationHours": {
-										"type": "number"
-									},
-									"responseDateTime": {
-										"type": "null"
-									},
-									"responseReason": {
-										"type": "null"
-									},
-									"deleted": {
-										"type": "string"
-									},
-									"customFields": {
-										"type": "object",
-										"properties": {
-											"kmAllowance": {
-												"type": "null"
-											},
-											"staffMeeting": {
-												"type": "array",
-												"items": {
-													"type": "object",
-													"properties": {
-														"StartTimeOfDay": {
-															"type": "null"
-														},
-														"EndTimeOfDay": {
-															"type": "null"
-														},
-														"DurationHours": {
-															"type": "null"
-														},
-														"Value": {
-															"type": "boolean"
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						},
-						"extraReportData": {
-							"type": "array"
-						},
-						"serverTime": {
-							"type": "string"
-						},
-						"addFooterRow": {
-							"type": "boolean"
-						},
-						"addStatusBar": {
-							"type": "boolean"
-						},
-						"reportVariantTag": {
-							"type": "string"
-						}
-					}
-				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
