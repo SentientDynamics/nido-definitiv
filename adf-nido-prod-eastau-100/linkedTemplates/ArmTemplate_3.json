@@ -3096,7 +3096,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT [Employee ID] AS employeeId\nFROM [dbo].[Definitiv_Employees]\nWHERE [Organisation GL Code] = 'ALKIMOS'",
+								"sqlReaderQuery": "SELECT [Employee ID]\nFROM [dbo].[Definitiv_Employees]\nWHERE [Organisation GL Code] = 'ALKIMOS'",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -3148,7 +3148,7 @@
 												{
 													"name": "Employee ID",
 													"value": {
-														"value": "@item().employeeId",
+														"value": "@activity('Employees').output",
 														"type": "Expression"
 													}
 												}
@@ -3180,7 +3180,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/employee/',\nitem().employeeId,\n'/pay-policies'\n)",
+													"value": "@concat(\n'/api/employee/',\nactivity('Employees').output,\n'/pay-policies'\n)",
 													"type": "Expression"
 												}
 											}
