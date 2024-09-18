@@ -63,6 +63,14 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Payslips_Staging"
 		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Payslips_Daily"
+		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -3962,6 +3970,16 @@
 						"parameters": {
 							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName')]"
+						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Payslips_Daily",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName')]"
 						}
 					}
 				],
