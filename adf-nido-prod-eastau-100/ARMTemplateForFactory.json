@@ -533,7 +533,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employees',\n'?asofDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employees',\n'?asofDate=2024-09-15'\n)",
 													"type": "Expression"
 												}
 											}
