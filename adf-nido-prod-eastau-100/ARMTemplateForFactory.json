@@ -6840,7 +6840,7 @@
 						],
 						"policy": {
 							"timeout": "0.03:00:00",
-							"retry": 3,
+							"retry": 1,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
 							"secureInput": false
@@ -11157,8 +11157,7 @@
 						"     mapColumn(",
 						"          {Policy Name} = payPolicyName,",
 						"          {Commencement Date} = commencementDate,",
-						"          {Cease Date} = ceaseDate,",
-						"          {Custom Policy Name} = customPayPolicy.name",
+						"          {Cease Date} = ceaseDate",
 						"     ),",
 						"     skipDuplicateMapInputs: false,",
 						"     skipDuplicateMapOutputs: false) ~> flatten1",
