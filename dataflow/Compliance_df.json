@@ -1,0 +1,81 @@
+{
+	"name": "Compliance_df",
+	"properties": {
+		"folder": {
+			"name": "00_Definitv Dataflows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Compliance_ds",
+						"type": "DatasetReference"
+					},
+					"name": "jsoninput"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference"
+					},
+					"name": "WritetoSQLDB",
+					"description": "Export data to ds_sql_tnk001"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+				"          reportData as (employeeNumber as string, printName as string, projectAssignment as string, projectExportCode as string, departmentAssignment as string, departmentExportCode as string, locationAssignment as string, locationExportCode as string, roleAssignment as string, roleExportCode as string, firstName as string, surname as string, qualification as string, dateObtained as string, expiryDate as string, isExpired as boolean, employeeId as string, qualificationId as string, customFields as ({} as string), attachments as string, comments as string)[],",
+				"          extraReportData as string[],",
+				"          serverTime as string,",
+				"          addFooterRow as boolean,",
+				"          addStatusBar as boolean,",
+				"          reportVariantTag as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true,",
+				"     documentForm: 'documentPerLine') ~> jsoninput",
+				"jsoninput foldDown(unroll(reportData),",
+				"     mapColumn(",
+				"          employeeNumber = reportData.employeeNumber,",
+				"          printName = reportData.printName,",
+				"          projectAssignment = reportData.projectAssignment,",
+				"          projectExportCode = reportData.projectExportCode,",
+				"          departmentAssignment = reportData.departmentAssignment,",
+				"          locationAssignment = reportData.locationAssignment,",
+				"          roleAssignment = reportData.roleAssignment,",
+				"          qualification = reportData.qualification,",
+				"          dateObtained = reportData.dateObtained,",
+				"          expiryDate = reportData.expiryDate,",
+				"          isExpired = reportData.isExpired,",
+				"          employeeId = reportData.employeeId,",
+				"          attachments = reportData.attachments,",
+				"          comments = reportData.comments",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> WritetoSQLDB"
+			]
+		}
+	}
+}
