@@ -56,7 +56,7 @@
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.03:00:00",
-								"retry": 3,
+								"retry": 1,
 								"retryIntervalInSeconds": 30,
 								"secureOutput": false,
 								"secureInput": false
@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'reporting/employee-qualifications'\n)",
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employee-qualifications'\n)",
 											"type": "Expression"
 										}
 									}
@@ -109,7 +109,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "Employees_ds",
+									"referenceName": "Compliance_ds",
 									"type": "DatasetReference",
 									"parameters": {
 										"ds_PipelineTriggerTime": {
