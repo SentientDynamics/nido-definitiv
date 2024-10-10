@@ -17,6 +17,12 @@
 		"ls_rest_definitiv_properties_typeProperties_url": {
 			"value": "@{linkedService().sourceBaseUrl}"
 		},
+		"tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_TableName": {
+			"value": "Definitiv_Compliance"
+		},
 		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName": {
 			"value": "dbo"
 		},

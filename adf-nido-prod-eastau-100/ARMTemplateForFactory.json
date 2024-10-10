@@ -23,6 +23,14 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
 		},
+		"tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Compliance"
+		},
 		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -10561,6 +10569,55 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_Compliance_Schdeuled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Compliance",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2024-10-10T23:50:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								7
+							],
+							"weekDays": [
+								"Monday",
+								"Tuesday",
+								"Wednesday",
+								"Thursday",
+								"Friday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/pipelines/Compliance')]"
 			]
 		},
 		{
