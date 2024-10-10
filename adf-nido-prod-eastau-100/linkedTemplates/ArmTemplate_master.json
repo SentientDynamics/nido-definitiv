@@ -407,6 +407,26 @@
 					},
 					"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
 						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "adf-nido-prod-eastau-100_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
 					},
 					"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
 						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName')]"
@@ -417,7 +437,7 @@
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_2')]"
+				"[resourceId('Microsoft.Resources/deployments', 'adf-nido-prod-eastau-100_ArmTemplate_3')]"
 			]
 		}
 	]
