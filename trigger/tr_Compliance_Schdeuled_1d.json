@@ -1,0 +1,43 @@
+{
+	"name": "tr_Compliance_Schdeuled_1d",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Compliance",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitiv_Compliance"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Week",
+				"interval": 1,
+				"startTime": "2024-10-10T23:50:00",
+				"timeZone": "AUS Eastern Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						7
+					],
+					"weekDays": [
+						"Monday",
+						"Tuesday",
+						"Wednesday",
+						"Thursday",
+						"Friday"
+					]
+				}
+			}
+		}
+	}
+}
