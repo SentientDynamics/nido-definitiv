@@ -72,6 +72,7 @@
 				"     upsertable:false,",
 				"     truncate:true,",
 				"     format: 'table',",
+				"     postSQLs:['DELETE FROM Definitiv_Compliance\\nWHERE employeeNumber IS NULL'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> WritetoSQLDB"
