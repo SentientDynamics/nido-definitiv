@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-balances',\n'?asofdate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)",
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-balances',\n'?asofdate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd')\n)",
 											"type": "Expression"
 										}
 									}
