@@ -83,7 +83,7 @@
 				"     upsertable:false,",
 				"     truncate:true,",
 				"     format: 'table',",
-				"     postSQLs:['DELETE FROM [dbo].[Definitiv_Rosters_V3]\\nWHERE [date] IS NULL OR [shiftPublishedState] <> \\'Published\\' OR sourceType = \\'Leave Application\\' OR deleted = \\'Yes\\''],",
+				"     postSQLs:['DELETE FROM [dbo].[Definitiv_Rosters_V3]\\nWHERE [date] IS NULL OR sourceType = \\'Leave Application\\' OR deleted = \\'Yes\\''],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
