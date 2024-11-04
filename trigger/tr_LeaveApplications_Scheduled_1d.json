@@ -1,5 +1,5 @@
 {
-	"name": "tr_LeaveApplications_Scheduled_2w",
+	"name": "tr_LeaveApplications_Scheduled_1d",
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Started",
@@ -11,15 +11,15 @@
 				},
 				"parameters": {
 					"param_SchemaName": "dbo",
-					"param_TableName": "Definitiv_LeaveApplications"
+					"param_TableName": "Definitiv_LeaveApplications_Staging"
 				}
 			}
 		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
-				"frequency": "Week",
-				"interval": 2,
+				"frequency": "Day",
+				"interval": 1,
 				"startTime": "2023-11-16T03:00:00",
 				"timeZone": "AUS Eastern Standard Time",
 				"schedule": {
@@ -27,10 +27,7 @@
 						0
 					],
 					"hours": [
-						4
-					],
-					"weekDays": [
-						"Thursday"
+						7
 					]
 				}
 			}
