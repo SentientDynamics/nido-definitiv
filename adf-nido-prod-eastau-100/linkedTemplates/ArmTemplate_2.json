@@ -1414,7 +1414,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',\n'2024-01-01',\n'&toDate=',\n'2024-04-30')",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',\n'2024-05-01',\n'&toDate=',\n'2024-08-31')",
 													"type": "Expression"
 												}
 											}
