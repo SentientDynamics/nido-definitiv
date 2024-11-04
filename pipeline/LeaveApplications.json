@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -30), 'yyyy-MM-dd'),\n'&toDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 90), 'yyyy-MM-dd'))",
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/leave-applications',\n'?fromDate=',\n'2024-01-01',\n'&toDate=',\n'2024-04-30')",
 											"type": "Expression"
 										}
 									}
@@ -187,7 +187,7 @@
 							},
 							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "Definitiv_LeaveApplications"
+								"param_TableName": "Definitiv_LeaveApplications_Staging"
 							}
 						}
 					},
@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_LeaveApplications"
+				"defaultValue": "Definitiv_LeaveApplications_Staging"
 			}
 		},
 		"folder": {
