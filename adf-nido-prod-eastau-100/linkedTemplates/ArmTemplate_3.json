@@ -39,13 +39,13 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Employees"
 		},
-		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName": {
+		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_TableName": {
+		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_LeaveApplications"
+			"defaultValue": "Definitiv_LeaveApplications_Staging"
 		},
 		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_SchemaName": {
 			"type": "string",
@@ -4765,7 +4765,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tr_LeaveApplications_Scheduled_2w')]",
+			"name": "[concat(parameters('factoryName'), '/tr_LeaveApplications_Scheduled_1d')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -4778,16 +4778,16 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_LeaveApplications_Scheduled_2w_properties_LeaveApplications_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName')]"
 						}
 					}
 				],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Week",
-						"interval": 2,
+						"frequency": "Day",
+						"interval": 1,
 						"startTime": "2023-11-16T03:00:00",
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
@@ -4795,10 +4795,7 @@
 								0
 							],
 							"hours": [
-								4
-							],
-							"weekDays": [
-								"Thursday"
+								7
 							]
 						}
 					}
