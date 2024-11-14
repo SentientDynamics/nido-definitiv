@@ -18,7 +18,7 @@
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
-				"frequency": "Day",
+				"frequency": "Week",
 				"interval": 1,
 				"startTime": "2023-11-16T03:00:00",
 				"timeZone": "AUS Eastern Standard Time",
@@ -28,6 +28,13 @@
 					],
 					"hours": [
 						7
+					],
+					"weekDays": [
+						"Monday",
+						"Tuesday",
+						"Wednesday",
+						"Thursday",
+						"Friday"
 					]
 				}
 			}
