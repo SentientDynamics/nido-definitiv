@@ -246,7 +246,13 @@
 										"type": "null"
 									},
 									"staffMeeting": {
-										"type": "array"
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									},
+									"staffMeetingHours": {
+										"type": "number"
 									}
 								}
 							},
