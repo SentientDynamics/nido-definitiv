@@ -2695,7 +2695,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nWHERE tradingName in (\n'Nido Early School Kingsley',\n'CMS Pty Ltd',\n'Ferntree Gully',\n'Nido Early School Alkimos',\n'Nest Employee Services Pty Ltd',\n'NAED Employee Services Pty Ltd',\n'Edmur - Wembley Downs')",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
