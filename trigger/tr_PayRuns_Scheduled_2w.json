@@ -23,6 +23,16 @@
 					"param_SchemaName": "dbo",
 					"param_TableName": "Definitiv_Payslips_Daily"
 				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "OrganisationPayPolicies",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_SchemaName": "dbo",
+					"param_TableName": "Definitiv_OrganisationPayPolcies"
+				}
 			}
 		],
 		"type": "ScheduleTrigger",
