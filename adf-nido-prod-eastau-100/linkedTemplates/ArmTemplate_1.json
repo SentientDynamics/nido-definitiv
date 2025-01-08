@@ -826,6 +826,118 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/EmployeePayPolicies_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "EmployeePayPolicies_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+						"          reportData as (employeeNumber as string, printName as string, title as string, firstName as string, surname as string, middleName as string, preferredName as string, gender as string, dateOfBirth as string, hireDate as string, hireReason as string, terminationDate as string, terminationReason as string, employmentStatus as string, payCalendar as string, policyCode as string, policyType as string, policyName as string, commencementDate as string, ceaseDate as string, payRateType as string, salary as string, salaryFte as string, totalPackage as string, totalPackageFte as string, weeklyHours as string, fullTimeEquivalentWeeklyHours as string, fullTimeEquivalentRatio as string, dailyRate as string, dailyHours as string, hourlyRate as double, allPurposeRate as double, payRates as string[], primaryProject as string, primaryProjectCode as string, canOnlyWorkAssignedProjects as string, primaryRole as string, primaryRoleCode as string, primaryLocation as string, primaryLocationCode as string, primaryDepartment as string, primaryDepartmentCode as string, workSchedule as string, workScheduleDescription as string, shiftType as string, shiftTypeCode as string, usualPlaceOfResidence as string, employeeId as string, primaryProjectId as string, primaryRoleId as string, primaryLocationId as string, primaryDepartmentId as string)[],",
+						"          extraReportData as string[],",
+						"          serverTime as string,",
+						"          addFooterRow as boolean,",
+						"          addStatusBar as boolean,",
+						"          reportVariantTag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     purgeFiles: true,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput foldDown(unroll(reportData),",
+						"     mapColumn(",
+						"          {Emp No} = reportData.employeeNumber,",
+						"          {Print Name} = reportData.printName,",
+						"          Gender = reportData.gender,",
+						"          {Date of Birth} = reportData.dateOfBirth,",
+						"          {Hire Date} = reportData.hireDate,",
+						"          {Hire Reason} = reportData.hireReason,",
+						"          {Termination Date} = reportData.terminationDate,",
+						"          {Termination Reason} = reportData.terminationReason,",
+						"          {Employment Status} = reportData.employmentStatus,",
+						"          {Pay Calendar} = reportData.payCalendar,",
+						"          {Policy Type} = reportData.policyType,",
+						"          {Policy Name} = reportData.policyName,",
+						"          {Commencement Date} = reportData.commencementDate,",
+						"          {Cease Date} = reportData.ceaseDate,",
+						"          {Pay Rate Type} = reportData.payRateType,",
+						"          Salary = reportData.salary,",
+						"          {Salary FTE} = reportData.salaryFte,",
+						"          {Total Package} = reportData.totalPackage,",
+						"          {Total Package FTE} = reportData.totalPackageFte,",
+						"          {Weekly Hours} = reportData.weeklyHours,",
+						"          {FTE Weekly Hours} = reportData.fullTimeEquivalentWeeklyHours,",
+						"          {FTE Ratio} = reportData.fullTimeEquivalentRatio,",
+						"          {Daily Rate} = reportData.dailyRate,",
+						"          {Daily Hours} = reportData.dailyHours,",
+						"          {Hourly Rate} = reportData.hourlyRate,",
+						"          {All Purpose Rate} = reportData.allPurposeRate,",
+						"          {Primary Project} = reportData.primaryProject,",
+						"          {Primary Project Code} = reportData.primaryProjectCode,",
+						"          {Can Only Work Assigned Projects} = reportData.canOnlyWorkAssignedProjects,",
+						"          {Primary Role} = reportData.primaryRole,",
+						"          {Primary Role Code} = reportData.primaryRoleCode,",
+						"          {Primary Location} = reportData.primaryLocation,",
+						"          {Primary Location Code} = reportData.primaryLocationCode,",
+						"          {Primary Department} = reportData.primaryDepartment,",
+						"          {Primary Department Code} = reportData.primaryDepartmentCode,",
+						"          {Work Schedule} = reportData.workSchedule,",
+						"          {Work Schedule Description} = reportData.workScheduleDescription,",
+						"          {Shift Type} = reportData.shiftType,",
+						"          {Shift Type Code} = reportData.shiftTypeCode,",
+						"          {Usual Place of Residence} = reportData.usualPlaceOfResidence,",
+						"          {Employee ID} = reportData.employeeId",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/EmployeesHistory_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1238,6 +1350,69 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/OrganisationPayPolicies_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "OrganisationPayPolcies_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          payPolicyId as string,",
+						"          name as string,",
+						"          description as string,",
+						"          lastUpdated as string,",
+						"          commencementDate as string,",
+						"          ceaseDate as string,",
+						"          currentVersion as string,",
+						"          currentVersionId as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     purgeFiles: true,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Organizations_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1302,192 +1477,6 @@
 						"     purgeFiles: true,",
 						"     documentForm: 'documentPerLine') ~> jsoninput",
 						"jsoninput sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     truncate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PayPoliciesHistory_df')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "00_Definitv Dataflows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "PayPoliciesHistory_ds",
-								"type": "DatasetReference"
-							},
-							"name": "jsoninput"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "WriteToSQLDB"
-						}
-					],
-					"transformations": [
-						{
-							"name": "flatten1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          payPolicyAssignmentId as string,",
-						"          payPolicyId as string,",
-						"          payPolicyName as string,",
-						"          commencementDate as date,",
-						"          ceaseDate as date,",
-						"          hoursInWorkingWeek as string,",
-						"          fullTimeEquivalentWeeklyHours as float,",
-						"          customPayPolicy as (customPayPolicyId as string, name as string, baseRate as (isDraft as boolean, type as string, salary as string, totalPackage as string, weeklyHours as string, fullTimeEquivalentWeeklyHours as float, dailyRate as string, dailyHours as string, hourlyRate as float, allPurposeRate as string, hourlyRateRuleId as string), payRates as string[], payRateRules as string[])",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     purgeFiles: true,",
-						"     documentForm: 'documentPerLine') ~> jsoninput",
-						"jsoninput foldDown(unroll(),",
-						"     mapColumn(",
-						"          {Policy Name} = payPolicyName,",
-						"          {Commencement Date} = commencementDate,",
-						"          {Cease Date} = ceaseDate",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flatten1",
-						"flatten1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PayPolicies_df')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "00_Definitv Dataflows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "PayPolicies_ds",
-								"type": "DatasetReference"
-							},
-							"name": "jsoninput"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "WriteToSQLDB"
-						}
-					],
-					"transformations": [
-						{
-							"name": "flatten1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
-						"          reportData as (employeeNumber as string, printName as string, title as string, firstName as string, surname as string, middleName as string, preferredName as string, gender as string, dateOfBirth as string, hireDate as string, hireReason as string, terminationDate as string, terminationReason as string, employmentStatus as string, payCalendar as string, policyCode as string, policyType as string, policyName as string, commencementDate as string, ceaseDate as string, payRateType as string, salary as string, salaryFte as string, totalPackage as string, totalPackageFte as string, weeklyHours as string, fullTimeEquivalentWeeklyHours as string, fullTimeEquivalentRatio as string, dailyRate as string, dailyHours as string, hourlyRate as double, allPurposeRate as double, payRates as string[], primaryProject as string, primaryProjectCode as string, canOnlyWorkAssignedProjects as string, primaryRole as string, primaryRoleCode as string, primaryLocation as string, primaryLocationCode as string, primaryDepartment as string, primaryDepartmentCode as string, workSchedule as string, workScheduleDescription as string, shiftType as string, shiftTypeCode as string, usualPlaceOfResidence as string, employeeId as string, primaryProjectId as string, primaryRoleId as string, primaryLocationId as string, primaryDepartmentId as string)[],",
-						"          extraReportData as string[],",
-						"          serverTime as string,",
-						"          addFooterRow as boolean,",
-						"          addStatusBar as boolean,",
-						"          reportVariantTag as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     purgeFiles: true,",
-						"     documentForm: 'documentPerLine') ~> jsoninput",
-						"jsoninput foldDown(unroll(reportData),",
-						"     mapColumn(",
-						"          {Emp No} = reportData.employeeNumber,",
-						"          {Print Name} = reportData.printName,",
-						"          Gender = reportData.gender,",
-						"          {Date of Birth} = reportData.dateOfBirth,",
-						"          {Hire Date} = reportData.hireDate,",
-						"          {Hire Reason} = reportData.hireReason,",
-						"          {Termination Date} = reportData.terminationDate,",
-						"          {Termination Reason} = reportData.terminationReason,",
-						"          {Employment Status} = reportData.employmentStatus,",
-						"          {Pay Calendar} = reportData.payCalendar,",
-						"          {Policy Type} = reportData.policyType,",
-						"          {Policy Name} = reportData.policyName,",
-						"          {Commencement Date} = reportData.commencementDate,",
-						"          {Cease Date} = reportData.ceaseDate,",
-						"          {Pay Rate Type} = reportData.payRateType,",
-						"          Salary = reportData.salary,",
-						"          {Salary FTE} = reportData.salaryFte,",
-						"          {Total Package} = reportData.totalPackage,",
-						"          {Total Package FTE} = reportData.totalPackageFte,",
-						"          {Weekly Hours} = reportData.weeklyHours,",
-						"          {FTE Weekly Hours} = reportData.fullTimeEquivalentWeeklyHours,",
-						"          {FTE Ratio} = reportData.fullTimeEquivalentRatio,",
-						"          {Daily Rate} = reportData.dailyRate,",
-						"          {Daily Hours} = reportData.dailyHours,",
-						"          {Hourly Rate} = reportData.hourlyRate,",
-						"          {All Purpose Rate} = reportData.allPurposeRate,",
-						"          {Primary Project} = reportData.primaryProject,",
-						"          {Primary Project Code} = reportData.primaryProjectCode,",
-						"          {Can Only Work Assigned Projects} = reportData.canOnlyWorkAssignedProjects,",
-						"          {Primary Role} = reportData.primaryRole,",
-						"          {Primary Role Code} = reportData.primaryRoleCode,",
-						"          {Primary Location} = reportData.primaryLocation,",
-						"          {Primary Location Code} = reportData.primaryLocationCode,",
-						"          {Primary Department} = reportData.primaryDepartment,",
-						"          {Primary Department Code} = reportData.primaryDepartmentCode,",
-						"          {Work Schedule} = reportData.workSchedule,",
-						"          {Work Schedule Description} = reportData.workScheduleDescription,",
-						"          {Shift Type} = reportData.shiftType,",
-						"          {Shift Type Code} = reportData.shiftTypeCode,",
-						"          {Usual Place of Residence} = reportData.usualPlaceOfResidence,",
-						"          {Employee ID} = reportData.employeeId",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flatten1",
-						"flatten1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     deletable:false,",
 						"     insertable:true,",

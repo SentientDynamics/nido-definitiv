@@ -39,11 +39,11 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Employees_History"
 		},
-		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
+		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
+		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_PayPolicies"
 		},
@@ -94,6 +94,14 @@
 		"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Payslips_Daily"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_OrganisationPayPolcies"
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
 			"type": "string",
@@ -368,11 +376,11 @@
 					"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName": {
 						"value": "[parameters('tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName')]"
 					},
-					"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName')]"
+					"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName')]"
 					},
-					"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
-						"value": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName')]"
+					"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
+						"value": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName')]"
 					},
 					"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
 						"value": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName')]"
@@ -409,6 +417,12 @@
 					},
 					"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName": {
 						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName')]"
+					},
+					"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName": {
+						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName')]"
+					},
+					"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName": {
+						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName')]"
 					}
 				}
 			},

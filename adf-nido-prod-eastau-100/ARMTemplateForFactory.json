@@ -39,11 +39,11 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Employees_History"
 		},
-		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName": {
+		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
 		},
-		"tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName": {
+		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_PayPolicies"
 		},
@@ -94,6 +94,14 @@
 		"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Payslips_Daily"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_OrganisationPayPolcies"
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
 			"type": "string",
@@ -434,6 +442,238 @@
 				"[concat(variables('factoryId'), '/dataflows/Compliance_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Compliance_ds')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EmployeePayPolicies')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Organizations",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": "dbo",
+									"param_TableName": "Definitiv_Organizations"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Organization",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Organizations",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Organizations').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "ApiToJson",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.03:00:00",
+										"retry": 3,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "Org.OrganizationId",
+													"value": {
+														"value": "@item().organizationId",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": {
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
+												"type": "Expression"
+											},
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employee-pay-policies',\n'?asofDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "EmployeePayPolicies_ds",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "PayPolicies_df",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Organization",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.03:00:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "EmployeePayPolicies_df",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"jsoninput": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"WriteToSQLDB": {
+										"param_SchemaName": "dbo",
+										"param_TableName": "Definitiv_PayPolicies"
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "Definitiv_PayPolicies"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Pipelines"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/dataflows/EmployeePayPolicies_df')]",
+				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
+				"[concat(variables('factoryId'), '/datasets/EmployeePayPolicies_ds')]"
 			]
 		},
 		{
@@ -1391,6 +1631,238 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/OrganisationPayPolicies')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Organizations",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_SchemaName": "dbo",
+									"param_TableName": "Definitiv_Organizations"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Organization",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Organizations",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Organizations').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "ApiToJson",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.03:00:00",
+										"retry": 3,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "Org.OrganizationId",
+													"value": {
+														"value": "@item().organizationId",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": {
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
+												"type": "Expression"
+											},
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat(\n'/api/admin/company/', \nitem().organizationId,\n'/pay-policies'\n)",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "EmployeePayPolicies_ds",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "OrganisationPayPolicies_df",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Organization",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.03:00:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "OrganisationPayPolicies_df",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"jsoninput": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"WriteToSQLDB": {
+										"param_SchemaName": "dbo",
+										"param_TableName": "Definitiv_OrganisationPayPolcies"
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "Definitiv_OrganisationPayPolcies"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Pipelines"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/dataflows/OrganisationPayPolicies_df')]",
+				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
+				"[concat(variables('factoryId'), '/datasets/EmployeePayPolicies_ds')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Organizations')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1578,238 +2050,6 @@
 				"[concat(variables('factoryId'), '/dataflows/Organizations_df')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Organizations_ds')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PayPolicies')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Organizations",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_SchemaName": "dbo",
-									"param_TableName": "Definitiv_Organizations"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Organization",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Organizations",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Organizations').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "ApiToJson",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.03:00:00",
-										"retry": 3,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "RestSource",
-											"additionalColumns": [
-												{
-													"name": "Org.OrganizationId",
-													"value": {
-														"value": "@item().organizationId",
-														"type": "Expression"
-													}
-												}
-											],
-											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
-												"type": "Expression"
-											},
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"supportRFC5988": "true"
-											}
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_rest_definitiv",
-											"type": "DatasetReference",
-											"parameters": {
-												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employee-pay-policies',\n'?asofDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "PayPolicies_ds",
-											"type": "DatasetReference",
-											"parameters": {
-												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
-													"type": "Expression"
-												},
-												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
-													"type": "Expression"
-												},
-												"ds_FileSystem": {
-													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-													"type": "Expression"
-												},
-												"ds_Directory": {
-													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-													"type": "Expression"
-												},
-												"ds_PipelineName": {
-													"value": "@pipeline().Pipeline",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					},
-					{
-						"name": "PayPolicies_df",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "Organization",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 3,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "PayPolicies_df",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"jsoninput": {
-										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										},
-										"ds_FileSystem": {
-											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-											"type": "Expression"
-										},
-										"ds_Directory": {
-											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-											"type": "Expression"
-										},
-										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_PayPolicies"
-									}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"param_TableName": {
-						"type": "string",
-						"defaultValue": "Definitiv_PayPolicies"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Pipelines"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-18T05:28:43Z"
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/PayPolicies_df')]",
-				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
-				"[concat(variables('factoryId'), '/datasets/PayPolicies_ds')]"
 			]
 		},
 		{
@@ -6953,239 +7193,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pl_PayPolicyHostory')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Employees",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT [Employee ID] AS employeeId\nFROM [dbo].[Definitiv_Employees]\nWHERE [Organisation GL Code] = 'ALKIMOS'",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_SchemaName": "definitiv",
-									"param_TableName": "Employees"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Employee",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Employees",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Employees').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "ApiToJson",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.03:00:00",
-										"retry": 3,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "RestSource",
-											"additionalColumns": [
-												{
-													"name": "Employee ID",
-													"value": {
-														"value": "item().employeeId",
-														"type": "Expression"
-													}
-												}
-											],
-											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
-												"type": "Expression"
-											},
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"supportRFC5988": "true"
-											}
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_rest_definitiv",
-											"type": "DatasetReference",
-											"parameters": {
-												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/employee/',\nitem().employeeId,\n'/pay-policies'\n)",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "ds_adls2_stnidoprodeastau100_json_output",
-											"type": "DatasetReference",
-											"parameters": {
-												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
-													"type": "Expression"
-												},
-												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
-													"type": "Expression"
-												},
-												"ds_FileSystem": {
-													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-													"type": "Expression"
-												},
-												"ds_Directory": {
-													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-													"type": "Expression"
-												},
-												"ds_PipelineName": {
-													"value": "@pipeline().Pipeline",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					},
-					{
-						"name": "PayPoliciesHistory_df",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "Employee",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 1,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "PayPoliciesHistory_df",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"jsoninput": {
-										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										},
-										"ds_FileSystem": {
-											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-											"type": "Expression"
-										},
-										"ds_Directory": {
-											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-											"type": "Expression"
-										},
-										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_PayPolicies_Historyy"
-									}
-								}
-							},
-							"staging": {},
-							"integrationRuntime": {
-								"referenceName": "AustraliaEastIntegrationRuntime",
-								"type": "IntegrationRuntimeReference"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
-					"param_TableName": {
-						"type": "string",
-						"defaultValue": "Definitiv_PayPolicies_Historyy"
-					}
-				},
-				"folder": {
-					"name": "01_Sentient Pipelines"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-18T05:28:43Z"
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
-				"[concat(variables('factoryId'), '/dataflows/PayPoliciesHistory_df')]",
-				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]",
-				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
-				"[concat(variables('factoryId'), '/datasets/ds_adls2_stnidoprodeastau100_json_output')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/pl_monitoring_logic-nido-prod-eastau-101')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -7579,6 +7586,317 @@
 										"type": "string"
 									},
 									"comments": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EmployeePayPolicies_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "null"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"employeeNumber": {
+										"type": "string"
+									},
+									"printName": {
+										"type": "string"
+									},
+									"title": {
+										"type": "string"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"surname": {
+										"type": "string"
+									},
+									"middleName": {
+										"type": "null"
+									},
+									"preferredName": {
+										"type": "string"
+									},
+									"gender": {
+										"type": "string"
+									},
+									"dateOfBirth": {
+										"type": "string"
+									},
+									"hireDate": {
+										"type": "string"
+									},
+									"hireReason": {
+										"type": "string"
+									},
+									"terminationDate": {
+										"type": "null"
+									},
+									"terminationReason": {
+										"type": "null"
+									},
+									"employmentStatus": {
+										"type": "string"
+									},
+									"payCalendar": {
+										"type": "string"
+									},
+									"policyCode": {
+										"type": "string"
+									},
+									"policyType": {
+										"type": "string"
+									},
+									"policyName": {
+										"type": "string"
+									},
+									"commencementDate": {
+										"type": "string"
+									},
+									"ceaseDate": {
+										"type": "null"
+									},
+									"payRateType": {
+										"type": "string"
+									},
+									"salary": {
+										"type": "null"
+									},
+									"salaryFte": {
+										"type": "null"
+									},
+									"totalPackage": {
+										"type": "null"
+									},
+									"totalPackageFte": {
+										"type": "null"
+									},
+									"weeklyHours": {
+										"type": "null"
+									},
+									"fullTimeEquivalentWeeklyHours": {
+										"type": "null"
+									},
+									"fullTimeEquivalentRatio": {
+										"type": "null"
+									},
+									"dailyRate": {
+										"type": "null"
+									},
+									"dailyHours": {
+										"type": "null"
+									},
+									"hourlyRate": {
+										"type": "number"
+									},
+									"allPurposeRate": {
+										"type": "number"
+									},
+									"payRates": {
+										"type": "array"
+									},
+									"primaryProject": {
+										"type": "string"
+									},
+									"primaryProjectCode": {
+										"type": "string"
+									},
+									"canOnlyWorkAssignedProjects": {
+										"type": "string"
+									},
+									"primaryRole": {
+										"type": "string"
+									},
+									"primaryRoleCode": {
+										"type": "null"
+									},
+									"primaryLocation": {
+										"type": "string"
+									},
+									"primaryLocationCode": {
+										"type": "string"
+									},
+									"primaryDepartment": {
+										"type": "string"
+									},
+									"primaryDepartmentCode": {
+										"type": "null"
+									},
+									"workSchedule": {
+										"type": "null"
+									},
+									"workScheduleDescription": {
+										"type": "null"
+									},
+									"shiftType": {
+										"type": "null"
+									},
+									"shiftTypeCode": {
+										"type": "null"
+									},
+									"usualPlaceOfResidence": {
+										"type": "null"
+									},
+									"employeeId": {
+										"type": "string"
+									},
+									"primaryProjectId": {
+										"type": "null"
+									},
+									"primaryRoleId": {
+										"type": "string"
+									},
+									"primaryLocationId": {
+										"type": "string"
+									},
+									"primaryDepartmentId": {
 										"type": "string"
 									}
 								}
@@ -8892,6 +9210,85 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/OrganisationPayPolcies_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"payPolicyId": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						},
+						"description": {
+							"type": "string"
+						},
+						"lastUpdated": {
+							"type": "string"
+						},
+						"commencementDate": {
+							"type": "string"
+						},
+						"ceaseDate": {
+							"type": "string"
+						},
+						"currentVersion": {
+							"type": "null"
+						},
+						"currentVersionId": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Organizations_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -9018,448 +9415,6 @@
 						},
 						"excludeReportableFbtBelowThreshold": {
 							"type": "boolean"
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PayPoliciesHistory_ds')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls2_stnidoprodeastau100",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"ds_PipelineTriggerTime": {
-						"type": "string"
-					},
-					"ds_PipelineRunId": {
-						"type": "string"
-					},
-					"ds_FileSystem": {
-						"type": "string"
-					},
-					"ds_Directory": {
-						"type": "string"
-					},
-					"ds_PipelineName": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Datasets"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": {
-							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
-							"type": "Expression"
-						},
-						"fileSystem": {
-							"value": "@dataset().ds_FileSystem",
-							"type": "Expression"
-						}
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"payPolicyAssignmentId": {
-							"type": "string"
-						},
-						"payPolicyId": {
-							"type": "null"
-						},
-						"payPolicyName": {
-							"type": "null"
-						},
-						"commencementDate": {
-							"type": "string"
-						},
-						"ceaseDate": {
-							"type": "string"
-						},
-						"hoursInWorkingWeek": {
-							"type": "null"
-						},
-						"fullTimeEquivalentWeeklyHours": {
-							"type": "null"
-						},
-						"customPayPolicy": {
-							"type": "object",
-							"properties": {
-								"customPayPolicyId": {
-									"type": "string"
-								},
-								"name": {
-									"type": "string"
-								},
-								"baseRate": {
-									"type": "object",
-									"properties": {
-										"isDraft": {
-											"type": "boolean"
-										},
-										"type": {
-											"type": "string"
-										},
-										"salary": {
-											"type": "null"
-										},
-										"totalPackage": {
-											"type": "null"
-										},
-										"weeklyHours": {
-											"type": "null"
-										},
-										"fullTimeEquivalentWeeklyHours": {
-											"type": "null"
-										},
-										"dailyRate": {
-											"type": "null"
-										},
-										"dailyHours": {
-											"type": "null"
-										},
-										"hourlyRate": {
-											"type": "number"
-										},
-										"allPurposeRate": {
-											"type": "null"
-										},
-										"hourlyRateRuleId": {
-											"type": "null"
-										}
-									}
-								},
-								"payRates": {
-									"type": "array"
-								},
-								"payRateRules": {
-									"type": "array"
-								}
-							}
-						}
-					}
-				}
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PayPolicies_ds')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls2_stnidoprodeastau100",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"ds_PipelineTriggerTime": {
-						"type": "string"
-					},
-					"ds_PipelineRunId": {
-						"type": "string"
-					},
-					"ds_FileSystem": {
-						"type": "string"
-					},
-					"ds_Directory": {
-						"type": "string"
-					},
-					"ds_PipelineName": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Datasets"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": {
-							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
-							"type": "Expression"
-						},
-						"fileSystem": {
-							"value": "@dataset().ds_FileSystem",
-							"type": "Expression"
-						}
-					}
-				},
-				"schema": {
-					"type": "object",
-					"properties": {
-						"headers": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"title": {
-										"type": "string"
-									},
-									"filterDisabled": {
-										"type": "boolean"
-									},
-									"sortDisabled": {
-										"type": "boolean"
-									},
-									"hiddenByDefault": {
-										"type": "boolean"
-									},
-									"searchDisabled": {
-										"type": "boolean"
-									},
-									"dataType": {
-										"type": "string"
-									},
-									"fieldName": {
-										"type": "string"
-									},
-									"defaultPivotColumnOrder": {
-										"type": "integer"
-									},
-									"defaultPivotRowOrder": {
-										"type": "integer"
-									},
-									"defaultPivotValueOrder": {
-										"type": "integer"
-									},
-									"defaultSortOrder": {
-										"type": "integer"
-									},
-									"defaultSortDirection": {
-										"type": "string"
-									},
-									"defaultPivotAggregation": {
-										"type": "null"
-									},
-									"isDynamicColumns": {
-										"type": "boolean"
-									},
-									"isCustomFields": {
-										"type": "boolean"
-									},
-									"customFieldsKeyName": {
-										"type": "null"
-									},
-									"createDayOfWeekColumn": {
-										"type": "boolean"
-									},
-									"prependBaseColumnNameToDayOfWeekColumn": {
-										"type": "boolean"
-									},
-									"trueText": {
-										"type": "null"
-									},
-									"falseText": {
-										"type": "null"
-									},
-									"nullDisplayText": {
-										"type": "null"
-									},
-									"disableDefaultAggregation": {
-										"type": "boolean"
-									},
-									"numericPrecision": {
-										"type": "null"
-									}
-								}
-							}
-						},
-						"reportData": {
-							"type": "array",
-							"items": {
-								"type": "object",
-								"properties": {
-									"employeeNumber": {
-										"type": "string"
-									},
-									"printName": {
-										"type": "string"
-									},
-									"title": {
-										"type": "string"
-									},
-									"firstName": {
-										"type": "string"
-									},
-									"surname": {
-										"type": "string"
-									},
-									"middleName": {
-										"type": "null"
-									},
-									"preferredName": {
-										"type": "string"
-									},
-									"gender": {
-										"type": "string"
-									},
-									"dateOfBirth": {
-										"type": "string"
-									},
-									"hireDate": {
-										"type": "string"
-									},
-									"hireReason": {
-										"type": "string"
-									},
-									"terminationDate": {
-										"type": "null"
-									},
-									"terminationReason": {
-										"type": "null"
-									},
-									"employmentStatus": {
-										"type": "string"
-									},
-									"payCalendar": {
-										"type": "string"
-									},
-									"policyCode": {
-										"type": "string"
-									},
-									"policyType": {
-										"type": "string"
-									},
-									"policyName": {
-										"type": "string"
-									},
-									"commencementDate": {
-										"type": "string"
-									},
-									"ceaseDate": {
-										"type": "null"
-									},
-									"payRateType": {
-										"type": "string"
-									},
-									"salary": {
-										"type": "null"
-									},
-									"salaryFte": {
-										"type": "null"
-									},
-									"totalPackage": {
-										"type": "null"
-									},
-									"totalPackageFte": {
-										"type": "null"
-									},
-									"weeklyHours": {
-										"type": "null"
-									},
-									"fullTimeEquivalentWeeklyHours": {
-										"type": "null"
-									},
-									"fullTimeEquivalentRatio": {
-										"type": "null"
-									},
-									"dailyRate": {
-										"type": "null"
-									},
-									"dailyHours": {
-										"type": "null"
-									},
-									"hourlyRate": {
-										"type": "number"
-									},
-									"allPurposeRate": {
-										"type": "number"
-									},
-									"payRates": {
-										"type": "array"
-									},
-									"primaryProject": {
-										"type": "string"
-									},
-									"primaryProjectCode": {
-										"type": "string"
-									},
-									"canOnlyWorkAssignedProjects": {
-										"type": "string"
-									},
-									"primaryRole": {
-										"type": "string"
-									},
-									"primaryRoleCode": {
-										"type": "null"
-									},
-									"primaryLocation": {
-										"type": "string"
-									},
-									"primaryLocationCode": {
-										"type": "string"
-									},
-									"primaryDepartment": {
-										"type": "string"
-									},
-									"primaryDepartmentCode": {
-										"type": "null"
-									},
-									"workSchedule": {
-										"type": "null"
-									},
-									"workScheduleDescription": {
-										"type": "null"
-									},
-									"shiftType": {
-										"type": "null"
-									},
-									"shiftTypeCode": {
-										"type": "null"
-									},
-									"usualPlaceOfResidence": {
-										"type": "null"
-									},
-									"employeeId": {
-										"type": "string"
-									},
-									"primaryProjectId": {
-										"type": "null"
-									},
-									"primaryRoleId": {
-										"type": "string"
-									},
-									"primaryLocationId": {
-										"type": "string"
-									},
-									"primaryDepartmentId": {
-										"type": "string"
-									}
-								}
-							}
-						},
-						"extraReportData": {
-							"type": "array"
-						},
-						"serverTime": {
-							"type": "string"
-						},
-						"addFooterRow": {
-							"type": "boolean"
-						},
-						"addStatusBar": {
-							"type": "boolean"
-						},
-						"reportVariantTag": {
-							"type": "string"
 						}
 					}
 				}
@@ -10710,12 +10665,12 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "PayPolicies",
+							"referenceName": "EmployeePayPolicies",
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_SchemaName')]",
-							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_PayPolicies_parameters_param_TableName')]"
+							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName')]"
 						}
 					},
 					{
@@ -10756,7 +10711,7 @@
 			},
 			"dependsOn": [
 				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/pipelines/PayPolicies')]",
+				"[concat(variables('factoryId'), '/pipelines/EmployeePayPolicies')]",
 				"[concat(variables('factoryId'), '/pipelines/Employees')]"
 			]
 		},
@@ -10926,6 +10881,16 @@
 							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName')]"
 						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "OrganisationPayPolicies",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -10952,7 +10917,8 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/pipelines/Payslips')]",
-				"[concat(variables('factoryId'), '/pipelines/Payslips_Daily')]"
+				"[concat(variables('factoryId'), '/pipelines/Payslips_Daily')]",
+				"[concat(variables('factoryId'), '/pipelines/OrganisationPayPolicies')]"
 			]
 		},
 		{
@@ -11227,6 +11193,120 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/Compliance_ds')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EmployeePayPolicies_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "EmployeePayPolicies_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+						"          reportData as (employeeNumber as string, printName as string, title as string, firstName as string, surname as string, middleName as string, preferredName as string, gender as string, dateOfBirth as string, hireDate as string, hireReason as string, terminationDate as string, terminationReason as string, employmentStatus as string, payCalendar as string, policyCode as string, policyType as string, policyName as string, commencementDate as string, ceaseDate as string, payRateType as string, salary as string, salaryFte as string, totalPackage as string, totalPackageFte as string, weeklyHours as string, fullTimeEquivalentWeeklyHours as string, fullTimeEquivalentRatio as string, dailyRate as string, dailyHours as string, hourlyRate as double, allPurposeRate as double, payRates as string[], primaryProject as string, primaryProjectCode as string, canOnlyWorkAssignedProjects as string, primaryRole as string, primaryRoleCode as string, primaryLocation as string, primaryLocationCode as string, primaryDepartment as string, primaryDepartmentCode as string, workSchedule as string, workScheduleDescription as string, shiftType as string, shiftTypeCode as string, usualPlaceOfResidence as string, employeeId as string, primaryProjectId as string, primaryRoleId as string, primaryLocationId as string, primaryDepartmentId as string)[],",
+						"          extraReportData as string[],",
+						"          serverTime as string,",
+						"          addFooterRow as boolean,",
+						"          addStatusBar as boolean,",
+						"          reportVariantTag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     purgeFiles: true,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput foldDown(unroll(reportData),",
+						"     mapColumn(",
+						"          {Emp No} = reportData.employeeNumber,",
+						"          {Print Name} = reportData.printName,",
+						"          Gender = reportData.gender,",
+						"          {Date of Birth} = reportData.dateOfBirth,",
+						"          {Hire Date} = reportData.hireDate,",
+						"          {Hire Reason} = reportData.hireReason,",
+						"          {Termination Date} = reportData.terminationDate,",
+						"          {Termination Reason} = reportData.terminationReason,",
+						"          {Employment Status} = reportData.employmentStatus,",
+						"          {Pay Calendar} = reportData.payCalendar,",
+						"          {Policy Type} = reportData.policyType,",
+						"          {Policy Name} = reportData.policyName,",
+						"          {Commencement Date} = reportData.commencementDate,",
+						"          {Cease Date} = reportData.ceaseDate,",
+						"          {Pay Rate Type} = reportData.payRateType,",
+						"          Salary = reportData.salary,",
+						"          {Salary FTE} = reportData.salaryFte,",
+						"          {Total Package} = reportData.totalPackage,",
+						"          {Total Package FTE} = reportData.totalPackageFte,",
+						"          {Weekly Hours} = reportData.weeklyHours,",
+						"          {FTE Weekly Hours} = reportData.fullTimeEquivalentWeeklyHours,",
+						"          {FTE Ratio} = reportData.fullTimeEquivalentRatio,",
+						"          {Daily Rate} = reportData.dailyRate,",
+						"          {Daily Hours} = reportData.dailyHours,",
+						"          {Hourly Rate} = reportData.hourlyRate,",
+						"          {All Purpose Rate} = reportData.allPurposeRate,",
+						"          {Primary Project} = reportData.primaryProject,",
+						"          {Primary Project Code} = reportData.primaryProjectCode,",
+						"          {Can Only Work Assigned Projects} = reportData.canOnlyWorkAssignedProjects,",
+						"          {Primary Role} = reportData.primaryRole,",
+						"          {Primary Role Code} = reportData.primaryRoleCode,",
+						"          {Primary Location} = reportData.primaryLocation,",
+						"          {Primary Location Code} = reportData.primaryLocationCode,",
+						"          {Primary Department} = reportData.primaryDepartment,",
+						"          {Primary Department Code} = reportData.primaryDepartmentCode,",
+						"          {Work Schedule} = reportData.workSchedule,",
+						"          {Work Schedule Description} = reportData.workScheduleDescription,",
+						"          {Shift Type} = reportData.shiftType,",
+						"          {Shift Type Code} = reportData.shiftTypeCode,",
+						"          {Usual Place of Residence} = reportData.usualPlaceOfResidence,",
+						"          {Employee ID} = reportData.employeeId",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/EmployeePayPolicies_ds')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
@@ -11651,6 +11731,71 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/OrganisationPayPolicies_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "OrganisationPayPolcies_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          payPolicyId as string,",
+						"          name as string,",
+						"          description as string,",
+						"          lastUpdated as string,",
+						"          commencementDate as string,",
+						"          ceaseDate as string,",
+						"          currentVersion as string,",
+						"          currentVersionId as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     purgeFiles: true,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/OrganisationPayPolcies_ds')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Organizations_df')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -11731,196 +11876,6 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/Organizations_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PayPoliciesHistory_df')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "00_Definitv Dataflows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "PayPoliciesHistory_ds",
-								"type": "DatasetReference"
-							},
-							"name": "jsoninput"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "WriteToSQLDB"
-						}
-					],
-					"transformations": [
-						{
-							"name": "flatten1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          payPolicyAssignmentId as string,",
-						"          payPolicyId as string,",
-						"          payPolicyName as string,",
-						"          commencementDate as date,",
-						"          ceaseDate as date,",
-						"          hoursInWorkingWeek as string,",
-						"          fullTimeEquivalentWeeklyHours as float,",
-						"          customPayPolicy as (customPayPolicyId as string, name as string, baseRate as (isDraft as boolean, type as string, salary as string, totalPackage as string, weeklyHours as string, fullTimeEquivalentWeeklyHours as float, dailyRate as string, dailyHours as string, hourlyRate as float, allPurposeRate as string, hourlyRateRuleId as string), payRates as string[], payRateRules as string[])",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     purgeFiles: true,",
-						"     documentForm: 'documentPerLine') ~> jsoninput",
-						"jsoninput foldDown(unroll(),",
-						"     mapColumn(",
-						"          {Policy Name} = payPolicyName,",
-						"          {Commencement Date} = commencementDate,",
-						"          {Cease Date} = ceaseDate",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flatten1",
-						"flatten1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
-					]
-				}
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/PayPoliciesHistory_ds')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PayPolicies_df')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"folder": {
-					"name": "00_Definitv Dataflows"
-				},
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "PayPolicies_ds",
-								"type": "DatasetReference"
-							},
-							"name": "jsoninput"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference"
-							},
-							"name": "WriteToSQLDB"
-						}
-					],
-					"transformations": [
-						{
-							"name": "flatten1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
-						"          reportData as (employeeNumber as string, printName as string, title as string, firstName as string, surname as string, middleName as string, preferredName as string, gender as string, dateOfBirth as string, hireDate as string, hireReason as string, terminationDate as string, terminationReason as string, employmentStatus as string, payCalendar as string, policyCode as string, policyType as string, policyName as string, commencementDate as string, ceaseDate as string, payRateType as string, salary as string, salaryFte as string, totalPackage as string, totalPackageFte as string, weeklyHours as string, fullTimeEquivalentWeeklyHours as string, fullTimeEquivalentRatio as string, dailyRate as string, dailyHours as string, hourlyRate as double, allPurposeRate as double, payRates as string[], primaryProject as string, primaryProjectCode as string, canOnlyWorkAssignedProjects as string, primaryRole as string, primaryRoleCode as string, primaryLocation as string, primaryLocationCode as string, primaryDepartment as string, primaryDepartmentCode as string, workSchedule as string, workScheduleDescription as string, shiftType as string, shiftTypeCode as string, usualPlaceOfResidence as string, employeeId as string, primaryProjectId as string, primaryRoleId as string, primaryLocationId as string, primaryDepartmentId as string)[],",
-						"          extraReportData as string[],",
-						"          serverTime as string,",
-						"          addFooterRow as boolean,",
-						"          addStatusBar as boolean,",
-						"          reportVariantTag as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     purgeFiles: true,",
-						"     documentForm: 'documentPerLine') ~> jsoninput",
-						"jsoninput foldDown(unroll(reportData),",
-						"     mapColumn(",
-						"          {Emp No} = reportData.employeeNumber,",
-						"          {Print Name} = reportData.printName,",
-						"          Gender = reportData.gender,",
-						"          {Date of Birth} = reportData.dateOfBirth,",
-						"          {Hire Date} = reportData.hireDate,",
-						"          {Hire Reason} = reportData.hireReason,",
-						"          {Termination Date} = reportData.terminationDate,",
-						"          {Termination Reason} = reportData.terminationReason,",
-						"          {Employment Status} = reportData.employmentStatus,",
-						"          {Pay Calendar} = reportData.payCalendar,",
-						"          {Policy Type} = reportData.policyType,",
-						"          {Policy Name} = reportData.policyName,",
-						"          {Commencement Date} = reportData.commencementDate,",
-						"          {Cease Date} = reportData.ceaseDate,",
-						"          {Pay Rate Type} = reportData.payRateType,",
-						"          Salary = reportData.salary,",
-						"          {Salary FTE} = reportData.salaryFte,",
-						"          {Total Package} = reportData.totalPackage,",
-						"          {Total Package FTE} = reportData.totalPackageFte,",
-						"          {Weekly Hours} = reportData.weeklyHours,",
-						"          {FTE Weekly Hours} = reportData.fullTimeEquivalentWeeklyHours,",
-						"          {FTE Ratio} = reportData.fullTimeEquivalentRatio,",
-						"          {Daily Rate} = reportData.dailyRate,",
-						"          {Daily Hours} = reportData.dailyHours,",
-						"          {Hourly Rate} = reportData.hourlyRate,",
-						"          {All Purpose Rate} = reportData.allPurposeRate,",
-						"          {Primary Project} = reportData.primaryProject,",
-						"          {Primary Project Code} = reportData.primaryProjectCode,",
-						"          {Can Only Work Assigned Projects} = reportData.canOnlyWorkAssignedProjects,",
-						"          {Primary Role} = reportData.primaryRole,",
-						"          {Primary Role Code} = reportData.primaryRoleCode,",
-						"          {Primary Location} = reportData.primaryLocation,",
-						"          {Primary Location Code} = reportData.primaryLocationCode,",
-						"          {Primary Department} = reportData.primaryDepartment,",
-						"          {Primary Department Code} = reportData.primaryDepartmentCode,",
-						"          {Work Schedule} = reportData.workSchedule,",
-						"          {Work Schedule Description} = reportData.workScheduleDescription,",
-						"          {Shift Type} = reportData.shiftType,",
-						"          {Shift Type Code} = reportData.shiftTypeCode,",
-						"          {Usual Place of Residence} = reportData.usualPlaceOfResidence,",
-						"          {Employee ID} = reportData.employeeId",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: false) ~> flatten1",
-						"flatten1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     truncate:true,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
-					]
-				}
-			},
-			"dependsOn": [
-				"[variables('factoryId')]",
-				"[concat(variables('factoryId'), '/datasets/PayPolicies_ds')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
 			]
 		},
