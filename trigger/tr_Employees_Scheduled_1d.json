@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "PayPolicies",
+					"referenceName": "EmployeePayPolicies",
 					"type": "PipelineReference"
 				},
 				"parameters": {

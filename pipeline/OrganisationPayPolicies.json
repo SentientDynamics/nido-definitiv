@@ -1,5 +1,5 @@
 {
-	"name": "EmployeePayPolicies",
+	"name": "OrganisationPayPolicies",
 	"properties": {
 		"activities": [
 			{
@@ -101,7 +101,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/employee-pay-policies',\n'?asofDate=',\nformatDateTime(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)",
+											"value": "@concat(\n'/api/admin/company/', \nitem().organizationId,\n'/pay-policies'\n)",
 											"type": "Expression"
 										}
 									}
@@ -140,7 +140,7 @@
 				}
 			},
 			{
-				"name": "PayPolicies_df",
+				"name": "OrganisationPayPolicies_df",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -160,7 +160,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "EmployeePayPolicies_df",
+						"referenceName": "OrganisationPayPolicies_df",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"jsoninput": {
@@ -187,7 +187,7 @@
 							},
 							"WriteToSQLDB": {
 								"param_SchemaName": "dbo",
-								"param_TableName": "Definitiv_PayPolicies"
+								"param_TableName": "Definitiv_OrganisationPayPolcies"
 							}
 						}
 					},
@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_PayPolicies"
+				"defaultValue": "Definitiv_OrganisationPayPolcies"
 			}
 		},
 		"folder": {

@@ -1,5 +1,5 @@
 {
-	"name": "PayPolicies_df",
+	"name": "EmployeePayPolicies_df",
 	"properties": {
 		"folder": {
 			"name": "00_Definitv Dataflows"
@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "PayPolicies_ds",
+						"referenceName": "EmployeePayPolicies_ds",
 						"type": "DatasetReference"
 					},
 					"name": "jsoninput"

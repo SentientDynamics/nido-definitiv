@@ -1,0 +1,58 @@
+{
+	"name": "OrganisationPayPolicies_df",
+	"properties": {
+		"folder": {
+			"name": "00_Definitv Dataflows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "OrganisationPayPolcies_ds",
+						"type": "DatasetReference"
+					},
+					"name": "jsoninput"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference"
+					},
+					"name": "WriteToSQLDB"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          payPolicyId as string,",
+				"          name as string,",
+				"          description as string,",
+				"          lastUpdated as string,",
+				"          commencementDate as string,",
+				"          ceaseDate as string,",
+				"          currentVersion as string,",
+				"          currentVersionId as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true,",
+				"     documentForm: 'documentPerLine') ~> jsoninput",
+				"jsoninput sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+			]
+		}
+	}
+}
