@@ -95,6 +95,14 @@
 			"type": "string",
 			"defaultValue": "Definitiv_OrganisationPayPolcies"
 		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Payslips_Staging"
+		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -409,6 +417,12 @@
 					},
 					"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName": {
 						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName')]"
+					},
+					"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName": {
+						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName')]"
+					},
+					"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
+						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName')]"
 					}
 				}
 			},

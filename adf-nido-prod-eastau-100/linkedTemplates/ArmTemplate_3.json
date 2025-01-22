@@ -78,6 +78,14 @@
 		"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_OrganisationPayPolcies"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Payslips_Staging"
 		}
 	},
 	"variables": {
@@ -4946,6 +4954,16 @@
 						"parameters": {
 							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName')]"
+						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Payslips",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName')]"
 						}
 					}
 				],

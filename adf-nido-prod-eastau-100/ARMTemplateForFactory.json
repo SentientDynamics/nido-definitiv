@@ -95,6 +95,14 @@
 			"type": "string",
 			"defaultValue": "Definitiv_OrganisationPayPolcies"
 		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName": {
+			"type": "string",
+			"defaultValue": "dbo"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Payslips_Staging"
+		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
 			"type": "string",
 			"defaultValue": "dbo"
@@ -2149,7 +2157,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId,\n'/reporting/pay-runs?FromDate=2024-11-23',\n'&toDate=2024-12-06',\n'&reportType=AggregatePerPayRun')\n\n",
+													"value": "@concat('/api/company/', item().organizationId,\n'/reporting/pay-runs?FromDate=',\nformatDateTime(addDays(utcNow(), -32), 'yyyy-MM-dd'),\n'&reportType=AggregatePerPayRun')\n\n",
 													"type": "Expression"
 												}
 											}
@@ -2247,6 +2255,33 @@
 							},
 							"traceLevel": "Fine"
 						}
+					},
+					{
+						"name": "Execute DefinitivWagesFortnightly",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Payslips_df",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[DefinitivWagesFortnightly]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_sql_tnk001",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {
@@ -2271,6 +2306,7 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/Payslips_df')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Payslips_ds')]"
 			]
@@ -10845,6 +10881,16 @@
 							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName')]"
 						}
+					},
+					{
+						"pipelineReference": {
+							"referenceName": "Payslips",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName')]",
+							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName')]"
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -10871,7 +10917,8 @@
 			"dependsOn": [
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/pipelines/Payslips_Daily')]",
-				"[concat(variables('factoryId'), '/pipelines/OrganisationPayPolicies')]"
+				"[concat(variables('factoryId'), '/pipelines/OrganisationPayPolicies')]",
+				"[concat(variables('factoryId'), '/pipelines/Payslips')]"
 			]
 		},
 		{
