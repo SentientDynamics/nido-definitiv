@@ -59,12 +59,6 @@
 		"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_TableName": {
 			"value": "Definitiv_Organizations"
 		},
-		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName": {
-			"value": "dbo"
-		},
-		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
-			"value": "Definitiv_Payslips_Staging"
-		},
 		"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_SchemaName": {
 			"value": "dbo"
 		},
