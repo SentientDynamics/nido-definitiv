@@ -2626,26 +2626,6 @@
 							},
 							"traceLevel": "Fine"
 						}
-					},
-					{
-						"name": "Execute DefinitivWagesFortnightly",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[DefinitivWagesFortnightly]"
-						},
-						"linkedServiceName": {
-							"referenceName": "ls_sql_tnk001",
-							"type": "LinkedServiceReference"
-						}
 					}
 				],
 				"policy": {
@@ -2870,6 +2850,26 @@
 								"computeType": "General"
 							},
 							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "Execute DefinitivWagesFortnightly",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[DefinitivWagesFortnightly]"
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_sql_tnk001",
+							"type": "LinkedServiceReference"
 						}
 					}
 				],
