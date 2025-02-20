@@ -89,6 +89,7 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
+				"     postSQLs:['DELETE FROM Definitiv_Payslips_Daily\\nWHERE periodEndDate IS NULL'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     saveOrder: 1,",
