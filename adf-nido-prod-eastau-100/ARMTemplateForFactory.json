@@ -2416,7 +2416,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId,\n'/reporting/pay-runs?FromDate=',\nformatDateTime(addDays(utcNow(), -18), 'yyyy-MM-dd'),\n'&toDate=',\nformatDateTime(addDays(utcNow(), -5), 'yyyy-MM-dd'),\n'&reportType=AggregatePerDate')\n\n",
+													"value": "@concat('/api/company/', item().organizationId,\n'/reporting/pay-runs?FromDate=2024-09-14',\n'&toDate=2024-12-06',\n'&reportType=AggregatePerDate')\n",
 													"type": "Expression"
 												}
 											}
