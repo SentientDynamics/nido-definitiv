@@ -5,6 +5,96 @@
 		"factoryName": {
 			"value": "adf-nido-prod-eastau-100"
 		},
+		"ls_sql_tnk001_connectionString": {
+			"value": ""
+		},
+		"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
+			"value": "https://stnidoprodeastau100.dfs.core.windows.net/"
+		},
+		"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
+			"value": "https://kv-nido-prod-eastau-100.vault.azure.net/"
+		},
+		"ls_rest_definitiv_properties_typeProperties_url": {
+			"value": "@{linkedService().sourceBaseUrl}"
+		},
+		"tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_TableName": {
+			"value": "Definitiv_Compliance"
+		},
+		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName": {
+			"value": "Definitiv_Employees_History"
+		},
+		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
+			"value": "Definitiv_PayPolicies"
+		},
+		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
+			"value": "Definitiv_Employees"
+		},
+		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName": {
+			"value": "Definitiv_LeaveApplications_Staging"
+		},
+		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName": {
+			"value": "Definitiv_LeaveBalances"
+		},
+		"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_TableName": {
+			"value": "Definitiv_Organizations"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName": {
+			"value": "Definitiv_Payslips_Daily"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName": {
+			"value": "Definitiv_OrganisationPayPolcies"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
+			"value": "Definitiv_Payslips_Staging"
+		},
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
+			"value": "Definitiv_Rosters_Staging"
+		},
+		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
+			"value": "Definitiv_Rosters_V3"
+		},
+		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
+			"value": "dbo"
+		},
+		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
+			"value": "Definitiv_Timesheets_Staging"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"value": "container-adf-nido-prod-eastau-100-1"
 		},

@@ -7,6 +7,22 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
 		},
+		"ls_sql_tnk001_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_sql_tnk001'"
+		},
+		"ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-nido-prod-eastau-100.vault.azure.net/"
+		},
+		"ls_adls2_stnidoprodeastau100_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://stnidoprodeastau100.dfs.core.windows.net/"
+		},
+		"ls_rest_definitiv_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().sourceBaseUrl}"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
 			"defaultValue": "container-adf-nido-prod-eastau-100-1"
@@ -93,6 +109,368 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_keyvault_kvnidoprodeastau100')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ls_keyvault_kvnidoprodeastau100_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/id-nido-prod-001')]",
+			"type": "Microsoft.DataFactory/factories/credentials",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {
+					"resourceId": "/subscriptions/7a7b564c-588c-4825-a61b-90fec283b855/resourceGroups/NidoSQLGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id-nido-prod-001"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+			"apiVersion": "2018-06-01",
+			"properties": {},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AustraliaEastIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "Australia East",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 240,
+							"cleanup": false
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0,
+							"cleanup": true
+						},
+						"pipelineExternalComputeScaleProperties": {
+							"timeToLive": 60
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_monitoring_logic-nido-prod-eastau-101')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "logic-nido-prod-eastau-101",
+						"description": "Pipeline monitoring and notification",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"url": {
+								"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'failed',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
+								"type": "Expression"
+							},
+							"connectVia": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"body": {
+								"PipelineName": "@{pipeline().parameters.PipelineName}",
+								"PipelineRunId": "@{pipeline().parameters.PipelineRunId}",
+								"PipelineTriggerId": "@{pipeline().parameters.PipelineTriggerId}",
+								"PipelineTriggerName": "@{pipeline().parameters.PipelineTriggerName}",
+								"PipelineTriggerTime": "@{pipeline().parameters.PipelineTriggerTime}",
+								"PipelineTriggerType": "@{pipeline().parameters.PipelineTriggerType}",
+								"PipelineTriggeredByPipelineName": "@{pipeline().parameters.PipelineTriggeredByPipelineName}",
+								"PipelineTriggeredByPipelineRunId": "@{pipeline().parameters.PipelineTriggeredByPipelineRunId}",
+								"ActivityOutputMessage": "@{pipeline().parameters.ActivityOutputMessage}",
+								"AzureSqlTargetTable": "@{pipeline().parameters.AzureSqlTargetTable}"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"PipelineName": {
+						"type": "string"
+					},
+					"PipelineRunId": {
+						"type": "string"
+					},
+					"PipelineTriggerId": {
+						"type": "string"
+					},
+					"PipelineTriggerName": {
+						"type": "string"
+					},
+					"PipelineTriggerTime": {
+						"type": "string"
+					},
+					"PipelineTriggerType": {
+						"type": "string"
+					},
+					"PipelineTriggeredByPipelineName": {
+						"type": "string"
+					},
+					"PipelineTriggeredByPipelineRunId": {
+						"type": "string"
+					},
+					"ActivityOutputMessage": {
+						"type": "string"
+					},
+					"AzureSqlTargetTable": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"varLogicAppBody": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "01_Sentient Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_monitoring_logic-nido-prod-eastau-102')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "logic-nido-prod-eastau-102",
+						"description": "Pipeline monitoring and notification",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"url": {
+								"value": "@concat(\n    pipeline().globalParameters.global_logic_Monitoring_baseUrl,\n    'succeeded',\n    pipeline().globalParameters.global_logic_Monitoring_SAS\n    )",
+								"type": "Expression"
+							},
+							"connectVia": {
+								"referenceName": "AustraliaEastIntegrationRuntime",
+								"type": "IntegrationRuntimeReference"
+							},
+							"body": {
+								"PipelineName": "@{pipeline().parameters.PipelineName}",
+								"PipelineRunId": "@{pipeline().parameters.PipelineRunId}",
+								"PipelineTriggerId": "@{pipeline().parameters.PipelineTriggerId}",
+								"PipelineTriggerName": "@{pipeline().parameters.PipelineTriggerName}",
+								"PipelineTriggerTime": "@{pipeline().parameters.PipelineTriggerTime}",
+								"PipelineTriggerType": "@{pipeline().parameters.PipelineTriggerType}",
+								"PipelineTriggeredByPipelineName": "@{pipeline().parameters.PipelineTriggeredByPipelineName}",
+								"PipelineTriggeredByPipelineRunId": "@{pipeline().parameters.PipelineTriggeredByPipelineRunId}",
+								"AzureSqlTargetTablePreRowCount": "@{pipeline().parameters.AzureSqlTargetTablePreRowCount}",
+								"AzureSqlTargetTablePostRowCount": "@{pipeline().parameters.AzureSqlTargetTablePostRowCount}",
+								"AzureSqlTargetTable": "@{pipeline().parameters.AzureSqlTargetTable}"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "PipelineName"
+					},
+					"PipelineRunId": {
+						"type": "object",
+						"defaultValue": "PipelineRunId"
+					},
+					"PipelineTriggerId": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerId"
+					},
+					"PipelineTriggerName": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerName"
+					},
+					"PipelineTriggerTime": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerTime"
+					},
+					"PipelineTriggerType": {
+						"type": "string",
+						"defaultValue": "PipelineTriggerType"
+					},
+					"PipelineTriggeredByPipelineName": {
+						"type": "string",
+						"defaultValue": "PipelineTriggeredByPipelineName"
+					},
+					"PipelineTriggeredByPipelineRunId": {
+						"type": "string",
+						"defaultValue": "PipelineTriggeredByPipelineRunId"
+					},
+					"AzureSqlTargetTable": {
+						"type": "string",
+						"defaultValue": "AzureSqlTargetTable"
+					},
+					"AzureSqlTargetTablePreRowCount": {
+						"type": "string",
+						"defaultValue": "AzureSqlTargetTablePreRowCount"
+					},
+					"AzureSqlTargetTablePostRowCount": {
+						"type": "string",
+						"defaultValue": "AzureSqlTargetTablePostRowCount"
+					}
+				},
+				"folder": {
+					"name": "01_Sentient Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AustraliaEastIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_adls2_stnidoprodeastau100')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_adls2_stnidoprodeastau100_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_rest_definitiv')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"sourceBaseUrl": {
+						"type": "String",
+						"defaultValue": "https://nido.definitiv.com.au"
+					}
+				},
+				"annotations": [
+					"Basic Authentication i.e. Base 64 encoded; Credentials Format {API Key}:{Password (Leave empty)} e.g. \"Basic {base64 string}\""
+				],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('ls_rest_definitiv_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous",
+					"authHeaders": {
+						"Authorization": {
+							"type": "SecureString",
+							"value": "**********"
+						}
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sql_tnk001')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_sql_tnk001_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[parameters('factoryName')]",
 			"type": "Microsoft.DataFactory/factories",
 			"apiVersion": "2018-06-01",
@@ -165,11 +543,2333 @@
 					"factoryStagingLSType": "[parameters('dataFactory_properties_globalConfigurations_factoryStagingLSType')]"
 				}
 			},
-			"dependsOn": [],
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			],
 			"location": "[parameters('dataFactory_location')]",
 			"identity": {
 				"type": "[parameters('dataFactory_identity_type')]"
 			}
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Compliance_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "null"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"employeeNumber": {
+										"type": "string"
+									},
+									"printName": {
+										"type": "string"
+									},
+									"projectAssignment": {
+										"type": "string"
+									},
+									"projectExportCode": {
+										"type": "string"
+									},
+									"departmentAssignment": {
+										"type": "string"
+									},
+									"departmentExportCode": {
+										"type": "null"
+									},
+									"locationAssignment": {
+										"type": "string"
+									},
+									"locationExportCode": {
+										"type": "string"
+									},
+									"roleAssignment": {
+										"type": "string"
+									},
+									"roleExportCode": {
+										"type": "null"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"surname": {
+										"type": "string"
+									},
+									"qualification": {
+										"type": "string"
+									},
+									"dateObtained": {
+										"type": "string"
+									},
+									"expiryDate": {
+										"type": "string"
+									},
+									"isExpired": {
+										"type": "boolean"
+									},
+									"employeeId": {
+										"type": "string"
+									},
+									"qualificationId": {
+										"type": "string"
+									},
+									"customFields": {
+										"type": "object"
+									},
+									"attachments": {
+										"type": "string"
+									},
+									"comments": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EmployeePayPolicies_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "null"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"employeeNumber": {
+										"type": "string"
+									},
+									"printName": {
+										"type": "string"
+									},
+									"title": {
+										"type": "string"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"surname": {
+										"type": "string"
+									},
+									"middleName": {
+										"type": "null"
+									},
+									"preferredName": {
+										"type": "string"
+									},
+									"gender": {
+										"type": "string"
+									},
+									"dateOfBirth": {
+										"type": "string"
+									},
+									"hireDate": {
+										"type": "string"
+									},
+									"hireReason": {
+										"type": "string"
+									},
+									"terminationDate": {
+										"type": "null"
+									},
+									"terminationReason": {
+										"type": "null"
+									},
+									"employmentStatus": {
+										"type": "string"
+									},
+									"payCalendar": {
+										"type": "string"
+									},
+									"policyCode": {
+										"type": "string"
+									},
+									"policyType": {
+										"type": "string"
+									},
+									"policyName": {
+										"type": "string"
+									},
+									"commencementDate": {
+										"type": "string"
+									},
+									"ceaseDate": {
+										"type": "null"
+									},
+									"payRateType": {
+										"type": "string"
+									},
+									"salary": {
+										"type": "null"
+									},
+									"salaryFte": {
+										"type": "null"
+									},
+									"totalPackage": {
+										"type": "null"
+									},
+									"totalPackageFte": {
+										"type": "null"
+									},
+									"weeklyHours": {
+										"type": "null"
+									},
+									"fullTimeEquivalentWeeklyHours": {
+										"type": "null"
+									},
+									"fullTimeEquivalentRatio": {
+										"type": "null"
+									},
+									"dailyRate": {
+										"type": "null"
+									},
+									"dailyHours": {
+										"type": "null"
+									},
+									"hourlyRate": {
+										"type": "number"
+									},
+									"allPurposeRate": {
+										"type": "number"
+									},
+									"payRates": {
+										"type": "array"
+									},
+									"primaryProject": {
+										"type": "string"
+									},
+									"primaryProjectCode": {
+										"type": "string"
+									},
+									"canOnlyWorkAssignedProjects": {
+										"type": "string"
+									},
+									"primaryRole": {
+										"type": "string"
+									},
+									"primaryRoleCode": {
+										"type": "null"
+									},
+									"primaryLocation": {
+										"type": "string"
+									},
+									"primaryLocationCode": {
+										"type": "string"
+									},
+									"primaryDepartment": {
+										"type": "string"
+									},
+									"primaryDepartmentCode": {
+										"type": "null"
+									},
+									"workSchedule": {
+										"type": "null"
+									},
+									"workScheduleDescription": {
+										"type": "null"
+									},
+									"shiftType": {
+										"type": "null"
+									},
+									"shiftTypeCode": {
+										"type": "null"
+									},
+									"usualPlaceOfResidence": {
+										"type": "null"
+									},
+									"employeeId": {
+										"type": "string"
+									},
+									"primaryProjectId": {
+										"type": "null"
+									},
+									"primaryRoleId": {
+										"type": "string"
+									},
+									"primaryLocationId": {
+										"type": "string"
+									},
+									"primaryDepartmentId": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EmployeesHistory_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "string"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"organisationName": {
+										"type": "string"
+									},
+									"glCode": {
+										"type": "string"
+									},
+									"exportCode": {
+										"type": "null"
+									},
+									"employeeNumber": {
+										"type": "string"
+									},
+									"printName": {
+										"type": "string"
+									},
+									"title": {
+										"type": "string"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"surname": {
+										"type": "string"
+									},
+									"middleName": {
+										"type": "null"
+									},
+									"preferredName": {
+										"type": "string"
+									},
+									"gender": {
+										"type": "string"
+									},
+									"dateOfBirth": {
+										"type": "string"
+									},
+									"phoneNumbers": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"headerName": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												},
+												"dataType": {
+													"type": "null"
+												},
+												"defaultPivotAggregation": {
+													"type": "null"
+												},
+												"defaultPivotValueOrder": {
+													"type": "null"
+												},
+												"defaultDynamicHidden": {
+													"type": "null"
+												},
+												"columnTooltip": {
+													"type": "null"
+												}
+											}
+										}
+									},
+									"addresses": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"headerName": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												},
+												"dataType": {
+													"type": "null"
+												},
+												"defaultPivotAggregation": {
+													"type": "null"
+												},
+												"defaultPivotValueOrder": {
+													"type": "null"
+												},
+												"defaultDynamicHidden": {
+													"type": "null"
+												},
+												"columnTooltip": {
+													"type": "null"
+												}
+											}
+										}
+									},
+									"emailAddresses": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"headerName": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												},
+												"dataType": {
+													"type": "null"
+												},
+												"defaultPivotAggregation": {
+													"type": "null"
+												},
+												"defaultPivotValueOrder": {
+													"type": "null"
+												},
+												"defaultDynamicHidden": {
+													"type": "null"
+												},
+												"columnTooltip": {
+													"type": "null"
+												}
+											}
+										}
+									},
+									"hireDate": {
+										"type": "string"
+									},
+									"yearsOfServiceStartDate": {
+										"type": "string"
+									},
+									"hireReason": {
+										"type": "string"
+									},
+									"terminateDate": {
+										"type": "null"
+									},
+									"terminationReason": {
+										"type": "null"
+									},
+									"lastPaidDate": {
+										"type": "string"
+									},
+									"positionOrgChart": {
+										"type": "string"
+									},
+									"divisionOrgChart": {
+										"type": "string"
+									},
+									"employmentStatus": {
+										"type": "string"
+									},
+									"managerIds": {
+										"type": "string"
+									},
+									"payCalendar": {
+										"type": "string"
+									},
+									"primaryProjectName": {
+										"type": "string"
+									},
+									"primaryProjectCode": {
+										"type": "string"
+									},
+									"canOnlyWorkAssignedProjects": {
+										"type": "string"
+									},
+									"primaryRoleName": {
+										"type": "string"
+									},
+									"primaryRoleCode": {
+										"type": "null"
+									},
+									"primaryLocationName": {
+										"type": "string"
+									},
+									"primaryLocationCode": {
+										"type": "string"
+									},
+									"primaryDepartmentName": {
+										"type": "string"
+									},
+									"primaryDepartmentCode": {
+										"type": "null"
+									},
+									"workSchedule": {
+										"type": "string"
+									},
+									"shiftType": {
+										"type": "null"
+									},
+									"shiftTypeCode": {
+										"type": "null"
+									},
+									"usualPlaceOfResidence": {
+										"type": "null"
+									},
+									"employeeId": {
+										"type": "string"
+									},
+									"primaryProjectId": {
+										"type": "string"
+									},
+									"primaryRoleId": {
+										"type": "string"
+									},
+									"primaryLocationId": {
+										"type": "string"
+									},
+									"primaryDepartmentId": {
+										"type": "string"
+									},
+									"username": {
+										"type": "string"
+									},
+									"customFields": {
+										"type": "object",
+										"properties": {
+											"asOfDate": {
+												"type": "string"
+											},
+											"contractedHours": {
+												"type": "number"
+											},
+											"jobAdderCandidateId": {
+												"type": "null"
+											},
+											"aboriginalTorresStIslanderStatus": {
+												"type": "boolean"
+											},
+											"bonus2": {
+												"type": "null"
+											},
+											"notes": {
+												"type": "null"
+											},
+											"legalRightToWorkInAustralia": {
+												"type": "boolean"
+											},
+											"probationEndDate": {
+												"type": "string"
+											},
+											"ineligibleForPerformanceReview": {
+												"type": "boolean"
+											}
+										}
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Employees_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "string"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"organisationName": {
+										"type": "string"
+									},
+									"glCode": {
+										"type": "string"
+									},
+									"exportCode": {
+										"type": "null"
+									},
+									"employeeNumber": {
+										"type": "string"
+									},
+									"printName": {
+										"type": "string"
+									},
+									"title": {
+										"type": "string"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"surname": {
+										"type": "string"
+									},
+									"middleName": {
+										"type": "null"
+									},
+									"preferredName": {
+										"type": "string"
+									},
+									"gender": {
+										"type": "string"
+									},
+									"dateOfBirth": {
+										"type": "string"
+									},
+									"phoneNumbers": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"headerName": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												},
+												"dataType": {
+													"type": "null"
+												},
+												"defaultPivotAggregation": {
+													"type": "null"
+												},
+												"defaultPivotValueOrder": {
+													"type": "null"
+												},
+												"defaultDynamicHidden": {
+													"type": "null"
+												},
+												"columnTooltip": {
+													"type": "null"
+												}
+											}
+										}
+									},
+									"addresses": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"headerName": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												},
+												"dataType": {
+													"type": "null"
+												},
+												"defaultPivotAggregation": {
+													"type": "null"
+												},
+												"defaultPivotValueOrder": {
+													"type": "null"
+												},
+												"defaultDynamicHidden": {
+													"type": "null"
+												},
+												"columnTooltip": {
+													"type": "null"
+												}
+											}
+										}
+									},
+									"emailAddresses": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"headerName": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												},
+												"dataType": {
+													"type": "null"
+												},
+												"defaultPivotAggregation": {
+													"type": "null"
+												},
+												"defaultPivotValueOrder": {
+													"type": "null"
+												},
+												"defaultDynamicHidden": {
+													"type": "null"
+												},
+												"columnTooltip": {
+													"type": "null"
+												}
+											}
+										}
+									},
+									"hireDate": {
+										"type": "string"
+									},
+									"yearsOfServiceStartDate": {
+										"type": "string"
+									},
+									"hireReason": {
+										"type": "string"
+									},
+									"terminateDate": {
+										"type": "null"
+									},
+									"terminationReason": {
+										"type": "null"
+									},
+									"lastPaidDate": {
+										"type": "string"
+									},
+									"positionOrgChart": {
+										"type": "string"
+									},
+									"divisionOrgChart": {
+										"type": "string"
+									},
+									"employmentStatus": {
+										"type": "string"
+									},
+									"managerIds": {
+										"type": "string"
+									},
+									"payCalendar": {
+										"type": "string"
+									},
+									"primaryProjectName": {
+										"type": "string"
+									},
+									"primaryProjectCode": {
+										"type": "string"
+									},
+									"canOnlyWorkAssignedProjects": {
+										"type": "string"
+									},
+									"primaryRoleName": {
+										"type": "string"
+									},
+									"primaryRoleCode": {
+										"type": "null"
+									},
+									"primaryLocationName": {
+										"type": "string"
+									},
+									"primaryLocationCode": {
+										"type": "string"
+									},
+									"primaryDepartmentName": {
+										"type": "string"
+									},
+									"primaryDepartmentCode": {
+										"type": "null"
+									},
+									"workSchedule": {
+										"type": "string"
+									},
+									"shiftType": {
+										"type": "null"
+									},
+									"shiftTypeCode": {
+										"type": "null"
+									},
+									"usualPlaceOfResidence": {
+										"type": "null"
+									},
+									"employeeId": {
+										"type": "string"
+									},
+									"primaryProjectId": {
+										"type": "string"
+									},
+									"primaryRoleId": {
+										"type": "string"
+									},
+									"primaryLocationId": {
+										"type": "string"
+									},
+									"primaryDepartmentId": {
+										"type": "string"
+									},
+									"username": {
+										"type": "string"
+									},
+									"customFields": {
+										"type": "object",
+										"properties": {
+											"asOfDate": {
+												"type": "string"
+											},
+											"contractedHours": {
+												"type": "number"
+											},
+											"jobAdderCandidateId": {
+												"type": "null"
+											},
+											"aboriginalTorresStIslanderStatus": {
+												"type": "boolean"
+											},
+											"bonus2": {
+												"type": "null"
+											},
+											"notes": {
+												"type": "null"
+											},
+											"legalRightToWorkInAustralia": {
+												"type": "boolean"
+											},
+											"probationEndDate": {
+												"type": "string"
+											},
+											"ineligibleForPerformanceReview": {
+												"type": "boolean"
+											}
+										}
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LeaveApplications_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "null"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"organisationName": {
+										"type": "string"
+									},
+									"glCode": {
+										"type": "string"
+									},
+									"exportCode": {
+										"type": "string"
+									},
+									"employeeNumber": {
+										"type": "string"
+									},
+									"printName": {
+										"type": "string"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"surname": {
+										"type": "string"
+									},
+									"gender": {
+										"type": "string"
+									},
+									"leaveDateStart": {
+										"type": "string"
+									},
+									"leaveDateEnd": {
+										"type": "string"
+									},
+									"leaveAppNumDays": {
+										"type": "integer"
+									},
+									"leaveUnits": {
+										"type": "number"
+									},
+									"leaveUnitOfMeasure": {
+										"type": "string"
+									},
+									"leavePaymentStatus": {
+										"type": "string"
+									},
+									"leaveTypeName": {
+										"type": "string"
+									},
+									"leaveReasonName": {
+										"type": "string"
+									},
+									"leaveNotes": {
+										"type": "null"
+									},
+									"status": {
+										"type": "string"
+									},
+									"dateSubmitted": {
+										"type": "string"
+									},
+									"approvers": {
+										"type": "string"
+									},
+									"leaveApplicationId": {
+										"type": "string"
+									},
+									"employeeId": {
+										"type": "string"
+									},
+									"leaveTypeId": {
+										"type": "string"
+									},
+									"primaryProject": {
+										"type": "string"
+									},
+									"primaryProjectGlCode": {
+										"type": "string"
+									},
+									"primaryProjectCode": {
+										"type": "string"
+									},
+									"primaryRole": {
+										"type": "string"
+									},
+									"primaryRoleCode": {
+										"type": "null"
+									},
+									"primaryLocation": {
+										"type": "string"
+									},
+									"primaryLocationGlCode": {
+										"type": "null"
+									},
+									"primaryLocationCode": {
+										"type": "string"
+									},
+									"primaryDepartment": {
+										"type": "string"
+									},
+									"primaryDepartmentGlCode": {
+										"type": "string"
+									},
+									"primaryDepartmentCode": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LeaveBalances_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "null"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"organisationName": {
+										"type": "string"
+									},
+									"glCode": {
+										"type": "string"
+									},
+									"exportCode": {
+										"type": "null"
+									},
+									"employeeNumber": {
+										"type": "string"
+									},
+									"printName": {
+										"type": "string"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"surname": {
+										"type": "string"
+									},
+									"leaveTypeName": {
+										"type": "string"
+									},
+									"leaveEntitlementHours": {
+										"type": "number"
+									},
+									"leaveProRataHours": {
+										"type": "number"
+									},
+									"leaveTotalHours": {
+										"type": "number"
+									},
+									"primaryProjectName": {
+										"type": "string"
+									},
+									"primaryProjectGlCode": {
+										"type": "string"
+									},
+									"primaryProjectCode": {
+										"type": "string"
+									},
+									"primaryRoleName": {
+										"type": "string"
+									},
+									"primaryRoleCode": {
+										"type": "null"
+									},
+									"primaryLocationName": {
+										"type": "string"
+									},
+									"primaryLocationGlCode": {
+										"type": "null"
+									},
+									"primaryLocationCode": {
+										"type": "null"
+									},
+									"primaryDepartmentName": {
+										"type": "string"
+									},
+									"primaryDepartmentGlCode": {
+										"type": "null"
+									},
+									"primaryDepartmentCode": {
+										"type": "null"
+									},
+									"employeeId": {
+										"type": "string"
+									},
+									"leaveTypeId": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OrganisationPayPolcies_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"payPolicyId": {
+							"type": "string"
+						},
+						"name": {
+							"type": "string"
+						},
+						"description": {
+							"type": "string"
+						},
+						"lastUpdated": {
+							"type": "string"
+						},
+						"commencementDate": {
+							"type": "string"
+						},
+						"ceaseDate": {
+							"type": "string"
+						},
+						"currentVersion": {
+							"type": "null"
+						},
+						"currentVersionId": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Organizations_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"organizationId": {
+							"type": "string"
+						},
+						"organizationCode": {
+							"type": "string"
+						},
+						"legalName": {
+							"type": "string"
+						},
+						"tradingName": {
+							"type": "string"
+						},
+						"wpn": {
+							"type": "null"
+						},
+						"abn": {
+							"type": "string"
+						},
+						"branchCode": {
+							"type": "null"
+						},
+						"acn": {
+							"type": "string"
+						},
+						"employeeSupportEmail": {
+							"type": "null"
+						},
+						"contactTitle": {
+							"type": "null"
+						},
+						"contactFirstName": {
+							"type": "null"
+						},
+						"contactSurname": {
+							"type": "null"
+						},
+						"contactEmail": {
+							"type": "null"
+						},
+						"contactPhone": {
+							"type": "null"
+						},
+						"fbtExempt": {
+							"type": "boolean"
+						},
+						"intermediary": {
+							"type": "null"
+						},
+						"beamTermsConfirmUserId": {
+							"type": "null"
+						},
+						"beamTermsConfirmUserName": {
+							"type": "null"
+						},
+						"beamTermsConfirmDate": {
+							"type": "null"
+						},
+						"streetAddress": {
+							"type": "null"
+						},
+						"reference": {
+							"type": "null"
+						},
+						"softwareProviderABN": {
+							"type": "null"
+						},
+						"softwareProviderName": {
+							"type": "null"
+						},
+						"softwareSubscriptionId": {
+							"type": "null"
+						},
+						"notificationUserIds": {
+							"type": "null"
+						},
+						"notifyLodgementSubmitters": {
+							"type": "boolean"
+						},
+						"excludeReportableFbtBelowThreshold": {
+							"type": "boolean"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Payslips_ds')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls2_stnidoprodeastau100",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ds_PipelineTriggerTime": {
+						"type": "string"
+					},
+					"ds_PipelineRunId": {
+						"type": "string"
+					},
+					"ds_FileSystem": {
+						"type": "string"
+					},
+					"ds_Directory": {
+						"type": "string"
+					},
+					"ds_PipelineName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Datasets"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": {
+							"value": "@concat(\n    dataset().ds_Directory,\n    '/',\n    dataset().ds_PipelineName,\n    '/',\n    formatDateTime(string(dataset().ds_PipelineTriggerTime), 'yyyy-MM-ddTHH-mm-ss'),\n    '_',\n    dataset().ds_PipelineRunId\n)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().ds_FileSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"headers": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"title": {
+										"type": "string"
+									},
+									"filterDisabled": {
+										"type": "boolean"
+									},
+									"sortDisabled": {
+										"type": "boolean"
+									},
+									"hiddenByDefault": {
+										"type": "boolean"
+									},
+									"searchDisabled": {
+										"type": "boolean"
+									},
+									"dataType": {
+										"type": "string"
+									},
+									"fieldName": {
+										"type": "string"
+									},
+									"defaultPivotColumnOrder": {
+										"type": "integer"
+									},
+									"defaultPivotRowOrder": {
+										"type": "integer"
+									},
+									"defaultPivotValueOrder": {
+										"type": "integer"
+									},
+									"defaultSortOrder": {
+										"type": "integer"
+									},
+									"defaultSortDirection": {
+										"type": "string"
+									},
+									"defaultPivotAggregation": {
+										"type": "null"
+									},
+									"isDynamicColumns": {
+										"type": "boolean"
+									},
+									"isCustomFields": {
+										"type": "boolean"
+									},
+									"customFieldsKeyName": {
+										"type": "null"
+									},
+									"createDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"prependBaseColumnNameToDayOfWeekColumn": {
+										"type": "boolean"
+									},
+									"trueText": {
+										"type": "null"
+									},
+									"falseText": {
+										"type": "null"
+									},
+									"nullDisplayText": {
+										"type": "null"
+									},
+									"disableDefaultAggregation": {
+										"type": "boolean"
+									},
+									"numericPrecision": {
+										"type": "null"
+									}
+								}
+							}
+						},
+						"reportData": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"organisationName": {
+										"type": "string"
+									},
+									"glCode": {
+										"type": "string"
+									},
+									"exportCode": {
+										"type": "string"
+									},
+									"employeeNumber": {
+										"type": "string"
+									},
+									"printName": {
+										"type": "string"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"surname": {
+										"type": "string"
+									},
+									"employmentStatus": {
+										"type": "string"
+									},
+									"payRunNumber": {
+										"type": "integer"
+									},
+									"paymentDate": {
+										"type": "string"
+									},
+									"payCalendar": {
+										"type": "string"
+									},
+									"payRunType": {
+										"type": "string"
+									},
+									"payRunStatus": {
+										"type": "string"
+									},
+									"isBackpay": {
+										"type": "boolean"
+									},
+									"date": {
+										"type": "string"
+									},
+									"payItemType": {
+										"type": "string"
+									},
+									"payItemCode": {
+										"type": "string"
+									},
+									"payItem": {
+										"type": "string"
+									},
+									"unitOfMeasure": {
+										"type": "string"
+									},
+									"units": {
+										"type": "number"
+									},
+									"rate": {
+										"type": "number"
+									},
+									"total": {
+										"type": "number"
+									},
+									"awardPolicyName": {
+										"type": "string"
+									},
+									"awardSource": {
+										"type": "null"
+									},
+									"payItemGlDebitCode": {
+										"type": "string"
+									},
+									"payItemGlCreditCode": {
+										"type": "null"
+									},
+									"role": {
+										"type": "string"
+									},
+									"roleCode": {
+										"type": "null"
+									},
+									"project": {
+										"type": "string"
+									},
+									"projectGlCode": {
+										"type": "string"
+									},
+									"projectCode": {
+										"type": "string"
+									},
+									"location": {
+										"type": "string"
+									},
+									"locationGlCode": {
+										"type": "null"
+									},
+									"locationCode": {
+										"type": "string"
+									},
+									"department": {
+										"type": "string"
+									},
+									"departmentGlCode": {
+										"type": "string"
+									},
+									"departmentCode": {
+										"type": "null"
+									},
+									"workOrder": {
+										"type": "null"
+									},
+									"workOrderGLCode": {
+										"type": "null"
+									},
+									"workOrderCode": {
+										"type": "null"
+									},
+									"superFundName": {
+										"type": "string"
+									},
+									"leaveType": {
+										"type": "null"
+									},
+									"leaveReason": {
+										"type": "null"
+									},
+									"periodStartDate": {
+										"type": "string"
+									},
+									"periodEndDate": {
+										"type": "string"
+									},
+									"notes": {
+										"type": "null"
+									},
+									"payItemCustomFields": {
+										"type": "object",
+										"properties": {
+											"alternateGLCode": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						},
+						"extraReportData": {
+							"type": "array"
+						},
+						"serverTime": {
+							"type": "string"
+						},
+						"addFooterRow": {
+							"type": "boolean"
+						},
+						"addStatusBar": {
+							"type": "boolean"
+						},
+						"reportVariantTag": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adls2_stnidoprodeastau100')]"
+			]
 		}
 	]
 }
