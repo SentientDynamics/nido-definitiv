@@ -84,6 +84,7 @@
 				"     upsertable:false,",
 				"     truncate:true,",
 				"     format: 'table',",
+				"     postSQLs:['DELETE FROM dbo.Definitiv_Rosters_Costs\\nWHERE Date IN (SELECT Date FROM Definitiv_Rosters_Staging)\\n\\nINSERT INTO dbo.Definitiv_Rosters_Costs\\nSELECT * FROM Definitiv_Rosters_Staging\\nWHERE Date IS NOT NULL'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"

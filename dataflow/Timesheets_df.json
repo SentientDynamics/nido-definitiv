@@ -96,6 +96,7 @@
 				"     upsertable:false,",
 				"     truncate:true,",
 				"     format: 'table',",
+				"     postSQLs:['DELETE FROM Definitiv_Timesheets\\nWHERE Date IN (SELECT Date FROM Definitiv_Timesheets_Staging)\\n\\nINSERT INTO Definitiv_Timesheets\\nSELECT * FROM Definitiv_Timesheets_Staging\\nWHERE Date IS NOT NULL'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
