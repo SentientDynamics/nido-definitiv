@@ -101,6 +101,7 @@
 				"     upsertable:false,",
 				"     truncate:true,",
 				"     format: 'table',",
+				"     postSQLs:['DROP TABLE TerminatedEmployeeEmails;\\n  \\nSELECT DISTINCT value AS Email\\n     INTO TerminatedEmployeeEmails\\n     FROM      [Definitiv_Employees] CROSS APPLY STRING_SPLIT(TRIM(REPLACE(REPLACE(REPLACE([Email - Primary], \\'[\"\\', \\'\\'), \\'\"]\\', \\'\\'), \\'\"\\', \\'\\')), \\',\\')\\n    WHERE   [Email - Primary] <> \\'[null]\\' AND ([Termination Date] < GETDATE() AND [Termination Reason] NOT LIKE \\'Transferred%\\') \\n               AND [Email - Primary] NOT IN (SELECT [Email - Primary]\\n                                              FROM      [dbo].[Definitiv_Employees]\\n                                              WHERE   [Termination Date] IS NULL OR [Termination Date] >= GETDATE());'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
