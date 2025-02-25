@@ -7,25 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nido-prod-eastau-100"
 		},
-		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Rosters_Staging"
-		},
-		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
+			"defaultValue": "Definitiv_Rosters"
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Rosters_V3"
-		},
-		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 			"type": "string",
@@ -50,7 +38,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName')]"
 						}
 					},
@@ -60,7 +47,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName')]"
 						}
 					}
@@ -116,7 +102,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName')]"
 						}
 					}

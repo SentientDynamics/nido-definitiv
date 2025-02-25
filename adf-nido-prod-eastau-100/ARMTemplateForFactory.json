@@ -23,105 +23,53 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().sourceBaseUrl}"
 		},
-		"tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
 		"tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Compliance"
-		},
-		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
 		},
 		"tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Employees_History"
 		},
-		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
 		"tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_PayPolicies"
-		},
-		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
 		},
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Employees"
 		},
-		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
 		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_LeaveApplications_Staging"
-		},
-		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
 		},
 		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_LeaveBalances"
 		},
-		"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
 		"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Organizations"
-		},
-		"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
 		},
 		"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Payslips_Daily"
 		},
-		"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
 		"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_OrganisationPayPolcies"
-		},
-		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
 		},
 		"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Payslips_Staging"
 		},
-		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
-		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Rosters_Staging"
-		},
-		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
+			"defaultValue": "Definitiv_Rosters"
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Rosters_V3"
-		},
-		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName": {
-			"type": "string",
-			"defaultValue": "dbo"
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 			"type": "string",
@@ -241,7 +189,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -403,8 +350,10 @@
 										}
 									},
 									"WritetoSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Compliance"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -421,10 +370,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Compliance"
@@ -473,7 +418,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -635,8 +579,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_PayPolicies"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -653,10 +599,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_PayPolicies"
@@ -705,7 +647,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -867,8 +808,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Employees"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -885,10 +828,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Employees"
@@ -937,7 +876,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -1099,8 +1037,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Employees_History"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -1117,10 +1057,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Employees_History"
@@ -1169,7 +1105,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -1331,8 +1266,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_LeaveApplications_Staging"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -1349,10 +1286,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_LeaveApplications_Staging"
@@ -1400,7 +1333,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -1562,8 +1494,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_LeaveBalances"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -1580,10 +1514,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_LeaveBalances"
@@ -1631,7 +1561,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -1793,8 +1722,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_OrganisationPayPolcies"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -1811,10 +1742,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_OrganisationPayPolcies"
@@ -1888,8 +1815,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Organizations"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2003,10 +1932,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Organizations"
@@ -2053,7 +1978,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -2215,8 +2139,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Payslips_Staging"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2260,10 +2186,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Payslips_Staging"
@@ -2312,7 +2234,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -2474,8 +2395,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Payslips_Daily"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2492,10 +2415,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Payslips_Daily"
@@ -2543,7 +2462,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -2705,8 +2623,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Rosters_Staging"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2723,13 +2643,9 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Rosters_Staging"
+						"defaultValue": "Definitiv_Rosters"
 					}
 				},
 				"folder": {
@@ -2774,7 +2690,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -2936,8 +2851,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Rosters_V3"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2954,10 +2871,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Rosters_V3"
@@ -3005,7 +2918,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -3167,8 +3079,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Timesheets_Staging"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -3185,10 +3099,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Timesheets_Staging"
@@ -3379,70 +3289,42 @@
 										}
 									},
 									"sinkSqlEmployee": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemeName1",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName1",
 											"type": "Expression"
 										}
 									},
 									"sinkSqlEmployeePaymentAccounts": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemeName2",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName2",
 											"type": "Expression"
 										}
 									},
 									"sinkSqlEmployeePhoneNumbers": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemeName3",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName3",
 											"type": "Expression"
 										}
 									},
 									"sinkSqlEmployeeStreetAddresses": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemeName4",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName4",
 											"type": "Expression"
 										}
 									},
 									"sinkSqlEmployeeSuperAccounts": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemeName5",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName5",
 											"type": "Expression"
 										}
 									},
 									"sinkSqlEmployeeSuperContributions": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemeName6",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName6",
 											"type": "Expression"
 										}
 									},
 									"sinkSqlEmployeeTaxDeclaration": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemeName7",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName7",
 											"type": "Expression"
@@ -3483,10 +3365,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemeName1",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName1",
 										"type": "Expression"
@@ -3526,10 +3404,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemeName1",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName1",
 										"type": "Expression"
@@ -3678,7 +3552,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "definitiv",
 									"param_TableName": "Employees"
 								}
 							},
@@ -3871,10 +3744,6 @@
 										}
 									},
 									"sinkSql": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName",
 											"type": "Expression"
@@ -3913,10 +3782,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -3956,10 +3821,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -4034,7 +3895,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "definitiv",
 									"param_TableName": "Organizations"
 								}
 							},
@@ -4242,10 +4102,6 @@
 										}
 									},
 									"sinkSql": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName",
 											"type": "Expression"
@@ -4311,10 +4167,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -4354,10 +4206,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -4489,10 +4337,6 @@
 										}
 									},
 									"SinkSqlDefinitiv": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName",
 											"type": "Expression"
@@ -4635,10 +4479,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -4678,10 +4518,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -4761,7 +4597,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "definitiv",
 									"param_TableName": "OrganizationPayRuns"
 								}
 							},
@@ -4972,10 +4807,6 @@
 										}
 									},
 									"sinkSql": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName",
 											"type": "Expression"
@@ -5014,10 +4845,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -5057,10 +4884,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -5161,7 +4984,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "definitiv",
 									"param_TableName": "Organizations"
 								}
 							},
@@ -5348,10 +5170,6 @@
 										}
 									},
 									"sinkSql": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName",
 											"type": "Expression"
@@ -5390,10 +5208,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -5433,10 +5247,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -5511,7 +5321,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "definitiv",
 									"param_TableName": "Organizations"
 								}
 							},
@@ -5711,10 +5520,6 @@
 										}
 									},
 									"sinkSql": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName",
 											"type": "Expression"
@@ -5777,10 +5582,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -5820,10 +5621,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -6101,10 +5898,6 @@
 										}
 									},
 									"sinkSql": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName",
 											"type": "Expression"
@@ -6143,10 +5936,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -6186,10 +5975,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -6343,10 +6128,6 @@
 										}
 									},
 									"sinkSql": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName",
 											"type": "Expression"
@@ -6385,10 +6166,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -6428,10 +6205,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -6817,10 +6590,6 @@
 										}
 									},
 									"sinkSql": {
-										"param_SchemaName": {
-											"value": "@pipeline().parameters.param_SchemaName",
-											"type": "Expression"
-										},
 										"param_TableName": {
 											"value": "@pipeline().parameters.param_TableName",
 											"type": "Expression"
@@ -6859,10 +6628,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -6902,10 +6667,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": {
-										"value": "@pipeline().parameters.param_SchemaName",
-										"type": "Expression"
-									},
 									"param_TableName": {
 										"value": "@pipeline().parameters.param_TableName",
 										"type": "Expression"
@@ -6945,7 +6706,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "definitiv",
 									"param_TableName": "OrganizationPayRuns"
 								}
 							},
@@ -10356,9 +10116,6 @@
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string"
-					},
 					"param_TableName": {
 						"type": "string"
 					}
@@ -10370,10 +10127,7 @@
 				"type": "AzureSqlTable",
 				"schema": [],
 				"typeProperties": {
-					"schema": {
-						"value": "@dataset().param_SchemaName",
-						"type": "Expression"
-					},
+					"schema": "dbo",
 					"table": {
 						"value": "@dataset().param_TableName",
 						"type": "Expression"
@@ -10490,7 +10244,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Compliance_Schdeuled_1d_properties_Compliance_parameters_param_TableName')]"
 						}
 					}
@@ -10539,7 +10292,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_EmployeesHistory_Scheduled_1m_properties_EmployeesHistory_parameters_param_TableName')]"
 						}
 					}
@@ -10585,7 +10337,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_EmployeePayPolicies_parameters_param_TableName')]"
 						}
 					},
@@ -10595,7 +10346,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName')]"
 						}
 					}
@@ -10645,7 +10395,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName')]"
 						}
 					}
@@ -10694,7 +10443,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName')]"
 						}
 					}
@@ -10739,7 +10487,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_TableName')]"
 						}
 					}
@@ -10784,7 +10531,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName')]"
 						}
 					},
@@ -10794,7 +10540,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName')]"
 						}
 					},
@@ -10804,7 +10549,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName')]"
 						}
 					}
@@ -10851,7 +10595,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName')]"
 						}
 					},
@@ -10861,7 +10604,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName')]"
 						}
 					}
@@ -10921,7 +10663,6 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"param_SchemaName": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_SchemaName')]",
 							"param_TableName": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName')]"
 						}
 					}
@@ -12094,9 +11835,9 @@
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
-						"     truncate:true,",
 						"     format: 'table',",
-						"     postSQLs:['DELETE FROM dbo.Definitiv_Rosters_Costs\\nWHERE Date IN (SELECT Date FROM Definitiv_Rosters_Staging)\\n\\nINSERT INTO dbo.Definitiv_Rosters_Costs\\nSELECT * FROM Definitiv_Rosters_Staging\\nWHERE Date IS NOT NULL'],",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\n  WHERE Date BETWEEN CAST(DATEADD(DAY, -7, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, 26, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
+						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\nWHERE Date IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"

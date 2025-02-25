@@ -660,7 +660,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -822,8 +821,10 @@
 										}
 									},
 									"WritetoSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Compliance"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -840,10 +841,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Compliance"
@@ -886,7 +883,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -1048,8 +1044,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_PayPolicies"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -1066,10 +1064,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_PayPolicies"
@@ -1112,7 +1106,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -1274,8 +1267,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Employees"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -1292,10 +1287,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Employees"
@@ -1338,7 +1329,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -1500,8 +1490,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Employees_History"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -1518,10 +1510,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Employees_History"
@@ -1564,7 +1552,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -1726,8 +1713,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_LeaveApplications_Staging"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -1744,10 +1733,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_LeaveApplications_Staging"
@@ -1789,7 +1774,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -1951,8 +1935,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_LeaveBalances"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -1969,10 +1955,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_LeaveBalances"
@@ -2014,7 +1996,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -2176,8 +2157,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_OrganisationPayPolcies"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2194,10 +2177,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_OrganisationPayPolcies"
@@ -2265,8 +2244,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Organizations"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2380,10 +2361,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Organizations"
@@ -2425,7 +2402,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -2587,8 +2563,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Payslips_Staging"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2632,10 +2610,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Payslips_Staging"
@@ -2677,7 +2651,6 @@
 								"referenceName": "ds_sql_tnk001",
 								"type": "DatasetReference",
 								"parameters": {
-									"param_SchemaName": "dbo",
 									"param_TableName": "Definitiv_Organizations"
 								}
 							},
@@ -2839,8 +2812,10 @@
 										}
 									},
 									"WriteToSQLDB": {
-										"param_SchemaName": "dbo",
-										"param_TableName": "Definitiv_Payslips_Daily"
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
 									}
 								}
 							},
@@ -2857,10 +2832,6 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"param_SchemaName": {
-						"type": "string",
-						"defaultValue": "dbo"
-					},
 					"param_TableName": {
 						"type": "string",
 						"defaultValue": "Definitiv_Payslips_Daily"
