@@ -32,7 +32,6 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"param_SchemaName": "definitiv",
 							"param_TableName": "Organizations"
 						}
 					},
@@ -240,10 +239,6 @@
 								}
 							},
 							"sinkSql": {
-								"param_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemaName",
-									"type": "Expression"
-								},
 								"param_TableName": {
 									"value": "@pipeline().parameters.param_TableName",
 									"type": "Expression"
@@ -308,10 +303,6 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"param_SchemaName": {
-								"value": "@pipeline().parameters.param_SchemaName",
-								"type": "Expression"
-							},
 							"param_TableName": {
 								"value": "@pipeline().parameters.param_TableName",
 								"type": "Expression"
@@ -351,10 +342,6 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"param_SchemaName": {
-								"value": "@pipeline().parameters.param_SchemaName",
-								"type": "Expression"
-							},
 							"param_TableName": {
 								"value": "@pipeline().parameters.param_TableName",
 								"type": "Expression"
