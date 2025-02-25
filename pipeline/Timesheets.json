@@ -25,7 +25,6 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"param_SchemaName": "dbo",
 							"param_TableName": "Definitiv_Organizations"
 						}
 					},
@@ -204,7 +203,7 @@
 		"parameters": {
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_Timesheets_Staging"
+				"defaultValue": "Definitiv_Timesheets"
 			}
 		},
 		"folder": {
