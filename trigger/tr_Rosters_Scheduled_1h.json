@@ -10,7 +10,6 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"param_SchemaName": "dbo",
 					"param_TableName": "Definitiv_Rosters"
 				}
 			},
@@ -20,7 +19,6 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"param_SchemaName": "dbo",
 					"param_TableName": "Definitiv_Rosters_V3"
 				}
 			}
@@ -34,7 +32,7 @@
 				"timeZone": "AUS Eastern Standard Time",
 				"schedule": {
 					"minutes": [
-						15
+						30
 					],
 					"hours": [
 						9,
