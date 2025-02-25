@@ -49,8 +49,10 @@
 								}
 							},
 							"WriteToSQLDB": {
-								"param_SchemaName": "dbo",
-								"param_TableName": "Definitiv_Organizations"
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
 							}
 						}
 					},
@@ -160,10 +162,6 @@
 			}
 		],
 		"parameters": {
-			"param_SchemaName": {
-				"type": "string",
-				"defaultValue": "dbo"
-			},
 			"param_TableName": {
 				"type": "string",
 				"defaultValue": "Definitiv_Organizations"
