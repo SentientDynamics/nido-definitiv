@@ -83,7 +83,7 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
-				"     preSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\n  WHERE Date BETWEEN CAST(DATEADD(DAY, -7, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, 26, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
+				"     preSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\nWHERE Date BETWEEN CAST(DATEADD(DAY, -7, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, 26, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
 				"     postSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\nWHERE Date IS NULL'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
