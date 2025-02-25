@@ -54,7 +54,7 @@
 			"value": "Definitiv_Rosters_V3"
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
-			"value": "Definitiv_Timesheets_Staging"
+			"value": "Definitiv_Timesheets"
 		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"value": "container-adf-nido-prod-eastau-100-1"

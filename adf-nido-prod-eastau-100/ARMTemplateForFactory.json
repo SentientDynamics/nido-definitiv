@@ -73,7 +73,7 @@
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Timesheets_Staging"
+			"defaultValue": "Definitiv_Timesheets"
 		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
@@ -3101,7 +3101,7 @@
 				"parameters": {
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Timesheets_Staging"
+						"defaultValue": "Definitiv_Timesheets"
 					}
 				},
 				"folder": {
@@ -11837,7 +11837,7 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
-						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\n  WHERE Date BETWEEN CAST(DATEADD(DAY, -7, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, 26, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\nWHERE Date BETWEEN CAST(DATEADD(DAY, -7, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, 26, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
 						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\nWHERE Date IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
@@ -12050,9 +12050,9 @@
 						"     insertable:true,",
 						"     updateable:false,",
 						"     upsertable:false,",
-						"     truncate:true,",
 						"     format: 'table',",
-						"     postSQLs:['DELETE FROM Definitiv_Timesheets\\nWHERE Date IN (SELECT Date FROM Definitiv_Timesheets_Staging)\\n\\nINSERT INTO Definitiv_Timesheets\\nSELECT * FROM Definitiv_Timesheets_Staging\\nWHERE Date IS NOT NULL'],",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN CAST(DATEADD(DAY, -28, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
+						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"

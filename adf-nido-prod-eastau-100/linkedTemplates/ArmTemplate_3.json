@@ -708,7 +708,7 @@
 				"parameters": {
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Timesheets_Staging"
+						"defaultValue": "Definitiv_Timesheets"
 					}
 				},
 				"folder": {

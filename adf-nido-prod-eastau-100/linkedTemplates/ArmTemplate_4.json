@@ -17,7 +17,7 @@
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Timesheets_Staging"
+			"defaultValue": "Definitiv_Timesheets"
 		}
 	},
 	"variables": {
