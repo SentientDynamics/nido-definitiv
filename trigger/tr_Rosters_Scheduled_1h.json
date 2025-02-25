@@ -11,7 +11,7 @@
 				},
 				"parameters": {
 					"param_SchemaName": "dbo",
-					"param_TableName": "Definitiv_Rosters_Staging"
+					"param_TableName": "Definitiv_Rosters"
 				}
 			},
 			{

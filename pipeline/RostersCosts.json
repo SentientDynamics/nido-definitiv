@@ -206,7 +206,7 @@
 			},
 			"param_TableName": {
 				"type": "string",
-				"defaultValue": "Definitiv_Rosters_Staging"
+				"defaultValue": "Definitiv_Rosters"
 			}
 		},
 		"folder": {
