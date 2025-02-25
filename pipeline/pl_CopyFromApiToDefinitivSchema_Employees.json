@@ -167,70 +167,42 @@
 								}
 							},
 							"sinkSqlEmployee": {
-								"param_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemeName1",
-									"type": "Expression"
-								},
 								"param_TableName": {
 									"value": "@pipeline().parameters.param_TableName1",
 									"type": "Expression"
 								}
 							},
 							"sinkSqlEmployeePaymentAccounts": {
-								"param_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemeName2",
-									"type": "Expression"
-								},
 								"param_TableName": {
 									"value": "@pipeline().parameters.param_TableName2",
 									"type": "Expression"
 								}
 							},
 							"sinkSqlEmployeePhoneNumbers": {
-								"param_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemeName3",
-									"type": "Expression"
-								},
 								"param_TableName": {
 									"value": "@pipeline().parameters.param_TableName3",
 									"type": "Expression"
 								}
 							},
 							"sinkSqlEmployeeStreetAddresses": {
-								"param_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemeName4",
-									"type": "Expression"
-								},
 								"param_TableName": {
 									"value": "@pipeline().parameters.param_TableName4",
 									"type": "Expression"
 								}
 							},
 							"sinkSqlEmployeeSuperAccounts": {
-								"param_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemeName5",
-									"type": "Expression"
-								},
 								"param_TableName": {
 									"value": "@pipeline().parameters.param_TableName5",
 									"type": "Expression"
 								}
 							},
 							"sinkSqlEmployeeSuperContributions": {
-								"param_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemeName6",
-									"type": "Expression"
-								},
 								"param_TableName": {
 									"value": "@pipeline().parameters.param_TableName6",
 									"type": "Expression"
 								}
 							},
 							"sinkSqlEmployeeTaxDeclaration": {
-								"param_SchemaName": {
-									"value": "@pipeline().parameters.param_SchemeName7",
-									"type": "Expression"
-								},
 								"param_TableName": {
 									"value": "@pipeline().parameters.param_TableName7",
 									"type": "Expression"
@@ -270,10 +242,6 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"param_SchemaName": {
-								"value": "@pipeline().parameters.param_SchemeName1",
-								"type": "Expression"
-							},
 							"param_TableName": {
 								"value": "@pipeline().parameters.param_TableName1",
 								"type": "Expression"
@@ -313,10 +281,6 @@
 						"referenceName": "ds_sql_tnk001",
 						"type": "DatasetReference",
 						"parameters": {
-							"param_SchemaName": {
-								"value": "@pipeline().parameters.param_SchemeName1",
-								"type": "Expression"
-							},
 							"param_TableName": {
 								"value": "@pipeline().parameters.param_TableName1",
 								"type": "Expression"
