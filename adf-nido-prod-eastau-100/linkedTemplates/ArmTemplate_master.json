@@ -65,7 +65,7 @@
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Rosters"
+			"defaultValue": "Definitiv_Rosters_Costs"
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
 			"type": "string",

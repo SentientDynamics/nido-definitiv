@@ -48,7 +48,7 @@
 			"value": "Definitiv_Payslips_Staging"
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
-			"value": "Definitiv_Rosters"
+			"value": "Definitiv_Rosters_Costs"
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
 			"value": "Definitiv_Rosters_V3"

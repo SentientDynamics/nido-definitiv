@@ -65,7 +65,7 @@
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Rosters"
+			"defaultValue": "Definitiv_Rosters_Costs"
 		},
 		"tr_Rosters_Scheduled_1h_properties_RostersV3_parameters_param_TableName": {
 			"type": "string",
@@ -2645,7 +2645,7 @@
 				"parameters": {
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Rosters"
+						"defaultValue": "Definitiv_Rosters_Costs"
 					}
 				},
 				"folder": {
@@ -11837,8 +11837,8 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
-						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\nWHERE Date BETWEEN CAST(DATEADD(DAY, -7, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, 26, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
-						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Rosters]\\nWHERE Date IS NULL'],",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Rosters_Costs]\\nWHERE Date BETWEEN CAST(DATEADD(DAY, -7, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, 26, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
+						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Rosters_Costs]\\nWHERE Date IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"

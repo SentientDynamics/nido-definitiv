@@ -264,7 +264,7 @@
 				"parameters": {
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Rosters"
+						"defaultValue": "Definitiv_Rosters_Costs"
 					}
 				},
 				"folder": {
