@@ -3347,6 +3347,7 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/Timesheets_df_copy1')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]"
 			]
@@ -10908,7 +10909,7 @@
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
-								40
+								30
 							],
 							"hours": [
 								8,
