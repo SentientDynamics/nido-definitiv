@@ -75,6 +75,10 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Timesheets"
 		},
+		"trigger1_properties_Timesheets_copy1_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Timesheets"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
 			"defaultValue": "container-adf-nido-prod-eastau-100-1"
@@ -329,18 +333,6 @@
 					},
 					"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName": {
 						"value": "[parameters('tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName')]"
-					},
-					"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_TableName": {
-						"value": "[parameters('tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_TableName')]"
-					},
-					"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName": {
-						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName')]"
-					},
-					"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName": {
-						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName')]"
-					},
-					"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
-						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName')]"
 					}
 				}
 			},
@@ -362,6 +354,18 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_TableName": {
+						"value": "[parameters('tr_Organizations_Scheduled_1w_properties_Organizations_parameters_param_TableName')]"
+					},
+					"tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName": {
+						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_Daily_parameters_param_TableName')]"
+					},
+					"tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName": {
+						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_OrganisationPayPolicies_parameters_param_TableName')]"
+					},
+					"tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName": {
+						"value": "[parameters('tr_PayRuns_Scheduled_2w_properties_Payslips_parameters_param_TableName')]"
+					},
 					"tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName": {
 						"value": "[parameters('tr_Rosters_Scheduled_1h_properties_RostersCosts_parameters_param_TableName')]"
 					},
@@ -370,6 +374,9 @@
 					},
 					"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 						"value": "[parameters('tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName')]"
+					},
+					"trigger1_properties_Timesheets_copy1_parameters_param_TableName": {
+						"value": "[parameters('trigger1_properties_Timesheets_copy1_parameters_param_TableName')]"
 					}
 				}
 			},

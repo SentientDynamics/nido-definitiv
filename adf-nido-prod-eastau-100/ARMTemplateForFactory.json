@@ -75,6 +75,10 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Timesheets"
 		},
+		"trigger1_properties_Timesheets_copy1_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_Timesheets"
+		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
 			"defaultValue": "container-adf-nido-prod-eastau-100-1"
@@ -3114,6 +3118,235 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/Timesheets_df')]",
+				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
+				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Timesheets_copy1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Organizations",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nWHERE [organizationId] = '06a54b6b-65ab-40be-b3d7-a99999967b35'",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_TableName": "Definitiv_Organizations"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Organization",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Organizations",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Organizations').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "ApiToJson",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.03:00:00",
+										"retry": 1,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "Org.OrganizationId",
+													"value": {
+														"value": "@item().organizationId",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": {
+												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
+												"type": "Expression"
+											},
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_rest_definitiv",
+											"type": "DatasetReference",
+											"parameters": {
+												"sourceRelativeUrl": {
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=2025-03-04',\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -1), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)\n",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "Timesheets_ds",
+											"type": "DatasetReference",
+											"parameters": {
+												"ds_PipelineTriggerTime": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"ds_PipelineRunId": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"ds_FileSystem": {
+													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+													"type": "Expression"
+												},
+												"ds_Directory": {
+													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+													"type": "Expression"
+												},
+												"ds_PipelineName": {
+													"value": "@pipeline().Pipeline",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					},
+					{
+						"name": "Timesheets_df",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Organization",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.03:00:00",
+							"retry": 3,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Timesheets_df_copy1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"jsoninput": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									"WriteToSQLDB": {
+										"param_TableName": {
+											"value": "@pipeline().parameters.param_TableName",
+											"type": "Expression"
+										}
+									}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_TableName": {
+						"type": "string",
+						"defaultValue": "Definitiv_Timesheets"
+					}
+				},
+				"folder": {
+					"name": "00_Definitiv Pipelines"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-01-18T05:28:43Z"
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
+				"[concat(variables('factoryId'), '/dataflows/Timesheets_df_copy1')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]"
 			]
@@ -10707,6 +10940,57 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Timesheets_copy1",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_TableName": "[parameters('trigger1_properties_Timesheets_copy1_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2025-03-06T04:30:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								20
+							],
+							"hours": [
+								8,
+								9,
+								10,
+								11,
+								12,
+								13,
+								14,
+								15,
+								16,
+								17,
+								7
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/pipelines/Timesheets_copy1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AustraliaEastIntegrationRuntime')]",
 			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
@@ -12050,7 +12334,120 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
-						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN \\'2025-03-03\\' AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN \\'2025-03-03\\' AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) AND [Organisation GL Code] <> \\'NEST Services\\''],",
+						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date IS NULL'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+					]
+				}
+			},
+			"dependsOn": [
+				"[variables('factoryId')]",
+				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Timesheets_df_copy1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "00_Definitv Dataflows"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Timesheets_ds",
+								"type": "DatasetReference"
+							},
+							"name": "jsoninput",
+							"description": "Import data from Timesheets_ds"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_tnk001",
+								"type": "DatasetReference"
+							},
+							"name": "WriteToSQLDB",
+							"description": "Export data to AzureSQLDatabaseTable"
+						}
+					],
+					"transformations": [
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+						"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, employmentStatus as string, payCalendar as string, date as string, approvalStatus as string, type as string, leaveType as string, leaveReason as string, project as string, projectCode as string, role as string, roleCode as string, location as string, locationCode as string, department as string, departmentCode as string, shiftType as string, shiftTypeCode as string, workOrder as string, workOrderCode as string, durationHours as double, breakDurationHours as double, startTime as string, finishTime as string, submittedBy as string, submittedDateTime as string, approvers as string, approvedBy as string, approvalTime as string, notes as string, leaveTypeCode as string, leaveReasonCode as string, customFields as (kmAllowance as string, staffMeeting as string[], staffMeetingHours as double), publicHolidayWorked as string)[],",
+						"          extraReportData as string[],",
+						"          serverTime as string,",
+						"          addFooterRow as boolean,",
+						"          addStatusBar as boolean,",
+						"          reportVariantTag as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     purgeFiles: true,",
+						"     documentForm: 'documentPerLine') ~> jsoninput",
+						"jsoninput foldDown(unroll(reportData),",
+						"     mapColumn(",
+						"          Organisation = reportData.organisationName,",
+						"          {Organisation GL Code} = reportData.glCode,",
+						"          {Emp No} = reportData.employeeNumber,",
+						"          {Print Name} = reportData.printName,",
+						"          {Employment Status} = reportData.employmentStatus,",
+						"          {Pay Calendar} = reportData.payCalendar,",
+						"          Date = reportData.date,",
+						"          {Approval Status} = reportData.approvalStatus,",
+						"          Type = reportData.type,",
+						"          {Leave Type} = reportData.leaveType,",
+						"          {Leave Reason} = reportData.leaveReason,",
+						"          Project = reportData.project,",
+						"          {Project Code} = reportData.projectCode,",
+						"          Role = reportData.role,",
+						"          {Role Code} = reportData.roleCode,",
+						"          Location = reportData.location,",
+						"          {Location Code} = reportData.locationCode,",
+						"          Department = reportData.department,",
+						"          {Department Code} = reportData.departmentCode,",
+						"          {Shift Type} = reportData.shiftType,",
+						"          {Shift Type Code} = reportData.shiftTypeCode,",
+						"          {Work Order} = reportData.workOrder,",
+						"          {Work Order Code} = reportData.workOrderCode,",
+						"          Duration = reportData.durationHours,",
+						"          {Break Duration} = reportData.breakDurationHours,",
+						"          {Start Time} = reportData.startTime,",
+						"          {Finish Time} = reportData.finishTime,",
+						"          {Submitted By} = reportData.submittedBy,",
+						"          {Submitted Time} = reportData.submittedDateTime,",
+						"          Approvers = reportData.approvers,",
+						"          {Approved By} = reportData.approvedBy,",
+						"          {Approval Time} = reportData.approvalTime,",
+						"          {Leave Type Code} = reportData.leaveTypeCode,",
+						"          {Leave Reason Code} = reportData.leaveReasonCode,",
+						"          {Public Holiday Worked} = reportData.publicHolidayWorked,",
+						"          {Staff Meeting} = reportData.customFields.staffMeeting,",
+						"          {Staff Meeting Hours} = reportData.customFields.staffMeetingHours",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN \\'2025-03-04\\' AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) AND [Organisation GL Code] = \\'NEST Services\\''],",
 						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
