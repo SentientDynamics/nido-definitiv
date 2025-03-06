@@ -1997,7 +1997,7 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
-						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN (\\'2025-03-03\\'\\n               AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE))'],",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN \\'2025-03-03\\' AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
 						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
