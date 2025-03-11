@@ -46,10 +46,6 @@
 		"trigger1_properties_Timesheets_copy1_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Timesheets"
-		},
-		"trigger2_properties_Timesheets_copy2_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "Definitiv_Timesheets"
 		}
 	},
 	"variables": {
@@ -401,54 +397,6 @@
 								16,
 								17,
 								7
-							]
-						}
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/trigger2')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "Timesheets_copy2",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"param_TableName": "[parameters('trigger2_properties_Timesheets_copy2_parameters_param_TableName')]"
-						}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2025-03-11T03:53:00",
-						"timeZone": "AUS Eastern Standard Time",
-						"schedule": {
-							"minutes": [
-								45
-							],
-							"hours": [
-								7,
-								8,
-								9,
-								10,
-								11,
-								12,
-								13,
-								14,
-								15,
-								16,
-								17
 							]
 						}
 					}

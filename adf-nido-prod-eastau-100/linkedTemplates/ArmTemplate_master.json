@@ -79,10 +79,6 @@
 			"type": "string",
 			"defaultValue": "Definitiv_Timesheets"
 		},
-		"trigger2_properties_Timesheets_copy2_parameters_param_TableName": {
-			"type": "string",
-			"defaultValue": "Definitiv_Timesheets"
-		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
 			"defaultValue": "container-adf-nido-prod-eastau-100-1"
@@ -381,9 +377,6 @@
 					},
 					"trigger1_properties_Timesheets_copy1_parameters_param_TableName": {
 						"value": "[parameters('trigger1_properties_Timesheets_copy1_parameters_param_TableName')]"
-					},
-					"trigger2_properties_Timesheets_copy2_parameters_param_TableName": {
-						"value": "[parameters('trigger2_properties_Timesheets_copy2_parameters_param_TableName')]"
 					}
 				}
 			},
