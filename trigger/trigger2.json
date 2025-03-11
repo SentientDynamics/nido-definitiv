@@ -1,0 +1,45 @@
+{
+	"name": "trigger2",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Timesheets_copy2",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"param_TableName": "Definitiv_Timesheets"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2025-03-11T03:53:00",
+				"timeZone": "AUS Eastern Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			}
+		}
+	}
+}

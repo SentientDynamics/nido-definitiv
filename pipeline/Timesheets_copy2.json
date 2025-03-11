@@ -1,0 +1,216 @@
+{
+	"name": "Timesheets_copy2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Organizations",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_TableName": "Definitiv_Organizations"
+						}
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Organization",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Organizations",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Organizations').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "ApiToJson",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.03:00:00",
+								"retry": 1,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"additionalColumns": [
+										{
+											"name": "Org.OrganizationId",
+											"value": {
+												"value": "@item().organizationId",
+												"type": "Expression"
+											}
+										}
+									],
+									"httpRequestTimeout": {
+										"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
+										"type": "Expression"
+									},
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"supportRFC5988": "true"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_rest_definitiv",
+									"type": "DatasetReference",
+									"parameters": {
+										"sourceRelativeUrl": {
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=2025-03-11',\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), 0), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)\n",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Timesheets_ds",
+									"type": "DatasetReference",
+									"parameters": {
+										"ds_PipelineTriggerTime": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"ds_PipelineRunId": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"ds_FileSystem": {
+											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+											"type": "Expression"
+										},
+										"ds_Directory": {
+											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+											"type": "Expression"
+										},
+										"ds_PipelineName": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "Timesheets_df",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Organization",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.03:00:00",
+					"retry": 3,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "Timesheets_df",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"jsoninput": {
+								"ds_PipelineTriggerTime": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								},
+								"ds_PipelineRunId": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								},
+								"ds_FileSystem": {
+									"value": "@pipeline().globalParameters.global_adls2_FileSystem",
+									"type": "Expression"
+								},
+								"ds_Directory": {
+									"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
+									"type": "Expression"
+								},
+								"ds_PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							"WriteToSQLDB": {
+								"param_TableName": {
+									"value": "@pipeline().parameters.param_TableName",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"param_TableName": {
+				"type": "string",
+				"defaultValue": "Definitiv_Timesheets"
+			}
+		},
+		"folder": {
+			"name": "00_Definitiv Pipelines"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-01-18T05:28:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
