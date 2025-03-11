@@ -95,7 +95,7 @@
 				"     updateable:false,",
 				"     upsertable:false,",
 				"     format: 'table',",
-				"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date >= \\'2024-03-11\\''],",
+				"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date >= \\'2025-03-11\\''],",
 				"     postSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date IS NULL'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
