@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nWHERE [organizationId] <> '06a54b6b-65ab-40be-b3d7-a99999967b35'",
+						"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -100,7 +100,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"sourceRelativeUrl": {
-											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -1), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)\n",
+											"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd'),\n'&ToDate=2025-03-02',\n'&includeTerminated=true'\n)\n",
 											"type": "Expression"
 										}
 									}
