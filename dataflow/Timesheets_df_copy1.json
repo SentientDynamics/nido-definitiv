@@ -1,0 +1,106 @@
+{
+	"name": "Timesheets_df_copy1",
+	"properties": {
+		"folder": {
+			"name": "00_Definitv Dataflows"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Timesheets_ds",
+						"type": "DatasetReference"
+					},
+					"name": "jsoninput",
+					"description": "Import data from Timesheets_ds"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_tnk001",
+						"type": "DatasetReference"
+					},
+					"name": "WriteToSQLDB",
+					"description": "Export data to AzureSQLDatabaseTable"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          headers as (title as string, filterDisabled as boolean, sortDisabled as boolean, hiddenByDefault as boolean, searchDisabled as boolean, dataType as string, fieldName as string, defaultPivotColumnOrder as integer, defaultPivotRowOrder as integer, defaultPivotValueOrder as integer, defaultSortOrder as integer, defaultSortDirection as string, defaultPivotAggregation as string, isDynamicColumns as boolean, isCustomFields as boolean, customFieldsKeyName as string, createDayOfWeekColumn as boolean, prependBaseColumnNameToDayOfWeekColumn as boolean, trueText as string, falseText as string, nullDisplayText as string, disableDefaultAggregation as boolean, numericPrecision as string)[],",
+				"          reportData as (organisationName as string, glCode as string, exportCode as string, employeeNumber as string, printName as string, firstName as string, surname as string, employmentStatus as string, payCalendar as string, date as string, approvalStatus as string, type as string, leaveType as string, leaveReason as string, project as string, projectCode as string, role as string, roleCode as string, location as string, locationCode as string, department as string, departmentCode as string, shiftType as string, shiftTypeCode as string, workOrder as string, workOrderCode as string, durationHours as double, breakDurationHours as double, startTime as string, finishTime as string, submittedBy as string, submittedDateTime as string, approvers as string, approvedBy as string, approvalTime as string, notes as string, leaveTypeCode as string, leaveReasonCode as string, customFields as (kmAllowance as string, staffMeeting as string[], staffMeetingHours as double), publicHolidayWorked as string)[],",
+				"          extraReportData as string[],",
+				"          serverTime as string,",
+				"          addFooterRow as boolean,",
+				"          addStatusBar as boolean,",
+				"          reportVariantTag as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true,",
+				"     documentForm: 'documentPerLine') ~> jsoninput",
+				"jsoninput foldDown(unroll(reportData),",
+				"     mapColumn(",
+				"          Organisation = reportData.organisationName,",
+				"          {Organisation GL Code} = reportData.glCode,",
+				"          {Emp No} = reportData.employeeNumber,",
+				"          {Print Name} = reportData.printName,",
+				"          {Employment Status} = reportData.employmentStatus,",
+				"          {Pay Calendar} = reportData.payCalendar,",
+				"          Date = reportData.date,",
+				"          {Approval Status} = reportData.approvalStatus,",
+				"          Type = reportData.type,",
+				"          {Leave Type} = reportData.leaveType,",
+				"          {Leave Reason} = reportData.leaveReason,",
+				"          Project = reportData.project,",
+				"          {Project Code} = reportData.projectCode,",
+				"          Role = reportData.role,",
+				"          {Role Code} = reportData.roleCode,",
+				"          Location = reportData.location,",
+				"          {Location Code} = reportData.locationCode,",
+				"          Department = reportData.department,",
+				"          {Department Code} = reportData.departmentCode,",
+				"          {Shift Type} = reportData.shiftType,",
+				"          {Shift Type Code} = reportData.shiftTypeCode,",
+				"          {Work Order} = reportData.workOrder,",
+				"          {Work Order Code} = reportData.workOrderCode,",
+				"          Duration = reportData.durationHours,",
+				"          {Break Duration} = reportData.breakDurationHours,",
+				"          {Start Time} = reportData.startTime,",
+				"          {Finish Time} = reportData.finishTime,",
+				"          {Submitted By} = reportData.submittedBy,",
+				"          {Submitted Time} = reportData.submittedDateTime,",
+				"          Approvers = reportData.approvers,",
+				"          {Approved By} = reportData.approvedBy,",
+				"          {Approval Time} = reportData.approvalTime,",
+				"          {Leave Type Code} = reportData.leaveTypeCode,",
+				"          {Leave Reason Code} = reportData.leaveReasonCode,",
+				"          {Public Holiday Worked} = reportData.publicHolidayWorked,",
+				"          {Staff Meeting} = reportData.customFields.staffMeeting,",
+				"          {Staff Meeting Hours} = reportData.customFields.staffMeetingHours",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN \\'2024-03-04\\'\\n               AND \\'2024-03-09\\''],",
+				"     postSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date IS NULL'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
+			]
+		}
+	}
+}
