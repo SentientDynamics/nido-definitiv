@@ -159,7 +159,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "Timesheets_df",
+						"referenceName": "Timesheets_df_copy2",
 						"type": "DataFlowReference",
 						"datasetParameters": {
 							"jsoninput": {
