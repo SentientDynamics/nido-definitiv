@@ -56,12 +56,6 @@
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 			"value": "Definitiv_Timesheets"
 		},
-		"trigger1_properties_Timesheets_copy1_parameters_param_TableName": {
-			"value": "Definitiv_Timesheets"
-		},
-		"trigger2_properties_Timesheets_copy2_parameters_param_TableName": {
-			"value": "Definitiv_Timesheets"
-		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"value": "container-adf-nido-prod-eastau-100-1"
 		},

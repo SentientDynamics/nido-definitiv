@@ -22,261 +22,20 @@
 		"tr_Employees_Scheduled_1d_properties_Employees_parameters_param_TableName": {
 			"type": "string",
 			"defaultValue": "Definitiv_Employees"
+		},
+		"tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_LeaveApplications_Staging"
+		},
+		"tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName": {
+			"type": "string",
+			"defaultValue": "Definitiv_LeaveBalances"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/Payslips')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Organizations",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 3,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_TableName": "Definitiv_Organizations"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Organization",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Organizations",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Organizations').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "ApiToJson",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 3,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "RestSource",
-											"additionalColumns": [
-												{
-													"name": "Org.OrganizationId",
-													"value": {
-														"value": "@item().organizationId",
-														"type": "Expression"
-													}
-												}
-											],
-											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
-												"type": "Expression"
-											},
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"supportRFC5988": "true"
-											}
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_rest_definitiv",
-											"type": "DatasetReference",
-											"parameters": {
-												"sourceRelativeUrl": {
-													"value": "@concat('/api/company/', item().organizationId,\n'/reporting/pay-runs?FromDate=',\nformatDateTime(addDays(utcNow(), -32), 'yyyy-MM-dd'),\n'&reportType=AggregatePerPayRun')\n\n",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "Payslips_ds",
-											"type": "DatasetReference",
-											"parameters": {
-												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
-													"type": "Expression"
-												},
-												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
-													"type": "Expression"
-												},
-												"ds_FileSystem": {
-													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-													"type": "Expression"
-												},
-												"ds_Directory": {
-													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-													"type": "Expression"
-												},
-												"ds_PipelineName": {
-													"value": "@pipeline().Pipeline",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					},
-					{
-						"name": "Payslips_df",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "Organization",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 3,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "Payslips_df",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"jsoninput": {
-										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										},
-										"ds_FileSystem": {
-											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-											"type": "Expression"
-										},
-										"ds_Directory": {
-											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-											"type": "Expression"
-										},
-										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									"WriteToSQLDB": {
-										"param_TableName": {
-											"value": "@pipeline().parameters.param_TableName",
-											"type": "Expression"
-										}
-									}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					},
-					{
-						"name": "Execute DefinitivWagesFortnightly",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [
-							{
-								"activity": "Payslips_df",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[DefinitivWagesFortnightly]"
-						},
-						"linkedServiceName": {
-							"referenceName": "ls_sql_tnk001",
-							"type": "LinkedServiceReference"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"param_TableName": {
-						"type": "string",
-						"defaultValue": "Definitiv_Payslips_Staging"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Pipelines"
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Payslips_Daily')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -1330,229 +1089,6 @@
 						"typeProperties": {
 							"dataflow": {
 								"referenceName": "Timesheets_df_copy1",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"jsoninput": {
-										"ds_PipelineTriggerTime": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										},
-										"ds_PipelineRunId": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										},
-										"ds_FileSystem": {
-											"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-											"type": "Expression"
-										},
-										"ds_Directory": {
-											"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-											"type": "Expression"
-										},
-										"ds_PipelineName": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									"WriteToSQLDB": {
-										"param_TableName": {
-											"value": "@pipeline().parameters.param_TableName",
-											"type": "Expression"
-										}
-									}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"param_TableName": {
-						"type": "string",
-						"defaultValue": "Definitiv_Timesheets"
-					}
-				},
-				"folder": {
-					"name": "00_Definitiv Pipelines"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-01-18T05:28:43Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Timesheets_copy2')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Organizations",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "ds_sql_tnk001",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_TableName": "Definitiv_Organizations"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "Organization",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Organizations",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Organizations').output.value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "ApiToJson",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.03:00:00",
-										"retry": 1,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "RestSource",
-											"additionalColumns": [
-												{
-													"name": "Org.OrganizationId",
-													"value": {
-														"value": "@item().organizationId",
-														"type": "Expression"
-													}
-												}
-											],
-											"httpRequestTimeout": {
-												"value": "@{pipeline().globalParameters.global_REST_RequestTimeoutDuration_30min}",
-												"type": "Expression"
-											},
-											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"supportRFC5988": "true"
-											}
-										},
-										"sink": {
-											"type": "JsonSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "JsonWriteSettings"
-											}
-										},
-										"enableStaging": false
-									},
-									"inputs": [
-										{
-											"referenceName": "ds_rest_definitiv",
-											"type": "DatasetReference",
-											"parameters": {
-												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=2025-03-11',\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -1), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)\n",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "Timesheets_ds",
-											"type": "DatasetReference",
-											"parameters": {
-												"ds_PipelineTriggerTime": {
-													"value": "@pipeline().TriggerTime",
-													"type": "Expression"
-												},
-												"ds_PipelineRunId": {
-													"value": "@pipeline().RunId",
-													"type": "Expression"
-												},
-												"ds_FileSystem": {
-													"value": "@pipeline().globalParameters.global_adls2_FileSystem",
-													"type": "Expression"
-												},
-												"ds_Directory": {
-													"value": "@pipeline().globalParameters.global_adls2_OutputDirectory_Json",
-													"type": "Expression"
-												},
-												"ds_PipelineName": {
-													"value": "@pipeline().Pipeline",
-													"type": "Expression"
-												}
-											}
-										}
-									]
-								}
-							]
-						}
-					},
-					{
-						"name": "Timesheets_df_copy2",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "Organization",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.03:00:00",
-							"retry": 3,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "Timesheets_df_copy2",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -5427,6 +4963,92 @@
 								"Wednesday",
 								"Thursday",
 								"Friday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_LeaveApplications_Scheduled_1d')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "LeaveApplications",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_TableName": "[parameters('tr_LeaveApplications_Scheduled_1d_properties_LeaveApplications_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2023-11-16T03:00:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								7
+							],
+							"weekDays": [
+								"Monday",
+								"Tuesday",
+								"Wednesday",
+								"Thursday",
+								"Friday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_LeaveBalances_Scheduled_2w')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "LeaveBalances",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"param_TableName": "[parameters('tr_LeaveBalances_Scheduled_2w_properties_LeaveBalances_parameters_param_TableName')]"
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 2,
+						"startTime": "2023-11-16T04:00:00",
+						"timeZone": "AUS Eastern Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								5
+							],
+							"weekDays": [
+								"Thursday"
 							]
 						}
 					}
