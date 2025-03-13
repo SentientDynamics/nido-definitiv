@@ -2993,7 +2993,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd'),\n'&ToDate=2025-03-02',\n'&includeTerminated=true'\n)\n",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -28), 'yyyy-MM-dd'),\n'&ToDate=',\nformatDateTime(addDays(convertFromUtc(utcNow(), 'AUS Eastern Standard Time'), -1), 'yyyy-MM-dd'),\n'&includeTerminated=true'\n)\n",
 													"type": "Expression"
 												}
 											}
@@ -10846,7 +10846,7 @@
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
-								15
+								5
 							],
 							"hours": [
 								9,
@@ -12279,7 +12279,7 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
-						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN CAST(DATEADD(DAY, -28, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND \\'2025-03-02\\''],",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN CAST(DATEADD(DAY, -28, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) '],",
 						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
