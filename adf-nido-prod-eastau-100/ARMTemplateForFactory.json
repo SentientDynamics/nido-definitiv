@@ -3230,7 +3230,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"sourceRelativeUrl": {
-													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=2025-03-04',\n'&ToDate=2025-03-09',\n'&includeTerminated=true'\n)\n",
+													"value": "@concat(\n'/api/company/', \nitem().organizationId,\n'/reporting/time-attendance',\n'?FromDate=2025-03-02',\n'&ToDate=2025-03-13',\n'&includeTerminated=true'\n)\n",
 													"type": "Expression"
 												}
 											}
@@ -12731,7 +12731,7 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
-						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN \\'2025-03-04\\'\\n               AND \\'2025-03-09\\''],",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN \\'2025-03-02\\'\\n               AND \\'2025-03-13\\''],",
 						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
