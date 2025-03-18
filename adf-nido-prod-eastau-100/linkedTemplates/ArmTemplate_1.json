@@ -1785,6 +1785,7 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
+						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Rosters_Costs]\\nWHERE Date BETWEEN CAST(DATEADD(DAY, -7, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, 26, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE)'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"
