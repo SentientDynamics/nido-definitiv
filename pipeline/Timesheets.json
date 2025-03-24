@@ -226,7 +226,7 @@
 					"scripts": [
 						{
 							"type": "Query",
-							"text": "DELETE FROM Definitiv_Timesheets\nWHERE Date BETWEEN CAST(DATEADD(DAY, -28, SYSDATETIMEOFFSET() AT TIME ZONE 'AUS Eastern Standard Time') AS DATE) \n               AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE 'AUS Eastern Standard Time') AS DATE) \n\nINSERT INTO Definitiv_Timesheets\nSELECT * FROM Definitiv_Timesheets_Staging\nWHERE Date IS NOT NULL\n\nTRUNCATE TABLE Definitiv_Timesheets_Staging"
+							"text": "DELETE FROM Definitiv_Timesheets\nWHERE Date BETWEEN CAST(DATEADD(DAY, -28, SYSDATETIMEOFFSET() AT TIME ZONE 'AUS Eastern Standard Time') AS DATE) \n               AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE 'AUS Eastern Standard Time') AS DATE) \n\nINSERT INTO Definitiv_Timesheets\nSELECT * FROM Definitiv_Timesheets_Staging"
 						}
 					],
 					"scriptBlockExecutionTimeout": "02:00:00"
