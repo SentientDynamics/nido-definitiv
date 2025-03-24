@@ -906,6 +906,39 @@
 							},
 							"traceLevel": "Fine"
 						}
+					},
+					{
+						"name": "Script1",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Timesheets_df",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sql_tnk001",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "DELETE FROM Definitiv_Timesheets\nWHERE Date BETWEEN CAST(DATEADD(DAY, -28, SYSDATETIMEOFFSET() AT TIME ZONE 'AUS Eastern Standard Time') AS DATE) \n               AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE 'AUS Eastern Standard Time') AS DATE) \n\nINSERT INTO Definitiv_Timesheets\nSELECT * FROM Definitiv_Timesheets_Staging\nWHERE Date IS NOT NULL\n\nTRUNCATE TABLE Definitiv_Timesheets_Staging"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
 					}
 				],
 				"policy": {
@@ -914,7 +947,7 @@
 				"parameters": {
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Timesheets"
+						"defaultValue": "Definitiv_Timesheets_Staging"
 					}
 				},
 				"folder": {

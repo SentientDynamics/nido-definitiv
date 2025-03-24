@@ -73,7 +73,7 @@
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Timesheets"
+			"defaultValue": "Definitiv_Timesheets_Staging"
 		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
@@ -3093,6 +3093,39 @@
 							},
 							"traceLevel": "Fine"
 						}
+					},
+					{
+						"name": "Script1",
+						"type": "Script",
+						"dependsOn": [
+							{
+								"activity": "Timesheets_df",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "ls_sql_tnk001",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "DELETE FROM Definitiv_Timesheets\nWHERE Date BETWEEN CAST(DATEADD(DAY, -28, SYSDATETIMEOFFSET() AT TIME ZONE 'AUS Eastern Standard Time') AS DATE) \n               AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE 'AUS Eastern Standard Time') AS DATE) \n\nINSERT INTO Definitiv_Timesheets\nSELECT * FROM Definitiv_Timesheets_Staging\nWHERE Date IS NOT NULL\n\nTRUNCATE TABLE Definitiv_Timesheets_Staging"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
 					}
 				],
 				"policy": {
@@ -3101,7 +3134,7 @@
 				"parameters": {
 					"param_TableName": {
 						"type": "string",
-						"defaultValue": "Definitiv_Timesheets"
+						"defaultValue": "Definitiv_Timesheets_Staging"
 					}
 				},
 				"folder": {
@@ -3114,6 +3147,8 @@
 				"[variables('factoryId')]",
 				"[concat(variables('factoryId'), '/datasets/ds_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/dataflows/Timesheets_df')]",
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_tnk001')]",
 				"[concat(variables('factoryId'), '/datasets/ds_rest_definitiv')]",
 				"[concat(variables('factoryId'), '/datasets/Timesheets_ds')]"
 			]
@@ -12278,8 +12313,6 @@
 						"     updateable:false,",
 						"     upsertable:false,",
 						"     format: 'table',",
-						"     preSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date BETWEEN CAST(DATEADD(DAY, -28, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) \\n               AND CAST(DATEADD(DAY, -1, SYSDATETIMEOFFSET() AT TIME ZONE \\'AUS Eastern Standard Time\\') AS DATE) '],",
-						"     postSQLs:['DELETE FROM [dbo].[Definitiv_Timesheets]\\nWHERE Date IS NULL'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError') ~> WriteToSQLDB"

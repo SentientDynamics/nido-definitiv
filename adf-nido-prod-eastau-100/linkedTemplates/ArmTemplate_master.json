@@ -73,7 +73,7 @@
 		},
 		"tr_Timesheets_Scheduled_1d_properties_Timesheets_parameters_param_TableName": {
 			"type": "string",
-			"defaultValue": "Definitiv_Timesheets"
+			"defaultValue": "Definitiv_Timesheets_Staging"
 		},
 		"dataFactory_properties_globalParameters_global_adls2_FileSystem_value": {
 			"type": "string",
