@@ -10,7 +10,7 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"param_TableName": "Definitiv_Timesheets"
+					"param_TableName": "Definitiv_Timesheets_Staging"
 				}
 			}
 		],
