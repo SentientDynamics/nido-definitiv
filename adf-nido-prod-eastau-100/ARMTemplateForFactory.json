@@ -10654,16 +10654,11 @@
 								5
 							],
 							"hours": [
+								0,
 								9,
-								10,
-								11,
 								12,
-								13,
-								14,
 								15,
-								16,
-								17,
-								6
+								18
 							],
 							"weekDays": [
 								"Monday",
@@ -10709,19 +10704,14 @@
 						"timeZone": "AUS Eastern Standard Time",
 						"schedule": {
 							"minutes": [
-								5
+								45
 							],
 							"hours": [
-								9,
-								10,
+								0,
+								8,
 								11,
-								12,
-								13,
 								14,
-								15,
-								16,
-								17,
-								6
+								17
 							],
 							"weekDays": [
 								"Monday",
