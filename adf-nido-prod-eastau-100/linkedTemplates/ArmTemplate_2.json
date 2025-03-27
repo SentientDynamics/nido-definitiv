@@ -1544,7 +1544,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nWHERE [organizationCode] IN ('lytwa2-pty-ltd','edmur-wembley-downs','naid','think-development-pty-ltd','think-pty-ltd','cms-pty-ltd')",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -1766,7 +1766,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nWHERE [organizationCode] IN ('lytwa2-pty-ltd','edmur-wembley-downs','naid','think-development-pty-ltd','think-pty-ltd','cms-pty-ltd')",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -2394,7 +2394,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nWHERE [organizationCode] IN ('lytwa2-pty-ltd','edmur-wembley-downs','naid','think-development-pty-ltd','think-pty-ltd','cms-pty-ltd')",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -2643,7 +2643,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations",
+								"sqlReaderQuery": "SELECT organizationId\nFROM dbo.Definitiv_Organizations\nWHERE [organizationCode] IN ('lytwa2-pty-ltd','edmur-wembley-downs','naid','think-development-pty-ltd','think-pty-ltd','cms-pty-ltd')",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
